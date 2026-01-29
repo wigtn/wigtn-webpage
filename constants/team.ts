@@ -12,12 +12,12 @@ export const TEAM_MEMBERS: TeamMember[] = [
     },
   },
   {
-    name: "Member 2",
+    name: "Jinmo Kim",
     role: "Co-Founder & Developer",
-    bio: "Architecting robust and scalable AI systems. Deep expertise in building distributed systems and integrating large language models into production environments.",
+    bio: "Responsible for backend development, DevOps, and overall infrastructure. Focuses on building reliable system architectures and deployment environments to ensure stable service operations, while laying the foundation for AI features to run smoothly in production environments.",
     expertise: ["Backend", "Cloud Infrastructure", "LLM Integration", "DevOps"],
     links: {
-      github: "https://github.com/wigtn",
+      github: "https://github.com/moriroKim",
     },
   },
   {
