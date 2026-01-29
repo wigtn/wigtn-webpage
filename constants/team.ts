@@ -39,12 +39,14 @@ export const TEAM_MEMBERS: TeamMember[] = [
     },
   },
   {
-    name: "Member 5",
-    role: "Co-Founder & Developer",
-    bio: "Crafting intuitive experiences for complex AI tools. Believes that powerful technology should feel effortless to use.",
-    expertise: ["UI/UX Design", "Product Strategy", "User Research", "Figma"],
+    name: "Hyunwoo Cho",
+    role: "Co-Founder & Full-Stack Developer",
+    bio: "End-to-end builder who bridges frontend elegance with backend reliability. Passionate about crafting seamless user experiences powered by robust, scalable architectures. Thrives on turning complex ideas into clean, production-ready code.",
+    expertise: ["React", "Next.js", "TypeScript", "Node.js", "Full-Stack"],
     links: {
-      linkedin: "https://linkedin.com/company/wigtn",
+      linkedin:
+        "https://www.linkedin.com/in/%ED%98%84%EC%9A%B0-%EC%A1%B0-8a6800393/",
+      github: "https://github.com/starz-woo",
     },
   },
 ];

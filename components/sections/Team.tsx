@@ -11,7 +11,9 @@ export function Team() {
   return (
     <section id="team" className="py-16 md:py-24">
       <div className="max-w-4xl mx-auto px-6">
-        <span className="text-sm font-semibold text-violet mb-12 block tracking-wide">TEAM</span>
+        <span className="text-sm font-semibold text-violet mb-12 block tracking-wide">
+          TEAM
+        </span>
 
         <div className="space-y-0">
           {rows.map((row, rowIndex) => (
@@ -22,10 +24,7 @@ export function Team() {
               }`}
             >
               {row.map((member, index) => (
-                <div
-                  key={index}
-                  className="group h-full flex flex-col"
-                >
+                <div key={index} className="group h-full flex flex-col">
                   {/* Name & Role */}
                   <div className="mb-4">
                     <h3 className="text-xl font-semibold text-foreground group-hover:text-violet transition-colors">
