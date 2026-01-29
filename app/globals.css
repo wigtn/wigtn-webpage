@@ -7,6 +7,11 @@
     border-color: #E5E7EB;
   }
 
+  /* Scroll offset for fixed header */
+  section[id] {
+    scroll-margin-top: 80px;
+  }
+
   body {
     background-color: #FFFFFF;
     color: #0A0A0A;

@@ -3,13 +3,11 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { NAV_ITEMS } from "@/constants";
-import { useScrollToSection } from "@/lib/hooks";
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
-  const { scrollToSection, scrollToTop } = useScrollToSection();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,8 +36,7 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = (id: string) => {
-    scrollToSection(id);
+  const handleMobileNavClick = () => {
     setIsMobileMenuOpen(false);
   };
 
@@ -53,19 +50,20 @@ export function Navigation() {
         <nav className="max-w-4xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <button
-              onClick={scrollToTop}
+            <a
+              href="#"
+              onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
               className="text-xl font-bold text-foreground hover:text-violet transition-colors"
             >
               WIGTN
-            </button>
+            </a>
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-8">
               {NAV_ITEMS.map((item) => (
-                <button
+                <a
                   key={item.id}
-                  onClick={() => handleNavClick(item.id)}
+                  href={`#${item.id}`}
                   className={`text-sm transition-colors ${
                     activeSection === item.id
                       ? "text-violet font-medium"
@@ -73,7 +71,7 @@ export function Navigation() {
                   }`}
                 >
                   {item.label}
-                </button>
+                </a>
               ))}
             </div>
 
@@ -97,9 +95,10 @@ export function Navigation() {
         <div className="fixed inset-0 z-30 bg-white pt-20 md:hidden">
           <nav className="flex flex-col items-center gap-6 px-6">
             {NAV_ITEMS.map((item) => (
-              <button
+              <a
                 key={item.id}
-                onClick={() => handleNavClick(item.id)}
+                href={`#${item.id}`}
+                onClick={handleMobileNavClick}
                 className={`text-lg transition-colors ${
                   activeSection === item.id
                     ? "text-violet font-medium"
@@ -107,7 +106,7 @@ export function Navigation() {
                 }`}
               >
                 {item.label}
-              </button>
+              </a>
             ))}
           </nav>
         </div>

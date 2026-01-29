@@ -28,7 +28,9 @@ export function Footer() {
           <div className="text-left md:text-right">
             <span className="text-sm text-gray-400 block mb-1">Contact us</span>
             <a
-              href="mailto:wigtncrew@gmail.com"
+              href="https://mail.google.com/mail/?view=cm&to=wigtncrew@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-foreground hover:text-violet transition-colors"
             >
               wigtncrew@gmail.com
