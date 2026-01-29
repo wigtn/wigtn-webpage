@@ -1,80 +1,86 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { Github, Linkedin, Twitter } from "lucide-react";
-import { SectionHeader } from "@/components/ui";
+import { Github, Linkedin } from "lucide-react";
 import { TEAM_MEMBERS } from "@/constants";
-import { staggerContainer, staggerItem, TRANSITION } from "@/lib/animations";
 
 export function Team() {
+  // Group members into rows of 2
+  const rows: (typeof TEAM_MEMBERS)[] = [];
+  for (let i = 0; i < TEAM_MEMBERS.length; i += 2) {
+    rows.push(TEAM_MEMBERS.slice(i, i + 2));
+  }
+
   return (
-    <section id="team" className="py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <SectionHeader label="TEAM" title="팀" subtitle="WIGTN을 만드는 사람들" />
+    <section id="team" className="py-16 md:py-24">
+      <div className="max-w-4xl mx-auto px-6">
+        <span className="text-sm font-semibold text-violet mb-12 block tracking-wide">TEAM</span>
 
-        <motion.div
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
-        >
-          {TEAM_MEMBERS.map((member, index) => (
-            <motion.div
-              key={index}
-              variants={staggerItem}
-              transition={TRANSITION.smooth}
-              className="group p-6 border-t border-white/10 hover:border-lime/50 transition-colors"
+        <div className="space-y-0">
+          {rows.map((row, rowIndex) => (
+            <div
+              key={rowIndex}
+              className={`grid md:grid-cols-2 gap-6 py-8 ${
+                rowIndex !== rows.length - 1 ? "border-b border-slate-200" : ""
+              }`}
             >
-              <div className="mb-4">
-                <h3 className="text-lg font-medium text-white group-hover:text-lime transition-colors">
-                  {member.name}
-                </h3>
-                {member.nameEn && (
-                  <span className="text-sm text-white/40">{member.nameEn}</span>
-                )}
-              </div>
+              {row.map((member, index) => (
+                <div
+                  key={index}
+                  className="group h-full flex flex-col"
+                >
+                  {/* Name & Role */}
+                  <div className="mb-4">
+                    <h3 className="text-xl font-semibold text-foreground group-hover:text-violet transition-colors">
+                      {member.name}
+                    </h3>
+                    <span className="text-sm text-violet">{member.role}</span>
+                  </div>
 
-              <p className="text-label text-lime mb-3">{member.role}</p>
-              <p className="text-sm text-white/60 mb-4">{member.description}</p>
+                  {/* Bio */}
+                  <p className="text-gray-600 mb-5 leading-relaxed flex-grow">
+                    {member.bio}
+                  </p>
 
-              {member.links && (
-                <div className="flex gap-3">
-                  {member.links.github && (
-                    <a
-                      href={member.links.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/40 hover:text-lime transition-colors"
-                    >
-                      <Github className="w-4 h-4" />
-                    </a>
-                  )}
-                  {member.links.linkedin && (
-                    <a
-                      href={member.links.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/40 hover:text-lime transition-colors"
-                    >
-                      <Linkedin className="w-4 h-4" />
-                    </a>
-                  )}
-                  {member.links.twitter && (
-                    <a
-                      href={member.links.twitter}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/40 hover:text-lime transition-colors"
-                    >
-                      <Twitter className="w-4 h-4" />
-                    </a>
+                  {/* Expertise Tags */}
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {member.expertise.map((skill, idx) => (
+                      <span
+                        key={idx}
+                        className="px-3 py-1 text-xs text-gray-600 bg-gray-100 rounded-full"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Social Links - Icons only, black */}
+                  {member.links && (
+                    <div className="flex gap-3 mt-auto">
+                      {member.links.github && (
+                        <a
+                          href={member.links.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-foreground hover:text-violet transition-colors"
+                        >
+                          <Github className="w-5 h-5" />
+                        </a>
+                      )}
+                      {member.links.linkedin && (
+                        <a
+                          href={member.links.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-foreground hover:text-violet transition-colors"
+                        >
+                          <Linkedin className="w-5 h-5" />
+                        </a>
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
-            </motion.div>
+              ))}
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

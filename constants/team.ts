@@ -2,48 +2,49 @@ import type { TeamMember } from "@/types";
 
 export const TEAM_MEMBERS: TeamMember[] = [
   {
-    name: "대표",
-    nameEn: "CEO",
-    role: "Founder & CEO",
-    description: "AI Agent 개발의 새로운 패러다임을 만듭니다.",
+    name: "Harrison Kim",
+    role: "Founder & Crew Lead",
+    bio: "Building the future of AI-native development. Passionate about making software development accessible to everyone through the power of AI.",
+    expertise: ["AI/ML", "Product Strategy", "System Architecture", "Startup"],
+    links: {
+      github: "https://github.com/harrisonkim",
+      linkedin: "https://linkedin.com/in/harrisonkim",
+    },
+  },
+  {
+    name: "Member 2",
+    role: "Co-Founder & Developer",
+    bio: "Architecting robust and scalable AI systems. Deep expertise in building distributed systems and integrating large language models into production environments.",
+    expertise: ["Backend", "Cloud Infrastructure", "LLM Integration", "DevOps"],
     links: {
       github: "https://github.com/wigtn",
-      linkedin: "#",
     },
   },
   {
-    name: "개발 리드",
-    nameEn: "Tech Lead",
-    role: "Technical Lead",
-    description: "확장 가능한 AI 시스템 아키텍처를 설계합니다.",
+    name: "Member 3",
+    role: "Co-Founder & Developer",
+    bio: "Turning cutting-edge AI research into practical applications. Specializing in prompt engineering, model fine-tuning, and building intelligent agents.",
+    expertise: ["Machine Learning", "Prompt Engineering", "Python", "NLP"],
     links: {
-      github: "#",
+      github: "https://github.com/wigtn",
     },
   },
   {
-    name: "AI 엔지니어",
-    nameEn: "AI Engineer",
-    role: "AI Engineer",
-    description: "최신 LLM 기술을 실제 서비스에 적용합니다.",
+    name: "Member 4",
+    role: "Co-Founder & Developer",
+    bio: "Building seamless user experiences from frontend to backend. Focused on creating intuitive interfaces that make complex AI tools feel simple.",
+    expertise: ["React", "Next.js", "TypeScript", "Node.js"],
     links: {
-      github: "#",
+      github: "https://github.com/wigtn",
     },
   },
   {
-    name: "프로덕트 매니저",
-    nameEn: "Product Manager",
-    role: "Product Manager",
-    description: "고객의 니즈를 제품으로 구현합니다.",
+    name: "Member 5",
+    role: "Co-Founder & Developer",
+    bio: "Crafting intuitive experiences for complex AI tools. Believes that powerful technology should feel effortless to use.",
+    expertise: ["UI/UX Design", "Product Strategy", "User Research", "Figma"],
     links: {
-      linkedin: "#",
+      linkedin: "https://linkedin.com/company/wigtn",
     },
-  },
-];
-
-export const ADVISORS = [
-  {
-    name: "자문",
-    role: "Advisor",
-    description: "전략 자문",
   },
 ];

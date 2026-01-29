@@ -9,7 +9,8 @@ export interface TeamMember {
   name: string;
   nameEn?: string;
   role: string;
-  description: string;
+  bio: string;
+  expertise: string[];
   image?: string;
   links?: {
     github?: string;

@@ -4,101 +4,61 @@
 
 @layer base {
   * {
-    border-color: #1A1A1A;
+    border-color: #E5E7EB;
   }
 
   body {
-    background-color: #000000;
-    color: #FFFFFF;
+    background-color: #FFFFFF;
+    color: #0A0A0A;
     font-feature-settings: "rlig" 1, "calt" 1;
-    font-smooth: always;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Custom scrollbar */
+  /* Custom scrollbar - light mode */
   ::-webkit-scrollbar {
     width: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background-color: #000000;
+    background-color: #F9FAFB;
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: #1A1A1A;
+    background-color: #D1D5DB;
+    border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background-color: #2A2A2A;
+    background-color: #9CA3AF;
   }
 }
 
 @layer components {
-  /* Typography System */
+  /* Typography System - Pretendard */
   .text-hero {
-    @apply font-display text-[clamp(3rem,10vw,7rem)] leading-none tracking-tighter;
+    @apply text-[clamp(2.5rem,8vw,5rem)] leading-tight tracking-tight font-bold;
   }
 
   .text-section {
-    @apply font-display text-[clamp(2rem,5vw,4rem)] leading-tight tracking-tight;
+    @apply text-[clamp(1.75rem,4vw,2.5rem)] leading-tight tracking-tight font-semibold;
   }
 
   .text-title {
-    @apply font-body text-xl md:text-2xl font-medium;
+    @apply text-xl md:text-2xl font-semibold;
   }
 
   .text-body {
-    @apply font-body text-base md:text-lg text-gray-400 leading-relaxed;
+    @apply text-base md:text-lg text-gray-600 leading-relaxed;
   }
 
   .text-label {
-    @apply font-mono text-xs tracking-widest uppercase;
+    @apply text-xs tracking-widest uppercase font-medium;
   }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
-  }
-
-  /* Grid background - subtle */
-  .grid-bg {
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    background-size: 50px 50px;
-  }
-
-  /* Lime glow effect */
-  .glow-lime {
-    box-shadow: 0 0 30px rgba(191, 255, 0, 0.4);
-  }
-
-  /* Text effects */
-  .text-stroke {
-    -webkit-text-stroke: 1px white;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .text-lime-glow {
-    text-shadow: 0 0 20px rgba(191, 255, 0, 0.5);
-  }
-
-  /* Noise texture overlay */
-  .noise-overlay {
-    position: relative;
-  }
-
-  .noise-overlay::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' /%3E%3C/svg%3E");
-    pointer-events: none;
   }
 }

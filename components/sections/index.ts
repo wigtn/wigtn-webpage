@@ -1,8 +1,8 @@
-export { Intro } from "./Intro";
 export { Navigation } from "./Navigation";
-export { Hero } from "./Hero";
+export { Crew } from "./Crew";
+export { About } from "./About";
 export { WhatWeDo } from "./WhatWeDo";
 export { Products } from "./Products";
+export { Plugins } from "./Plugins";
 export { Team } from "./Team";
-export { Partners } from "./Partners";
-export { Contact } from "./Contact";
+export { Footer } from "./Footer";

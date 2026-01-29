@@ -1,39 +1,25 @@
-"use client";
-
-import { useState } from "react";
 import {
-  Intro,
   Navigation,
-  Hero,
+  Crew,
+  About,
   WhatWeDo,
   Products,
+  Plugins,
   Team,
-  Partners,
-  Contact,
+  Footer,
 } from "@/components/sections";
 
 export default function Home() {
-  const [introComplete, setIntroComplete] = useState(false);
-
   return (
-    <main className="relative min-h-screen bg-nero">
-      {/* Intro animation */}
-      {!introComplete && <Intro onComplete={() => setIntroComplete(true)} />}
-
-      {/* Main content */}
-      <div className="relative z-10">
-        <Navigation show={introComplete} />
-        {introComplete && (
-          <>
-            <Hero />
-            <WhatWeDo />
-            <Products />
-            <Team />
-            <Partners />
-            <Contact />
-          </>
-        )}
-      </div>
+    <main className="relative min-h-screen bg-white">
+      <Navigation />
+      <Crew />
+      <About />
+      <WhatWeDo />
+      <Products />
+      <Plugins />
+      <Team />
+      <Footer />
     </main>
   );
 }

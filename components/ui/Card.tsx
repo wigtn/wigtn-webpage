@@ -1,7 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { staggerItem, TRANSITION } from "@/lib/animations";
 import { cn } from "@/lib/utils";
 
 interface CardProps {
@@ -10,7 +6,7 @@ interface CardProps {
   subtitle?: string;
   icon?: React.ReactNode;
   className?: string;
-  variant?: "default" | "bordered" | "filled";
+  variant?: "default" | "bordered";
 }
 
 export function Card({
@@ -22,27 +18,24 @@ export function Card({
   variant = "default",
 }: CardProps) {
   return (
-    <motion.div
-      variants={staggerItem}
-      transition={TRANSITION.smooth}
+    <div
       className={cn(
-        "group p-6 md:p-8 rounded-lg transition-colors",
-        variant === "default" && "hover:bg-white/5",
-        variant === "bordered" && "border border-white/10 hover:border-lime/50",
-        variant === "filled" && "bg-white/5 hover:bg-white/10",
+        "group p-6 rounded-lg transition-colors",
+        variant === "default" && "hover:bg-gray-50",
+        variant === "bordered" && "border border-gray-200 hover:border-violet/50",
         className
       )}
     >
       {icon && (
-        <div className="mb-4 text-lime">{icon}</div>
+        <div className="mb-4 text-violet">{icon}</div>
       )}
       {subtitle && (
-        <span className="text-label text-white/50 mb-2 block">{subtitle}</span>
+        <span className="text-label text-gray-400 mb-2 block">{subtitle}</span>
       )}
-      <h3 className="text-title text-white mb-3 group-hover:text-lime transition-colors">
+      <h3 className="text-title text-foreground mb-3 group-hover:text-violet transition-colors">
         {title}
       </h3>
       <p className="text-body">{description}</p>
-    </motion.div>
+    </div>
   );
 }

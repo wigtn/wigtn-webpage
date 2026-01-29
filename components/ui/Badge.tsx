@@ -1,10 +1,8 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 
 interface BadgeProps {
   children: React.ReactNode;
-  variant?: "default" | "outline" | "lime";
+  variant?: "default" | "outline" | "violet";
   className?: string;
 }
 
@@ -16,10 +14,10 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center px-3 py-1 text-label rounded-full",
-        variant === "default" && "bg-white/10 text-white/70",
-        variant === "outline" && "border border-white/20 text-white/70",
-        variant === "lime" && "bg-lime/10 text-lime border border-lime/30",
+        "inline-flex items-center px-4 py-1.5 text-xs font-mono tracking-wider rounded-full",
+        variant === "default" && "bg-gray-100 text-gray-600",
+        variant === "outline" && "border border-gray-300 text-gray-600",
+        variant === "violet" && "border border-violet/30 text-violet",
         className
       )}
     >

@@ -1,36 +1,28 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { SectionHeader } from "@/components/ui";
-import { Card } from "@/components/ui";
 import { CONTENT } from "@/constants";
-import { staggerContainer } from "@/lib/animations";
 
 export function WhatWeDo() {
-  const { label, title, items } = CONTENT.whatWeDo;
+  const { label, title, description, items } = CONTENT.whatWeDo;
 
   return (
-    <section id="what-we-do" className="py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <SectionHeader label={label} title={title} />
+    <section id="what-we-do" className="py-16 md:py-24">
+      <div className="max-w-4xl mx-auto px-6">
+        <span className="text-sm font-semibold text-violet mb-6 block tracking-wide">{label}</span>
+        <h2 className="text-section text-foreground mb-4">{title}</h2>
+        <p className="text-lg text-gray-600 mb-12 max-w-2xl">{description}</p>
 
-        <motion.div
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-          className="grid md:grid-cols-3 gap-6 md:gap-8"
-        >
+        <div className="space-y-8">
           {items.map((item, index) => (
-            <Card
+            <div
               key={index}
-              title={item.title}
-              subtitle={item.subtitle}
-              description={item.description}
-              variant="bordered"
-            />
+              className="group pb-8 border-b border-slate-200 last:border-b-0 last:pb-0"
+            >
+              <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-violet transition-colors">
+                {item.title}
+              </h3>
+              <p className="text-gray-600">{item.description}</p>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

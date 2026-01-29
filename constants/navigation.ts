@@ -1,15 +1,13 @@
 import type { NavItem } from "@/types";
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: "ABOUT", id: "what-we-do" },
-  { label: "SERVICES", id: "products" },
-  { label: "TEAM", id: "team" },
-  { label: "PARTNERS", id: "partners" },
-  { label: "CONTACT", id: "contact" },
+  { label: "About", id: "about" },
+  { label: "What We Do", id: "what-we-do" },
+  { label: "Products", id: "products" },
+  { label: "Team", id: "team" },
 ];
 
 export const SOCIAL_LINKS = {
   github: "https://github.com/wigtn",
-  linkedin: "#",
-  twitter: "#",
+  linkedin: "https://linkedin.com/company/wigtn",
 } as const;

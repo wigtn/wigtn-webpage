@@ -1,53 +1,63 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { SectionHeader } from "@/components/ui";
 import { CONTENT } from "@/constants";
-import { staggerContainer, staggerItem, TRANSITION } from "@/lib/animations";
 
 export function Products() {
-  const { label, title, items } = CONTENT.products;
+  const { label, title, description, items } = CONTENT.products;
 
   return (
-    <section id="products" className="py-24 md:py-32 bg-white/[0.02]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <SectionHeader label={label} title={title} />
+    <section id="products" className="py-16 md:py-24">
+      <div className="max-w-4xl mx-auto px-6 mb-12">
+        <span className="text-sm font-semibold text-violet mb-6 block tracking-wide">{label}</span>
+        <h2 className="text-section text-foreground mb-4">{title}</h2>
+        <p className="text-lg text-gray-600">{description}</p>
+      </div>
 
-        <motion.div
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-          className="grid md:grid-cols-3 gap-6 md:gap-8"
-        >
-          {items.map((item) => (
-            <motion.div
-              key={item.id}
-              variants={staggerItem}
-              transition={TRANSITION.smooth}
-              className="group p-6 md:p-8 border border-white/10 rounded-lg hover:border-lime/50 transition-colors"
-            >
-              <h3 className="text-title text-white mb-3 group-hover:text-lime transition-colors">
-                {item.title}
-              </h3>
-              <p className="text-body mb-6">{item.description}</p>
+      {/* Products with content-width dividers */}
+      <div className="max-w-4xl mx-auto px-6">
+        {items.map((product, index) => (
+          <div
+            key={product.id}
+            className={index !== 0 ? "border-t border-slate-200 pt-12 mt-12" : ""}
+          >
+            <div className="flex flex-col md:flex-row gap-8 md:gap-12">
+              {/* Image placeholder - 20% */}
+              <div className="md:w-1/5 flex-shrink-0">
+                <div className="aspect-square bg-gray-100 rounded-2xl flex items-center justify-center">
+                  <span className="text-4xl font-bold text-gray-300">
+                    {product.name.charAt(0)}
+                  </span>
+                </div>
+              </div>
 
-              {item.features && (
-                <ul className="space-y-2">
-                  {item.features.map((feature, idx) => (
-                    <li
+              {/* Description - 80% */}
+              <div className="md:w-4/5">
+                <div className="flex items-center gap-3 mb-2">
+                  <h3 className="text-2xl font-semibold text-foreground">
+                    {product.name}
+                  </h3>
+                  <span className="px-2 py-0.5 text-xs text-violet bg-violet/10 rounded-full">
+                    {product.status}
+                  </span>
+                </div>
+                <p className="text-violet mb-4">{product.tagline}</p>
+                <p className="text-gray-600 mb-6 leading-relaxed">
+                  {product.description}
+                </p>
+
+                {/* Features */}
+                <div className="flex flex-wrap gap-2">
+                  {product.features.map((feature, idx) => (
+                    <span
                       key={idx}
-                      className="text-sm text-white/50 flex items-center gap-2"
+                      className="px-3 py-1 text-sm text-gray-600 bg-gray-100 rounded-full"
                     >
-                      <span className="w-1 h-1 bg-lime rounded-full" />
                       {feature}
-                    </li>
+                    </span>
                   ))}
-                </ul>
-              )}
-            </motion.div>
-          ))}
-        </motion.div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

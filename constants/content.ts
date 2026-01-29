@@ -1,96 +1,92 @@
 export const CONTENT = {
   meta: {
     title: "WIGTN - One Sentence. Complete Program.",
-    description: "AI Agent 개발 회사. 고객의 1문장 요구를 완성된 프로그램으로 만듭니다.",
+    description: "AI-Native development team building tools and services for the future.",
   },
 
-  intro: {
-    title: "WIGTN",
-    subtitle: "One Sentence. Complete Program.",
+  crew: {
+    title: "WIGTN Crew",
   },
 
-  hero: {
-    badge: "AI AGENT DEVELOPMENT",
-    title: "한 문장이면 충분합니다",
-    description:
-      "복잡한 기획서는 필요 없습니다. 여러분의 아이디어를 한 문장으로 말씀해 주세요. WIGTN의 AI Agent가 완성된 프로그램으로 만들어 드립니다.",
+  about: {
+    label: "ABOUT",
+    tagline: "One Sentence. Complete Program.",
+    text: "We build AI-native development tools that transform how software is created. Our mission is simple: turn your one-sentence idea into a complete, working program.",
   },
 
   whatWeDo: {
     label: "WHAT WE DO",
-    title: "우리가 하는 일",
+    title: "Building the Future of Development",
+    description: "We create AI-native tools and services that empower developers and teams to build faster, smarter, and more efficiently.",
     items: [
       {
-        title: "For Everyone",
-        subtitle: "진입장벽 없는 개발",
-        description:
-          "복잡한 기획서 대신, 여러분만의 언어로 원하는 것을 말씀해 주세요. 기술적 배경 없이도 프로그램을 만들 수 있습니다.",
+        title: "AI-Native Development Tools",
+        description: "Powerful tools designed for the AI era. From intelligent code generators to automated workflows.",
       },
       {
-        title: "Just One Sentence",
-        subtitle: "단순함의 힘",
-        description:
-          "우리는 복잡함을 혐오합니다. 한 문장이면 충분합니다. AI가 여러분의 의도를 파악하고 완벽한 설계로 변환합니다.",
+        title: "App-Based Services",
+        description: "Production-ready applications built with our own tools, proving the power of AI-native development.",
       },
       {
-        title: "Speed & Quality",
-        subtitle: "빠르고 정확하게",
-        description:
-          "AI Agent가 PRD를 작성하고, 전문 개발팀이 품질을 보장합니다. 속도와 품질, 두 마리 토끼를 모두 잡습니다.",
+        title: "Open Source Plugins",
+        description: "Free, community-driven extensions that enhance development workflows for everyone.",
       },
     ],
   },
 
   products: {
     label: "PRODUCTS",
-    title: "서비스",
+    title: "Our Apps",
+    description: "App-based services built with AI-native development.",
     items: [
       {
-        id: "ai-development",
-        title: "AI Agent Development",
-        description: "맞춤형 AI Agent를 개발해 드립니다. 비즈니스 자동화부터 고객 서비스까지.",
-        features: ["맞춤형 AI 솔루션", "24/7 자동화", "지속적인 학습"],
+        id: "wigvu",
+        name: "WIGVU",
+        tagline: "See your ideas come to life",
+        description: "WIGVU transforms your concepts into visual prototypes instantly. Simply describe what you want to build, and watch as AI generates interactive previews. Perfect for validating ideas before committing to full development.",
+        features: ["Instant visual prototyping", "Natural language input", "Export to code"],
+        status: "Coming Soon",
+        image: "/images/wigvu-preview.png",
       },
       {
-        id: "rapid-prototyping",
-        title: "Rapid Prototyping",
-        description: "아이디어를 빠르게 프로토타입으로 만들어 드립니다. MVP 개발에 최적화.",
-        features: ["빠른 개발 사이클", "반복적 개선", "시장 검증"],
+        id: "wigex",
+        name: "WIGEX",
+        tagline: "Execute with precision",
+        description: "WIGEX takes your approved designs and executes them into production-ready code. Powered by advanced AI agents, it handles the heavy lifting of implementation while you focus on what matters most.",
+        features: ["AI-powered code generation", "Production-ready output", "Continuous iteration"],
+        status: "Coming Soon",
+        image: "/images/wigex-preview.png",
+      },
+    ],
+  },
+
+  plugins: {
+    label: "PLUGINS",
+    title: "Open Source",
+    description: "Free tools for the developer community.",
+    items: [
+      {
+        id: "claude-code-plugins",
+        name: "Claude Code Plugins",
+        description: "A collection of powerful plugins for Claude Code that enhance your AI-assisted development workflow. Includes PRD generator, code review, and more.",
+        repo: "https://github.com/wigtn/claude-code-plugins",
       },
       {
-        id: "consulting",
-        title: "AI Consulting",
-        description: "AI 도입 전략부터 구현까지 컨설팅해 드립니다.",
-        features: ["전략 수립", "기술 로드맵", "팀 교육"],
+        id: "cursor-plugins",
+        name: "Cursor Plugins",
+        description: "Custom plugins and extensions for Cursor IDE. Boost your productivity with AI-powered coding assistance.",
+        repo: "https://github.com/wigtn/cursor-plugins",
       },
     ],
   },
 
   contact: {
     label: "CONTACT",
-    title: "연락하기",
-    subtitle: "여러분의 아이디어를 한 문장으로 보내주세요",
+    title: "Get in Touch",
     email: "contact@wigtn.com",
-    responseTime: "24시간 이내",
-    form: {
-      name: {
-        label: "NAME",
-        placeholder: "이름을 입력하세요",
-      },
-      email: {
-        label: "EMAIL",
-        placeholder: "이메일을 입력하세요",
-      },
-      message: {
-        label: "MESSAGE",
-        placeholder: "만들고 싶은 것을 한 문장으로 적어주세요",
-      },
-      submit: "SEND MESSAGE",
-    },
   },
 
   footer: {
     copyright: "WIGTN. ALL RIGHTS RESERVED.",
-    tagline: "와, 이게 되네?",
   },
 } as const;
