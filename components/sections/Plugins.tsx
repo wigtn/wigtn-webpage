@@ -36,7 +36,7 @@ export function Plugins() {
       <div className="max-w-4xl mx-auto px-6">
         <span className="text-sm font-semibold text-violet dark:text-violet-light mb-6 block tracking-wide">PLUGINS</span>
         <h2 className="text-section text-foreground dark:text-white mb-4">Open Source</h2>
-        <p className="text-lg text-gray-600 dark:text-gray-400 mb-12">Now it's your turn. Powered by WIGTN AI-native tools.</p>
+        <p className="text-lg text-gray-600 dark:text-gray-400 mb-12">Now it&apos;s your turn. Powered by WIGTN AI-native tools.</p>
 
         <div>
           {PLUGINS.map((plugin, index) => (
