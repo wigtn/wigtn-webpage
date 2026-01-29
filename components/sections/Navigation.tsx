@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { NAV_ITEMS } from "@/constants";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -43,8 +44,8 @@ export function Navigation() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 bg-white ${
-          isScrolled ? "border-b border-gray-200" : ""
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 bg-white dark:bg-[#0F0F0F] ${
+          isScrolled ? "border-b border-gray-200 dark:border-gray-800" : ""
         }`}
       >
         <nav className="max-w-4xl mx-auto px-6">
@@ -53,7 +54,7 @@ export function Navigation() {
             <a
               href="#"
               onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-              className="text-xl font-bold text-foreground hover:text-violet transition-colors"
+              className="text-xl font-bold text-foreground dark:text-white hover:text-violet dark:hover:text-violet-light transition-colors"
             >
               WIGTN
             </a>
@@ -66,33 +67,37 @@ export function Navigation() {
                   href={`#${item.id}`}
                   className={`text-sm transition-colors ${
                     activeSection === item.id
-                      ? "text-violet font-medium"
-                      : "text-gray-600 hover:text-violet"
+                      ? "text-violet dark:text-violet-light font-medium"
+                      : "text-gray-600 dark:text-gray-400 hover:text-violet dark:hover:text-violet-light"
                   }`}
                 >
                   {item.label}
                 </a>
               ))}
+              <ThemeToggle />
             </div>
 
             {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden text-foreground p-2"
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
+            <div className="flex items-center gap-2 md:hidden">
+              <ThemeToggle />
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-foreground dark:text-white p-2"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </button>
+            </div>
           </div>
         </nav>
       </header>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-30 bg-white pt-20 md:hidden">
+        <div className="fixed inset-0 z-30 bg-white dark:bg-[#0F0F0F] pt-20 md:hidden">
           <nav className="flex flex-col items-center gap-6 px-6">
             {NAV_ITEMS.map((item) => (
               <a
@@ -101,8 +106,8 @@ export function Navigation() {
                 onClick={handleMobileNavClick}
                 className={`text-lg transition-colors ${
                   activeSection === item.id
-                    ? "text-violet font-medium"
-                    : "text-foreground hover:text-violet"
+                    ? "text-violet dark:text-violet-light font-medium"
+                    : "text-foreground dark:text-white hover:text-violet dark:hover:text-violet-light"
                 }`}
               >
                 {item.label}

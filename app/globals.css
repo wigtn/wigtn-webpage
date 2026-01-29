@@ -7,6 +7,10 @@
     border-color: #E5E7EB;
   }
 
+  .dark * {
+    border-color: #374151;
+  }
+
   /* Scroll offset for fixed header */
   section[id] {
     scroll-margin-top: 80px;
@@ -18,6 +22,12 @@
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .dark body {
+    background-color: #0F0F0F;
+    color: #F9FAFB;
   }
 
   /* Custom scrollbar - light mode */
@@ -37,6 +47,19 @@
   ::-webkit-scrollbar-thumb:hover {
     background-color: #9CA3AF;
   }
+
+  /* Custom scrollbar - dark mode */
+  .dark ::-webkit-scrollbar-track {
+    background-color: #1F1F1F;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: #4B5563;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background-color: #6B7280;
+  }
 }
 
 @layer components {
@@ -54,7 +77,7 @@
   }
 
   .text-body {
-    @apply text-base md:text-lg text-gray-600 leading-relaxed;
+    @apply text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed;
   }
 
   .text-label {

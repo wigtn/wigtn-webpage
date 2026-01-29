@@ -11,7 +11,7 @@ export function Team() {
   return (
     <section id="team" className="py-16 md:py-24">
       <div className="max-w-4xl mx-auto px-6">
-        <span className="text-sm font-semibold text-violet mb-12 block tracking-wide">
+        <span className="text-sm font-semibold text-violet dark:text-violet-light mb-12 block tracking-wide">
           TEAM
         </span>
 
@@ -20,21 +20,21 @@ export function Team() {
             <div
               key={rowIndex}
               className={`grid md:grid-cols-2 gap-6 py-8 ${
-                rowIndex !== rows.length - 1 ? "border-b border-slate-200" : ""
+                rowIndex !== rows.length - 1 ? "border-b border-slate-200 dark:border-gray-800" : ""
               }`}
             >
               {row.map((member, index) => (
                 <div key={index} className="group h-full flex flex-col">
                   {/* Name & Role */}
                   <div className="mb-4">
-                    <h3 className="text-xl font-semibold text-foreground group-hover:text-violet transition-colors">
+                    <h3 className="text-xl font-semibold text-foreground dark:text-white group-hover:text-violet dark:group-hover:text-violet-light transition-colors">
                       {member.name}
                     </h3>
-                    <span className="text-sm text-violet">{member.role}</span>
+                    <span className="text-sm text-violet dark:text-violet-light">{member.role}</span>
                   </div>
 
                   {/* Bio */}
-                  <p className="text-gray-600 mb-5 leading-relaxed flex-grow">
+                  <p className="text-gray-600 dark:text-gray-400 mb-5 leading-relaxed flex-grow">
                     {member.bio}
                   </p>
 
@@ -43,7 +43,7 @@ export function Team() {
                     {member.expertise.map((skill, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 text-xs text-gray-600 bg-gray-100 rounded-full"
+                        className="px-3 py-1 text-xs text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-full"
                       >
                         {skill}
                       </span>
@@ -58,7 +58,7 @@ export function Team() {
                           href={member.links.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-foreground hover:text-violet transition-colors"
+                          className="text-foreground dark:text-white hover:text-violet dark:hover:text-violet-light transition-colors"
                         >
                           <Github className="w-5 h-5" />
                         </a>
@@ -68,7 +68,7 @@ export function Team() {
                           href={member.links.linkedin}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-foreground hover:text-violet transition-colors"
+                          className="text-foreground dark:text-white hover:text-violet dark:hover:text-violet-light transition-colors"
                         >
                           <Linkedin className="w-5 h-5" />
                         </a>

@@ -21,12 +21,14 @@ export const TEAM_MEMBERS: TeamMember[] = [
     },
   },
   {
-    name: "Member 3",
-    role: "Co-Founder & Developer",
-    bio: "Turning cutting-edge AI research into practical applications. Specializing in prompt engineering, model fine-tuning, and building intelligent agents.",
-    expertise: ["Machine Learning", "Prompt Engineering", "Python", "NLP"],
+    name: "Hyeonsang Kim",
+    role: "Co-Founder & Full-Stack Developer",
+    bio: "Full-stack developer specializing in cross-platform development. Building mobile apps with React Native and web applications with Next.js, delivering seamless experiences across all platforms.",
+    expertise: ["React", "React Native", "Next.js","Nest.js", "Full-Stack"],
     links: {
-      github: "https://github.com/wigtn",
+      github: "https://github.com/HyeonsangKim",
+      linkedin: "https://www.linkedin.com/in/hyeonsang-kim-5a7a67260/",
+
     },
   },
   {
