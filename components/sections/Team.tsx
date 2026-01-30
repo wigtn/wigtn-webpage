@@ -2,6 +2,7 @@
 
 import { TEAM_MEMBERS } from "@/constants";
 import { useLanguage } from "@/lib/i18n";
+import { useBudouX } from "@/lib/hooks/useBudouX";
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -31,6 +32,7 @@ function LinkedInIcon({ className }: { className?: string }) {
 
 export function Team() {
   const { t } = useLanguage();
+  const { processText } = useBudouX();
 
   // Group members into rows of 2
   const rows: (typeof TEAM_MEMBERS)[] = [];
@@ -38,13 +40,12 @@ export function Team() {
     rows.push(TEAM_MEMBERS.slice(i, i + 2));
   }
 
-  // Calculate the global index for accessing translated bios
   const getGlobalIndex = (rowIndex: number, memberIndex: number) => rowIndex * 2 + memberIndex;
 
   return (
     <section id="team" className="py-16 md:py-24">
-      <div className="max-w-4xl mx-auto px-6">
-        <span className="text-sm font-semibold text-violet dark:text-violet-light mb-12 block tracking-wide">
+      <div className="max-w-5xl mx-auto px-6">
+        <span className="text-sm font-semibold text-violet mb-12 block tracking-wide">
           TEAM
         </span>
 
@@ -53,22 +54,22 @@ export function Team() {
             <div
               key={rowIndex}
               className={`grid md:grid-cols-2 gap-6 py-8 ${
-                rowIndex !== rows.length - 1 ? "border-b border-slate-200 dark:border-gray-800" : ""
+                rowIndex !== rows.length - 1 ? "border-b border-slate-200" : ""
               }`}
             >
               {row.map((member, memberIndex) => (
                 <div key={memberIndex} className="group h-full flex flex-col">
                   {/* Name & Role */}
                   <div className="mb-4">
-                    <h3 className="text-xl font-semibold text-foreground dark:text-white group-hover:text-violet dark:group-hover:text-violet-light transition-colors">
+                    <h3 className="text-xl font-semibold text-foreground group-hover:text-violet transition-colors">
                       {member.name}
                     </h3>
-                    <span className="text-sm text-violet dark:text-violet-light">{member.role}</span>
+                    <span className="text-sm text-violet">{member.role}</span>
                   </div>
 
                   {/* Bio - translated */}
-                  <p className="text-gray-600 dark:text-gray-400 mb-5 leading-relaxed flex-grow">
-                    {t.team.bios[getGlobalIndex(rowIndex, memberIndex)]}
+                  <p className="text-gray-600 mb-5 leading-relaxed flex-grow">
+                    {processText(t.team.bios[getGlobalIndex(rowIndex, memberIndex)])}
                   </p>
 
                   {/* Expertise Tags */}
@@ -76,14 +77,14 @@ export function Team() {
                     {member.expertise.map((skill, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 text-xs text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-full"
+                        className="px-3 py-1 text-xs text-gray-600 bg-gray-100 rounded-full"
                       >
                         {skill}
                       </span>
                     ))}
                   </div>
 
-                  {/* Social Links - Icons only, black */}
+                  {/* Social Links */}
                   {member.links && (
                     <div className="flex gap-3 mt-auto">
                       {member.links.github && (
@@ -91,7 +92,7 @@ export function Team() {
                           href={member.links.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-foreground dark:text-white hover:text-violet dark:hover:text-violet-light transition-colors"
+                          className="text-foreground hover:text-violet transition-colors"
                         >
                           <GitHubIcon className="w-5 h-5" />
                         </a>
@@ -101,7 +102,7 @@ export function Team() {
                           href={member.links.linkedin}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-foreground dark:text-white hover:text-violet dark:hover:text-violet-light transition-colors"
+                          className="text-foreground hover:text-violet transition-colors"
                         >
                           <LinkedInIcon className="w-5 h-5" />
                         </a>

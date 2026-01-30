@@ -1,9 +1,9 @@
 export type Language = "en" | "ko" | "ja";
 
-export const LANGUAGES: { code: Language; label: string }[] = [
-  { code: "en", label: "ENG" },
-  { code: "ko", label: "KOR" },
-  { code: "ja", label: "JPN" },
+export const LANGUAGES: { code: Language; label: string; short: string }[] = [
+  { code: "en", label: "ENG", short: "EN" },
+  { code: "ko", label: "KOR", short: "KR" },
+  { code: "ja", label: "JPN", short: "JP" },
 ];
 
 // Only translatable content

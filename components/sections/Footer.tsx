@@ -16,22 +16,22 @@ function GitHubIcon({ className }: { className?: string }) {
 export function Footer() {
   return (
     <footer className="py-16 md:py-24">
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="max-w-5xl mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
           {/* Left - Logo & Signature */}
           <div>
-            <span className="text-xl font-bold text-foreground dark:text-white block">WIGTN</span>
-            <span className="text-sm text-gray-400 dark:text-gray-500">One Sentence. Complete Program.</span>
+            <span className="text-xl font-bold text-foreground block">WIGTN</span>
+            <span className="text-sm text-gray-400">One Sentence. Complete Program.</span>
           </div>
 
           {/* Right - Contact */}
           <div className="text-left md:text-right">
-            <span className="text-sm text-gray-400 dark:text-gray-500 block mb-1">Contact us</span>
+            <span className="text-sm text-gray-400 block mb-1">Contact us</span>
             <a
               href="https://mail.google.com/mail/?view=cm&to=wigtncrew@gmail.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-foreground dark:text-white hover:text-violet dark:hover:text-violet-light transition-colors"
+              className="text-foreground hover:text-violet transition-colors"
             >
               wigtncrew@gmail.com
             </a>
@@ -39,15 +39,15 @@ export function Footer() {
         </div>
 
         {/* Bottom - Copyright & GitHub */}
-        <div className="mt-12 pt-8 border-t border-slate-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <span className="text-gray-400 dark:text-gray-500 text-sm">
+        <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <span className="text-gray-400 text-sm">
             Fast build, real ship. &copy; {new Date().getFullYear()} WIGTN
           </span>
           <a
             href={SOCIAL_LINKS.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-violet dark:hover:text-violet-light transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-violet transition-colors"
           >
             <span>GitHub</span>
             <GitHubIcon className="w-4 h-4" />

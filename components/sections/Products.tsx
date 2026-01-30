@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/lib/i18n";
+import { useBudouX } from "@/lib/hooks/useBudouX";
 
 const PRODUCTS = [
   {
@@ -9,6 +10,7 @@ const PRODUCTS = [
     tagline: "See your ideas come to life",
     features: ["Instant visual prototyping", "Natural language input", "Export to code"],
     status: "Coming Soon",
+    gradient: "from-violet to-purple-400",
   },
   {
     id: "wigex",
@@ -16,58 +18,57 @@ const PRODUCTS = [
     tagline: "Execute with precision",
     features: ["AI-powered code generation", "Production-ready output", "Continuous iteration"],
     status: "Coming Soon",
+    gradient: "from-indigo-500 to-violet",
   },
 ];
 
 export function Products() {
   const { t } = useLanguage();
+  const { processText } = useBudouX();
 
   return (
     <section id="products" className="py-16 md:py-24">
-      <div className="max-w-4xl mx-auto px-6 mb-12">
-        <span className="text-sm font-semibold text-violet dark:text-violet-light mb-6 block tracking-wide">PRODUCTS</span>
-        <h2 className="text-section text-foreground dark:text-white mb-4">Our Apps</h2>
-        <p className="text-lg text-gray-600 dark:text-gray-400">App-based services built with AI-native development.</p>
+      <div className="max-w-5xl mx-auto px-6 mb-12">
+        <span className="text-sm font-semibold text-violet mb-6 block tracking-wide">PRODUCTS</span>
+        <h2 className="text-section text-foreground mb-4">Our Apps</h2>
+        <p className="text-lg text-gray-600">App-based services built with AI-native development.</p>
       </div>
 
-      {/* Products with content-width dividers */}
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="max-w-5xl mx-auto px-6 space-y-4">
         {PRODUCTS.map((product, index) => (
           <div
             key={product.id}
-            className={index !== 0 ? "border-t border-slate-200 dark:border-gray-800 pt-12 mt-12" : ""}
+            className="group bg-white rounded-2xl border border-gray-200 p-5 hover:border-violet/30 hover:shadow-sm transition-all"
           >
-            <div className="flex flex-col md:flex-row gap-8 md:gap-12">
-              {/* Image placeholder - 20% */}
-              <div className="md:w-1/5 flex-shrink-0">
-                <div className="aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center">
-                  <span className="text-4xl font-bold text-gray-300 dark:text-gray-600">
-                    {product.name.charAt(0)}
-                  </span>
-                </div>
+            <div className="flex items-start gap-5">
+              {/* App Icon - Small like App Store */}
+              <div className={`w-16 h-16 md:w-[72px] md:h-[72px] flex-shrink-0 rounded-2xl bg-gradient-to-br ${product.gradient} flex items-center justify-center shadow-sm`}>
+                <span className="text-2xl md:text-3xl font-bold text-white">
+                  {product.name.charAt(0)}
+                </span>
               </div>
 
-              {/* Description - 80% */}
-              <div className="md:w-4/5">
-                <div className="flex items-center gap-3 mb-2">
-                  <h3 className="text-2xl font-semibold text-foreground dark:text-white">
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-3 mb-1">
+                  <h3 className="text-lg font-semibold text-foreground group-hover:text-violet transition-colors">
                     {product.name}
                   </h3>
-                  <span className="px-2 py-0.5 text-xs text-violet dark:text-violet-light bg-violet/10 dark:bg-violet/20 rounded-full">
+                  <span className="px-2 py-0.5 text-xs text-violet bg-violet/10 rounded-full font-medium">
                     {product.status}
                   </span>
                 </div>
-                <p className="text-violet dark:text-violet-light mb-4">{product.tagline}</p>
-                <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                  {t.products.items[index]}
+                <p className="text-violet text-sm mb-2">{product.tagline}</p>
+                <p className="text-gray-600 text-sm leading-relaxed mb-3">
+                  {processText(t.products.items[index])}
                 </p>
 
                 {/* Features */}
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {product.features.map((feature, idx) => (
                     <span
                       key={idx}
-                      className="px-3 py-1 text-sm text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-full"
+                      className="px-2.5 py-0.5 text-xs text-gray-500 bg-gray-100 rounded-full"
                     >
                       {feature}
                     </span>

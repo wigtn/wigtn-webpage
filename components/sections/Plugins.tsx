@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/lib/i18n";
+import { useBudouX } from "@/lib/hooks/useBudouX";
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -30,34 +31,35 @@ const PLUGINS = [
 
 export function Plugins() {
   const { t } = useLanguage();
+  const { processText } = useBudouX();
 
   return (
     <section className="py-16 md:py-24">
-      <div className="max-w-4xl mx-auto px-6">
-        <span className="text-sm font-semibold text-violet dark:text-violet-light mb-6 block tracking-wide">PLUGINS</span>
-        <h2 className="text-section text-foreground dark:text-white mb-4">Open Source</h2>
-        <p className="text-lg text-gray-600 dark:text-gray-400 mb-12">Now it&apos;s your turn. Powered by WIGTN AI-native tools.</p>
+      <div className="max-w-5xl mx-auto px-6">
+        <span className="text-sm font-semibold text-violet mb-6 block tracking-wide">PLUGINS</span>
+        <h2 className="text-section text-foreground mb-4">Open Source</h2>
+        <p className="text-lg text-gray-600 mb-12">Now it&apos;s your turn. Powered by WIGTN AI-native tools.</p>
 
         <div>
           {PLUGINS.map((plugin, index) => (
             <div
               key={plugin.id}
               className={`group py-8 ${
-                index !== PLUGINS.length - 1 ? "border-b border-slate-200 dark:border-gray-800" : ""
+                index !== PLUGINS.length - 1 ? "border-b border-slate-200" : ""
               }`}
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-foreground dark:text-white mb-2 group-hover:text-violet dark:group-hover:text-violet-light transition-colors">
+                  <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-violet transition-colors">
                     {plugin.name}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400">{t.plugins.items[index]}</p>
+                  <p className="text-gray-600">{processText(t.plugins.items[index])}</p>
                 </div>
                 <a
                   href={plugin.repo}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-violet dark:hover:text-violet-light transition-colors flex-shrink-0"
+                  className="flex items-center gap-2 text-sm text-gray-500 hover:text-violet transition-colors flex-shrink-0"
                 >
                   <span>GitHub</span>
                   <GitHubIcon className="w-4 h-4" />
