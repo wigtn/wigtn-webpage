@@ -5,19 +5,19 @@ import { useBudouX } from "@/lib/hooks/useBudouX";
 
 const PRODUCTS = [
   {
-    id: "wigvu",
-    name: "WIGVU",
-    tagline: "See your ideas come to life",
-    features: ["Instant visual prototyping", "Natural language input", "Export to code"],
-    status: "Coming Soon",
+    id: "wigvo",
+    name: "WIGVO",
+    tagline: "Real-time phone translation, just call",
+    features: ["Bidirectional real-time voice translation", "Any phone number, any carrier", "4 modes: Voice, Text, and AI Agent"],
+    status: "Live",
     gradient: "from-violet to-purple-400",
   },
   {
-    id: "wigex",
-    name: "WIGEX",
-    tagline: "Execute with precision",
-    features: ["AI-powered code generation", "Production-ready output", "Continuous iteration"],
-    status: "Coming Soon",
+    id: "wigvu",
+    name: "WIGVU",
+    tagline: "Watch, understand, any language",
+    features: ["Subtitle extraction and real-time translation", "AI analysis with summaries and highlights", "Synchronized script panel with video playback"],
+    status: "Live",
     gradient: "from-indigo-500 to-violet",
   },
 ];

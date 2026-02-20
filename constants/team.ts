@@ -35,8 +35,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
   {
     name: "Sangwoo Son",
     role: "Tech | AI Engineer",
-    bio: "Building seamless user experiences from frontend to backend. Focused on creating intuitive interfaces that make complex AI tools feel simple.",
-    expertise: ["React", "Next.js", "TypeScript", "Node.js"],
+    bio: "AI Engineer specializing in Speech-to-Text and Text-to-Speech technologies. Focused on building natural voice interaction systems that bridge the gap between humans and AI.",
+    expertise: ["STT", "TTS", "AI/ML", "Voice AI"],
     links: {
       github: "https://github.com/wigtn",
     },
