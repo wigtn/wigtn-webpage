@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import { useBudouX } from "@/lib/hooks/useBudouX";
 
@@ -36,9 +38,10 @@ export function Products() {
 
       <div className="max-w-5xl mx-auto px-6 space-y-4">
         {PRODUCTS.map((product, index) => (
-          <div
+          <Link
             key={product.id}
-            className="group bg-white rounded-2xl border border-gray-200 p-5 hover:border-violet/30 hover:shadow-sm transition-all"
+            href={`/products/${product.id}/`}
+            className="group block bg-white rounded-2xl border border-gray-200 p-5 hover:border-violet/30 hover:shadow-sm transition-all"
           >
             <div className="flex items-start gap-5">
               {/* App Icon - Small like App Store */}
@@ -57,6 +60,7 @@ export function Products() {
                   <span className="px-2 py-0.5 text-xs text-violet bg-violet/10 rounded-full font-medium">
                     {product.status}
                   </span>
+                  <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-violet transition-colors ml-auto flex-shrink-0" />
                 </div>
                 <p className="text-violet text-sm mb-2">{product.tagline}</p>
                 <p className="text-gray-600 text-sm leading-relaxed mb-3">
@@ -76,7 +80,7 @@ export function Products() {
                 </div>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>
