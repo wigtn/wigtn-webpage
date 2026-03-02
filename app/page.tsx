@@ -2,9 +2,7 @@ import {
   Navigation,
   Crew,
   About,
-  WhatWeDo,
-  Products,
-  Plugins,
+  Results,
   Team,
   Footer,
 } from "@/components/sections";
@@ -15,9 +13,7 @@ export default function Home() {
       <Navigation />
       <Crew />
       <About />
-      <WhatWeDo />
-      <Products />
-      <Plugins />
+      <Results />
       <Team />
       <Footer />
     </main>

@@ -3,8 +3,8 @@ import { LanguageProvider } from "@/lib/i18n";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "WIGTN - One Sentence. Complete Program.",
-  description: "AI-Native development team building tools and services for the future.",
+  title: "WIGTN Crew",
+  description: "We prove ourselves by what we build, not how long we've built.",
 };
 
 export default function RootLayout({

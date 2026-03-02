@@ -2,8 +2,7 @@ import type { NavItem } from "@/types";
 
 export const NAV_ITEMS: NavItem[] = [
   { label: "About", id: "about" },
-  { label: "What We Do", id: "what-we-do" },
-  { label: "Products", id: "products" },
+  { label: "Results", id: "results" },
   { label: "Team", id: "team" },
 ];
 

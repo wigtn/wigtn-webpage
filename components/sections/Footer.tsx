@@ -1,4 +1,8 @@
+"use client";
+
 import { SOCIAL_LINKS } from "@/constants";
+import { useLanguage } from "@/lib/i18n";
+import { useBudouX } from "@/lib/hooks/useBudouX";
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -14,14 +18,19 @@ function GitHubIcon({ className }: { className?: string }) {
 }
 
 export function Footer() {
+  const { t } = useLanguage();
+  const { processText } = useBudouX();
+
   return (
     <footer className="py-16 md:py-24">
       <div className="max-w-5xl mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
-          {/* Left - Logo & Signature */}
+          {/* Left - Logo & Tagline */}
           <div>
             <span className="text-xl font-bold text-foreground block">WIGTN</span>
-            <span className="text-sm text-gray-400">One Sentence. Complete Program.</span>
+            <span className="text-sm text-gray-400">
+              {processText(t.footer.tagline)}
+            </span>
           </div>
 
           {/* Right - Contact */}
