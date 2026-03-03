@@ -21,6 +21,9 @@ export const TRANSLATIONS = {
     },
     results: {
       heading: "What We've Built",
+      filterAll: "All",
+      filterProducts: "Products",
+      filterOpensource: "Open Source",
     },
     team: {
       bios: [
@@ -102,6 +105,9 @@ export const TRANSLATIONS = {
     },
     results: {
       heading: "우리가 만든 것들",
+      filterAll: "전체",
+      filterProducts: "Products",
+      filterOpensource: "Open Source",
     },
     team: {
       bios: [
@@ -183,6 +189,9 @@ export const TRANSLATIONS = {
     },
     results: {
       heading: "私たちが作ったもの",
+      filterAll: "すべて",
+      filterProducts: "Products",
+      filterOpensource: "Open Source",
     },
     team: {
       bios: [
@@ -270,6 +279,9 @@ export interface Translations {
   };
   results: {
     heading: string;
+    filterAll: string;
+    filterProducts: string;
+    filterOpensource: string;
   };
   team: {
     bios: string[];

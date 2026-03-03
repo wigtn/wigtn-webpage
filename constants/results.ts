@@ -4,6 +4,7 @@ export interface ResultItem {
   type: "product" | "opensource";
   status: string;
   badge?: string;
+  videoUrl?: string;
   description: {
     en: string;
     ko: string;
@@ -27,6 +28,7 @@ export const RESULTS: ResultItem[] = [
     },
     gradient: "from-violet to-purple-400",
     link: "/products/wigvo/",
+    videoUrl: "https://youtu.be/_ixVEnHJxjk?si=P257fqme3B0zTzNu",
   },
   {
     id: "wigvu",
@@ -53,18 +55,5 @@ export const RESULTS: ResultItem[] = [
     },
     gradient: "from-gray-700 to-gray-900",
     link: "https://github.com/wigtn/wigtn-plugins-with-claude-code",
-  },
-  {
-    id: "cursor-skills-toolkit",
-    name: "Cursor Skills Toolkit",
-    type: "opensource",
-    status: "Active",
-    description: {
-      en: "Custom plugins and extensions for Cursor IDE. Boost your productivity with AI-powered coding assistance.",
-      ko: "Cursor IDE용 커스텀 플러그인 및 확장 프로그램. AI 기반 코딩 지원으로 생산성을 높이세요.",
-      ja: "Cursor IDE用のカスタムプラグインと拡張機能。AI駆動のコーディング支援で生産性を向上。",
-    },
-    gradient: "from-gray-700 to-gray-900",
-    link: "https://github.com/wigtn/cursor-skills-toolkit",
   },
 ];
