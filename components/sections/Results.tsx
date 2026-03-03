@@ -1,10 +1,29 @@
 "use client";
 
+import { useCallback, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useLanguage } from "@/lib/i18n";
 import { useBudouX } from "@/lib/hooks/useBudouX";
-import { RESULTS } from "@/constants/results";
+import { RESULTS, type ResultItem } from "@/constants/results";
+
+const SWIPE_THRESHOLD = 50;
+
+const slideVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 300 : -300,
+    opacity: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => ({
+    x: direction > 0 ? -300 : 300,
+    opacity: 0,
+  }),
+};
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -35,9 +54,108 @@ function BadgeLabel({ text }: { text: string }) {
   );
 }
 
+const NAV_BUTTON_CLASS =
+  "flex-shrink-0 w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:border-violet/30 hover:text-violet transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:text-gray-500";
+
+function ResultCard({
+  item,
+  description,
+}: {
+  item: ResultItem;
+  description: string;
+}) {
+  const { processText } = useBudouX();
+
+  const content = (
+    <div className="flex items-start gap-5">
+      <div
+        className={`w-16 h-16 md:w-[72px] md:h-[72px] flex-shrink-0 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-sm`}
+      >
+        {item.type === "product" ? (
+          <span className="text-2xl md:text-3xl font-bold text-white">
+            {item.name.charAt(0)}
+          </span>
+        ) : (
+          <GitHubIcon className="w-7 h-7 md:w-8 md:h-8 text-white" />
+        )}
+      </div>
+
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-3 mb-1 flex-wrap">
+          <h3 className="text-lg font-semibold text-foreground group-hover:text-violet transition-colors">
+            {item.name}
+          </h3>
+          <StatusBadge status={item.status} />
+          {item.badge && <BadgeLabel text={item.badge} />}
+          {item.type === "product" ? (
+            <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-violet transition-colors ml-auto flex-shrink-0" />
+          ) : (
+            <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-violet transition-colors ml-auto flex-shrink-0" />
+          )}
+        </div>
+        <p className="text-gray-600 text-sm leading-relaxed">
+          {item.type === "product" ? processText(description) : description}
+        </p>
+      </div>
+    </div>
+  );
+
+  const cardClass =
+    "group block bg-white rounded-2xl border border-gray-200 p-5 hover:border-violet/30 hover:shadow-sm transition-all";
+
+  if (item.type === "product") {
+    return (
+      <Link href={item.link} className={cardClass}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <a
+      href={item.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cardClass}
+    >
+      {content}
+    </a>
+  );
+}
+
 export function Results() {
   const { language, t } = useLanguage();
-  const { processText } = useBudouX();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+
+  const canGoPrev = currentIndex > 0;
+  const canGoNext = currentIndex < RESULTS.length - 1;
+
+  const goTo = useCallback(
+    (index: number) => {
+      setDirection(index > currentIndex ? 1 : -1);
+      setCurrentIndex(index);
+    },
+    [currentIndex],
+  );
+
+  const goPrev = useCallback(() => {
+    if (canGoPrev) goTo(currentIndex - 1);
+  }, [canGoPrev, goTo, currentIndex]);
+
+  const goNext = useCallback(() => {
+    if (canGoNext) goTo(currentIndex + 1);
+  }, [canGoNext, goTo, currentIndex]);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "ArrowLeft") goPrev();
+      else if (e.key === "ArrowRight") goNext();
+    },
+    [goPrev, goNext],
+  );
+
+  const item = RESULTS[currentIndex];
 
   return (
     <section id="results" className="py-16 md:py-24">
@@ -50,75 +168,82 @@ export function Results() {
         </h2>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 space-y-4">
-        {RESULTS.map((item) => {
-          const description = item.description[language];
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+      <div
+        className="max-w-5xl mx-auto px-6"
+        onKeyDown={handleKeyDown}
+      >
+        <div className="flex items-center gap-3">
+          <button
+            onClick={goPrev}
+            disabled={!canGoPrev}
+            aria-label="Previous result"
+            className={NAV_BUTTON_CLASS}
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
 
-          if (item.type === "product") {
-            return (
-              <Link
+          <div
+            className="flex-1 overflow-hidden relative min-h-[100px]"
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="Results carousel"
+          >
+            <AnimatePresence initial={false} custom={direction} mode="wait">
+              <motion.div
                 key={item.id}
-                href={item.link}
-                className="group block bg-white rounded-2xl border border-gray-200 p-5 hover:border-violet/30 hover:shadow-sm transition-all"
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.25, ease: "easeInOut" }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.7}
+                onDragEnd={(_e, info) => {
+                  if (info.offset.x < -SWIPE_THRESHOLD && canGoNext) {
+                    goNext();
+                  } else if (info.offset.x > SWIPE_THRESHOLD && canGoPrev) {
+                    goPrev();
+                  }
+                }}
+                className="cursor-grab active:cursor-grabbing"
               >
-                <div className="flex items-start gap-5">
-                  <div
-                    className={`w-16 h-16 md:w-[72px] md:h-[72px] flex-shrink-0 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-sm`}
-                  >
-                    <span className="text-2xl md:text-3xl font-bold text-white">
-                      {item.name.charAt(0)}
-                    </span>
-                  </div>
+                <ResultCard
+                  item={item}
+                  description={item.description[language]}
+                />
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-1 flex-wrap">
-                      <h3 className="text-lg font-semibold text-foreground group-hover:text-violet transition-colors">
-                        {item.name}
-                      </h3>
-                      <StatusBadge status={item.status} />
-                      {item.badge && <BadgeLabel text={item.badge} />}
-                      <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-violet transition-colors ml-auto flex-shrink-0" />
-                    </div>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {processText(description)}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            );
-          }
+          <button
+            onClick={goNext}
+            disabled={!canGoNext}
+            aria-label="Next result"
+            className={NAV_BUTTON_CLASS}
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
 
-          return (
-            <a
-              key={item.id}
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group block bg-white rounded-2xl border border-gray-200 p-5 hover:border-violet/30 hover:shadow-sm transition-all"
-            >
-              <div className="flex items-start gap-5">
-                <div
-                  className={`w-16 h-16 md:w-[72px] md:h-[72px] flex-shrink-0 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-sm`}
-                >
-                  <GitHubIcon className="w-7 h-7 md:w-8 md:h-8 text-white" />
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3 mb-1 flex-wrap">
-                    <h3 className="text-lg font-semibold text-foreground group-hover:text-violet transition-colors">
-                      {item.name}
-                    </h3>
-                    <StatusBadge status={item.status} />
-                    <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-violet transition-colors ml-auto flex-shrink-0" />
-                  </div>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {description}
-                  </p>
-                </div>
-              </div>
-            </a>
-          );
-        })}
+        <div className="flex justify-center gap-2 mt-5" role="tablist" aria-label="Result navigation">
+          {RESULTS.map((r, i) => (
+            <button
+              key={r.id}
+              role="tab"
+              aria-selected={i === currentIndex}
+              onClick={() => goTo(i)}
+              aria-label={`Go to ${r.name}`}
+              className={`w-2.5 h-2.5 rounded-full transition-all ${
+                i === currentIndex
+                  ? "bg-violet scale-110"
+                  : "bg-gray-300 hover:bg-gray-400"
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
