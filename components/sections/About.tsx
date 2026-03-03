@@ -10,10 +10,10 @@ export function About() {
   return (
     <section id="about" className="py-16 md:py-20">
       <div className="max-w-5xl mx-auto px-6">
-        <span className="text-sm font-semibold text-violet mb-6 block tracking-wide">ABOUT</span>
-        <h2 className="text-section text-foreground mb-8">
+        <h2 className="text-section text-violet mb-4 tracking-wide">ABOUT</h2>
+        <p className="text-lg md:text-xl text-foreground mb-8">
           {processText(t.about.heading)}
-        </h2>
+        </p>
         <div className="space-y-4 max-w-2xl">
           {t.about.paragraphs.map((paragraph, index) => (
             <p key={index} className="text-lg md:text-xl text-gray-600 leading-relaxed">

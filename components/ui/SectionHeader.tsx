@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 
 interface SectionHeaderProps {
-  label?: string;
   title: string;
   subtitle?: string;
   align?: "left" | "center";
@@ -9,7 +8,6 @@ interface SectionHeaderProps {
 }
 
 export function SectionHeader({
-  label,
   title,
   subtitle,
   align = "left",
@@ -23,12 +21,9 @@ export function SectionHeader({
         className
       )}
     >
-      {label && (
-        <span className="text-label text-violet mb-4 block">{label}</span>
-      )}
-      <h2 className="text-section text-foreground">{title}</h2>
+      <h2 className="text-section text-violet">{title}</h2>
       {subtitle && (
-        <p className="text-body mt-4 max-w-2xl">{subtitle}</p>
+        <p className="text-lg md:text-xl text-foreground mt-2">{subtitle}</p>
       )}
     </div>
   );

@@ -53,7 +53,6 @@ export interface Partner {
 
 // Section Header Types
 export interface SectionHeaderProps {
-  label?: string;
   title: string;
   subtitle?: string;
   align?: "left" | "center";
