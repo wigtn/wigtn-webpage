@@ -40,3 +40,6 @@ next-env.d.ts
 
 # folder
 docs/prd
+
+# source assets
+app/wigtn_logo.*
