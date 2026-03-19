@@ -1,3 +1,16 @@
+export function HuggingFaceIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-.5 3.5a1 1 0 110 2 1 1 0 010-2zm3 0a1 1 0 110 2 1 1 0 010-2zM8.5 9.5c1 0 1.5.75 1.5.75s-.5 1.25-1.5 1.25S7 10.25 7 10.25 7.5 9.5 8.5 9.5zm7 0c1 0 1.5.75 1.5.75s-.5 1.25-1.5 1.25-1.5-1.25-1.5-1.25.5-.75 1.5-.75zM12 17c-2.5 0-4-1.5-4-3h8c0 1.5-1.5 3-4 3z" />
+    </svg>
+  );
+}
+
 export function GitHubIcon({ className }: { className?: string }) {
   return (
     <svg

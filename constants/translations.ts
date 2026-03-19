@@ -22,8 +22,16 @@ export const TRANSLATIONS = {
     results: {
       heading: "What We've Built",
       filterAll: "All",
+      filterResearch: "Research",
+      filterCompetition: "Competition",
       filterProducts: "Products",
+      filterModels: "Models",
       filterOpensource: "Open Source",
+      statPapers: "Papers",
+      statCompetitions: "Competitions",
+      statLive: "Live Services",
+      statModels: "Models",
+      statOpenSource: "Open Source Repos",
     },
     team: {
       bios: [
@@ -106,8 +114,16 @@ export const TRANSLATIONS = {
     results: {
       heading: "우리가 만든 것들",
       filterAll: "전체",
+      filterResearch: "Research",
+      filterCompetition: "Competition",
       filterProducts: "Products",
+      filterModels: "Models",
       filterOpensource: "Open Source",
+      statPapers: "Papers",
+      statCompetitions: "Competitions",
+      statLive: "Live Services",
+      statModels: "Models",
+      statOpenSource: "Open Source Repos",
     },
     team: {
       bios: [
@@ -190,8 +206,16 @@ export const TRANSLATIONS = {
     results: {
       heading: "私たちが作ったもの",
       filterAll: "すべて",
+      filterResearch: "Research",
+      filterCompetition: "Competition",
       filterProducts: "Products",
+      filterModels: "Models",
       filterOpensource: "Open Source",
+      statPapers: "Papers",
+      statCompetitions: "Competitions",
+      statLive: "Live Services",
+      statModels: "Models",
+      statOpenSource: "Open Source Repos",
     },
     team: {
       bios: [
@@ -280,8 +304,17 @@ export interface Translations {
   results: {
     heading: string;
     filterAll: string;
+    filterResearch: string;
+    filterCompetition: string;
     filterProducts: string;
+    filterModels: string;
     filterOpensource: string;
+    statPapers: string;
+    statCompetitions: string;
+    statLive: string;
+    statModels: string;
+    statOpenSource: string;
+    [key: string]: string;
   };
   team: {
     bios: string[];

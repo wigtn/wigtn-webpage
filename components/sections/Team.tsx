@@ -19,9 +19,9 @@ export function Team() {
 
   return (
     <section id="team" className="py-16 md:py-24">
-      <div className="max-w-5xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-6">
         <h2 className="text-section text-violet mb-12 tracking-wide">
-          TEAM
+          Team
         </h2>
 
         <div className="space-y-0">

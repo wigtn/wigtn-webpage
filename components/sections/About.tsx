@@ -9,12 +9,12 @@ export function About() {
 
   return (
     <section id="about" className="py-16 md:py-20">
-      <div className="max-w-5xl mx-auto px-6">
-        <h2 className="text-section text-violet mb-4 tracking-wide">ABOUT</h2>
+      <div className="max-w-6xl mx-auto px-6">
+        <h2 className="text-section text-violet mb-4 tracking-wide">About us</h2>
         <p className="text-lg md:text-xl text-foreground mb-8">
-          {processText(t.about.heading)}
+          We prove ourselves by what we build, not how long we&apos;ve built.
         </p>
-        <div className="space-y-4 max-w-2xl">
+        <div className="space-y-4">
           {t.about.paragraphs.map((paragraph, index) => (
             <p key={index} className="text-lg md:text-xl text-gray-600 leading-relaxed">
               {processText(paragraph)}

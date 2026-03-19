@@ -11,13 +11,13 @@ export function Footer() {
 
   return (
     <footer className="py-16 md:py-24">
-      <div className="max-w-5xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
           {/* Left - Logo & Tagline */}
           <div>
             <span className="text-xl font-bold text-foreground block">WIGTN</span>
             <span className="text-sm text-gray-400">
-              {processText(t.footer.tagline)}
+              We prove ourselves by what we build, not how long we&apos;ve built.
             </span>
           </div>
 

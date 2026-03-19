@@ -49,7 +49,7 @@ export function Navigation() {
           isScrolled ? "border-b border-gray-200" : ""
         }`}
       >
-        <nav className="max-w-5xl mx-auto px-6">
+        <nav className="max-w-6xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
             {/* Left: Logo */}
             <a
