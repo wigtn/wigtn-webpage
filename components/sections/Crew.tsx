@@ -16,7 +16,7 @@ export function Crew() {
           alt="WIGTN Logo"
           width={280}
           height={196}
-          className="mx-auto mb-6"
+          className="mx-auto mb-6 mix-blend-multiply"
           priority
         />
         <h1 className="text-hero text-foreground">
