@@ -39,6 +39,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     expertise: ["STT", "TTS", "AI/ML", "Voice AI"],
     links: {
       github: "https://github.com/wigtn",
+      linkedin: "https://linkedin.com/in/sangwooson",
     },
   },
   {
