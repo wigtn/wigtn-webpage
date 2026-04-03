@@ -3,7 +3,7 @@ import type { TeamMember } from "@/types";
 export const TEAM_MEMBERS: TeamMember[] = [
   {
     name: "Hyeongseob Kim",
-    role: "Crew Lead | AI Engineer",
+    role: "Founder & Crew Lead",
     bio: "Building the future of AI-native development. Passionate about making software development accessible to everyone through the power of AI.",
     expertise: ["AI/ML", "Product Strategy", "System Architecture", "Operations"],
     links: {

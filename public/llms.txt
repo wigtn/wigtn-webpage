@@ -1,0 +1,21 @@
+# WIGTN Crew
+
+> We are an AI-native open-source research crew building practical, domain-specialized AI tools. Korea-based. Fast prototyping, strong engineering, shipping real things.
+
+## Projects
+
+- [WigtnOCR](https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR): VLM-based Korean government document parser. Teacher-Student Pseudo-GT pipeline using Qwen3-VL-30B teacher and 122B judge. LoRA fine-tuned Qwen3-VL-2B achieving OmniDocBench Table TEDS 0.649 (1st place) and KoGovDoc-Bench Retrieval Hit@1 0.739 (1st among 6 parsers). Targeting EMNLP 2026 Industry Track.
+- [WIGVO](https://wigtn.com): Real-time PSTN voice translation system with Dual-Session Echo Gating architecture. ACL 2026 System Demonstrations submitted as first author. Achieved 0/148 production calls with echo loops and 480ms VAD latency after 7-stage evolution.
+- [Claude Code Plugin](https://github.com/wigtn): Multi-agent parallel execution ecosystem achieving approximately 3x speedup.
+
+## Team
+
+- 5-person AI-native external developer crew founded in Korea
+- Active in Korean AI community: Modulabs RAPIDS Lab, BrainCrew Log26
+- Hackathon track record: Ralphthon Seoul #2 (Roguekit), Gemini Live Agent Challenge (Time-Lens)
+
+## Links
+
+- [Website](https://wigtn.com)
+- [GitHub](https://github.com/wigtn)
+- [HuggingFace](https://huggingface.co/Wigtn)
