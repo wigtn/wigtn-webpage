@@ -4,8 +4,8 @@
 
 ## Projects
 
-- [WigtnOCR](https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR): VLM-based Korean government document parser. Teacher-Student Pseudo-GT pipeline using Qwen3-VL-30B teacher and 122B judge. LoRA fine-tuned Qwen3-VL-2B achieving OmniDocBench Table TEDS 0.649 (1st place) and KoGovDoc-Bench Retrieval Hit@1 0.739 (1st among 6 parsers). Targeting EMNLP 2026 Industry Track.
-- [WIGVO](https://wigtn.com): Real-time PSTN voice translation system with Dual-Session Echo Gating architecture. ACL 2026 System Demonstrations submitted as first author. Achieved 0/148 production calls with echo loops and 480ms VAD latency after 7-stage evolution.
+- [WigtnOCR](https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR): VLM-based Korean government document parser. Teacher-Student Pseudo-GT pipeline using Qwen3-VL-30B teacher and 122B judge. LoRA fine-tuned Qwen3-VL-2B achieving OmniDocBench Table TEDS 0.649 (1st place) and KoGovDoc-Bench Retrieval Hit@1 0.739 (1st among 6 parsers). In preparation for EMNLP 2026 Industry Track.
+- [WIGVO](https://wigtn.com): Real-time PSTN voice translation system with Dual-Session Echo Gating architecture. Submitted to ACL 2026 System Demonstrations (first author). Achieved 0/148 production calls with echo loops and 480ms VAD latency after 7-stage evolution.
 - [Claude Code Plugin](https://github.com/wigtn): Multi-agent parallel execution ecosystem achieving approximately 3x speedup.
 
 ## Team
