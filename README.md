@@ -138,3 +138,28 @@ Pseudo-Label Distillation for Structure-Preserving Document Parsing. Distills Qw
 ## License
 
 &copy; 2025-2026 WIGTN. All rights reserved. Individual projects are licensed as indicated in their respective repositories.
+
+---
+
+## 🏢 About WIGTN Crew
+
+This project is built and maintained by **[WIGTN Crew](https://wigtn.com)** —  
+an AI-native open-source research crew based in Korea.  
+We build practical, domain-specialized AI tools. Fast prototyping, strong engineering, shipping real things.
+
+| | |
+|---|---|
+| 🌐 Website | [wigtn.com](https://wigtn.com) |
+| 🐙 GitHub | [github.com/wigtn](https://github.com/wigtn) |
+| 🤗 HuggingFace | [huggingface.co/Wigtn](https://huggingface.co/Wigtn) |
+| 📦 NPM | [npmjs.com/org/wigtn](https://www.npmjs.com/org/wigtn) |
+
+### 🔬 Our Projects
+
+| Project | Description | Status |
+|---------|-------------|--------|
+| [WigtnOCR](https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR) | VLM-based Korean government document parser | EMNLP 2026 |
+| [WIGVO](https://wigtn.com) | Real-time PSTN voice translation (Korean↔English) | ACL 2026 |
+| [Claude Code Plugin](https://github.com/wigtn/wigtn-plugins-with-claude-code) | Multi-agent parallel execution ecosystem | Open Source |
+
+> Results speak louder than résumés.

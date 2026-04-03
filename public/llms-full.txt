@@ -40,5 +40,13 @@
 - Repository: https://github.com/wigtn
 - Open source within WIGTN ecosystem
 
+## Key Findings
+
+- Advanced RAG scored 0.763 vs Naive RAG 0.825 (ablation study)
+- Query Decomposition: -8.8% impact
+- Reranking: +16.6% impact
+- MinerU ranked #1 in chunk quality but #5 in Retrieval
+  (chunk boundary metrics do not predict end-to-end RAG performance)
+
 ---
 Last updated: 2026-04-03

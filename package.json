@@ -2,6 +2,26 @@
   "name": "wigtn-homepage",
   "version": "0.1.0",
   "private": true,
+  "author": "WIGTN Crew <hello@wigtn.com> (https://wigtn.com)",
+  "homepage": "https://wigtn.com",
+  "bugs": {
+    "url": "https://github.com/wigtn/wigtn-introduce/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wigtn/wigtn-introduce.git"
+  },
+  "keywords": [
+    "wigtn",
+    "ai-native",
+    "homepage",
+    "korea",
+    "research-crew"
+  ],
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/wigtn"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

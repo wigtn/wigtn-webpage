@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - name: "WIGTN Crew"
+    website: "https://wigtn.com"
+repository-code: "https://github.com/wigtn/wigtn-introduce"
+url: "https://wigtn.com"
+abstract: "WIGTN — Official website for WIGTN Crew, an AI-native open-source research crew based in Korea. Showcases projects in document intelligence, voice translation, cultural heritage AI, and developer tools."
+keywords:
+  - ai-native
+  - wigtn
+  - korea
+  - homepage
+  - research-crew
+license: MIT

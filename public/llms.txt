@@ -19,3 +19,4 @@
 - [Website](https://wigtn.com)
 - [GitHub](https://github.com/wigtn)
 - [HuggingFace](https://huggingface.co/Wigtn)
+- [NPM](https://www.npmjs.com/org/wigtn)
