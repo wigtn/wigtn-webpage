@@ -3,19 +3,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
-import {
-  ArrowRight,
-  ExternalLink,
-  Github,
-  Play,
-} from "lucide-react";
-import type { Project, SectionBadge } from "@/constants/projects";
+import { ArrowRight } from "lucide-react";
+import type {
+  AchievementResult,
+  Project,
+  SectionBadge,
+} from "@/constants/projects";
 import { useLanguage } from "@/lib/i18n";
 import { useBudouX } from "@/lib/hooks/useBudouX";
 
 /**
- * Tag text colors — no backgrounds. Used by Open Source and Hackathon rows.
- * Upcoming is muted + italic to signal "not yet started".
+ * Tag text colors — no backgrounds. Used by the Open Source variant for the
+ * "Research / Paper / Tool" sub-category label under the title.
  */
 const TAG_COLOR: Record<SectionBadge, string> = {
   Research: "text-[#185FA5]",
@@ -26,32 +25,203 @@ const TAG_COLOR: Record<SectionBadge, string> = {
   Upcoming: "text-[#888780] italic",
 };
 
+type Medal = "gold" | "silver" | "bronze";
+
+/**
+ * Award chip (trophy + label) shown to the right of the title for hackathon
+ * rows. Only rendered when the project has an awarded achievement.
+ */
+const MEDAL_STYLES: Record<Medal, { emoji: string; chip: string }> = {
+  gold: {
+    emoji: "🏆",
+    chip: "border-amber-300 bg-amber-50 text-amber-800",
+  },
+  silver: {
+    emoji: "🥈",
+    chip: "border-slate-300 bg-slate-50 text-slate-700",
+  },
+  bronze: {
+    emoji: "🥉",
+    chip: "border-orange-300 bg-orange-50 text-orange-800",
+  },
+};
+
+/**
+ * Resolves the medal (or lack thereof) and human-readable label for a
+ * hackathon project's primary achievement. Returns `null` when the project
+ * was not awarded (participated / upcoming / no achievements).
+ */
+function getAwardInfo(
+  project: Project,
+): { medal: Medal | null; label: string } | null {
+  const achievement = project.achievements?.[0];
+  if (!achievement) return null;
+
+  const result: AchievementResult = achievement.result;
+
+  const medal: Medal | null =
+    result === "winner" || result === "grand-prize"
+      ? "gold"
+      : result === "second-place"
+        ? "silver"
+        : result === "third-place"
+          ? "bronze"
+          : null;
+
+  // Only awarded results get a tag. "participated" / "upcoming" have no tag.
+  const labelByResult: Partial<Record<AchievementResult, string>> = {
+    winner: "Winner",
+    "grand-prize": "Grand Prize",
+    "second-place": "2nd Place",
+    "third-place": "3rd Place",
+    finalist: "Finalist",
+    accepted: "Accepted",
+  };
+
+  const defaultLabel = labelByResult[result];
+  if (!defaultLabel) return null;
+
+  // Prefer the project-level badge text (e.g. "Grand Prize") when present so
+  // existing copy stays authoritative.
+  const label =
+    project.sectionBadge && project.sectionBadge !== "Participated" && project.sectionBadge !== "Upcoming"
+      ? project.sectionBadge
+      : defaultLabel;
+
+  return { medal, label };
+}
+
+function AwardBadge({
+  medal,
+  label,
+}: {
+  medal: Medal | null;
+  label: string;
+}) {
+  const style = medal
+    ? MEDAL_STYLES[medal]
+    : { emoji: null as string | null, chip: "border-gray-200 bg-gray-50 text-gray-700" };
+
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-md border ${style.chip}`}
+    >
+      {style.emoji && (
+        <span className="text-sm leading-none">{style.emoji}</span>
+      )}
+      {label}
+    </span>
+  );
+}
+
+/* ─────────────── Box action links ─────────────── */
+
+interface BoxLink {
+  key: string;
+  emoji: string;
+  label: string;
+  href: string;
+}
+
+const LINK_DEFS = {
+  github: { emoji: "💻", label: "GitHub" },
+  huggingface: { emoji: "🤗", label: "HuggingFace" },
+  video: { emoji: "▶️", label: "YouTube" },
+  live: { emoji: "🌐", label: "Live" },
+} as const;
+
+type LinkKey = keyof typeof LINK_DEFS;
+
+/**
+ * Build box links in a specific priority order. The first link that has a
+ * matching href on `project.links` becomes the primary (leftmost) box; the
+ * rest follow. Keys without a href are silently skipped.
+ */
+function buildBoxLinks(project: Project, order: LinkKey[]): BoxLink[] {
+  const links: BoxLink[] = [];
+  for (const key of order) {
+    const href = project.links[key];
+    if (!href) continue;
+    links.push({ key, href, ...LINK_DEFS[key] });
+  }
+  return links;
+}
+
+/**
+ * Priority order per list variant. Controls which link sits leftmost in the
+ * box row and signals the project's primary artifact.
+ *   • models   — HuggingFace weights are the headline; GitHub is secondary.
+ *   • papers   — the paper/venue isn't linked directly yet, so Live demo or
+ *                YouTube walkthrough leads; GitHub is last.
+ *   • open-source — code-first (GitHub), then Live (npm / deployed site).
+ */
+const LINK_ORDER: Record<"models" | "papers" | "open-source", LinkKey[]> = {
+  models: ["huggingface", "github", "live", "video"],
+  papers: ["live", "video", "huggingface", "github"],
+  "open-source": ["github", "live", "huggingface", "video"],
+};
+
+function BoxLinkButton({ link }: { link: BoxLink }) {
+  return (
+    <a
+      href={link.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:border-violet hover:bg-violet/5 hover:text-violet transition-colors"
+    >
+      <span className="text-base leading-none">{link.emoji}</span>
+      {link.label}
+    </a>
+  );
+}
+
+/* ─────────────── ProjectRow ─────────────── */
+
+type Variant = "models" | "papers" | "open-source" | "hackathon";
+
+const BOX_LINK_VARIANTS = new Set<Variant>(["models", "papers", "open-source"]);
+
 interface ProjectRowProps {
   project: Project;
   /** Zero-based position within its section — rendered as a large "01/02/…" prefix. */
   index: number;
+  /** Controls which actions and secondary UI render. */
+  variant: Variant;
   /** Right-side meta text (e.g. "EMNLP 2026 prep" or "TRAE Seoul · ByteDance"). */
   meta?: string | null;
   isLast?: boolean;
 }
 
 /**
- * Editorial project row used by both Open Source and Hackathon sections.
+ * Editorial project row used by every list-style section (Featured Work on
+ * the homepage and the /projects filter page).
  *
- * Layout — kakaostyle-inspired 12-col grid on desktop:
+ * Layout — 12-col grid on desktop, stacked on mobile:
  *   [1 col]  large light-gray index number (01, 02, …)
- *   [7 col]  title, tagline, tag · meta, action links
+ *   [7 col]  title (+ optional award badge), tagline, tag/meta, box actions
  *   [4 col]  4:3 thumbnail with hover scale
- * On mobile the three blocks stack vertically.
+ *
+ * The box action row in the text column is pushed to the bottom via `mt-auto`
+ * so it visually aligns with the bottom edge of the thumbnail.
+ *
+ * Variant differences:
+ *   • "models"      — boxes ordered 🤗 HuggingFace → GitHub → Live → YouTube.
+ *   • "papers"      — boxes ordered Live → YouTube → HuggingFace → GitHub.
+ *   • "open-source" — boxes ordered GitHub → Live → HuggingFace → YouTube.
+ *   • "hackathon"   — only a Details box; no source-code link. An AwardBadge
+ *                     (🏆 gold / 🥈 silver / 🥉 bronze / label-only) renders
+ *                     next to the title when the project has an awarded
+ *                     achievement.
  *
  * If the project's media has a local heroVideo, the thumbnail is a `<video>`
  * that plays on hover and rewinds on leave. YouTube heroVideos are not
- * hover-played (too heavy for a list view) — they surface via the "Demo"
- * action link instead.
+ * hover-played (too heavy for a list view) — they surface via the YouTube
+ * box link or the Details page.
  */
 export function ProjectRow({
   project,
   index,
+  variant,
   meta,
   isLast = false,
 }: ProjectRowProps) {
@@ -82,6 +252,13 @@ export function ProjectRow({
   };
 
   const indexLabel = String(index + 1).padStart(2, "0");
+  const detailHref = `/projects/${project.slug}/`;
+
+  const boxLinks = BOX_LINK_VARIANTS.has(variant)
+    ? buildBoxLinks(project, LINK_ORDER[variant as keyof typeof LINK_ORDER])
+    : [];
+
+  const awardInfo = variant === "hackathon" ? getAwardInfo(project) : null;
 
   return (
     <article
@@ -89,7 +266,7 @@ export function ProjectRow({
         isLast ? "" : "border-b border-black/[0.08]"
       }`}
     >
-      <div className="grid grid-cols-12 gap-6 md:gap-10 items-start">
+      <div className="grid grid-cols-12 gap-6 md:gap-10">
         {/* Index number — editorial prefix */}
         <div className="col-span-12 md:col-span-1 order-1">
           <span className="block text-2xl md:text-3xl font-light text-gray-300 tabular-nums leading-none">
@@ -98,44 +275,68 @@ export function ProjectRow({
         </div>
 
         {/* Text block */}
-        <div className="col-span-12 md:col-span-7 min-w-0 order-2">
-          <Link
-            href={`/projects/${project.slug}/`}
-            className="inline-block"
-          >
-            <h3 className="text-2xl md:text-[2rem] font-semibold text-foreground group-hover:text-violet transition-colors leading-tight tracking-tight">
-              {project.name}
-            </h3>
-          </Link>
-
-          <p className="text-base md:text-lg text-gray-600 mt-3 leading-relaxed max-w-xl">
-            {processText(project.tagline[language])}
-          </p>
-
-          {/* Tag · meta */}
-          {(project.sectionBadge || meta) && (
-            <div className="mt-4 flex items-center flex-wrap gap-x-2 text-[13px]">
-              {project.sectionBadge && (
-                <span className={`font-medium ${tagColor}`}>
-                  {project.sectionBadge}
-                </span>
+        <div className="col-span-12 md:col-span-7 min-w-0 order-2 flex flex-col">
+          <div>
+            <div className="flex items-center gap-3 flex-wrap">
+              <Link href={detailHref} className="inline-block">
+                <h3 className="text-2xl md:text-[2rem] font-semibold text-foreground group-hover:text-violet transition-colors leading-tight tracking-tight">
+                  {project.name}
+                </h3>
+              </Link>
+              {awardInfo && (
+                <AwardBadge medal={awardInfo.medal} label={awardInfo.label} />
               )}
-              {project.sectionBadge && meta && (
-                <span className="text-gray-300">·</span>
-              )}
-              {meta && <span className="text-gray-500">{meta}</span>}
             </div>
-          )}
 
-          {/* Action links */}
-          <ActionLinks project={project} />
+            <p className="text-base md:text-lg text-gray-600 mt-3 leading-relaxed max-w-xl">
+              {processText(project.tagline[language])}
+            </p>
+
+            {/* Tag · meta — shown for every list variant except Hackathon,
+                which uses AwardBadge next to the title + meta-only line. */}
+            {variant !== "hackathon" && (project.sectionBadge || meta) && (
+              <div className="mt-4 flex items-center flex-wrap gap-x-2 text-[13px]">
+                {project.sectionBadge && (
+                  <span className={`font-medium ${tagColor}`}>
+                    {project.sectionBadge}
+                  </span>
+                )}
+                {project.sectionBadge && meta && (
+                  <span className="text-gray-300">·</span>
+                )}
+                {meta && <span className="text-gray-500">{meta}</span>}
+              </div>
+            )}
+            {variant === "hackathon" && meta && (
+              <div className="mt-4 text-[13px] text-gray-500">{meta}</div>
+            )}
+          </div>
+
+          {/* Box actions — pushed to the bottom so they align with the
+              thumbnail's bottom edge on desktop. On mobile they just follow
+              the text naturally. */}
+          <div className="mt-6 md:mt-auto md:pt-8 flex flex-wrap gap-2">
+            {BOX_LINK_VARIANTS.has(variant) ? (
+              boxLinks.map((link) => (
+                <BoxLinkButton key={link.key} link={link} />
+              ))
+            ) : (
+              <Link
+                href={detailHref}
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:border-violet hover:bg-violet/5 hover:text-violet transition-colors"
+              >
+                Details
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            )}
+          </div>
         </div>
 
         {/* Thumbnail */}
         <Link
-          href={`/projects/${project.slug}/`}
+          href={detailHref}
           aria-label={`${project.name} — learn more`}
-          className="col-span-12 md:col-span-4 order-3 block w-full overflow-hidden rounded-xl border border-black/[0.06] bg-gray-50"
+          className="col-span-12 md:col-span-4 order-3 block w-full overflow-hidden rounded-xl border border-black/[0.06] bg-gray-50 self-start"
           onMouseEnter={hasLocalVideo ? handleMouseEnter : undefined}
           onMouseLeave={hasLocalVideo ? handleMouseLeave : undefined}
         >
@@ -166,95 +367,5 @@ export function ProjectRow({
         </Link>
       </div>
     </article>
-  );
-}
-
-/* ─────────────── Action links ─────────────── */
-
-interface ActionLinkItem {
-  key: string;
-  label: string;
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
-  external: boolean;
-}
-
-/**
- * Renders a small horizontal row of clickable chips derived from
- * `project.links`, always ending in a "Details" link to the project's
- * detail page. This guarantees every row has at least one action, even
- * for projects with no external links (e.g. DataPulse).
- */
-function ActionLinks({ project }: { project: Project }) {
-  const items: ActionLinkItem[] = [];
-
-  if (project.links.github) {
-    items.push({
-      key: "github",
-      label: "Code",
-      href: project.links.github,
-      icon: Github,
-      external: true,
-    });
-  }
-  if (project.links.live) {
-    items.push({
-      key: "live",
-      label: "Live",
-      href: project.links.live,
-      icon: ExternalLink,
-      external: true,
-    });
-  }
-  if (project.links.video) {
-    items.push({
-      key: "video",
-      label: "Demo",
-      href: project.links.video,
-      icon: Play,
-      external: true,
-    });
-  }
-  if (project.links.huggingface) {
-    items.push({
-      key: "huggingface",
-      label: "HF",
-      href: project.links.huggingface,
-      icon: ExternalLink,
-      external: true,
-    });
-  }
-  items.push({
-    key: "details",
-    label: "Details",
-    href: `/projects/${project.slug}/`,
-    icon: ArrowRight,
-    external: false,
-  });
-
-  return (
-    <div className="mt-6 flex items-center flex-wrap gap-x-5 gap-y-2">
-      {items.map(({ key, label, href, icon: Icon, external }) => {
-        const className =
-          "inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:text-violet transition-colors";
-        return external ? (
-          <a
-            key={key}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={className}
-          >
-            <Icon className="w-3.5 h-3.5" />
-            {label}
-          </a>
-        ) : (
-          <Link key={key} href={href} className={className}>
-            <Icon className="w-3.5 h-3.5" />
-            {label}
-          </Link>
-        );
-      })}
-    </div>
   );
 }

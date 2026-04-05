@@ -37,7 +37,12 @@ export interface CommunicationMode {
  * "Grand Prize" / "Participated" / "Upcoming" inside Hackathon.
  */
 
-export type Section = "products" | "open-source" | "hackathon";
+export type Section =
+  | "products"
+  | "models"
+  | "papers"
+  | "open-source"
+  | "hackathon";
 
 /**
  * Free-form but typed sub-category badge. Constrained so a typo in the
@@ -57,6 +62,8 @@ export type Phase = "in-progress" | "under-review" | "completed" | "archived";
 export type AchievementResult =
   | "winner"
   | "grand-prize"
+  | "second-place"
+  | "third-place"
   | "finalist"
   | "accepted"
   | "participated"
@@ -207,9 +214,10 @@ export const PROJECTS: Project[] = [
     id: "wigtnocr",
     slug: "wigtnocr",
     name: "WigtnOCR",
-    section: "open-source",
+    section: "models",
     sectionBadge: "Research",
     phase: "completed",
+    featured: true,
     publication: "EMNLP 2026 prep",
     tagline: {
       en: "2B document parser. #1 on KoGovDoc.",
@@ -236,9 +244,10 @@ export const PROJECTS: Project[] = [
     id: "wigvo",
     slug: "wigvo",
     name: "WIGVO",
-    section: "open-source",
+    section: "papers",
     sectionBadge: "Paper",
     phase: "completed",
+    featured: true,
     publication: "ACL 2026 (submitted)",
     tagline: {
       en: "Real-time voice translation.",
@@ -357,6 +366,7 @@ export const PROJECTS: Project[] = [
     section: "hackathon",
     sectionBadge: "Grand Prize",
     phase: "completed",
+    featured: true,
     tagline: {
       en: "Multi-agent debate arena.",
       ko: "멀티 에이전트 토론 아레나.",
@@ -465,6 +475,28 @@ export const PROJECTS_BY_SLUG: Record<string, Project> = Object.fromEntries(
 export const PROJECTS_BY_SECTION: Readonly<Record<Section, readonly Project[]>> =
   Object.freeze({
     products: PROJECTS.filter((p) => p.section === "products"),
+    models: PROJECTS.filter((p) => p.section === "models"),
+    papers: PROJECTS.filter((p) => p.section === "papers"),
     "open-source": PROJECTS.filter((p) => p.section === "open-source"),
     hackathon: PROJECTS.filter((p) => p.section === "hackathon"),
   });
+
+/**
+ * Projects flagged for the homepage Featured Work row. Returned in the order
+ * they appear in `PROJECTS`, so curation is driven by data order + the flag.
+ */
+export const FEATURED_PROJECTS: readonly Project[] = PROJECTS.filter(
+  (p) => p.featured,
+);
+
+/**
+ * Human-readable labels for each section — used by the /projects filter UI
+ * and the Featured Work meta chips.
+ */
+export const SECTION_LABEL: Record<Section, string> = {
+  products: "Products",
+  models: "Models",
+  papers: "Papers",
+  "open-source": "Open Source",
+  hackathon: "Hackathon",
+};
