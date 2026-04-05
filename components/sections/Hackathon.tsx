@@ -25,9 +25,9 @@ export function Hackathon() {
   if (items.length === 0) return null;
 
   return (
-    <section id="hackathon" className="py-20 md:py-28">
-      <div className="max-w-4xl mx-auto px-6">
-        <div className="mb-10 md:mb-14">
+    <section id="hackathon" className="py-16 md:py-24">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="mb-12 md:mb-16">
           <h2 className="text-section text-violet mb-2 tracking-wide">
             Hackathon
           </h2>
@@ -41,6 +41,7 @@ export function Hackathon() {
             <ProjectRow
               key={project.id}
               project={project}
+              index={i}
               meta={metaFor(project)}
               isLast={i === items.length - 1}
             />

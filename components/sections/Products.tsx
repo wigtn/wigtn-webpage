@@ -32,9 +32,9 @@ export function Products() {
   const appStoreUrl = product.app?.appStoreUrl;
 
   return (
-    <section id="products" className="py-20 md:py-28">
+    <section id="products" className="py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="mb-10 md:mb-14">
+        <div className="mb-12 md:mb-16">
           <h2 className="text-section text-violet mb-2 tracking-wide">
             Our Products
           </h2>

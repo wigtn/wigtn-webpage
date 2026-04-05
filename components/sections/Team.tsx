@@ -20,7 +20,7 @@ export function Team() {
   return (
     <section id="team" className="py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-6">
-        <h2 className="text-section text-violet mb-12 tracking-wide">
+        <h2 className="text-section text-violet mb-12 md:mb-16 tracking-wide">
           Team
         </h2>
 

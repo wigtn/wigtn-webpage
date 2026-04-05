@@ -28,24 +28,33 @@ const TAG_COLOR: Record<SectionBadge, string> = {
 
 interface ProjectRowProps {
   project: Project;
+  /** Zero-based position within its section — rendered as a large "01/02/…" prefix. */
+  index: number;
   /** Right-side meta text (e.g. "EMNLP 2026 prep" or "TRAE Seoul · ByteDance"). */
   meta?: string | null;
   isLast?: boolean;
 }
 
 /**
- * Compact project row used by both Open Source and Hackathon sections.
+ * Editorial project row used by both Open Source and Hackathon sections.
  *
- * Desktop layout: two columns — left column holds title, tagline, tag+meta
- * line, and a row of action links (Code / Live / Demo / HF / Details);
- * right column holds a ~260px thumbnail. Mobile stacks vertically.
+ * Layout — kakaostyle-inspired 12-col grid on desktop:
+ *   [1 col]  large light-gray index number (01, 02, …)
+ *   [7 col]  title, tagline, tag · meta, action links
+ *   [4 col]  4:3 thumbnail with hover scale
+ * On mobile the three blocks stack vertically.
  *
  * If the project's media has a local heroVideo, the thumbnail is a `<video>`
  * that plays on hover and rewinds on leave. YouTube heroVideos are not
  * hover-played (too heavy for a list view) — they surface via the "Demo"
  * action link instead.
  */
-export function ProjectRow({ project, meta, isLast = false }: ProjectRowProps) {
+export function ProjectRow({
+  project,
+  index,
+  meta,
+  isLast = false,
+}: ProjectRowProps) {
   const { language } = useLanguage();
   const { processText } = useBudouX();
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -72,28 +81,40 @@ export function ProjectRow({ project, meta, isLast = false }: ProjectRowProps) {
     v.currentTime = 0;
   };
 
+  const indexLabel = String(index + 1).padStart(2, "0");
+
   return (
     <article
-      className={`py-8 md:py-10 ${
-        isLast ? "" : "border-b border-black/[0.06]"
+      className={`group py-10 md:py-14 ${
+        isLast ? "" : "border-b border-black/[0.08]"
       }`}
     >
-      <div className="flex flex-col md:flex-row md:items-start gap-5 md:gap-8">
-        {/* Left column — text block */}
-        <div className="flex-1 min-w-0 order-1">
-          <Link href={`/projects/${project.slug}/`} className="group inline-block">
-            <h3 className="text-xl md:text-2xl font-semibold text-foreground group-hover:text-violet transition-colors">
+      <div className="grid grid-cols-12 gap-6 md:gap-10 items-start">
+        {/* Index number — editorial prefix */}
+        <div className="col-span-12 md:col-span-1 order-1">
+          <span className="block text-2xl md:text-3xl font-light text-gray-300 tabular-nums leading-none">
+            {indexLabel}
+          </span>
+        </div>
+
+        {/* Text block */}
+        <div className="col-span-12 md:col-span-7 min-w-0 order-2">
+          <Link
+            href={`/projects/${project.slug}/`}
+            className="inline-block"
+          >
+            <h3 className="text-2xl md:text-[2rem] font-semibold text-foreground group-hover:text-violet transition-colors leading-tight tracking-tight">
               {project.name}
             </h3>
           </Link>
 
-          <p className="text-sm md:text-base text-gray-600 mt-1 leading-relaxed">
+          <p className="text-base md:text-lg text-gray-600 mt-3 leading-relaxed max-w-xl">
             {processText(project.tagline[language])}
           </p>
 
           {/* Tag · meta */}
           {(project.sectionBadge || meta) && (
-            <div className="mt-3 flex items-center flex-wrap gap-x-2 text-[13px]">
+            <div className="mt-4 flex items-center flex-wrap gap-x-2 text-[13px]">
               {project.sectionBadge && (
                 <span className={`font-medium ${tagColor}`}>
                   {project.sectionBadge}
@@ -110,15 +131,15 @@ export function ProjectRow({ project, meta, isLast = false }: ProjectRowProps) {
           <ActionLinks project={project} />
         </div>
 
-        {/* Right column — thumbnail */}
+        {/* Thumbnail */}
         <Link
           href={`/projects/${project.slug}/`}
           aria-label={`${project.name} — learn more`}
-          className="order-2 block w-full md:w-[260px] md:flex-shrink-0 rounded-lg overflow-hidden border border-black/[0.06] bg-gray-50"
+          className="col-span-12 md:col-span-4 order-3 block w-full overflow-hidden rounded-xl border border-black/[0.06] bg-gray-50"
           onMouseEnter={hasLocalVideo ? handleMouseEnter : undefined}
           onMouseLeave={hasLocalVideo ? handleMouseLeave : undefined}
         >
-          <div className="relative aspect-video w-full">
+          <div className="relative aspect-[4/3] w-full overflow-hidden">
             {hasLocalVideo ? (
               <video
                 ref={videoRef}
@@ -129,15 +150,15 @@ export function ProjectRow({ project, meta, isLast = false }: ProjectRowProps) {
                 playsInline
                 preload="metadata"
                 aria-label={`${project.name} demo`}
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
               />
             ) : (
               <Image
                 src={project.media.poster}
                 alt={`${project.name} preview`}
                 fill
-                sizes="(max-width: 768px) 100vw, 260px"
-                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 340px"
+                className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                 unoptimized
               />
             )}
@@ -212,7 +233,7 @@ function ActionLinks({ project }: { project: Project }) {
   });
 
   return (
-    <div className="mt-4 flex items-center flex-wrap gap-x-5 gap-y-2">
+    <div className="mt-6 flex items-center flex-wrap gap-x-5 gap-y-2">
       {items.map(({ key, label, href, icon: Icon, external }) => {
         const className =
           "inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:text-violet transition-colors";
