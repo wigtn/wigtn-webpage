@@ -42,12 +42,6 @@ export function Hackathon() {
               key={project.id}
               project={project}
               meta={metaFor(project)}
-              image={project.media.poster}
-              video={
-                project.media.heroVideoType === "local"
-                  ? project.media.heroVideo
-                  : undefined
-              }
               isLast={i === items.length - 1}
             />
           ))}

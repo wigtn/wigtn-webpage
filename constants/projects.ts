@@ -180,9 +180,9 @@ export const PROJECTS: Project[] = [
       ja: "レシートOCR搭載の旅行経費管理アプリ。",
     },
     description: {
-      en: "Snap a receipt in any language. WIGEX reads it, converts the currency, categorizes the expense, and gives you a clean report at the end of your trip.",
-      ko: "어떤 언어로 된 영수증이든 사진 한 장. WIGEX가 읽고, 환율을 변환하고, 카테고리를 분류해, 여행이 끝나면 깔끔한 리포트로 돌려드립니다.",
-      ja: "どんな言語のレシートでも一枚撮るだけ。WIGEXが読み取り、通貨を変換し、カテゴリを分類して、旅の終わりにきれいなレポートとして返します。",
+      en: "Snap a receipt in any language — menu, hotel, taxi, souvenir stall — and WIGEX reads it in seconds. It pulls out the merchant, the total, and the local currency, converts every amount to your home currency at the day-of-purchase rate, and drops the expense into the right category without you lifting a finger. At the end of your trip you get a clean, shareable report: where your money went, what was reimbursable, and what wasn't. No shoeboxes of crumpled receipts. No 2AM spreadsheet tax on the flight home. Just pull out your phone, shoot, and forget.",
+      ko: "어떤 언어로 된 영수증이든 사진 한 장 — 메뉴판, 호텔, 택시, 기념품 가판대까지 — WIGEX가 몇 초 만에 읽어냅니다. 가맹점, 총액, 현지 통화를 자동으로 추출하고, 구매 당일 환율로 내 통화로 환산하고, 손 하나 까딱하지 않아도 알맞은 카테고리로 분류됩니다. 여행이 끝나면 깔끔하게 공유 가능한 리포트가 기다립니다: 어디에 얼마나 썼는지, 경비 처리 가능한 건 무엇이고 아닌 건 무엇인지. 구겨진 영수증 뭉치도, 돌아오는 비행기 새벽 2시의 스프레드시트 노동도 없습니다. 그냥 폰을 꺼내 찍고, 잊어버리세요.",
+      ja: "どんな言語のレシートでも一枚撮るだけ — メニュー、ホテル、タクシー、お土産屋まで — WIGEXが数秒で読み取ります。店名、合計、現地通貨を自動で抽出し、購入当日のレートで自分の通貨に換算し、指一本動かさなくても適切なカテゴリに振り分けます。旅の終わりには、きれいで共有可能なレポートが待っています。どこに何を使ったか、経費精算できるもの、できないもの。くしゃくしゃのレシートの山も、帰りの便で午前2時にスプレッドシートと格闘することもありません。ポケットからスマホを取り出して、撮って、忘れるだけ。",
     },
     gradient: "from-emerald-500 to-teal-400",
     media: {
