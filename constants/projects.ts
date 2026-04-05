@@ -1,14 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import {
-  Phone,
-  Globe,
-  Mic,
-  Shield,
-  BookOpen,
-  Languages,
-  Brain,
-  FileText,
-} from "lucide-react";
+import { Phone, Globe, Mic, Shield, Brain, FileText } from "lucide-react";
 
 /* ─────────────── Shared sub-types (used by product detail blocks) ─────────────── */
 
@@ -174,56 +165,8 @@ export const HOME_STATS: { value: string; label: string }[] = [
 export const PROJECTS: Project[] = [
   /* ─────── Products ─────── */
 
-  {
-    id: "wigvu",
-    slug: "wigvu",
-    name: "WIGVU",
-    section: "products",
-    phase: "in-progress",
-    tagline: {
-      en: "Learn Korean through the content you love.",
-      ko: "좋아하는 콘텐츠로 한국어를 배우세요.",
-      ja: "好きなコンテンツで韓国語を学ぼう。",
-    },
-    description: {
-      en: "Watch YouTube, Netflix, or any content — WIGVU breaks it down word by word, teaches grammar in context, and builds your vocabulary from what you actually watch.",
-      ko: "YouTube, Netflix, 무엇을 보든 — WIGVU가 단어 단위로 분해하고, 문맥 속에서 문법을 가르치고, 실제로 시청하는 콘텐츠로부터 어휘를 쌓아줍니다.",
-      ja: "YouTube、Netflix、あらゆるコンテンツを — WIGVUが単語レベルで分解し、文脈の中で文法を教え、実際に観ているコンテンツから語彙を積み上げます。",
-    },
-    gradient: "from-indigo-500 to-violet",
-    media: {
-      poster: "https://opengraph.githubassets.com/1/wigtn/wigvu",
-    },
-    app: {
-      video: "/videos/wigvu-demo.mp4",
-      screenshot: "/images/apps/wigvu-screenshot.png",
-      // appStoreUrl: TBD — not yet published
-    },
-    timeline: {},
-    links: {
-      github: "https://github.com/wigtn/wigvu",
-    },
-    detail: {
-      translationKey: "wigvu",
-      stats: [
-        { value: "7+", labelKey: "languagesSupported" },
-        { value: "2", labelKey: "contentModes" },
-        { value: "AI", labelKey: "powered" },
-      ],
-      features: [
-        { icon: BookOpen, title: "Content-Based Learning", descriptionKey: "wigvu_feature_content" },
-        { icon: Languages, title: "Sentence-Level Translation", descriptionKey: "wigvu_feature_translation" },
-        { icon: Brain, title: "AI Analysis", descriptionKey: "wigvu_feature_ai" },
-        { icon: FileText, title: "Expression Extraction", descriptionKey: "wigvu_feature_expression" },
-      ],
-      techStack: [
-        { category: "AI / NLP", items: ["GPT-4o-mini", "WhisperX STT", "Custom Prompts"] },
-        { category: "Frontend", items: ["React", "Next.js", "Chrome Extension"] },
-        { category: "Backend", items: ["Python", "FastAPI", "PostgreSQL"] },
-        { category: "Infrastructure", items: ["GCP", "Docker", "CI/CD"] },
-      ],
-    },
-  },
+  // NOTE: WIGVU is intentionally excluded from the homepage for now. Its
+  // translation blob in constants/translations.ts is kept for future re-add.
 
   {
     id: "wigex",
