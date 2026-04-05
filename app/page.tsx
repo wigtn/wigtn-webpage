@@ -2,11 +2,9 @@ import {
   Navigation,
   Crew,
   About,
-  NowStrip,
-  Achievements,
-  LiveProducts,
-  InDevelopment,
-  ResearchAndOSS,
+  Products,
+  OpenSource,
+  Hackathon,
   Team,
   Footer,
 } from "@/components/sections";
@@ -17,11 +15,9 @@ export default function Home() {
       <Navigation />
       <Crew />
       <About />
-      <NowStrip />
-      <Achievements />
-      <LiveProducts />
-      <InDevelopment />
-      <ResearchAndOSS />
+      <Products />
+      <OpenSource />
+      <Hackathon />
       <Team />
       <Footer />
     </main>

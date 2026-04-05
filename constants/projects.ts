@@ -10,7 +10,7 @@ import {
   FileText,
 } from "lucide-react";
 
-/* ─────────────── Shared sub-types (reused from old products.ts) ─────────────── */
+/* ─────────────── Shared sub-types (used by product detail blocks) ─────────────── */
 
 export interface ProductFeature {
   icon: LucideIcon;
@@ -35,22 +35,47 @@ export interface CommunicationMode {
   icon: LucideIcon;
 }
 
-/* ─────────────── Category / Phase / Achievement ─────────────── */
+/* ─────────────── Section / Phase / Achievement ───────────────
+ *
+ * The homepage is composed of three showcase sections (Products,
+ * Open Source, Hackathon). Every project belongs to exactly one
+ * section and is rendered exactly once on the homepage.
+ *
+ * `sectionBadge` is a free-text sub-category label shown on each
+ * card — e.g. "Research" / "Paper" / "Tool" inside Open Source,
+ * "Grand Prize" / "Participated" / "Upcoming" inside Hackathon.
+ */
 
-export type Category = "product" | "research" | "oss";
+export type Section = "products" | "open-source" | "hackathon";
+
+/**
+ * Free-form but typed sub-category badge. Constrained so a typo in the
+ * data file fails the build instead of silently falling through to the
+ * default card styling.
+ */
+export type SectionBadge =
+  | "Research"
+  | "Paper"
+  | "Tool"
+  | "Grand Prize"
+  | "Participated"
+  | "Upcoming";
 
 export type Phase = "in-progress" | "under-review" | "completed" | "archived";
 
 export type AchievementResult =
   | "winner"
+  | "grand-prize"
   | "finalist"
   | "accepted"
-  | "participated";
+  | "participated"
+  | "upcoming";
 
 export interface Achievement {
   event: string;
   result: AchievementResult;
-  date?: string; // "YYYY-MM"
+  organizer?: string;
+  date?: string;
   note?: string;
 }
 
@@ -60,22 +85,34 @@ export interface I18nText {
   ja: string;
 }
 
+/**
+ * Media assets consumed by the project detail page (`/projects/[slug]/`).
+ */
 export interface ProjectMedia {
-  /** Required — shown on cards idle and as detail-page fallback. */
   poster: string;
-  /** Short loop (5–8s) for card hover. Optional. */
   hoverClip?: string;
-  /** Full video for detail-page hero autoplay. */
   heroVideo?: string;
   heroVideoType?: "youtube" | "local";
   gallery?: string[];
+}
+
+/**
+ * Mobile-app assets consumed by the Products carousel's phone mockup.
+ * Only Products-section items populate this field.
+ */
+export interface ProjectApp {
+  /** Portrait screenshot shown inside the phone frame. */
+  screenshot?: string;
+  /** Optional portrait video (autoplay muted loop inside the phone frame). */
+  video?: string;
+  appStoreUrl?: string;
+  playStoreUrl?: string;
 }
 
 export interface ProjectTimeline {
   started?: string;
   submittedAt?: string;
   decidedAt?: string;
-  /** D-day for under-review items. */
   deadline?: string;
 }
 
@@ -93,12 +130,14 @@ export interface Project {
   id: string;
   slug: string;
   name: string;
-  category: Category;
+  section: Section;
+  sectionBadge?: SectionBadge;
   phase: Phase;
   tagline: I18nText;
   description: I18nText;
   gradient: string;
   media: ProjectMedia;
+  app?: ProjectApp;
   timeline: ProjectTimeline;
   achievements?: Achievement[];
   publication?: string;
@@ -112,121 +151,161 @@ export interface Project {
   detail?: ProjectDetail;
 }
 
-/* ─────────────── Phase label map ───────────────
- * Card phase badge text by (category, phase). Detail pages and cards
- * read these labels via components/projects/PhaseBadge.
- */
+/* ─────────────── Phase label (used on detail pages) ─────────────── */
 
-export const PHASE_LABEL: Record<Category, Record<Phase, string>> = {
-  product: {
-    "in-progress": "In development",
-    "under-review": "Beta",
-    completed: "Live",
-    archived: "Sunset",
-  },
-  research: {
-    "in-progress": "In preparation",
-    "under-review": "Under peer review",
-    completed: "Published",
-    archived: "Withdrawn",
-  },
-  oss: {
-    "in-progress": "Active",
-    "under-review": "Pre-release",
-    completed: "Stable",
-    archived: "Unmaintained",
-  },
+export const PHASE_LABEL: Record<Phase, string> = {
+  "in-progress": "In development",
+  "under-review": "Under review",
+  completed: "Released",
+  archived: "Archived",
 };
+
+/* ─────────────── Home-page stat bar ─────────────── */
+
+export const HOME_STATS: { value: string; label: string }[] = [
+  { value: "8+", label: "projects" },
+  { value: "1", label: "grand prize" },
+  { value: "1", label: "paper" },
+  { value: "5", label: "engineers" },
+];
 
 /* ─────────────── PROJECTS ─────────────── */
 
 export const PROJECTS: Project[] = [
+  /* ─────── Products ─────── */
+
   {
-    id: "timelens",
-    slug: "timelens",
-    name: "TimeLens",
-    category: "product",
-    phase: "completed",
-    featured: true,
+    id: "wigvu",
+    slug: "wigvu",
+    name: "WIGVU",
+    section: "products",
+    phase: "in-progress",
     tagline: {
-      en: "Point your camera. Meet your AI curator.",
-      ko: "카메라를 대면, AI 큐레이터를 만나세요.",
-      ja: "カメラを向ければ、AIキュレーターに出会える。",
+      en: "Learn Korean through the content you love.",
+      ko: "좋아하는 콘텐츠로 한국어를 배우세요.",
+      ja: "好きなコンテンツで韓国語を学ぼう。",
     },
     description: {
-      en: "AI-powered cultural heritage companion. Point your camera at museum artifacts and have an AI curator explain them in real-time with historical context and restoration visualizations. Built with Gemini Live API and Google ADK.",
-      ko: "AI 기반 문화유산 가이드. 박물관 유물에 카메라를 대면 AI 큐레이터가 역사적 맥락과 복원 시각화를 통해 실시간으로 설명합니다. Gemini Live API와 Google ADK로 구축.",
-      ja: "AI搭載の文化遺産ガイド。博物館の展示物にカメラを向けると、AIキュレーターが歴史的文脈と復元ビジュアライゼーションでリアルタイム解説。Gemini Live APIとGoogle ADKで構築。",
+      en: "Watch YouTube, Netflix, or any content — WIGVU breaks it down word by word, teaches grammar in context, and builds your vocabulary from what you actually watch.",
+      ko: "YouTube, Netflix, 무엇을 보든 — WIGVU가 단어 단위로 분해하고, 문맥 속에서 문법을 가르치고, 실제로 시청하는 콘텐츠로부터 어휘를 쌓아줍니다.",
+      ja: "YouTube、Netflix、あらゆるコンテンツを — WIGVUが単語レベルで分解し、文脈の中で文法を教え、実際に観ているコンテンツから語彙を積み上げます。",
     },
-    gradient: "from-amber-500 to-orange-400",
+    gradient: "from-indigo-500 to-violet",
     media: {
-      poster: "/images/projects/timelens_hero.png",
-      heroVideo: "https://youtu.be/ITaMtVO5jFg?si=Qb9-5mGiXtHMcewm",
-      heroVideoType: "youtube",
+      poster: "https://opengraph.githubassets.com/1/wigtn/wigvu",
+    },
+    app: {
+      video: "/videos/wigvu-demo.mp4",
+      screenshot: "/images/apps/wigvu-screenshot.png",
+      // appStoreUrl: TBD — not yet published
     },
     timeline: {},
-    achievements: [
-      {
-        event: "Google Gemini Live Agent Challenge",
-        result: "participated",
-      },
-    ],
     links: {
-      github: "https://github.com/wigtn/wigtn-timelens",
-      video: "https://youtu.be/ITaMtVO5jFg?si=Qb9-5mGiXtHMcewm",
-      live: "https://timelens-852253134165.asia-northeast3.run.app/",
+      github: "https://github.com/wigtn/wigvu",
+    },
+    detail: {
+      translationKey: "wigvu",
+      stats: [
+        { value: "7+", labelKey: "languagesSupported" },
+        { value: "2", labelKey: "contentModes" },
+        { value: "AI", labelKey: "powered" },
+      ],
+      features: [
+        { icon: BookOpen, title: "Content-Based Learning", descriptionKey: "wigvu_feature_content" },
+        { icon: Languages, title: "Sentence-Level Translation", descriptionKey: "wigvu_feature_translation" },
+        { icon: Brain, title: "AI Analysis", descriptionKey: "wigvu_feature_ai" },
+        { icon: FileText, title: "Expression Extraction", descriptionKey: "wigvu_feature_expression" },
+      ],
+      techStack: [
+        { category: "AI / NLP", items: ["GPT-4o-mini", "WhisperX STT", "Custom Prompts"] },
+        { category: "Frontend", items: ["React", "Next.js", "Chrome Extension"] },
+        { category: "Backend", items: ["Python", "FastAPI", "PostgreSQL"] },
+        { category: "Infrastructure", items: ["GCP", "Docker", "CI/CD"] },
+      ],
     },
   },
+
   {
-    id: "wigent",
-    slug: "wigent",
-    name: "Wigent",
-    category: "product",
-    phase: "completed",
-    featured: true,
+    id: "wigex",
+    slug: "wigex",
+    name: "WIGEX",
+    section: "products",
+    phase: "in-progress",
     tagline: {
-      en: "Multi-agent debate arena. Built in 3.5 hours.",
-      ko: "멀티 에이전트 토론 아레나. 3.5시간 만에 완성.",
-      ja: "マルチエージェント討論アリーナ。3.5時間で完成。",
+      en: "Travel expense tracker with receipt OCR.",
+      ko: "영수증 OCR이 탑재된 여행 경비 관리 앱.",
+      ja: "レシートOCR搭載の旅行経費管理アプリ。",
     },
     description: {
-      en: "Multi-agent debate platform. Throw in a topic and watch a PM agent plus auto-spawned expert agents discuss, argue, retire, and spawn new specialists in a Slack-style chat UI — then auto-generate a landing page from the conclusions. Built in 3.5 hours by 3 members using parallel Claude Code development.",
-      ko: "멀티 에이전트 토론 플랫폼. 주제를 던지면 PM 에이전트와 자동 생성된 전문가 에이전트들이 Slack 스타일 채팅 UI에서 토론하고, 반박하고, 물러나고, 새로운 전문가를 소환합니다. 결론을 바탕으로 랜딩 페이지까지 자동 생성. 3명이 병렬 Claude Code 개발로 3.5시간 만에 완성.",
-      ja: "マルチエージェント討論プラットフォーム。トピックを投げ込むと、PMエージェントと自動生成された専門家エージェントがSlack風チャットUIで討論・反論・引退・新しい専門家召喚を繰り返し、結論からランディングページまで自動生成。3人が並列Claude Code開発で3.5時間で完成。",
+      en: "Snap a receipt in any language. WIGEX reads it, converts the currency, categorizes the expense, and gives you a clean report at the end of your trip.",
+      ko: "어떤 언어로 된 영수증이든 사진 한 장. WIGEX가 읽고, 환율을 변환하고, 카테고리를 분류해, 여행이 끝나면 깔끔한 리포트로 돌려드립니다.",
+      ja: "どんな言語のレシートでも一枚撮るだけ。WIGEXが読み取り、通貨を変換し、カテゴリを分類して、旅の終わりにきれいなレポートとして返します。",
     },
-    gradient: "from-yellow-400 to-amber-500",
+    gradient: "from-emerald-500 to-teal-400",
     media: {
-      poster: "https://opengraph.githubassets.com/1/wigtn/wigent",
+      poster: "https://opengraph.githubassets.com/1/wigtn/wigex",
+      heroVideo: "/videos/wigex_video.mp4",
+      heroVideoType: "local",
+    },
+    app: {
+      screenshot: "/images/apps/wigex-screenshot.png",
+      video: "/videos/wigex_video.mp4",
+      // appStoreUrl: TBD
     },
     timeline: {},
-    achievements: [
-      {
-        event: "Build with TRAE Seoul (ByteDance)",
-        result: "winner",
-        note: "Grand Prize",
-      },
-    ],
     links: {
-      github: "https://github.com/wigtn/wigent",
+      github: "https://github.com/wigtn/wigex",
     },
   },
+
+  /* ─────── Open Source ─────── */
+
+  {
+    id: "wigtnocr",
+    slug: "wigtnocr",
+    name: "WigtnOCR",
+    section: "open-source",
+    sectionBadge: "Research",
+    phase: "completed",
+    publication: "EMNLP 2026 prep",
+    tagline: {
+      en: "2B document parser. #1 on KoGovDoc.",
+      ko: "2B 문서 파서. KoGovDoc 1위.",
+      ja: "2B文書パーサー。KoGovDoc 1位。",
+    },
+    description: {
+      en: "2B document parsing model distilled from a 30B teacher via pseudo-label distillation and LoRA fine-tuning. Matches teacher performance on OmniDocBench; ranks #1 on the KoGovDoc Korean government document retrieval benchmark.",
+      ko: "30B 교사 모델에서 pseudo-label distillation과 LoRA로 증류한 2B 문서 파싱 모델. OmniDocBench에서 교사 모델 수준 달성, KoGovDoc 한국 정부 문서 검색 벤치마크 1위.",
+      ja: "30B教師モデルから疑似ラベル蒸留とLoRAで蒸留した2B文書パーシングモデル。OmniDocBenchで教師モデル同等性能、KoGovDoc韓国政府文書検索ベンチマーク1位。",
+    },
+    gradient: "from-yellow-500 to-amber-400",
+    media: {
+      poster: "/images/projects/wigtnocr-huggingface.png",
+    },
+    timeline: {},
+    links: {
+      github: "https://github.com/wigtn/wigtnOCR-v1",
+      huggingface: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR",
+    },
+  },
+
   {
     id: "wigvo",
     slug: "wigvo",
     name: "WIGVO",
-    category: "product",
+    section: "open-source",
+    sectionBadge: "Paper",
     phase: "completed",
-    featured: true,
     publication: "ACL 2026 (submitted)",
     tagline: {
-      en: "Break language barriers. Call anyone, in any language.",
-      ko: "언어 장벽을 깨다. 누구에게든, 어떤 언어로든 전화하세요.",
-      ja: "言語の壁を壊す。誰にでも、どの言語でも電話できる。",
+      en: "Real-time voice translation.",
+      ko: "실시간 음성 통역.",
+      ja: "リアルタイム音声通訳。",
     },
     description: {
-      en: "Real-time voice translation for phone calls. Dual AI sessions with software-only echo cancellation enable natural bilingual conversations over standard phone lines. 0 echo-loop incidents across 148 production calls. Production-deployed on Google Cloud Run.",
-      ko: "실시간 전화 음성 통역. 듀얼 AI 세션과 소프트웨어 기반 에코 캔슬레이션으로 일반 전화선에서 자연스러운 이중 언어 대화를 실현합니다. 148회 프로덕션 통화에서 에코 루프 0건. Google Cloud Run 프로덕션 배포 중.",
-      ja: "電話通話のためのリアルタイム音声通訳。デュアルAIセッションとソフトウェアベースのエコーキャンセレーションにより、一般電話回線で自然な二言語会話を実現。148回の本番通話でエコーループ0件。Google Cloud Runで本番稼働中。",
+      en: "Real-time voice translation for phone calls. Dual AI sessions with software-only echo cancellation enable natural bilingual conversations over standard phone lines. 0 echo-loop incidents across 148 production calls.",
+      ko: "실시간 전화 음성 통역. 듀얼 AI 세션과 소프트웨어 기반 에코 캔슬레이션으로 일반 전화선에서 자연스러운 이중 언어 대화를 실현합니다. 148회 프로덕션 통화에서 에코 루프 0건.",
+      ja: "電話通話のためのリアルタイム音声通訳。デュアルAIセッションとソフトウェアベースのエコーキャンセレーションにより、一般電話回線で自然な二言語会話を実現。148回の本番通話でエコーループ0件。",
     },
     gradient: "from-violet to-purple-400",
     media: {
@@ -270,119 +349,22 @@ export const PROJECTS: Project[] = [
       ],
     },
   },
-  {
-    id: "wigtnocr",
-    slug: "wigtnocr",
-    name: "WigtnOCR-v1",
-    category: "research",
-    phase: "completed",
-    publication: "EMNLP 2026 (in preparation)",
-    tagline: {
-      en: "2B document parser distilled from 30B. #1 on KoGovDoc.",
-      ko: "30B에서 증류한 2B 문서 파서. KoGovDoc 1위.",
-      ja: "30Bから蒸留した2B文書パーサー。KoGovDoc 1位。",
-    },
-    description: {
-      en: "2B document parsing model distilled from a 30B teacher via pseudo-label distillation and LoRA fine-tuning. Matches teacher performance on OmniDocBench, ranks #1 on KoGovDoc Korean government document retrieval benchmark.",
-      ko: "30B 교사 모델에서 pseudo-label distillation과 LoRA로 증류한 2B 문서 파싱 모델. OmniDocBench에서 교사 모델 수준 달성, KoGovDoc 한국 정부 문서 검색 벤치마크 1위.",
-      ja: "30B教師モデルから疑似ラベル蒸留とLoRAで蒸留した2B文書パーシングモデル。OmniDocBenchで教師モデル同等性能、KoGovDoc韓国政府文書検索ベンチマーク1位。",
-    },
-    gradient: "from-yellow-500 to-amber-400",
-    media: {
-      poster: "/images/projects/wigtnocr-huggingface.png",
-    },
-    timeline: {},
-    links: {
-      github: "https://github.com/wigtn/wigtnOCR-v1",
-      huggingface: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR",
-    },
-  },
-  {
-    id: "wigvu",
-    slug: "wigvu",
-    name: "WIGVU",
-    category: "product",
-    phase: "in-progress",
-    tagline: {
-      en: "Learn Korean through the content you love.",
-      ko: "좋아하는 콘텐츠로 한국어를 배우세요.",
-      ja: "好きなコンテンツで韓国語を学ぼう。",
-    },
-    description: {
-      en: "AI-powered Korean learning from real content. Transforms K-Drama, K-POP, and YouTube into interactive lessons with sentence-level translation.",
-      ko: "실제 콘텐츠 기반 AI 한국어 학습. K-Drama, K-POP, YouTube를 문장 단위 번역이 가능한 인터랙티브 학습 자료로 변환합니다.",
-      ja: "実際のコンテンツからのAI韓国語学習。K-Drama、K-POP、YouTubeを文レベル翻訳付きインタラクティブレッスンに変換。",
-    },
-    gradient: "from-indigo-500 to-violet",
-    media: {
-      poster: "https://opengraph.githubassets.com/1/wigtn/wigvu",
-    },
-    timeline: {},
-    links: {
-      github: "https://github.com/wigtn/wigvu",
-    },
-    detail: {
-      translationKey: "wigvu",
-      stats: [
-        { value: "7+", labelKey: "languagesSupported" },
-        { value: "2", labelKey: "contentModes" },
-        { value: "AI", labelKey: "powered" },
-      ],
-      features: [
-        { icon: BookOpen, title: "Content-Based Learning", descriptionKey: "wigvu_feature_content" },
-        { icon: Languages, title: "Sentence-Level Translation", descriptionKey: "wigvu_feature_translation" },
-        { icon: Brain, title: "AI Analysis", descriptionKey: "wigvu_feature_ai" },
-        { icon: FileText, title: "Expression Extraction", descriptionKey: "wigvu_feature_expression" },
-      ],
-      techStack: [
-        { category: "AI / NLP", items: ["GPT-4o-mini", "WhisperX STT", "Custom Prompts"] },
-        { category: "Frontend", items: ["React", "Next.js", "Chrome Extension"] },
-        { category: "Backend", items: ["Python", "FastAPI", "PostgreSQL"] },
-        { category: "Infrastructure", items: ["GCP", "Docker", "CI/CD"] },
-      ],
-    },
-  },
-  {
-    id: "wigex",
-    slug: "wigex",
-    name: "WIGEX",
-    category: "product",
-    phase: "in-progress",
-    tagline: {
-      en: "Travel expense tracker with receipt OCR.",
-      ko: "영수증 OCR이 탑재된 여행 경비 관리 앱.",
-      ja: "レシートOCR搭載の旅行経費管理アプリ。",
-    },
-    description: {
-      en: "Travel expense tracker with receipt OCR powered by our own WigtnOCR model. Real-time currency conversion and offline support. Monorepo + microservices architecture (Expo mobile, NestJS backend, Next.js admin).",
-      ko: "자체 WigtnOCR 모델 기반 영수증 OCR 탑재 여행 경비 관리 앱. 실시간 환율 변환과 오프라인 지원. 모노레포 + 마이크로서비스 아키텍처 (Expo 모바일, NestJS 백엔드, Next.js 어드민).",
-      ja: "自社WigtnOCRモデルによるレシートOCR搭載の旅行経費管理アプリ。リアルタイム為替変換とオフライン対応。モノレポ＋マイクロサービスアーキテクチャ（Expoモバイル、NestJSバックエンド、Next.js管理画面）。",
-    },
-    gradient: "from-emerald-500 to-teal-400",
-    media: {
-      poster: "https://opengraph.githubassets.com/1/wigtn/wigex",
-      heroVideo: "/videos/wigex_video.mp4",
-      heroVideoType: "local",
-    },
-    timeline: {},
-    links: {
-      github: "https://github.com/wigtn/wigex",
-    },
-  },
+
   {
     id: "wigss",
     slug: "wigss",
     name: "WIGSS",
-    category: "oss",
+    section: "open-source",
+    sectionBadge: "Tool",
     phase: "in-progress",
     tagline: {
-      en: "Drag your UI. The source code rewrites itself.",
-      ko: "UI를 드래그하면, 소스 코드가 스스로 다시 써집니다.",
-      ja: "UIをドラッグすると、ソースコードが自ら書き直される。",
+      en: "Drag UI, code rewrites itself.",
+      ko: "UI를 드래그하면, 코드가 스스로 다시 써집니다.",
+      ja: "UIをドラッグすると、コードが自ら書き直される。",
     },
     description: {
-      en: 'Visual code refactoring with AI. Point WIGSS at your running dev server, visually drag and rearrange UI components in the browser, and watch the source code rewrite itself with an always-on AI agent. Published on npm.',
-      ko: "AI 기반 비주얼 코드 리팩토링. WIGSS를 실행 중인 개발 서버에 연결하면, 브라우저에서 UI 컴포넌트를 드래그하고 재배치하는 대로 상시 AI 에이전트가 소스 코드를 다시 써줍니다. npm 배포 중.",
+      en: "Visual code refactoring with AI. Point WIGSS at your running dev server, visually drag and rearrange UI components in the browser, and watch the source code rewrite itself with an always-on AI agent. Published on npm.",
+      ko: "AI 기반 비주얼 코드 리팩토링. WIGSS를 실행 중인 개발 서버에 연결하고, 브라우저에서 UI 컴포넌트를 드래그·재배치하면 상시 AI 에이전트가 소스 코드를 다시 써줍니다. npm 배포 중.",
       ja: "AIによるビジュアルコードリファクタリング。WIGSSを実行中の開発サーバーに接続し、ブラウザでUIコンポーネントをドラッグ・再配置すると、常時稼働AIエージェントがソースコードを書き換えます。npm公開中。",
     },
     gradient: "from-sky-500 to-cyan-400",
@@ -395,16 +377,18 @@ export const PROJECTS: Project[] = [
       live: "https://npmjs.com/package/wigss",
     },
   },
+
   {
     id: "wigtn-coding",
     slug: "wigtn-coding",
     name: "WIGTN Coding",
-    category: "oss",
+    section: "open-source",
+    sectionBadge: "Tool",
     phase: "in-progress",
     tagline: {
-      en: "From idea to deploy, zero friction. Claude Code plugin ecosystem.",
-      ko: "아이디어에서 배포까지, 제로 프릭션. Claude Code 플러그인 생태계.",
-      ja: "アイデアからデプロイまで、ゼロフリクション。Claude Codeプラグインエコシステム。",
+      en: "Claude Code plugin ecosystem.",
+      ko: "Claude Code 플러그인 생태계.",
+      ja: "Claude Codeプラグインエコシステム。",
     },
     description: {
       en: "Unified Claude Code plugin — from idea to deploy, zero friction. 12 agents, 3 skills, and 17 design styles working together with team-based parallel execution for 3-5x speedup.",
@@ -420,6 +404,113 @@ export const PROJECTS: Project[] = [
       github: "https://github.com/wigtn/wigtn-plugins-with-claude-code",
     },
   },
+
+  /* ─────── Hackathon ─────── */
+
+  {
+    id: "wigent",
+    slug: "wigent",
+    name: "Wigent",
+    section: "hackathon",
+    sectionBadge: "Grand Prize",
+    phase: "completed",
+    tagline: {
+      en: "Multi-agent debate arena.",
+      ko: "멀티 에이전트 토론 아레나.",
+      ja: "マルチエージェント討論アリーナ。",
+    },
+    description: {
+      en: "Throw in a topic and watch a PM agent plus auto-spawned expert agents discuss, argue, retire, and spawn new specialists in a Slack-style chat UI — then auto-generate a landing page from the conclusions. Built in 3.5 hours by 3 members.",
+      ko: "주제를 던지면 PM 에이전트와 자동 생성된 전문가 에이전트들이 Slack 스타일 채팅 UI에서 토론하고, 반박하고, 물러나고, 새로운 전문가를 소환합니다. 결론을 바탕으로 랜딩 페이지까지 자동 생성. 3명이 병렬로 3.5시간 만에 완성.",
+      ja: "トピックを投げ込むとPMエージェントと自動生成された専門家エージェントがSlack風チャットUIで討論・反論・引退・新しい専門家召喚を繰り返し、結論からランディングページまで自動生成。3人で並列で3.5時間で完成。",
+    },
+    gradient: "from-yellow-400 to-amber-500",
+    media: {
+      poster: "https://opengraph.githubassets.com/1/wigtn/wigent",
+    },
+    timeline: {},
+    achievements: [
+      {
+        event: "Build with TRAE Seoul",
+        organizer: "ByteDance",
+        result: "grand-prize",
+        note: "Grand Prize",
+      },
+    ],
+    links: {
+      github: "https://github.com/wigtn/wigent",
+    },
+  },
+
+  {
+    id: "timelens",
+    slug: "timelens",
+    name: "TimeLens",
+    section: "hackathon",
+    sectionBadge: "Participated",
+    phase: "completed",
+    tagline: {
+      en: "AI museum curator.",
+      ko: "AI 박물관 큐레이터.",
+      ja: "AI博物館キュレーター。",
+    },
+    description: {
+      en: "AI-powered cultural heritage companion. Point your camera at museum artifacts and have an AI curator explain them in real-time with historical context and restoration visualizations.",
+      ko: "AI 기반 문화유산 가이드. 박물관 유물에 카메라를 대면 AI 큐레이터가 역사적 맥락과 복원 시각화를 통해 실시간으로 설명합니다.",
+      ja: "AI搭載の文化遺産ガイド。博物館の展示物にカメラを向けると、AIキュレーターが歴史的文脈と復元ビジュアライゼーションでリアルタイム解説。",
+    },
+    gradient: "from-amber-500 to-orange-400",
+    media: {
+      poster: "/images/projects/timelens_hero.png",
+      heroVideo: "https://youtu.be/ITaMtVO5jFg?si=Qb9-5mGiXtHMcewm",
+      heroVideoType: "youtube",
+    },
+    timeline: {},
+    achievements: [
+      {
+        event: "Google Gemini Live Agent Challenge",
+        organizer: "Google",
+        result: "participated",
+      },
+    ],
+    links: {
+      github: "https://github.com/wigtn/wigtn-timelens",
+      video: "https://youtu.be/ITaMtVO5jFg?si=Qb9-5mGiXtHMcewm",
+      live: "https://timelens-852253134165.asia-northeast3.run.app/",
+    },
+  },
+
+  {
+    id: "datapulse",
+    slug: "datapulse",
+    name: "DataPulse",
+    section: "hackathon",
+    sectionBadge: "Upcoming",
+    phase: "in-progress",
+    tagline: {
+      en: "Decoupling Index.",
+      ko: "디커플링 인덱스.",
+      ja: "デカップリング指数。",
+    },
+    description: {
+      en: "A decoupling index and live data-driven signal platform built on Snowflake. Upcoming entry for Snowflake Korea 2026.",
+      ko: "Snowflake 기반의 디커플링 인덱스 및 실시간 데이터 시그널 플랫폼. Snowflake Korea 2026 출품 예정.",
+      ja: "Snowflakeベースのデカップリング指数とリアルタイムデータシグナルプラットフォーム。Snowflake Korea 2026 出場予定。",
+    },
+    gradient: "from-slate-500 to-slate-700",
+    media: {
+      poster: "https://opengraph.githubassets.com/1/wigtn/datapulse",
+    },
+    timeline: {},
+    achievements: [
+      {
+        event: "Snowflake Korea 2026",
+        organizer: "Snowflake",
+        result: "upcoming",
+      },
+    ],
+    links: {},
+  },
 ];
 
 /* ─────────────── Derived lookups ─────────────── */
@@ -428,12 +519,9 @@ export const PROJECTS_BY_SLUG: Record<string, Project> = Object.fromEntries(
   PROJECTS.map((p) => [p.slug, p]),
 );
 
-/* ─────────────── Impact stats (migrated from results.ts) ─────────────── */
-
-export const IMPACT_STATS = {
-  papers: 2,
-  competitions: 2,
-  liveServices: 2,
-  models: 1,
-  openSource: 6,
-};
+export const PROJECTS_BY_SECTION: Readonly<Record<Section, readonly Project[]>> =
+  Object.freeze({
+    products: PROJECTS.filter((p) => p.section === "products"),
+    "open-source": PROJECTS.filter((p) => p.section === "open-source"),
+    hackathon: PROJECTS.filter((p) => p.section === "hackathon"),
+  });
