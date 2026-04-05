@@ -61,7 +61,7 @@ export function Navigation() {
             </a>
 
             {/* Right: Desktop Menu + Language */}
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-5">
               {NAV_ITEMS.map((item) => (
                 <a
                   key={item.id}

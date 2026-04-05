@@ -44,7 +44,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
         description: project.description[language],
         problem: "",
         solution: "",
-        statusBadge: PHASE_LABEL[project.category][project.phase],
+        statusBadge: PHASE_LABEL[project.phase],
       };
 
   const liveUrl = project.detail?.liveUrl ?? project.links.live;

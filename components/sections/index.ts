@@ -1,10 +1,8 @@
 export { Navigation } from "./Navigation";
 export { Crew } from "./Crew";
 export { About } from "./About";
-export { NowStrip } from "./NowStrip";
-export { Achievements } from "./Achievements";
-export { LiveProducts } from "./LiveProducts";
-export { InDevelopment } from "./InDevelopment";
-export { ResearchAndOSS } from "./ResearchAndOSS";
+export { Products } from "./Products";
+export { OpenSource } from "./OpenSource";
+export { Hackathon } from "./Hackathon";
 export { Team } from "./Team";
 export { Footer } from "./Footer";
