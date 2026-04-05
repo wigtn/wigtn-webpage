@@ -1,22 +1,84 @@
 "use client";
 
+import Image from "next/image";
 import { ExternalLink } from "lucide-react";
-import type { ProductDetail } from "@/constants/products";
 import type { ProductDetailTranslations } from "@/constants/translations";
 import { useBudouX } from "@/lib/hooks/useBudouX";
 
-interface ProductHeroProps {
-  product: ProductDetail;
-  translations: ProductDetailTranslations;
-  ctaLabel: string;
+/**
+ * Minimal product shape this hero needs. Kept narrow so it can be called
+ * with either a legacy ProductDetail or a Project's detail block.
+ */
+interface HeroProduct {
+  name: string;
+  gradient: string;
+  liveUrl?: string;
 }
 
-export function ProductHero({ product, translations, ctaLabel }: ProductHeroProps) {
+interface ProductHeroProps {
+  product: HeroProduct;
+  translations: ProductDetailTranslations;
+  ctaLabel: string;
+  /** Optional poster image shown full-bleed above the content (portfolio fallback). */
+  posterImage?: string;
+  /** Optional hero video (local or youtube) that autoplays on mount. */
+  heroVideo?: string;
+  heroVideoType?: "youtube" | "local";
+}
+
+function getYouTubeEmbedId(url: string): string | null {
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : null;
+}
+
+export function ProductHero({
+  product,
+  translations,
+  ctaLabel,
+  posterImage,
+  heroVideo,
+  heroVideoType,
+}: ProductHeroProps) {
   const { processText } = useBudouX();
+  const youtubeId = heroVideo && heroVideoType === "youtube" ? getYouTubeEmbedId(heroVideo) : null;
 
   return (
     <section className="pt-32 pb-16 md:pt-40 md:pb-24">
       <div className="max-w-5xl mx-auto px-6">
+        {/* Optional media banner — video takes precedence, else poster */}
+        {(heroVideo || posterImage) && (
+          <div
+            className={`relative w-full rounded-2xl overflow-hidden mb-10 bg-gradient-to-br ${product.gradient}`}
+            style={{ aspectRatio: "16 / 9" }}
+          >
+            {youtubeId ? (
+              <iframe
+                src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&loop=1&playlist=${youtubeId}&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1`}
+                className="absolute inset-0 w-full h-full"
+                allow="autoplay; encrypted-media"
+                tabIndex={-1}
+              />
+            ) : heroVideo && heroVideoType === "local" ? (
+              <video
+                src={heroVideo}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            ) : posterImage ? (
+              <Image
+                src={posterImage}
+                alt={product.name}
+                fill
+                className="object-cover"
+                unoptimized
+              />
+            ) : null}
+          </div>
+        )}
+
         <div className="flex flex-col items-start gap-6">
           {/* Icon + Name + Badge */}
           <div className="flex items-center gap-4">

@@ -1,6 +1,6 @@
 "use client";
 
-import type { ProductFeature } from "@/constants/products";
+import type { ProductFeature } from "@/constants/projects";
 import { useBudouX } from "@/lib/hooks/useBudouX";
 
 interface ProductFeaturesProps {
