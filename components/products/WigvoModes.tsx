@@ -1,6 +1,6 @@
 "use client";
 
-import type { CommunicationMode } from "@/constants/products";
+import type { CommunicationMode } from "@/constants/projects";
 import { useBudouX } from "@/lib/hooks/useBudouX";
 
 interface WigvoModesProps {

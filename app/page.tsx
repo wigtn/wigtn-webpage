@@ -2,7 +2,11 @@ import {
   Navigation,
   Crew,
   About,
-  Results,
+  NowStrip,
+  Achievements,
+  LiveProducts,
+  InDevelopment,
+  ResearchAndOSS,
   Team,
   Footer,
 } from "@/components/sections";
@@ -13,7 +17,11 @@ export default function Home() {
       <Navigation />
       <Crew />
       <About />
-      <Results />
+      <NowStrip />
+      <Achievements />
+      <LiveProducts />
+      <InDevelopment />
+      <ResearchAndOSS />
       <Team />
       <Footer />
     </main>

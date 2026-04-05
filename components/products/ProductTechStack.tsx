@@ -1,6 +1,6 @@
 "use client";
 
-import type { TechCategory } from "@/constants/products";
+import type { TechCategory } from "@/constants/projects";
 
 interface ProductTechStackProps {
   label: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import type { ProductStat } from "@/constants/products";
+import type { ProductStat } from "@/constants/projects";
 
 interface ProductStatsProps {
   label: string;

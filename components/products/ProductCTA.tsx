@@ -2,11 +2,14 @@
 
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
-import type { ProductDetail } from "@/constants/products";
 import { useBudouX } from "@/lib/hooks/useBudouX";
 
+interface CTAProduct {
+  liveUrl?: string;
+}
+
 interface ProductCTAProps {
-  product: ProductDetail;
+  product: CTAProduct;
   tagline: string;
   ctaLabel: string;
   backToHomeLabel: string;
