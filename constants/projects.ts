@@ -411,7 +411,7 @@ export const PROJECTS: Project[] = [
     description: "AI-powered cultural heritage companion. Point your camera at museum artifacts and have an AI curator explain them in real-time with historical context and restoration visualizations.",
     gradient: "from-amber-500 to-orange-400",
     media: {
-      poster: "/images/projects/timelens_hero.png",
+      poster: "/images/carousel/timelens_logo.png",
       heroVideo: "https://youtu.be/ITaMtVO5jFg?si=Qb9-5mGiXtHMcewm",
       heroVideoType: "youtube",
     },
