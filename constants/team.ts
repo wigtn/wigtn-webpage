@@ -14,7 +14,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
   {
     name: "Jinmo Kim",
     role: "MLOps Engineer & Designer",
-    bio: "Owns the full MLOps lifecycle — containerizing models with Docker, orchestrating training and inference workloads on Kubernetes, and managing CI/CD pipelines that ship AI services to production. Also serves as the team's DBA, tuning query performance and maintaining data reliability across distributed datastores. Beyond infrastructure, brings a strong design sensibility to the table — leading UI/UX direction and building video processing systems that turn raw footage into polished product assets.",
+    bio: "Manages the full MLOps pipeline — Docker, Kubernetes, and CI/CD — to ship AI services to production. Also serves as the team's DBA and brings a strong design eye, leading UI/UX direction and building video processing systems.",
     expertise: ["Docker", "Kubernetes", "CI/CD", "MLOps", "DBA", "UI/UX Design", "Video Processing"],
     links: {
       github: "https://github.com/moriroKim",
@@ -24,7 +24,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
   {
     name: "Hyeonsang Kim",
     role: "AI Product Engineer",
-    bio: "Mobile-first full-stack engineer who architects and ships cross-platform applications from presentation layer to database. Specializes in React Native for native-quality mobile experiences while building the supporting backend services with Node.js and relational databases — covering the full 3-tier stack end to end. Integrates AI-native tooling throughout the development workflow to accelerate iteration speed and maintain production-grade quality, with a focus on software engineering craft rather than model development.",
+    bio: "Mobile-first full-stack engineer covering the entire 3-tier stack with React Native. Builds AI-native frontend and backend services end to end, focused on software engineering craft rather than model development.",
     expertise: ["React Native", "Expo", "Next.js", "Nest.js", "Node.js", "PostgreSQL", "Full-Stack"],
     links: {
       github: "https://github.com/HyeonsangKim",
@@ -45,7 +45,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
   {
     name: "Hyunwoo Cho",
     role: "AI Product Engineer",
-    bio: "Web-focused full-stack engineer who delivers responsive, high-performance applications across the entire 3-tier architecture — from pixel-perfect React frontends through API design to database-backed services. Brings additional mobile development experience with React Native, enabling seamless cross-platform contributions when the team needs it. Leverages AI-native tooling across every phase of the development cycle to ship faster without sacrificing code quality, with a clear focus on software engineering discipline over model building.",
+    bio: "Web-focused full-stack engineer who builds across the 3-tier architecture — React frontends, API design, and database services. Also brings mobile experience with React Native and leverages AI-native tooling for rapid, production-quality delivery.",
     expertise: ["React", "Next.js", "TypeScript", "Nest.js", "Node.js", "React Native", "PostgreSQL", "Full-Stack"],
     links: {
       linkedin:
