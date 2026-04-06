@@ -13,9 +13,9 @@ export const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     name: "Jinmo Kim",
-    role: "Distributed Systems Engineer & Designer",
-    bio: "Designs and builds large-scale distributed processing systems while serving as the team's DBA. Combines a sharp design sensibility with deep systems expertise — leading visual design and implementing video processing pipelines alongside core infrastructure work.",
-    expertise: ["Distributed Systems", "DBA", "Video Processing", "UI/UX Design", "Spring Boot", "Docker"],
+    role: "MLOps Engineer & Designer",
+    bio: "Owns the full MLOps lifecycle — containerizing models with Docker, orchestrating training and inference workloads on Kubernetes, and managing CI/CD pipelines that ship AI services to production. Also serves as the team's DBA, tuning query performance and maintaining data reliability across distributed datastores. Beyond infrastructure, brings a strong design sensibility to the table — leading UI/UX direction and building video processing systems that turn raw footage into polished product assets.",
+    expertise: ["Docker", "Kubernetes", "CI/CD", "MLOps", "DBA", "UI/UX Design", "Video Processing"],
     links: {
       github: "https://github.com/moriroKim",
       linkedin: "https://www.linkedin.com/in/jinmo-kim-62878533b/",
@@ -23,9 +23,9 @@ export const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     name: "Hyeonsang Kim",
-    role: "Mobile Software Engineer",
-    bio: "Mobile systems specialist who builds AI-native frontend and backend across the full 3-tier stack. Develops production mobile applications while leveraging AI tooling to accelerate delivery — focused on traditional software engineering, not model development.",
-    expertise: ["React Native", "Mobile", "Next.js", "Nest.js", "Full-Stack"],
+    role: "AI Product Engineer",
+    bio: "Mobile-first full-stack engineer who architects and ships cross-platform applications from presentation layer to database. Specializes in React Native for native-quality mobile experiences while building the supporting backend services with Node.js and relational databases — covering the full 3-tier stack end to end. Integrates AI-native tooling throughout the development workflow to accelerate iteration speed and maintain production-grade quality, with a focus on software engineering craft rather than model development.",
+    expertise: ["React Native", "Expo", "Next.js", "Nest.js", "Node.js", "PostgreSQL", "Full-Stack"],
     links: {
       github: "https://github.com/HyeonsangKim",
       linkedin: "https://www.linkedin.com/in/hyeonsang-kim-5a7a67260/",
@@ -44,9 +44,9 @@ export const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     name: "Hyunwoo Cho",
-    role: "Web Software Engineer",
-    bio: "Web-focused full-stack engineer who builds AI-native frontend and backend across the 3-tier stack. Specializes in web applications with additional mobile development experience — leveraging AI tooling for rapid, production-quality delivery.",
-    expertise: ["React", "Next.js", "TypeScript", "Node.js", "React Native", "Full-Stack"],
+    role: "AI Product Engineer",
+    bio: "Web-focused full-stack engineer who delivers responsive, high-performance applications across the entire 3-tier architecture — from pixel-perfect React frontends through API design to database-backed services. Brings additional mobile development experience with React Native, enabling seamless cross-platform contributions when the team needs it. Leverages AI-native tooling across every phase of the development cycle to ship faster without sacrificing code quality, with a clear focus on software engineering discipline over model building.",
+    expertise: ["React", "Next.js", "TypeScript", "Nest.js", "Node.js", "React Native", "PostgreSQL", "Full-Stack"],
     links: {
       linkedin:
         "https://www.linkedin.com/in/%ED%98%84%EC%9A%B0-%EC%A1%B0-8a6800393/",
