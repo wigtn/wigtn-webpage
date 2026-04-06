@@ -1,5 +1,7 @@
 import type { LucideIcon } from "lucide-react";
-import { Phone, Globe, Mic, Shield, Brain, FileText } from "lucide-react";
+import { Phone, Globe, Mic, Shield, Brain, FileText, Zap, Database, Github } from "lucide-react";
+import { WIGTNOCR_SECTIONS } from "./wigtnocr-sections";
+import { WIGVO_SECTIONS } from "./wigvo-sections";
 
 /* ─────────────── Shared sub-types (used by product detail blocks) ─────────────── */
 
@@ -24,6 +26,22 @@ export interface CommunicationMode {
   titleKey: string;
   descriptionKey: string;
   icon: LucideIcon;
+}
+
+/* ─────────────── Research content blocks ─────────────── */
+
+export type ContentBlock =
+  | { type: "prose"; text: string }
+  | { type: "highlights"; title: string; items: string[] }
+  | { type: "list"; items: string[] }
+  | { type: "table"; caption?: string; headers: string[]; rows: { cells: string[]; highlight?: boolean }[] }
+  | { type: "figure"; images: { src: string; alt: string; caption?: string }[]; layout?: "single" | "grid" }
+
+export interface ResearchSection {
+  id: string;
+  title: string;
+  subtitle?: string;
+  blocks: ContentBlock[];
 }
 
 /* ─────────────── Section / Phase / Achievement ───────────────
@@ -112,13 +130,14 @@ export interface ProjectTimeline {
 }
 
 export interface ProjectDetail {
-  /** References existing productDetail.wigvo / productDetail.wigvu translation blobs. */
-  translationKey?: "wigvo" | "wigvu";
+  /** References existing productDetail.wigvo / productDetail.wigvu / productDetail.wigtnocr translation blobs. */
+  translationKey?: "wigvo" | "wigvu" | "wigtnocr";
   liveUrl?: string;
   features?: ProductFeature[];
   stats?: ProductStat[];
   techStack?: TechCategory[];
   modes?: CommunicationMode[];
+  researchSections?: ResearchSection[];
 }
 
 export interface Project {
@@ -237,6 +256,27 @@ export const PROJECTS: Project[] = [
       github: "https://github.com/wigtn/wigtnOCR-v1",
       huggingface: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR",
     },
+    detail: {
+      translationKey: "wigtnocr",
+      stats: [
+        { value: "0.649", labelKey: "tableTeds" },
+        { value: "0.739", labelKey: "retrievalHit1" },
+        { value: "31min", labelKey: "trainingTime" },
+        { value: "2B", labelKey: "parameters" },
+      ],
+      features: [
+        { icon: Brain, title: "Pseudo-Label Distillation", descriptionKey: "wigtnocr_feature_distillation" },
+        { icon: Zap, title: "LoRA Fine-tuning", descriptionKey: "wigtnocr_feature_lora" },
+        { icon: Database, title: "KoGovDoc-Bench", descriptionKey: "wigtnocr_feature_benchmark" },
+        { icon: Github, title: "Fully Open Source", descriptionKey: "wigtnocr_feature_opensource" },
+      ],
+      techStack: [
+        { category: "Model & Training", items: ["Qwen3-VL-2B-Instruct", "Qwen3-VL-30B-Instruct (Teacher)", "Qwen3.5-122B (Judge)", "ms-swift", "LoRA", "DeepSpeed ZeRO-2", "vLLM"] },
+        { category: "Evaluation & Retrieval", items: ["OmniDocBench (CVPR 2025)", "KoGovDoc-Bench", "MoC BC/CS (ACL 2025)", "BGE-M3", "FAISS", "Qwen2.5-1.5B-Instruct"] },
+        { category: "Infrastructure", items: ["2x NVIDIA RTX PRO 6000 Blackwell (96GB)", "HuggingFace", "GitHub", "Docker"] },
+      ],
+      researchSections: WIGTNOCR_SECTIONS,
+    },
   },
 
   {
@@ -262,11 +302,9 @@ export const PROJECTS: Project[] = [
     links: {
       github: "https://github.com/wigtn/wigvo-v2",
       video: "https://youtu.be/_ixVEnHJxjk?si=P257fqme3B0zTzNu",
-      live: "https://wigvo.run",
     },
     detail: {
       translationKey: "wigvo",
-      liveUrl: "https://wigvo.run",
       stats: [
         { value: "557ms", labelKey: "avgLatency" },
         { value: "169", labelKey: "callsMade" },
@@ -280,16 +318,16 @@ export const PROJECTS: Project[] = [
         { icon: Shield, title: "No App Required", descriptionKey: "wigvo_feature_noapp" },
       ],
       techStack: [
-        { category: "AI / Voice", items: ["OpenAI Realtime API", "Dual WebSocket Sessions", "VAD"] },
-        { category: "Telephony", items: ["Twilio PSTN", "WebRTC", "SIP Trunking"] },
-        { category: "Backend", items: ["Node.js", "WebSocket Server", "Redis"] },
-        { category: "Infrastructure", items: ["AWS", "Docker", "CI/CD"] },
+        { category: "AI & Audio", items: ["OpenAI Realtime API (Whisper-1)", "GPT-4o-mini (translation)", "Silero VAD (ONNX)", "Twilio Media Streams (G.711 μ-law 8kHz)"] },
+        { category: "Backend & Frontend", items: ["Python 3.12", "FastAPI", "uvicorn", "asyncio", "Next.js", "React 19", "Zustand", "shadcn/ui", "React Native (Expo SDK 54)"] },
+        { category: "Infrastructure", items: ["Google Cloud Run", "Cloud Build", "Secret Manager", "Docker", "Supabase (PostgreSQL)", "COMET", "pytest (434 tests)"] },
       ],
       modes: [
         { id: "v2v", titleKey: "mode_v2v_title", descriptionKey: "mode_v2v_desc", icon: Mic },
         { id: "t2v", titleKey: "mode_t2v_title", descriptionKey: "mode_t2v_desc", icon: FileText },
         { id: "agent", titleKey: "mode_agent_title", descriptionKey: "mode_agent_desc", icon: Brain },
       ],
+      researchSections: WIGVO_SECTIONS,
     },
   },
 

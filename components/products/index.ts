@@ -6,3 +6,7 @@ export { ProductStats } from "./ProductStats";
 export { ProductTechStack } from "./ProductTechStack";
 export { ProductCTA } from "./ProductCTA";
 export { WigvoModes } from "./WigvoModes";
+export { ResearchSectionComponent } from "./ResearchSection";
+export { BenchmarkTable } from "./BenchmarkTable";
+export { FigureGallery } from "./FigureGallery";
+export { ResearchHighlights } from "./ResearchHighlights";

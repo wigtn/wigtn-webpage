@@ -14,6 +14,7 @@ import {
   ProductTechStack,
   ProductCTA,
   WigvoModes,
+  ResearchSectionComponent,
 } from "@/components/products";
 
 interface ProjectDetailProps {
@@ -56,6 +57,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
   const hasStats = !!detail?.stats?.length && translationKey;
   const hasTech = !!detail?.techStack?.length;
   const hasProblem = !!translationKey && !!translations.problem;
+  const hasResearch = !!detail?.researchSections?.length;
 
   return (
     <div className="min-h-screen bg-[#FAFAFA]">
@@ -106,6 +108,15 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
       {hasTech && (
         <ProductTechStack label={pd.techStack} techStack={detail!.techStack!} />
       )}
+
+      {hasResearch &&
+        detail!.researchSections!.map((section, i) => (
+          <ResearchSectionComponent
+            key={section.id}
+            section={section}
+            bgWhite={i % 2 === 1}
+          />
+        ))}
 
       {/* Portfolio fallback: projects without a detail translation blob still
           get a rich body from their own tagline/description. */}
