@@ -51,6 +51,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: "AI Product Engineer",
     bio: "Web-focused full-stack engineer who builds across the 3-tier architecture. Brings mobile experience with React Native and leverages AI-native tooling for rapid delivery.",
     image: "/images/team/hyunwoo_cho.jpg",
+    imagePosition: "center 20%",
     expertise: ["React", "Next.js", "TypeScript", "Node.js", "Full-Stack"],
     links: {
       linkedin:
