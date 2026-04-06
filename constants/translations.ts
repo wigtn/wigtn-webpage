@@ -41,6 +41,7 @@ export const TRANSLATIONS = {
     backToHome: "Back to Home",
     tryItLive: "Try it live",
     comingSoon: "Coming Soon",
+    viewOnGithub: "View on GitHub",
     theProblem: "THE PROBLEM",
     theSolution: "THE SOLUTION",
     keyMetrics: "KEY METRICS",

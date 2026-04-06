@@ -49,7 +49,9 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
       };
 
   const liveUrl = project.detail?.liveUrl ?? project.links.live;
-  const ctaLabel = liveUrl ? pd.tryItLive : pd.comingSoon;
+  const githubUrl = project.links.github;
+  const ctaUrl = liveUrl ?? githubUrl;
+  const ctaLabel = liveUrl ? pd.tryItLive : githubUrl ? pd.viewOnGithub : pd.comingSoon;
 
   const detail = project.detail;
   const hasFeatures = !!detail?.features?.length && translationKey; // features need translation blob
@@ -67,7 +69,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
         product={{
           name: project.name,
           gradient: project.gradient,
-          liveUrl,
+          liveUrl: ctaUrl,
         }}
         translations={translations}
         ctaLabel={ctaLabel}
@@ -154,7 +156,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
       )}
 
       <ProductCTA
-        product={{ liveUrl }}
+        product={{ liveUrl: ctaUrl }}
         tagline={translations.tagline}
         ctaLabel={ctaLabel}
         backToHomeLabel={pd.backToHome}

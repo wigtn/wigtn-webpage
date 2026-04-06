@@ -68,7 +68,7 @@ export function FeaturedWork() {
           </div>
           <Link
             href="/projects/"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-violet/10 text-sm font-medium text-violet hover:bg-violet/20 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-violet hover:text-violet/70 transition-colors"
           >
             See all {totalCount} projects
             <ArrowRight className="w-4 h-4" />

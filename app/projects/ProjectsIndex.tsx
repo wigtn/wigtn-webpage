@@ -1,14 +1,17 @@
 "use client";
 
-import { useMemo } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useMemo, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   PROJECTS,
   SECTION_LABEL,
+  PHASE_LABEL,
   type Project,
   type Section,
 } from "@/constants/projects";
-import { ProjectRow } from "@/components/projects";
+import { useBudouX } from "@/lib/hooks/useBudouX";
 
 /** Filter keys accepted via `?category=` query param. */
 type FilterKey = "all" | Section;
@@ -24,33 +27,14 @@ const FILTERS: { key: FilterKey; label: string }[] = [
 
 const FILTER_KEYS = new Set<FilterKey>(FILTERS.map((f) => f.key));
 
-/**
- * Resolves the ProjectRow list variant for a given project. Products fall
- * back to the "open-source" variant on this index page because their primary
- * presentation (phone mockup + App Store CTA) lives on the homepage — here we
- * just want a consistent row style across everything.
- */
-function variantFor(
-  project: Project,
-): "models" | "papers" | "open-source" | "hackathon" {
-  switch (project.section) {
-    case "models":
-      return "models";
-    case "papers":
-      return "papers";
-    case "hackathon":
-      return "hackathon";
-    case "products":
-    case "open-source":
-    default:
-      return "open-source";
-  }
-}
+const SECTION_COLOR: Record<Section, string> = {
+  products: "text-emerald-600",
+  models: "text-amber-600",
+  papers: "text-violet",
+  "open-source": "text-sky-600",
+  hackathon: "text-orange-600",
+};
 
-/**
- * Builds the right-side meta string per row — publication info wins, then
- * hackathon achievement "event · organizer", else null.
- */
 function metaFor(project: Project): string | null {
   if (project.publication) return project.publication;
   const achievement = project.achievements?.[0];
@@ -62,11 +46,105 @@ function metaFor(project: Project): string | null {
   return null;
 }
 
-/**
- * Client half of the /projects page. Renders the filter chip bar + the
- * filtered editorial list. The active filter is driven by the `?category=`
- * URL search param so state is shareable and preserved across refreshes.
- */
+/* ─────────────── Blog Card ─────────────── */
+
+function BlogCard({ project }: { project: Project }) {
+  const { processText } = useBudouX();
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const detailHref = `/projects/${project.slug}/`;
+  const meta = metaFor(project);
+  const sectionLabel = SECTION_LABEL[project.section];
+  const sectionColor = SECTION_COLOR[project.section];
+  const hasLocalVideo =
+    project.media.heroVideoType === "local" && !!project.media.heroVideo;
+
+  const handleMouseEnter = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.play().catch(() => {});
+  };
+
+  const handleMouseLeave = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.pause();
+    v.currentTime = 0;
+  };
+
+  return (
+    <article className="group">
+      <Link href={detailHref} className="block">
+        {/* Thumbnail */}
+        <div
+          className="relative w-full overflow-hidden rounded-xl bg-gray-100"
+          style={{ aspectRatio: "16 / 9" }}
+          onMouseEnter={hasLocalVideo ? handleMouseEnter : undefined}
+          onMouseLeave={hasLocalVideo ? handleMouseLeave : undefined}
+        >
+          {hasLocalVideo ? (
+            <video
+              ref={videoRef}
+              src={project.media.heroVideo}
+              poster={project.media.poster}
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            />
+          ) : (
+            <Image
+              src={project.media.poster}
+              alt={`${project.name} preview`}
+              fill
+              sizes="(max-width: 768px) 100vw, 720px"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              unoptimized
+            />
+          )}
+        </div>
+
+        {/* Text content */}
+        <div className="mt-4">
+          {/* Category + phase */}
+          <div className="flex items-center gap-2 text-[13px] mb-2">
+            <span className={`font-medium ${sectionColor}`}>
+              {sectionLabel}
+            </span>
+            {project.sectionBadge && (
+              <>
+                <span className="text-gray-300">·</span>
+                <span className="text-gray-500">{project.sectionBadge}</span>
+              </>
+            )}
+            <span className="text-gray-300">·</span>
+            <span className="text-gray-400 text-xs">
+              {PHASE_LABEL[project.phase]}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h3 className="text-xl md:text-2xl font-bold text-foreground group-hover:text-violet transition-colors leading-tight">
+            {project.name}
+          </h3>
+
+          {/* Tagline */}
+          <p className="text-[15px] text-gray-600 mt-2 leading-relaxed line-clamp-2">
+            {processText(project.tagline)}
+          </p>
+
+          {/* Meta (publication / event) */}
+          {meta && (
+            <p className="text-xs text-gray-400 mt-3">{meta}</p>
+          )}
+        </div>
+      </Link>
+    </article>
+  );
+}
+
+/* ─────────────── Projects Index ─────────────── */
+
 export function ProjectsIndex() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -98,13 +176,13 @@ export function ProjectsIndex() {
 
   return (
     <section className="pt-32 pb-16 md:pt-40 md:pb-24">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-3xl mx-auto px-6">
         {/* Header */}
         <div className="mb-10 md:mb-14">
-          <h1 className="text-section text-violet mb-2 tracking-wide">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
             Projects
           </h1>
-          <p className="text-lg md:text-xl text-foreground">
+          <p className="text-base text-gray-500">
             Everything we&apos;ve shipped — {PROJECTS.length} projects and
             counting.
           </p>
@@ -138,11 +216,12 @@ export function ProjectsIndex() {
           })}
         </div>
 
-        {/* List */}
+        {/* Blog-style card list */}
         <div
           id="projects-tabpanel"
           role="tabpanel"
           aria-labelledby={`projects-tab-${active}`}
+          className="space-y-12"
         >
           {filtered.length === 0 ? (
             <p className="py-16 text-center text-gray-500">
@@ -150,14 +229,12 @@ export function ProjectsIndex() {
             </p>
           ) : (
             filtered.map((project, i) => (
-              <ProjectRow
-                key={project.id}
-                project={project}
-                index={i}
-                variant={variantFor(project)}
-                meta={metaFor(project)}
-                isLast={i === filtered.length - 1}
-              />
+              <div key={project.id}>
+                <BlogCard project={project} />
+                {i < filtered.length - 1 && (
+                  <hr className="mt-12 border-gray-100" />
+                )}
+              </div>
             ))
           )}
         </div>
