@@ -13,9 +13,9 @@ export const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     name: "Jinmo Kim",
-    role: "Solution Architect & Designer",
-    bio: "Responsible for backend development, DevOps, and overall infrastructure. Focuses on building reliable system architectures and deployment environments to ensure stable service operations, while laying the foundation for AI features to run smoothly in production environments.",
-    expertise: ["React", "Next.js", "Nest.js", "Spring Boot", "Docker", "Kubernetes"],
+    role: "Distributed Systems Engineer & Designer",
+    bio: "Designs and builds large-scale distributed processing systems while serving as the team's DBA. Combines a sharp design sensibility with deep systems expertise — leading visual design and implementing video processing pipelines alongside core infrastructure work.",
+    expertise: ["Distributed Systems", "DBA", "Video Processing", "UI/UX Design", "Spring Boot", "Docker"],
     links: {
       github: "https://github.com/moriroKim",
       linkedin: "https://www.linkedin.com/in/jinmo-kim-62878533b/",
@@ -23,9 +23,9 @@ export const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     name: "Hyeonsang Kim",
-    role: "AI Product Engineer",
-    bio: "Full-stack developer specializing in cross-platform development. Building mobile apps with React Native and web applications with Next.js, delivering seamless experiences across all platforms.",
-    expertise: ["React", "React Native", "Next.js","Nest.js", "Full-Stack"],
+    role: "Mobile Software Engineer",
+    bio: "Mobile systems specialist who builds AI-native frontend and backend across the full 3-tier stack. Develops production mobile applications while leveraging AI tooling to accelerate delivery — focused on traditional software engineering, not model development.",
+    expertise: ["React Native", "Mobile", "Next.js", "Nest.js", "Full-Stack"],
     links: {
       github: "https://github.com/HyeonsangKim",
       linkedin: "https://www.linkedin.com/in/hyeonsang-kim-5a7a67260/",
@@ -44,9 +44,9 @@ export const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     name: "Hyunwoo Cho",
-    role: "AI Product Engineer",
-    bio: "End-to-end builder who bridges frontend elegance with backend reliability. Passionate about crafting seamless user experiences powered by robust, scalable architectures. Thrives on turning complex ideas into clean, production-ready code.",
-    expertise: ["React", "Next.js", "TypeScript", "Node.js", "Full-Stack"],
+    role: "Web Software Engineer",
+    bio: "Web-focused full-stack engineer who builds AI-native frontend and backend across the 3-tier stack. Specializes in web applications with additional mobile development experience — leveraging AI tooling for rapid, production-quality delivery.",
+    expertise: ["React", "Next.js", "TypeScript", "Node.js", "React Native", "Full-Stack"],
     links: {
       linkedin:
         "https://www.linkedin.com/in/%ED%98%84%EC%9A%B0-%EC%A1%B0-8a6800393/",
