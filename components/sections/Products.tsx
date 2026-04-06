@@ -154,7 +154,7 @@ export function Products() {
             {hasPrev && (
               <button
                 onClick={() => setCurrent(current - 1)}
-                className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500 transition-colors cursor-pointer hidden md:block"
+                className="absolute -left-14 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500 transition-colors cursor-pointer hidden md:block"
                 aria-label="Previous product"
               >
                 <ChevronLeft className="w-10 h-10" strokeWidth={1.5} />
@@ -163,7 +163,7 @@ export function Products() {
             {hasNext && (
               <button
                 onClick={() => setCurrent(current + 1)}
-                className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500 transition-colors cursor-pointer hidden md:block"
+                className="absolute -right-14 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500 transition-colors cursor-pointer hidden md:block"
                 aria-label="Next product"
               >
                 <ChevronRight className="w-10 h-10" strokeWidth={1.5} />
