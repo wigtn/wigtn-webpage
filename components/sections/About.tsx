@@ -13,7 +13,7 @@ export function About() {
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="text-section text-violet mb-4 tracking-wide">About us</h2>
         <p className="text-lg md:text-xl text-foreground mb-8">
-          We prove ourselves by what we build, not how long we&apos;ve built.
+          {t.about.heading}
         </p>
         <div className="space-y-4">
           {t.about.paragraphs.map((paragraph, index) => (

@@ -262,7 +262,7 @@ export function ProjectRow({
 
   return (
     <article
-      className={`group py-10 md:py-14 ${
+      className={`group py-5 md:py-7 ${
         isLast ? "" : "border-b border-black/[0.08]"
       }`}
     >
@@ -275,7 +275,7 @@ export function ProjectRow({
         </div>
 
         {/* Text block */}
-        <div className="col-span-12 md:col-span-7 min-w-0 order-2 flex flex-col">
+        <div className="col-span-12 md:col-span-8 min-w-0 order-2 flex flex-col">
           <div>
             <div className="flex items-center gap-3 flex-wrap">
               <Link href={detailHref} className="inline-block">
@@ -315,7 +315,7 @@ export function ProjectRow({
           {/* Box actions — pushed to the bottom so they align with the
               thumbnail's bottom edge on desktop. On mobile they just follow
               the text naturally. */}
-          <div className="mt-6 md:mt-auto md:pt-8 flex flex-wrap gap-2">
+          <div className="mt-4 md:mt-auto md:pt-4 flex flex-wrap gap-2">
             {BOX_LINK_VARIANTS.has(variant) ? (
               boxLinks.map((link) => (
                 <BoxLinkButton key={link.key} link={link} />
@@ -336,7 +336,7 @@ export function ProjectRow({
         <Link
           href={detailHref}
           aria-label={`${project.name} — learn more`}
-          className="col-span-12 md:col-span-4 order-3 block w-full overflow-hidden rounded-xl border border-black/[0.06] bg-gray-50 self-start"
+          className="col-span-12 md:col-span-3 order-3 block w-full overflow-hidden rounded-xl border border-black/[0.06] bg-gray-50 self-start"
           onMouseEnter={hasLocalVideo ? handleMouseEnter : undefined}
           onMouseLeave={hasLocalVideo ? handleMouseLeave : undefined}
         >

@@ -12,11 +12,10 @@ export const TRANSLATIONS = {
       tagline: "We prove ourselves by what we build, not how long we've built.",
     },
     about: {
-      heading: "We prove ourselves by what we build, not how long we've built.",
+      heading: "AI-Native: Bridging the Gap Between Research and Reality",
       paragraphs: [
-        "We're a crew of engineers who believe results speak louder than résumés. We started building because growth doesn't come from waiting — it comes from shipping.",
-        "Every product, every open-source tool, every research paper is proof. Not of where we've been, but of what we can do.",
-        "We move fast, we build real things, and we let the work speak for itself.",
+        "Wicton is a crew of five engineers dedicated to pushing the boundaries of AI. We began with a mission to contribute to the open-source community through rigorous research, but we didn't stop there.",
+        "By leveraging our proprietary automated workflows, we transform complex theories into functional, high-performance products. We believe that growth isn't found in waiting—it's found in shipping. From research papers to live services, our work is the only proof we need.",
       ],
     },
     results: {

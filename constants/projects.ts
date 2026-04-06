@@ -152,7 +152,7 @@ export interface Project {
 /* ─────────────── Phase label (used on detail pages) ─────────────── */
 
 export const PHASE_LABEL: Record<Phase, string> = {
-  "in-progress": "In development",
+  "in-progress": "Coming Soon",
   "under-review": "Under review",
   completed: "Released",
   archived: "Archived",
@@ -182,14 +182,14 @@ export const PROJECTS: Project[] = [
     section: "products",
     phase: "in-progress",
     tagline: {
-      en: "Travel expense tracker with receipt OCR.",
-      ko: "영수증 OCR이 탑재된 여행 경비 관리 앱.",
-      ja: "レシートOCR搭載の旅行経費管理アプリ。",
+      en: "Plan, track, and relive every trip — from budget to boarding pass home.",
+      ko: "예산 계획부터 귀국까지 — 여행의 모든 순간을 기록하고 되살리세요.",
+      ja: "予算計画から帰国まで — 旅のすべてを記録し、追体験する。",
     },
     description: {
-      en: "Snap a receipt in any language — menu, hotel, taxi, souvenir stall — and WIGEX reads it in seconds. It pulls out the merchant, the total, and the local currency, converts every amount to your home currency at the day-of-purchase rate, and drops the expense into the right category without you lifting a finger. At the end of your trip you get a clean, shareable report: where your money went, what was reimbursable, and what wasn't. No shoeboxes of crumpled receipts. No 2AM spreadsheet tax on the flight home. Just pull out your phone, shoot, and forget.",
-      ko: "어떤 언어로 된 영수증이든 사진 한 장 — 메뉴판, 호텔, 택시, 기념품 가판대까지 — WIGEX가 몇 초 만에 읽어냅니다. 가맹점, 총액, 현지 통화를 자동으로 추출하고, 구매 당일 환율로 내 통화로 환산하고, 손 하나 까딱하지 않아도 알맞은 카테고리로 분류됩니다. 여행이 끝나면 깔끔하게 공유 가능한 리포트가 기다립니다: 어디에 얼마나 썼는지, 경비 처리 가능한 건 무엇이고 아닌 건 무엇인지. 구겨진 영수증 뭉치도, 돌아오는 비행기 새벽 2시의 스프레드시트 노동도 없습니다. 그냥 폰을 꺼내 찍고, 잊어버리세요.",
-      ja: "どんな言語のレシートでも一枚撮るだけ — メニュー、ホテル、タクシー、お土産屋まで — WIGEXが数秒で読み取ります。店名、合計、現地通貨を自動で抽出し、購入当日のレートで自分の通貨に換算し、指一本動かさなくても適切なカテゴリに振り分けます。旅の終わりには、きれいで共有可能なレポートが待っています。どこに何を使ったか、経費精算できるもの、できないもの。くしゃくしゃのレシートの山も、帰りの便で午前2時にスプレッドシートと格闘することもありません。ポケットからスマホを取り出して、撮って、忘れるだけ。",
+      en: "before_title::Before You Go\nbefore::AI builds your daily budget based on destination, travel style, and length of stay — so you land with a plan, not a guess.\nduring_title::While You're There\nduring::Snap any receipt in any language. WIGEX reads it in seconds, converts to your home currency at the day-of-purchase rate, and tracks spending against your budget in real time. Split bills, check exchange rates, and stay on track — all in one tap.\nafter_title::When You're Back\nafter::Get a full stats dashboard — by category, destination, and day. Share a travel card to Instagram or KakaoTalk, level up your traveler profile, and relive the trip through your spending story.",
+      ko: "before_title::떠나기 전\nbefore::AI가 목적지, 여행 스타일, 체류 기간을 기반으로 하루 예산을 짜줍니다 — 감이 아닌 계획으로 여행을 시작하세요.\nduring_title::여행 중\nduring::어떤 언어의 영수증이든 찍기만 하면 됩니다. WIGEX가 몇 초 만에 읽고, 구매 당일 환율로 환산하고, 예산 대비 지출을 실시간으로 추적합니다. 더치페이, 환율 계산, 예산 체크까지 한 번에.\nafter_title::돌아온 후\nafter::카테고리별·목적지별·일자별 통계 대시보드를 확인하세요. 여행 카드를 인스타·카카오톡에 공유하고, 여행자 레벨을 올리고, 지출 스토리로 여행을 되새기세요.",
+      ja: "before_title::出発前\nbefore::AIが目的地・旅行スタイル・滞在期間から1日の予算を作成 — 勘ではなく計画で旅を始めましょう。\nduring_title::旅行中\nduring::どんな言語のレシートでも撮るだけ。WIGEXが数秒で読み取り、購入日のレートで換算し、予算に対する支出をリアルタイムで追跡します。割り勘、為替計算、予算チェックもワンタップで。\nafter_title::帰国後\nafter::カテゴリ別・目的地別・日別の統計ダッシュボードを確認。旅行カードをSNSでシェアし、トラベラーレベルを上げ、支出ストーリーで旅を追体験しましょう。",
     },
     gradient: "from-emerald-500 to-teal-400",
     media: {
@@ -218,16 +218,16 @@ export const PROJECTS: Project[] = [
     sectionBadge: "Research",
     phase: "completed",
     featured: true,
-    publication: "EMNLP 2026 prep",
+    publication: "EMNLP 2026 — Document AI Track (in preparation)",
     tagline: {
-      en: "2B document parser. #1 on KoGovDoc.",
-      ko: "2B 문서 파서. KoGovDoc 1위.",
-      ja: "2B文書パーサー。KoGovDoc 1位。",
+      en: "A 2B-parameter document parser that reads Korean government forms as accurately as a model 15x its size — ranked #1 on KoGovDoc.",
+      ko: "15배 큰 모델만큼 정확하게 한국 정부 문서를 읽는 2B 파라미터 문서 파서 — KoGovDoc 벤치마크 1위.",
+      ja: "15倍大きなモデルと同等の精度で韓国政府文書を読む2Bパラメータ文書パーサー — KoGovDocベンチマーク1位。",
     },
     description: {
-      en: "2B document parsing model distilled from a 30B teacher via pseudo-label distillation and LoRA fine-tuning. Matches teacher performance on OmniDocBench; ranks #1 on the KoGovDoc Korean government document retrieval benchmark.",
-      ko: "30B 교사 모델에서 pseudo-label distillation과 LoRA로 증류한 2B 문서 파싱 모델. OmniDocBench에서 교사 모델 수준 달성, KoGovDoc 한국 정부 문서 검색 벤치마크 1위.",
-      ja: "30B教師モデルから疑似ラベル蒸留とLoRAで蒸留した2B文書パーシングモデル。OmniDocBenchで教師モデル同等性能、KoGovDoc韓国政府文書検索ベンチマーク1位。",
+      en: "WigtnOCR distills a 30B teacher model into a 2B student through pseudo-label distillation and LoRA fine-tuning, achieving teacher-level accuracy on OmniDocBench while running on a single consumer GPU. On the KoGovDoc Korean government document retrieval benchmark — a dataset of scanned civil forms, tax filings, and public notices — it ranks #1 overall, outperforming models with 10-30x more parameters.",
+      ko: "WigtnOCR은 pseudo-label distillation과 LoRA 파인튜닝으로 30B 교사 모델을 2B 학생 모델로 증류하여, 소비자급 단일 GPU에서도 OmniDocBench 교사 모델급 정확도를 달성합니다. 스캔된 민원 서류, 세금 신고서, 공고문으로 구성된 KoGovDoc 한국 정부 문서 검색 벤치마크에서 10-30배 큰 모델을 제치고 전체 1위를 기록했습니다.",
+      ja: "WigtnOCRは疑似ラベル蒸留とLoRAファインチューニングで30B教師モデルを2B学生モデルに蒸留し、消費者向け単一GPUでOmniDocBench教師モデル級の精度を達成。スキャンされた行政書類・税務申告書・公告で構成されるKoGovDoc韓国政府文書検索ベンチマークで、10-30倍のパラメータを持つモデルを上回り総合1位を獲得しました。",
     },
     gradient: "from-yellow-500 to-amber-400",
     media: {
@@ -248,16 +248,16 @@ export const PROJECTS: Project[] = [
     sectionBadge: "Paper",
     phase: "completed",
     featured: true,
-    publication: "ACL 2026 (submitted)",
+    publication: "ACL 2026 — Speech & Multimodal Track (submitted)",
     tagline: {
-      en: "Real-time voice translation.",
-      ko: "실시간 음성 통역.",
-      ja: "リアルタイム音声通訳。",
+      en: "Real-time voice translation for phone calls — call anyone, in any language, with zero echo-loop incidents across 148 production calls.",
+      ko: "전화 통화를 위한 실시간 음성 통역 — 어떤 언어로든, 누구에게든 전화하세요. 148회 프로덕션 통화에서 에코 루프 0건.",
+      ja: "電話通話のためのリアルタイム音声通訳 — どの言語でも、誰にでも通話可能。148回の本番通話でエコーループ0件。",
     },
     description: {
-      en: "Real-time voice translation for phone calls. Dual AI sessions with software-only echo cancellation enable natural bilingual conversations over standard phone lines. 0 echo-loop incidents across 148 production calls.",
-      ko: "실시간 전화 음성 통역. 듀얼 AI 세션과 소프트웨어 기반 에코 캔슬레이션으로 일반 전화선에서 자연스러운 이중 언어 대화를 실현합니다. 148회 프로덕션 통화에서 에코 루프 0건.",
-      ja: "電話通話のためのリアルタイム音声通訳。デュアルAIセッションとソフトウェアベースのエコーキャンセレーションにより、一般電話回線で自然な二言語会話を実現。148回の本番通話でエコーループ0件。",
+      en: "WIGVO runs two parallel AI interpreter sessions — one for each speaker — to deliver natural, bidirectional voice translation over standard phone lines. A software-only echo-cancellation pipeline eliminates feedback loops without dedicated hardware, achieving 557ms average latency and zero echo incidents across 148 real-world calls. The recipient answers a normal phone call; no app download required.",
+      ko: "WIGVO는 각 화자를 위한 두 개의 병렬 AI 통역 세션을 실행하여 일반 전화선에서 자연스러운 양방향 음성 통역을 제공합니다. 소프트웨어 전용 에코 캔슬레이션 파이프라인이 전용 하드웨어 없이 피드백 루프를 제거하며, 평균 지연 557ms, 148회 실전 통화에서 에코 사고 0건을 달성했습니다. 수신자는 일반 전화를 받기만 하면 됩니다.",
+      ja: "WIGVOは各話者用に2つの並列AI通訳セッションを実行し、一般電話回線で自然な双方向音声通訳を提供します。ソフトウェア専用エコーキャンセレーションパイプラインが専用ハードウェアなしでフィードバックループを除去し、平均遅延557ms、148回の実通話でエコー事故0件を達成。受信者は通常の電話に出るだけです。",
     },
     gradient: "from-violet to-purple-400",
     media: {
@@ -368,14 +368,14 @@ export const PROJECTS: Project[] = [
     phase: "completed",
     featured: true,
     tagline: {
-      en: "Multi-agent debate arena.",
-      ko: "멀티 에이전트 토론 아레나.",
-      ja: "マルチエージェント討論アリーナ。",
+      en: "Drop a topic, watch AI agents debate it live — PM orchestrates, experts spawn and retire, then a landing page writes itself from the conclusions.",
+      ko: "주제를 던지면 AI 에이전트들이 실시간 토론 — PM이 조율하고, 전문가가 소환·퇴장하며, 결론에서 랜딩 페이지가 자동 생성됩니다.",
+      ja: "トピックを投げるとAIエージェントがリアルタイム討論 — PMが調整し、専門家が召喚・退場、結論からランディングページが自動生成。",
     },
     description: {
-      en: "Throw in a topic and watch a PM agent plus auto-spawned expert agents discuss, argue, retire, and spawn new specialists in a Slack-style chat UI — then auto-generate a landing page from the conclusions. Built in 3.5 hours by 3 members.",
-      ko: "주제를 던지면 PM 에이전트와 자동 생성된 전문가 에이전트들이 Slack 스타일 채팅 UI에서 토론하고, 반박하고, 물러나고, 새로운 전문가를 소환합니다. 결론을 바탕으로 랜딩 페이지까지 자동 생성. 3명이 병렬로 3.5시간 만에 완성.",
-      ja: "トピックを投げ込むとPMエージェントと自動生成された専門家エージェントがSlack風チャットUIで討論・反論・引退・新しい専門家召喚を繰り返し、結論からランディングページまで自動生成。3人で並列で3.5時間で完成。",
+      en: "Wigent is a multi-agent debate arena where a PM agent orchestrates auto-spawned domain experts in a Slack-style chat UI. Agents argue, challenge each other, retire when outmatched, and summon new specialists on the fly. Once consensus is reached, the system auto-generates a polished landing page from the debate conclusions. Grand Prize winner at Build with TRAE Seoul (ByteDance) — built by 3 engineers in 3.5 hours.",
+      ko: "Wigent은 PM 에이전트가 자동 소환된 도메인 전문가들을 Slack 스타일 채팅 UI에서 조율하는 멀티 에이전트 토론 아레나입니다. 에이전트들은 토론하고, 반박하고, 밀리면 퇴장하고, 즉석에서 새 전문가를 소환합니다. 합의에 도달하면 토론 결론에서 완성된 랜딩 페이지를 자동 생성합니다. Build with TRAE Seoul (ByteDance) 대상 수상 — 3명이 3.5시간 만에 완성.",
+      ja: "WigentはPMエージェントが自動召喚されたドメイン専門家をSlack風チャットUIで調整するマルチエージェント討論アリーナです。エージェントは討論し、反論し、劣勢なら退場し、その場で新しい専門家を召喚します。合意に達すると討論結論から完成されたランディングページを自動生成。Build with TRAE Seoul（ByteDance）大賞受賞 — 3人で3.5時間で完成。",
     },
     gradient: "from-yellow-400 to-amber-500",
     media: {
