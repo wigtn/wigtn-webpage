@@ -28,7 +28,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: "김현상 Hyeonsang Kim",
     role: "AI Product Engineer",
     bio: "Mobile-first full-stack engineer covering the entire 3-tier stack with React Native. Focused on software engineering craft rather than model development.",
-    image: "/images/team/hyeonsang.jpg",
+    image: "/images/team/hyeonsang_kim.jpg",
     expertise: ["React Native", "Expo", "Next.js", "Nest.js", "Node.js", "PostgreSQL", "Full-Stack"],
     links: {
       github: "https://github.com/HyeonsangKim",
