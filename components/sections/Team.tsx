@@ -21,7 +21,8 @@ function Avatar({ member }: { member: (typeof TEAM_MEMBERS)[number] }) {
           alt={member.name}
           fill
           sizes="80px"
-          className="object-cover object-top grayscale"
+          className="object-cover grayscale"
+          style={{ objectPosition: member.imagePosition || "center top" }}
           unoptimized
         />
       </div>

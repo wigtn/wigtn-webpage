@@ -12,6 +12,7 @@ export interface TeamMember {
   bio: string;
   expertise: string[];
   image?: string;
+  imagePosition?: string;
   links?: {
     github?: string;
     linkedin?: string;

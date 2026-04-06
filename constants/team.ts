@@ -39,6 +39,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: "AI Engineer",
     bio: "Builds LLM-powered applications and autonomous agent systems. Focuses on multi-agent orchestration and workflow automation.",
     image: "/images/team/sangwoo_son.jpg",
+    imagePosition: "left top",
     expertise: ["AI/ML", "LLM Application", "AI Agent", "Language AI"],
     links: {
       github: "https://github.com/wigtn",
