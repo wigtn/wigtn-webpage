@@ -93,10 +93,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
         heroVideoType={project.media.heroVideoType}
       />
 
-      {/* Body: content + sticky TOC sidebar */}
-      <div className="flex max-w-[90rem] mx-auto">
-        {/* Main content */}
-        <div className="flex-1 min-w-0">
+      <TableOfContents entries={tocEntries} />
           {hasProblem && (
             <ProductProblem id="toc-problem" label={pd.theProblem} text={translations.problem} />
           )}
@@ -175,14 +172,6 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
               </div>
             </section>
           )}
-        </div>
-
-        {/* Sticky TOC sidebar */}
-        <div className="hidden xl:block flex-shrink-0 w-56 pr-6">
-          <TableOfContents entries={tocEntries} />
-        </div>
-      </div>
-
       <ProductCTA
         product={{ liveUrl: ctaUrl }}
         tagline={translations.tagline}

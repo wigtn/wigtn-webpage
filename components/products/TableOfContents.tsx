@@ -54,7 +54,10 @@ export function TableOfContents({ entries }: TableOfContentsProps) {
   };
 
   return (
-    <nav className="sticky top-32">
+    <nav
+      aria-label="Table of contents"
+      className="hidden xl:block fixed top-[100px] right-[40px] w-[200px]"
+    >
       <div className="border-l border-gray-200 pl-4">
         <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
           On this page
