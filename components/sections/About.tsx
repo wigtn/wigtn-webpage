@@ -6,16 +6,31 @@ import { useBudouX } from "@/lib/hooks/useBudouX";
 import { HOME_STATS } from "@/constants/projects";
 
 const CAROUSEL_IMAGES = [
+  "/images/carousel/wigvo-test1.jpg",
+  "/images/carousel/trae_hackthon_seoul.png",
   "/images/carousel/wigtnocr-huggingface.png",
-  "/images/carousel/wigvo_screenshot_call.png",
+  "/images/carousel/wigvo_logo.png",
+  "/images/carousel/Gemini3_seoul_hackthon.jpg",
+  "/images/carousel/wigss-npm.png",
   "/images/carousel/timelens_hero.png",
+  "/images/carousel/trae_hackthon_seoul2.jpg",
+  "/images/carousel/wigvo-test2.jpg",
+  "/images/carousel/llm-loadtester-dashboard.png",
+  "/images/carousel/cursor-hackthon-seoul.jpg",
+  "/images/carousel/wigtnocr-logo.png",
+  "/images/carousel/timelens_logo.png",
+  "/images/carousel/wigvo_screenshot_call.png",
 ];
+
+/** Image card width + gap (must match the Tailwind classes below). */
+const CARD_W_MD = 360 + 16; // w-[360px] + gap-4 (16px)
+const SET_WIDTH_MD = CAROUSEL_IMAGES.length * CARD_W_MD; // one full set in px
 
 export function About() {
   const { t } = useLanguage();
   const { processText } = useBudouX();
 
-  // Duplicate images for seamless infinite loop
+  // Render two identical sets so the loop is seamless
   const filmImages = [...CAROUSEL_IMAGES, ...CAROUSEL_IMAGES];
 
   return (
@@ -55,7 +70,13 @@ export function About() {
         {/* Right gradient fade */}
         <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 z-10 bg-gradient-to-l from-[#FAFAFA] to-transparent pointer-events-none" />
 
-        <div className="flex gap-4 animate-carousel">
+        <div
+          className="flex gap-4 animate-carousel"
+          style={{
+            /* Shift exactly one set (images + gaps) so the seam is invisible */
+            "--carousel-shift": `-${SET_WIDTH_MD}px`,
+          } as React.CSSProperties}
+        >
           {filmImages.map((src, i) => (
             <div
               key={i}

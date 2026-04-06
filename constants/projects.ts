@@ -234,7 +234,7 @@ export const PROJECTS: Project[] = [
     description: "WIGVO runs two parallel AI interpreter sessions — one for each speaker — to deliver natural, bidirectional voice translation over standard phone lines. A software-only echo-cancellation pipeline eliminates feedback loops without dedicated hardware, achieving 557ms average latency and zero echo incidents across 148 real-world calls. The recipient answers a normal phone call; no app download required.",
     gradient: "from-violet to-purple-400",
     media: {
-      poster: "/images/projects/wigvo_screenshot_call.png",
+      poster: "/images/projects/wigvo_logo.png",
       heroVideo: "https://youtu.be/_ixVEnHJxjk?si=P257fqme3B0zTzNu",
       heroVideoType: "youtube",
     },
@@ -328,7 +328,7 @@ export const PROJECTS: Project[] = [
     description: "Wigent is a multi-agent debate arena where a PM agent orchestrates auto-spawned domain experts in a Slack-style chat UI. Agents argue, challenge each other, retire when outmatched, and summon new specialists on the fly. Once consensus is reached, the system auto-generates a polished landing page from the debate conclusions. Grand Prize winner at Build with TRAE Seoul (ByteDance) — built by 3 engineers in 3.5 hours.",
     gradient: "from-yellow-400 to-amber-500",
     media: {
-      poster: "https://opengraph.githubassets.com/1/wigtn/wigent",
+      poster: "/images/projects/trae_hackthon_seoul.png",
     },
     timeline: {},
     achievements: [

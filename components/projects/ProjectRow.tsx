@@ -10,6 +10,7 @@ import type {
   SectionBadge,
 } from "@/constants/projects";
 import { useBudouX } from "@/lib/hooks/useBudouX";
+import { GitHubIcon, YouTubeIcon, HuggingFaceIcon } from "@/components/ui/icons";
 
 /**
  * Tag text colors — no backgrounds. Used by the Open Source variant for the
@@ -117,25 +118,19 @@ function AwardBadge({
 
 interface BoxLink {
   key: string;
-  emoji: string;
+  icon: React.ReactNode;
   label: string;
   href: string;
 }
 
 const LINK_DEFS = {
-  github: { emoji: "💻", label: "GitHub" },
-  huggingface: { emoji: "🤗", label: "HuggingFace" },
-  video: { emoji: "▶️", label: "YouTube" },
-  live: { emoji: "🌐", label: "Live" },
-} as const;
+  github: { icon: <GitHubIcon className="w-4 h-4" />, label: "GitHub" },
+  huggingface: { icon: <HuggingFaceIcon className="w-4 h-4" />, label: "HuggingFace" },
+  video: { icon: <YouTubeIcon className="w-4 h-4 text-red-600" />, label: "YouTube" },
+};
 
 type LinkKey = keyof typeof LINK_DEFS;
 
-/**
- * Build box links in a specific priority order. The first link that has a
- * matching href on `project.links` becomes the primary (leftmost) box; the
- * rest follow. Keys without a href are silently skipped.
- */
 function buildBoxLinks(project: Project, order: LinkKey[]): BoxLink[] {
   const links: BoxLink[] = [];
   for (const key of order) {
@@ -168,7 +163,7 @@ function BoxLinkButton({ link }: { link: BoxLink }) {
       rel="noopener noreferrer"
       className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:border-violet hover:bg-violet/5 hover:text-violet transition-colors"
     >
-      <span className="text-base leading-none">{link.emoji}</span>
+      <span className="flex-shrink-0">{link.icon}</span>
       {link.label}
     </a>
   );

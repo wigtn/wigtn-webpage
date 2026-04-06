@@ -68,18 +68,18 @@
   }
 }
 
-/* Carousel infinite scroll animation */
+/* Carousel infinite scroll — shifts exactly one set width for seamless loop */
 @keyframes carousel {
   0% {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translateX(var(--carousel-shift));
   }
 }
 
 .animate-carousel {
-  animation: carousel 20s linear infinite;
+  animation: carousel 60s linear infinite;
 }
 
 .animate-carousel:hover {
