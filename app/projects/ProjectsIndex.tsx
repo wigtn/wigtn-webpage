@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { useMemo, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -177,6 +178,15 @@ export function ProjectsIndex() {
   return (
     <section className="pt-32 pb-16 md:pt-40 md:pb-24">
       <div className="max-w-3xl mx-auto px-6">
+        {/* Back link */}
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-violet transition-colors mb-8"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Home
+        </Link>
+
         {/* Header */}
         <div className="mb-10 md:mb-14">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
