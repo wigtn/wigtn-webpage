@@ -80,8 +80,6 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
     <div className="min-h-screen bg-[#FAFAFA]">
       <ProductDetailNav />
 
-      <TableOfContents entries={tocEntries} />
-
       <ProductHero
         product={{
           name: project.name,
@@ -95,85 +93,95 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
         heroVideoType={project.media.heroVideoType}
       />
 
-      {hasProblem && (
-        <ProductProblem id="toc-problem" label={pd.theProblem} text={translations.problem} />
-      )}
+      {/* Body: content + sticky TOC sidebar */}
+      <div className="flex max-w-[90rem] mx-auto">
+        {/* Main content */}
+        <div className="flex-1 min-w-0">
+          {hasProblem && (
+            <ProductProblem id="toc-problem" label={pd.theProblem} text={translations.problem} />
+          )}
 
-      {hasFeatures && (
-        <ProductFeatures
-          id="toc-solution"
-          label={pd.theSolution}
-          solutionText={translations.solution}
-          features={detail!.features!}
-          featureTranslations={pd.features}
-        />
-      )}
+          {hasFeatures && (
+            <ProductFeatures
+              id="toc-solution"
+              label={pd.theSolution}
+              solutionText={translations.solution}
+              features={detail!.features!}
+              featureTranslations={pd.features}
+            />
+          )}
 
-      {hasModes && (
-        <WigvoModes
-          id="toc-modes"
-          label={pd.howItWorks}
-          modes={detail!.modes!}
-          modeTranslations={pd.modes}
-        />
-      )}
+          {hasModes && (
+            <WigvoModes
+              id="toc-modes"
+              label={pd.howItWorks}
+              modes={detail!.modes!}
+              modeTranslations={pd.modes}
+            />
+          )}
 
-      {hasStats && (
-        <ProductStats
-          id="toc-metrics"
-          label={pd.keyMetrics}
-          stats={detail!.stats!}
-          statTranslations={pd.stats}
-        />
-      )}
+          {hasStats && (
+            <ProductStats
+              id="toc-metrics"
+              label={pd.keyMetrics}
+              stats={detail!.stats!}
+              statTranslations={pd.stats}
+            />
+          )}
 
-      {hasTech && (
-        <ProductTechStack id="toc-tech" label={pd.techStack} techStack={detail!.techStack!} />
-      )}
+          {hasTech && (
+            <ProductTechStack id="toc-tech" label={pd.techStack} techStack={detail!.techStack!} />
+          )}
 
-      {hasResearch &&
-        detail!.researchSections!.map((section, i) => (
-          <ResearchSectionComponent
-            key={section.id}
-            section={section}
-            bgWhite={i % 2 === 1}
-          />
-        ))}
+          {hasResearch &&
+            detail!.researchSections!.map((section, i) => (
+              <ResearchSectionComponent
+                key={section.id}
+                section={section}
+                bgWhite={i % 2 === 1}
+              />
+            ))}
 
-      {/* Portfolio fallback: projects without a detail translation blob still
-          get a rich body from their own tagline/description. */}
-      {!translationKey && (
-        <section className="py-16 md:py-24 bg-white">
-          <div className="max-w-3xl mx-auto px-6">
-            <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-              {processText(project.description)}
-            </p>
+          {/* Portfolio fallback */}
+          {!translationKey && (
+            <section className="py-16 md:py-24 bg-white">
+              <div className="max-w-3xl mx-auto px-6">
+                <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
+                  {processText(project.description)}
+                </p>
 
-            {project.achievements && project.achievements.length > 0 && (
-              <div className="mt-10 space-y-3">
-                {project.achievements.map((a) => (
-                  <div
-                    key={a.event}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-sm font-medium mr-2"
-                  >
-                    <span>🏆</span>
-                    <span>
-                      {a.event}
-                      {a.note ? ` — ${a.note}` : ""}
-                    </span>
+                {project.achievements && project.achievements.length > 0 && (
+                  <div className="mt-10 space-y-3">
+                    {project.achievements.map((a) => (
+                      <div
+                        key={a.event}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-sm font-medium mr-2"
+                      >
+                        <span>🏆</span>
+                        <span>
+                          {a.event}
+                          {a.note ? ` — ${a.note}` : ""}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            )}
+                )}
 
-            {project.publication && (
-              <div className="mt-6 inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full text-red-700 bg-red-50 border border-red-200">
-                {project.publication}
+                {project.publication && (
+                  <div className="mt-6 inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full text-red-700 bg-red-50 border border-red-200">
+                    {project.publication}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </section>
-      )}
+            </section>
+          )}
+        </div>
+
+        {/* Sticky TOC sidebar */}
+        <div className="hidden xl:block flex-shrink-0 w-56 pr-6">
+          <TableOfContents entries={tocEntries} />
+        </div>
+      </div>
 
       <ProductCTA
         product={{ liveUrl: ctaUrl }}

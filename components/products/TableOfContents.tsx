@@ -19,7 +19,6 @@ export function TableOfContents({ entries }: TableOfContentsProps) {
 
     const observer = new IntersectionObserver(
       (intersections) => {
-        // Find the first entry that is intersecting from the top
         for (const entry of intersections) {
           if (entry.isIntersecting) {
             setActiveId(entry.target.id);
@@ -55,7 +54,7 @@ export function TableOfContents({ entries }: TableOfContentsProps) {
   };
 
   return (
-    <nav className="hidden xl:block fixed right-[max(1rem,calc((100vw-80rem)/2+1rem))] top-32 w-56">
+    <nav className="sticky top-32">
       <div className="border-l border-gray-200 pl-4">
         <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">
           On this page
