@@ -18,7 +18,7 @@ export function Team() {
   const getGlobalIndex = (rowIndex: number, memberIndex: number) => rowIndex * 2 + memberIndex;
 
   return (
-    <section id="team" className="min-h-screen snap-start py-16 md:py-24">
+    <section id="team" className="py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="text-section text-violet mb-12 md:mb-16 tracking-wide">
           Team

@@ -15,9 +15,13 @@ export default function Home() {
       <Crew />
       <About />
       <Products />
-      <FeaturedWork />
-      <Team />
-      <Footer />
+
+      {/* From here on: one snap point, then free px-based scrolling */}
+      <div className="snap-start">
+        <FeaturedWork />
+        <Team />
+        <Footer />
+      </div>
     </main>
   );
 }

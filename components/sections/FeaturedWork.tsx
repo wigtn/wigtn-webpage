@@ -55,7 +55,7 @@ export function FeaturedWork() {
   const totalCount = PROJECTS.length;
 
   return (
-    <section id="work" className="min-h-screen snap-start py-16 md:py-24">
+    <section id="work" className="py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-6">
         <div className="mb-12 md:mb-16 flex items-end justify-between gap-4 flex-wrap">
           <div>
@@ -68,7 +68,7 @@ export function FeaturedWork() {
           </div>
           <Link
             href="/projects/"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-violet transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-violet/10 text-sm font-medium text-violet hover:bg-violet/20 transition-colors"
           >
             See all {totalCount} projects
             <ArrowRight className="w-4 h-4" />

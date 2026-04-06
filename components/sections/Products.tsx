@@ -46,8 +46,8 @@ export function Products() {
   const desc = parseDescription(product.description);
 
   return (
-    <section id="products" className="min-h-screen flex items-center snap-start py-16 md:py-24">
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="products" className="min-h-screen snap-start py-16 md:py-24 flex flex-col justify-center">
+      <div className="max-w-6xl mx-auto px-6 w-full">
         <div className="mb-12 md:mb-16">
           <h2 className="text-section text-violet mb-2 tracking-wide">
             Our Products
@@ -57,7 +57,7 @@ export function Products() {
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center md:items-stretch justify-center gap-8 md:gap-16 py-6 md:py-10">
+        <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8 md:gap-16 py-6 md:py-10">
           {/* Phone mockup */}
           <PhoneMockup
             screenshot={product.app?.screenshot}

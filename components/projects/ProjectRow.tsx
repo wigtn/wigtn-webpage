@@ -155,9 +155,9 @@ function buildBoxLinks(project: Project, order: LinkKey[]): BoxLink[] {
  *   • open-source — code-first (GitHub), then Live (npm / deployed site).
  */
 const LINK_ORDER: Record<"models" | "papers" | "open-source", LinkKey[]> = {
-  models: ["huggingface", "github", "live", "video"],
-  papers: ["live", "video", "huggingface", "github"],
-  "open-source": ["github", "live", "huggingface", "video"],
+  models: ["github", "video", "huggingface"],
+  papers: ["github", "video", "huggingface"],
+  "open-source": ["github", "video", "huggingface"],
 };
 
 function BoxLinkButton({ link }: { link: BoxLink }) {
