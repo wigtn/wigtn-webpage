@@ -75,7 +75,7 @@ export function Team() {
                             return (
                               <>
                                 <span className="text-foreground">{match[1]}</span>{" "}
-                                <span className="text-gray-400">{match[2]}</span>
+                                <span className="text-gray-400 text-[0.85em]">{match[2]}</span>
                               </>
                             );
                           }
