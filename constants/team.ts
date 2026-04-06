@@ -49,7 +49,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: "조현우 Hyunwoo Cho",
     role: "AI Product Engineer",
     bio: "Web-focused full-stack engineer who builds across the 3-tier architecture. Brings mobile experience with React Native and leverages AI-native tooling for rapid delivery.",
-    image: "/images/team/hyunwoo.jpg",
+    image: "/images/team/hyunwoo_cho.jpg",
     expertise: ["React", "Next.js", "TypeScript", "Node.js", "Full-Stack"],
     links: {
       linkedin:
