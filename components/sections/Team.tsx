@@ -1,15 +1,44 @@
 "use client";
 
+import Image from "next/image";
 import { TEAM_MEMBERS } from "@/constants";
 import { useLanguage } from "@/lib/i18n";
 import { useBudouX } from "@/lib/hooks/useBudouX";
 import { GitHubIcon, LinkedInIcon } from "@/components/ui/icons";
 
+function Avatar({ member }: { member: (typeof TEAM_MEMBERS)[number] }) {
+  const initials = member.name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2);
+
+  if (member.image) {
+    return (
+      <div className="relative w-20 h-20 rounded-full overflow-hidden bg-gray-100 flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+        <Image
+          src={member.image}
+          alt={member.name}
+          fill
+          sizes="80px"
+          className="object-cover"
+          unoptimized
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet/20 to-violet/5 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+      <span className="text-xl font-semibold text-violet">{initials}</span>
+    </div>
+  );
+}
+
 export function Team() {
   const { t } = useLanguage();
   const { processText } = useBudouX();
 
-  // Group members into rows of 2
   const rows: (typeof TEAM_MEMBERS)[] = [];
   for (let i = 0; i < TEAM_MEMBERS.length; i += 2) {
     rows.push(TEAM_MEMBERS.slice(i, i + 2));
@@ -34,15 +63,19 @@ export function Team() {
             >
               {row.map((member, memberIndex) => (
                 <div key={memberIndex} className="group h-full flex flex-col">
-                  {/* Name & Role */}
-                  <div className="mb-4">
-                    <h3 className="text-xl font-semibold text-foreground group-hover:text-violet transition-colors">
-                      {member.name}
-                    </h3>
-                    <span className="text-sm text-violet">{member.role}</span>
+                  {/* Mobile: centered photo above name */}
+                  {/* Desktop: photo left, info right */}
+                  <div className="flex flex-col items-center md:flex-row md:items-start gap-4 mb-4">
+                    <Avatar member={member} />
+                    <div className="text-center md:text-left">
+                      <h3 className="text-xl font-semibold text-foreground group-hover:text-violet transition-colors">
+                        {member.name}
+                      </h3>
+                      <span className="text-sm text-violet">{member.role}</span>
+                    </div>
                   </div>
 
-                  {/* Bio - translated */}
+                  {/* Bio */}
                   <p className="text-gray-600 mb-5 leading-relaxed flex-grow">
                     {processText(t.team.bios[getGlobalIndex(rowIndex, memberIndex)])}
                   </p>
