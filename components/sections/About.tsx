@@ -51,7 +51,7 @@ export function About() {
         {/* Stat bar — 10% smaller */}
         <div className="mt-10 md:mt-12 grid grid-cols-2 md:grid-cols-4 gap-5 py-6 border-y border-gray-200">
           {HOME_STATS.map((stat) => (
-            <div key={stat.label} className="text-center md:text-left">
+            <div key={stat.label} className="text-center">
               <div className="text-2xl md:text-3xl font-bold text-foreground">
                 {stat.value}
               </div>

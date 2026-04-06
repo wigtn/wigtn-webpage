@@ -177,7 +177,7 @@ export const PHASE_LABEL: Record<Phase, string> = {
 /* ─────────────── Home-page stat bar ─────────────── */
 
 export const HOME_STATS: { value: string; label: string }[] = [
-  { value: "8+", label: "projects" },
+  { value: "9", label: "projects" },
   { value: "1", label: "grand prize" },
   { value: "1", label: "paper" },
   { value: "5", label: "engineers" },
