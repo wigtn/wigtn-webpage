@@ -10,3 +10,5 @@ export { ResearchSectionComponent } from "./ResearchSection";
 export { BenchmarkTable } from "./BenchmarkTable";
 export { FigureGallery } from "./FigureGallery";
 export { ResearchHighlights } from "./ResearchHighlights";
+export { TableOfContents } from "./TableOfContents";
+export type { TocEntry } from "./TableOfContents";

@@ -3,13 +3,14 @@
 import type { TechCategory } from "@/constants/projects";
 
 interface ProductTechStackProps {
+  id?: string;
   label: string;
   techStack: TechCategory[];
 }
 
-export function ProductTechStack({ label, techStack }: ProductTechStackProps) {
+export function ProductTechStack({ id, label, techStack }: ProductTechStackProps) {
   return (
-    <section className="py-16 md:py-24">
+    <section id={id} className="py-16 md:py-24">
       <div className="max-w-5xl mx-auto px-6">
         <span className="text-sm font-semibold text-violet mb-8 block tracking-wide">
           {label}

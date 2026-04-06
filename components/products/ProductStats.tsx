@@ -3,16 +3,17 @@
 import type { ProductStat } from "@/constants/projects";
 
 interface ProductStatsProps {
+  id?: string;
   label: string;
   stats: ProductStat[];
   statTranslations: Record<string, string>;
 }
 
-export function ProductStats({ label, stats, statTranslations }: ProductStatsProps) {
+export function ProductStats({ id, label, stats, statTranslations }: ProductStatsProps) {
   const gridCols = stats.length <= 3 ? "md:grid-cols-3" : "md:grid-cols-4";
 
   return (
-    <section className="py-16 md:py-24 bg-white">
+    <section id={id} className="py-16 md:py-24 bg-white">
       <div className="max-w-5xl mx-auto px-6">
         <span className="text-sm font-semibold text-violet mb-8 block tracking-wide">
           {label}

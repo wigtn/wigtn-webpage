@@ -4,16 +4,17 @@ import type { CommunicationMode } from "@/constants/projects";
 import { useBudouX } from "@/lib/hooks/useBudouX";
 
 interface WigvoModesProps {
+  id?: string;
   label: string;
   modes: CommunicationMode[];
   modeTranslations: Record<string, string>;
 }
 
-export function WigvoModes({ label, modes, modeTranslations }: WigvoModesProps) {
+export function WigvoModes({ id, label, modes, modeTranslations }: WigvoModesProps) {
   const { processText } = useBudouX();
 
   return (
-    <section className="py-16 md:py-24 bg-white">
+    <section id={id} className="py-16 md:py-24 bg-white">
       <div className="max-w-5xl mx-auto px-6">
         <span className="text-sm font-semibold text-violet mb-8 block tracking-wide">
           {label}

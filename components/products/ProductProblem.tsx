@@ -3,15 +3,16 @@
 import { useBudouX } from "@/lib/hooks/useBudouX";
 
 interface ProductProblemProps {
+  id?: string;
   label: string;
   text: string;
 }
 
-export function ProductProblem({ label, text }: ProductProblemProps) {
+export function ProductProblem({ id, label, text }: ProductProblemProps) {
   const { processText } = useBudouX();
 
   return (
-    <section className="py-16 md:py-24 bg-white">
+    <section id={id} className="py-16 md:py-24 bg-white">
       <div className="max-w-5xl mx-auto px-6">
         <span className="text-sm font-semibold text-violet mb-6 block tracking-wide">
           {label}

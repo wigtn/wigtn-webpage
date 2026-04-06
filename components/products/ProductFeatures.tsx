@@ -4,6 +4,7 @@ import type { ProductFeature } from "@/constants/projects";
 import { useBudouX } from "@/lib/hooks/useBudouX";
 
 interface ProductFeaturesProps {
+  id?: string;
   label: string;
   solutionText: string;
   features: ProductFeature[];
@@ -11,6 +12,7 @@ interface ProductFeaturesProps {
 }
 
 export function ProductFeatures({
+  id,
   label,
   solutionText,
   features,
@@ -19,7 +21,7 @@ export function ProductFeatures({
   const { processText } = useBudouX();
 
   return (
-    <section className="py-16 md:py-24">
+    <section id={id} className="py-16 md:py-24">
       <div className="max-w-5xl mx-auto px-6">
         <span className="text-sm font-semibold text-violet mb-6 block tracking-wide">
           {label}

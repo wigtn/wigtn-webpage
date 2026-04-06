@@ -44,7 +44,7 @@ function renderBlock(block: ContentBlock, index: number) {
 
 export function ResearchSectionComponent({ section, bgWhite }: ResearchSectionProps) {
   return (
-    <section className={`py-12 md:py-16 ${bgWhite ? "bg-white" : ""}`}>
+    <section id={section.id} className={`py-12 md:py-16 ${bgWhite ? "bg-white" : ""}`}>
       <div className="max-w-5xl mx-auto px-6">
         {section.subtitle && (
           <span className="text-xs font-semibold text-violet mb-2 block tracking-wide uppercase">

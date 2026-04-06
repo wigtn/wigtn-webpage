@@ -15,7 +15,9 @@ import {
   ProductCTA,
   WigvoModes,
   ResearchSectionComponent,
+  TableOfContents,
 } from "@/components/products";
+import type { TocEntry } from "@/components/products";
 
 interface ProjectDetailProps {
   slug: string;
@@ -61,9 +63,24 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
   const hasProblem = !!translationKey && !!translations.problem;
   const hasResearch = !!detail?.researchSections?.length;
 
+  // Build TOC entries from visible sections
+  const tocEntries: TocEntry[] = [];
+  if (hasProblem) tocEntries.push({ id: "toc-problem", title: pd.theProblem });
+  if (hasFeatures) tocEntries.push({ id: "toc-solution", title: pd.theSolution });
+  if (hasModes) tocEntries.push({ id: "toc-modes", title: pd.howItWorks });
+  if (hasStats) tocEntries.push({ id: "toc-metrics", title: pd.keyMetrics });
+  if (hasTech) tocEntries.push({ id: "toc-tech", title: pd.techStack });
+  if (hasResearch) {
+    for (const section of detail!.researchSections!) {
+      tocEntries.push({ id: section.id, title: section.title });
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#FAFAFA]">
       <ProductDetailNav />
+
+      <TableOfContents entries={tocEntries} />
 
       <ProductHero
         product={{
@@ -79,11 +96,12 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
       />
 
       {hasProblem && (
-        <ProductProblem label={pd.theProblem} text={translations.problem} />
+        <ProductProblem id="toc-problem" label={pd.theProblem} text={translations.problem} />
       )}
 
       {hasFeatures && (
         <ProductFeatures
+          id="toc-solution"
           label={pd.theSolution}
           solutionText={translations.solution}
           features={detail!.features!}
@@ -93,6 +111,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
 
       {hasModes && (
         <WigvoModes
+          id="toc-modes"
           label={pd.howItWorks}
           modes={detail!.modes!}
           modeTranslations={pd.modes}
@@ -101,6 +120,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
 
       {hasStats && (
         <ProductStats
+          id="toc-metrics"
           label={pd.keyMetrics}
           stats={detail!.stats!}
           statTranslations={pd.stats}
@@ -108,7 +128,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
       )}
 
       {hasTech && (
-        <ProductTechStack label={pd.techStack} techStack={detail!.techStack!} />
+        <ProductTechStack id="toc-tech" label={pd.techStack} techStack={detail!.techStack!} />
       )}
 
       {hasResearch &&
