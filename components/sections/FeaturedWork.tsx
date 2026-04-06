@@ -55,7 +55,7 @@ export function FeaturedWork() {
   const totalCount = PROJECTS.length;
 
   return (
-    <section id="work" className="py-16 md:py-24">
+    <section id="work" className="snap-start py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-6">
         <div className="mb-12 md:mb-16 flex items-end justify-between gap-4 flex-wrap">
           <div>

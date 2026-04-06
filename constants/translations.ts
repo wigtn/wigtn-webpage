@@ -26,7 +26,7 @@ export const TRANSLATIONS = {
   },
   team: {
     bios: [
-      "Building the future of AI-native development. Passionate about making software development accessible to everyone through the power of AI.",
+      "Former construction PM with a decade of large-scale project experience. Now leading WIGTN, focused on AI modeling, product development, and applied research in GPU-accelerated computing.",
       "Architecting robust and scalable AI systems. Deep expertise in building distributed systems and integrating large language models into production environments.",
       "Turning cutting-edge AI research into practical applications. Specializing in prompt engineering, model fine-tuning, and building intelligent agents.",
       "AI Engineer focused on building LLM-powered applications and autonomous agent systems. Passionate about designing intelligent workflows that leverage large language models to solve real-world problems.",

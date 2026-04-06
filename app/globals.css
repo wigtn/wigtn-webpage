@@ -7,9 +7,9 @@
     border-color: #E5E7EB;
   }
 
-  /* Scroll offset for fixed header */
+  /* Scroll offset for fixed header — ensures section title is visible when snapped */
   section[id] {
-    scroll-margin-top: 80px;
+    scroll-margin-top: 64px;
   }
 
   body {
