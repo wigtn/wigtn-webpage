@@ -7,7 +7,7 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
     blocks: [
       {
         type: "prose",
-        text: "A VLM-based document parser specialized for Korean government documents. This research project originated from a real challenge encountered while developing a B2B2G (government-facing) RAG service at SoundMind Inc. In a B2B2G environment where the end user's document structure is unknown in advance, the only certainty was the domain: Korean government public documents. The goal was to build an SLM-based document parser that could accurately read and structure these documents while meeting practical infrastructure constraints (limited GPU, cost).",
+        text: "A VLM-based document parser specialized for Korean government documents. This research project originated from a practical need to parse Korean government public documents for a B2G (government-facing) RAG service. In a B2G environment where the end user's document structure is unknown in advance, the only certainty was the domain: Korean government public documents. The goal was to build an SLM-based document parser that could accurately read and structure these documents while meeting practical infrastructure constraints (limited GPU, cost).",
       },
       {
         type: "prose",
