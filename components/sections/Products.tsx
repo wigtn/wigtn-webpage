@@ -66,7 +66,7 @@ export function Products() {
           />
 
           {/* Copy — matches phone height on desktop */}
-          <div className="flex-1 max-w-xl flex flex-col text-center md:text-left">
+          <div className="flex-1 max-w-xl flex flex-col text-left">
             {/* Header */}
             <div className="mb-4">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full border border-gray-200 text-gray-600 mb-3">
@@ -101,7 +101,7 @@ export function Products() {
             </div>
 
             {/* Store buttons */}
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-5">
+            <div className="flex flex-wrap items-center justify-start gap-3 mt-5">
               {product.app?.appStoreUrl ? (
                 <a
                   href={product.app.appStoreUrl}
