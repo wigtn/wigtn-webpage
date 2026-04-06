@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     url: "https://wigtn.com",
     siteName: "WIGTN",
     type: "website",
-    locale: "ko_KR",
+    locale: "en_US",
   },
 };
 
@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth">
       <head>
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />

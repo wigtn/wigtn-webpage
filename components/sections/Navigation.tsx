@@ -3,14 +3,11 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { NAV_ITEMS } from "@/constants";
-import { LANGUAGES } from "@/constants/translations";
-import { useLanguage } from "@/lib/i18n";
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
-  const { language, setLanguage } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,7 +57,7 @@ export function Navigation() {
               WIGTN
             </a>
 
-            {/* Right: Desktop Menu + Language */}
+            {/* Right: Desktop Menu */}
             <div className="hidden md:flex items-center gap-5">
               {NAV_ITEMS.map((item) => (
                 <a
@@ -75,27 +72,6 @@ export function Navigation() {
                   {item.label}
                 </a>
               ))}
-
-              {/* Language Selector */}
-              <div className="flex items-center gap-1 text-sm text-gray-500 border-l border-gray-300 pl-5">
-                {LANGUAGES.map((lang, index) => (
-                  <span key={lang.code} className="flex items-center">
-                    <button
-                      onClick={() => setLanguage(lang.code)}
-                      className={`transition-colors ${
-                        language === lang.code
-                          ? "text-violet font-medium"
-                          : "hover:text-violet"
-                      }`}
-                    >
-                      {lang.short}
-                    </button>
-                    {index < LANGUAGES.length - 1 && (
-                      <span className="mx-1 text-gray-300">|</span>
-                    )}
-                  </span>
-                ))}
-              </div>
             </div>
 
             {/* Mobile Menu Button */}
@@ -133,27 +109,6 @@ export function Navigation() {
                 {item.label}
               </a>
             ))}
-
-            {/* Mobile Language Selector */}
-            <div className="flex items-center gap-2 mt-4 text-sm">
-              {LANGUAGES.map((lang, index) => (
-                <span key={lang.code} className="flex items-center">
-                  <button
-                    onClick={() => setLanguage(lang.code)}
-                    className={`transition-colors ${
-                      language === lang.code
-                        ? "text-violet font-medium"
-                        : "text-gray-500 hover:text-violet"
-                    }`}
-                  >
-                    {lang.short}
-                  </button>
-                  {index < LANGUAGES.length - 1 && (
-                    <span className="mx-2 text-gray-300">|</span>
-                  )}
-                </span>
-              ))}
-            </div>
           </nav>
         </div>
       )}

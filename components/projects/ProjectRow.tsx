@@ -9,7 +9,6 @@ import type {
   Project,
   SectionBadge,
 } from "@/constants/projects";
-import { useLanguage } from "@/lib/i18n";
 import { useBudouX } from "@/lib/hooks/useBudouX";
 
 /**
@@ -225,7 +224,6 @@ export function ProjectRow({
   meta,
   isLast = false,
 }: ProjectRowProps) {
-  const { language } = useLanguage();
   const { processText } = useBudouX();
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -289,7 +287,7 @@ export function ProjectRow({
             </div>
 
             <p className="text-base md:text-lg text-gray-600 mt-3 leading-relaxed max-w-xl">
-              {processText(project.tagline[language])}
+              {processText(project.tagline)}
             </p>
 
             {/* Tag · meta — shown for every list variant except Hackathon,

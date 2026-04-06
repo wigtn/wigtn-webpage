@@ -1,47 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, useCallback } from "react";
 
 export function Crew() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [isSnapping, setIsSnapping] = useState(false);
-
-  const scrollToAbout = useCallback(() => {
+  const scrollToAbout = () => {
     const aboutEl = document.getElementById("about");
-    if (!aboutEl || isSnapping) return;
-    setIsSnapping(true);
-    aboutEl.scrollIntoView({ behavior: "smooth" });
-    setTimeout(() => setIsSnapping(false), 800);
-  }, [isSnapping]);
-
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
-
-    const handleScroll = () => {
-      const section = sectionRef.current;
-      if (!section || isSnapping) return;
-
-      const sectionBottom = section.offsetTop + section.offsetHeight;
-      const currentScrollY = window.scrollY;
-      const scrollingDown = currentScrollY > lastScrollY;
-      lastScrollY = currentScrollY;
-
-      // If user is within hero and scrolling down, snap to about
-      if (scrollingDown && currentScrollY > 0 && currentScrollY < sectionBottom * 0.5) {
-        scrollToAbout();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isSnapping, scrollToAbout]);
+    if (aboutEl) {
+      aboutEl.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
-    <section
-      ref={sectionRef}
-      className="h-screen flex flex-col items-center justify-center relative"
-    >
+    <section className="h-screen flex flex-col items-center justify-center relative snap-start">
       <div className="text-center px-6">
         <Image
           src="/wigtn_logo.png"

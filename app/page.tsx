@@ -10,7 +10,7 @@ import {
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen bg-[#FAFAFA]">
+    <main className="relative h-screen overflow-y-auto snap-y snap-mandatory bg-[#FAFAFA]">
       <Navigation />
       <Crew />
       <About />

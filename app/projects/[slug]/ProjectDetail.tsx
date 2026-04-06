@@ -21,7 +21,7 @@ interface ProjectDetailProps {
 }
 
 export function ProjectDetail({ slug }: ProjectDetailProps) {
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
   const { processText } = useBudouX();
   const project = PROJECTS_BY_SLUG[slug];
 
@@ -40,8 +40,8 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
   const translations: ProductDetailTranslations = translationKey
     ? pd[translationKey]
     : {
-        tagline: project.tagline[language],
-        description: project.description[language],
+        tagline: project.tagline,
+        description: project.description,
         problem: "",
         solution: "",
         statusBadge: PHASE_LABEL[project.phase],
@@ -113,7 +113,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
         <section className="py-16 md:py-24 bg-white">
           <div className="max-w-3xl mx-auto px-6">
             <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-              {processText(project.description[language])}
+              {processText(project.description)}
             </p>
 
             {project.achievements && project.achievements.length > 0 && (

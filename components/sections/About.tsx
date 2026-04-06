@@ -9,7 +9,7 @@ export function About() {
   const { processText } = useBudouX();
 
   return (
-    <section id="about" className="py-16 md:py-24">
+    <section id="about" className="min-h-screen flex items-center snap-start py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-6">
         <h2 className="text-section text-violet mb-4 tracking-wide">About us</h2>
         <p className="text-lg md:text-xl text-foreground mb-8">

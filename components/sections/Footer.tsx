@@ -1,16 +1,12 @@
 "use client";
 
 import { SOCIAL_LINKS } from "@/constants";
-import { useLanguage } from "@/lib/i18n";
-import { useBudouX } from "@/lib/hooks/useBudouX";
 import { GitHubIcon } from "@/components/ui/icons";
 
 export function Footer() {
-  const { t } = useLanguage();
-  const { processText } = useBudouX();
 
   return (
-    <footer className="py-16 md:py-24">
+    <footer className="snap-start py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
           {/* Left - Logo & Tagline */}

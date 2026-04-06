@@ -17,10 +17,10 @@ export async function generateMetadata({
 
   return {
     title: `${project.name} | WIGTN`,
-    description: project.description.en,
+    description: project.description,
     openGraph: {
       title: project.name,
-      description: project.description.en,
+      description: project.description,
       images: project.media.poster ? [project.media.poster] : undefined,
     },
   };
