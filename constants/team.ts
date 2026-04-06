@@ -16,7 +16,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: "김진모 Jinmo Kim",
     role: "MLOps Engineer & Designer",
     bio: "Manages full MLOps pipelines with Docker, Kubernetes, and CI/CD. Also serves as the team's DBA and leads UI/UX direction.",
-    image: "/images/team/jinmo.jpg",
+    image: "/images/team/jinmo_kim.png",
+    imagePosition: "center 30%",
     expertise: ["Docker", "Kubernetes", "CI/CD", "MLOps", "DBA", "UI/UX Design", "Video Processing"],
     links: {
       github: "https://github.com/moriroKim",
