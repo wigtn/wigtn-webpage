@@ -27,10 +27,10 @@ export const TRANSLATIONS = {
   team: {
     bios: [
       "Former construction PM with a decade of large-scale project experience. Now leading WIGTN, focused on AI modeling, product development, and applied research in GPU-accelerated computing.",
-      "Architecting robust and scalable AI systems. Deep expertise in building distributed systems and integrating large language models into production environments.",
-      "Turning cutting-edge AI research into practical applications. Specializing in prompt engineering, model fine-tuning, and building intelligent agents.",
+      "Owns the full MLOps lifecycle — containerizing models with Docker, orchestrating training and inference workloads on Kubernetes, and managing CI/CD pipelines that ship AI services to production. Also serves as the team's DBA, tuning query performance and maintaining data reliability across distributed datastores. Beyond infrastructure, brings a strong design sensibility to the table — leading UI/UX direction and building video processing systems that turn raw footage into polished product assets.",
+      "Mobile-first full-stack engineer who architects and ships cross-platform applications from presentation layer to database. Specializes in React Native for native-quality mobile experiences while building the supporting backend services with Node.js and relational databases — covering the full 3-tier stack end to end. Integrates AI-native tooling throughout the development workflow to accelerate iteration speed and maintain production-grade quality, with a focus on software engineering craft rather than model development.",
       "AI Engineer focused on building LLM-powered applications and autonomous agent systems. Passionate about designing intelligent workflows that leverage large language models to solve real-world problems.",
-      "Crafting intuitive experiences for complex AI tools. Believes that powerful technology should feel effortless to use.",
+      "Web-focused full-stack engineer who delivers responsive, high-performance applications across the entire 3-tier architecture — from pixel-perfect React frontends through API design to database-backed services. Brings additional mobile development experience with React Native, enabling seamless cross-platform contributions when the team needs it. Leverages AI-native tooling across every phase of the development cycle to ship faster without sacrificing code quality, with a clear focus on software engineering discipline over model building.",
     ],
   },
   footer: {
