@@ -1,6 +1,7 @@
 "use client";
 
-import { Plane, Camera, BarChart3 } from "lucide-react";
+import { useState } from "react";
+import { Plane, Camera, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import { PROJECTS_BY_SECTION, PHASE_LABEL } from "@/constants/projects";
 import { useBudouX } from "@/lib/hooks/useBudouX";
 import { PhoneMockup } from "@/components/projects";
@@ -23,18 +24,14 @@ const PHASE_ICONS = [
   { key: "after", icon: BarChart3 },
 ] as const;
 
-/**
- * Products — fixed, single-product showcase. Phone mockup on the left,
- * 3-phase copy (Before / During / After) on the right, height-matched to
- * the phone frame. Stacked on mobile.
- */
 export function Products() {
   const products = PROJECTS_BY_SECTION.products;
   const { processText } = useBudouX();
+  const [current, setCurrent] = useState(0);
 
-  const product = products[0];
-  if (!product) return null;
+  if (products.length === 0) return null;
 
+  const product = products[current];
   const statusLabel = PHASE_LABEL[product.phase];
   const statusDot =
     product.phase === "in-progress"
@@ -44,10 +41,12 @@ export function Products() {
         : "bg-gray-400";
 
   const desc = parseDescription(product.description);
+  const hasPrev = current > 0;
+  const hasNext = current < products.length - 1;
 
   return (
     <section id="products" className="min-h-screen snap-start py-16 md:py-24 flex flex-col justify-center">
-      <div className="max-w-6xl mx-auto px-6 w-full">
+      <div className="max-w-6xl mx-auto px-6 w-full relative">
         <div className="mb-12 md:mb-16">
           <h2 className="text-section text-violet mb-2 tracking-wide">
             Our Products
@@ -148,6 +147,44 @@ export function Products() {
             </div>
           </div>
         </div>
+
+        {/* Navigation arrows — right side, semi-transparent, no box */}
+        {products.length > 1 && (
+          <>
+            {hasPrev && (
+              <button
+                onClick={() => setCurrent(current - 1)}
+                className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500 transition-colors cursor-pointer hidden md:block"
+                aria-label="Previous product"
+              >
+                <ChevronLeft className="w-10 h-10" strokeWidth={1.5} />
+              </button>
+            )}
+            {hasNext && (
+              <button
+                onClick={() => setCurrent(current + 1)}
+                className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500 transition-colors cursor-pointer hidden md:block"
+                aria-label="Next product"
+              >
+                <ChevronRight className="w-10 h-10" strokeWidth={1.5} />
+              </button>
+            )}
+
+            {/* Dot indicators */}
+            <div className="flex justify-center gap-2 mt-8">
+              {products.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrent(i)}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    i === current ? "bg-violet" : "bg-gray-300"
+                  }`}
+                  aria-label={`Go to product ${i + 1}`}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

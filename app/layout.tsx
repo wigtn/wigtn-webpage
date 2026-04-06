@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { LanguageProvider } from "@/lib/i18n";
+import { ScrollRestore } from "@/components/ScrollRestore";
 import { organizationSchema } from "@/lib/schema";
 import "./globals.css";
 
@@ -44,6 +45,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased bg-[#FAFAFA] text-foreground">
         <LanguageProvider>
+          <ScrollRestore />
           {children}
         </LanguageProvider>
       </body>

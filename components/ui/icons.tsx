@@ -2,11 +2,17 @@ export function HuggingFaceIcon({ className }: { className?: string }) {
   return (
     <svg
       className={className}
-      viewBox="0 0 24 24"
-      fill="currentColor"
+      viewBox="0 0 120 120"
+      fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-.5 3.5a1 1 0 110 2 1 1 0 010-2zm3 0a1 1 0 110 2 1 1 0 010-2zM8.5 9.5c1 0 1.5.75 1.5.75s-.5 1.25-1.5 1.25S7 10.25 7 10.25 7.5 9.5 8.5 9.5zm7 0c1 0 1.5.75 1.5.75s-.5 1.25-1.5 1.25-1.5-1.25-1.5-1.25.5-.75 1.5-.75zM12 17c-2.5 0-4-1.5-4-3h8c0 1.5-1.5 3-4 3z" />
+      <circle cx="60" cy="60" r="60" fill="#FFD21E" />
+      <path d="M39 68.5c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5M72 68.5c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5" stroke="#1A1A1A" strokeWidth="5" strokeLinecap="round" />
+      <ellipse cx="44" cy="50" rx="5" ry="6" fill="#1A1A1A" />
+      <ellipse cx="76" cy="50" rx="5" ry="6" fill="#1A1A1A" />
+      <ellipse cx="45.5" cy="48" rx="2" ry="2.5" fill="white" />
+      <ellipse cx="77.5" cy="48" rx="2" ry="2.5" fill="white" />
+      <path d="M45 78c0 0 5 8 15 8s15-8 15-8" stroke="#1A1A1A" strokeWidth="5" strokeLinecap="round" />
     </svg>
   );
 }

@@ -3,10 +3,11 @@ export const TRANSLATIONS = {
     tagline: "We prove ourselves by what we build, not how long we've built.",
   },
   about: {
-    heading: "AI-Native: Bridging the Gap Between Research and Reality",
+    heading: "An AI-Native Builder Crew That Starts from Real Problems, Builds Without Senior Guidance, and Makes \"Wait, This Actually Works?\" a Reality",
     paragraphs: [
-      "Wicton is a crew of five engineers dedicated to pushing the boundaries of AI. We began with a mission to contribute to the open-source community through rigorous research, but we didn't stop there.",
-      "By leveraging our proprietary automated workflows, we transform complex theories into functional, high-performance products. We believe that growth isn't found in waiting—it's found in shipping. From research papers to live services, our work is the only proof we need.",
+      "WIGTN is an independent development crew of five AI engineers. We start from real-world friction — the tangible inconveniences people face in everyday life and in the field — and take ideas all the way to production-grade systems, without relying on senior mentorship or hand-holding.",
+      "We don't build demos. We build products that make people say, \"Wait, this actually works?\" We move fast, but we deliver results that leave a lasting impression — creating meaningful impact in remarkably short timeframes.",
+      "Through hackathons, open-source projects, and community education, we learn by doing, proving what a small team of builders can accomplish in the AI-Native era.",
     ],
   },
   results: {

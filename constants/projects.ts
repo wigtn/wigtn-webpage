@@ -169,9 +169,6 @@ export const HOME_STATS: { value: string; label: string }[] = [
 export const PROJECTS: Project[] = [
   /* ─────── Products ─────── */
 
-  // NOTE: WIGVU is intentionally excluded from the homepage for now. Its
-  // translation blob in constants/translations.ts is kept for future re-add.
-
   {
     id: "wigex",
     slug: "wigex",
@@ -194,6 +191,27 @@ export const PROJECTS: Project[] = [
     timeline: {},
     links: {
       github: "https://github.com/wigtn/wigex",
+    },
+  },
+
+  {
+    id: "wigvu",
+    slug: "wigvu",
+    name: "WIGVU",
+    section: "products",
+    phase: "in-progress",
+    tagline: "Learn Korean through the content you love — K-Drama, K-POP, YouTube, and more.",
+    description: "before_title::Discover\nbefore::Browse real Korean content — K-Drama clips, K-POP lyrics, news articles, and YouTube videos — curated by difficulty level and topic.\nduring_title::Learn\nduring::Every sentence is translated with context-aware AI. Key expressions, grammar patterns, and cultural nuances are automatically extracted and explained — all synced with the original content.\nafter_title::Master\nafter::Track your progress with AI-generated quizzes, vocabulary lists, and comprehension scores. Build your Korean skills one episode at a time.",
+    gradient: "from-pink-500 to-rose-400",
+    media: {
+      poster: "https://opengraph.githubassets.com/1/wigtn/wigvu",
+    },
+    app: {
+      // appStoreUrl: TBD
+    },
+    timeline: {},
+    links: {
+      github: "https://github.com/wigtn/wigvu",
     },
   },
 
@@ -319,13 +337,13 @@ export const PROJECTS: Project[] = [
   {
     id: "wigent",
     slug: "wigent",
-    name: "Wigent",
+    name: "WIGENT",
     section: "hackathon",
     sectionBadge: "Grand Prize",
     phase: "completed",
     featured: true,
     tagline: "Drop a topic, watch AI agents debate it live — PM orchestrates, experts spawn and retire, then a landing page writes itself from the conclusions.",
-    description: "Wigent is a multi-agent debate arena where a PM agent orchestrates auto-spawned domain experts in a Slack-style chat UI. Agents argue, challenge each other, retire when outmatched, and summon new specialists on the fly. Once consensus is reached, the system auto-generates a polished landing page from the debate conclusions. Grand Prize winner at Build with TRAE Seoul (ByteDance) — built by 3 engineers in 3.5 hours.",
+    description: "WIGENT is a multi-agent debate arena where a PM agent orchestrates auto-spawned domain experts in a Slack-style chat UI. Agents argue, challenge each other, retire when outmatched, and summon new specialists on the fly. Once consensus is reached, the system auto-generates a polished landing page from the debate conclusions. Grand Prize winner at Build with TRAE Seoul (ByteDance) — built by 3 engineers in 3.5 hours.",
     gradient: "from-yellow-400 to-amber-500",
     media: {
       poster: "/images/projects/trae_hackthon_seoul.png",

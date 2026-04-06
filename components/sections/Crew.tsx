@@ -16,13 +16,15 @@ export function Crew() {
         <Image
           src="/wigtn_logo.png"
           alt="WIGTN"
-          width={420}
-          height={294}
+          width={560}
+          height={392}
           className="mx-auto mb-8 mix-blend-multiply"
           priority
         />
-        <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-          We prove ourselves by what we build, not how long we&apos;ve built.
+        <p className="text-xl md:text-2xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
+          From idea to production — no seniors, no shortcuts. We ship.
+          <br />
+          <span className="text-foreground font-medium">We don&apos;t study AI. We just ship it.</span>
         </p>
       </div>
 

@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
-import { ArrowRight } from "lucide-react";
 import type {
   AchievementResult,
   Project,
@@ -125,7 +124,7 @@ interface BoxLink {
 
 const LINK_DEFS = {
   github: { icon: <GitHubIcon className="w-4 h-4" />, label: "GitHub" },
-  huggingface: { icon: <HuggingFaceIcon className="w-4 h-4" />, label: "HuggingFace" },
+  huggingface: { icon: <HuggingFaceIcon className="w-4 h-4 rounded-full" />, label: "HuggingFace" },
   video: { icon: <YouTubeIcon className="w-4 h-4 text-red-600" />, label: "YouTube" },
 };
 
@@ -149,10 +148,11 @@ function buildBoxLinks(project: Project, order: LinkKey[]): BoxLink[] {
  *                YouTube walkthrough leads; GitHub is last.
  *   • open-source — code-first (GitHub), then Live (npm / deployed site).
  */
-const LINK_ORDER: Record<"models" | "papers" | "open-source", LinkKey[]> = {
+const LINK_ORDER: Record<"models" | "papers" | "open-source" | "hackathon", LinkKey[]> = {
   models: ["github", "video", "huggingface"],
   papers: ["github", "video", "huggingface"],
   "open-source": ["github", "video", "huggingface"],
+  hackathon: ["github", "video", "huggingface"],
 };
 
 function BoxLinkButton({ link }: { link: BoxLink }) {
@@ -161,7 +161,7 @@ function BoxLinkButton({ link }: { link: BoxLink }) {
       href={link.href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:border-violet hover:bg-violet/5 hover:text-violet transition-colors"
+      className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200/80 bg-white text-[13px] font-medium text-gray-600 shadow-sm hover:shadow-md hover:border-violet/30 hover:text-violet transition-all duration-200"
     >
       <span className="flex-shrink-0">{link.icon}</span>
       {link.label}
@@ -173,7 +173,7 @@ function BoxLinkButton({ link }: { link: BoxLink }) {
 
 type Variant = "models" | "papers" | "open-source" | "hackathon";
 
-const BOX_LINK_VARIANTS = new Set<Variant>(["models", "papers", "open-source"]);
+const BOX_LINK_VARIANTS = new Set<Variant>(["models", "papers", "open-source", "hackathon"]);
 
 interface ProjectRowProps {
   project: Project;
@@ -309,19 +309,9 @@ export function ProjectRow({
               thumbnail's bottom edge on desktop. On mobile they just follow
               the text naturally. */}
           <div className="mt-4 md:mt-auto md:pt-4 flex flex-wrap gap-2">
-            {BOX_LINK_VARIANTS.has(variant) ? (
-              boxLinks.map((link) => (
-                <BoxLinkButton key={link.key} link={link} />
-              ))
-            ) : (
-              <Link
-                href={detailHref}
-                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:border-violet hover:bg-violet/5 hover:text-violet transition-colors"
-              >
-                Details
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            )}
+            {boxLinks.map((link) => (
+              <BoxLinkButton key={link.key} link={link} />
+            ))}
           </div>
         </div>
 
