@@ -27,10 +27,10 @@ export const TRANSLATIONS = {
   team: {
     bios: [
       "Former construction PM with a decade of large-scale project experience. Now leading WIGTN, focused on AI modeling, product development, and applied research in GPU-accelerated computing.",
-      "Manages the full MLOps pipeline — Docker, Kubernetes, and CI/CD — to ship AI services to production. Also serves as the team's DBA and brings a strong design eye, leading UI/UX direction and building video processing systems.",
-      "Mobile-first full-stack engineer covering the entire 3-tier stack with React Native. Builds AI-native frontend and backend services end to end, focused on software engineering craft rather than model development.",
-      "AI Engineer focused on building LLM-powered applications and autonomous agent systems. Passionate about designing intelligent workflows that leverage large language models to solve real-world problems.",
-      "Web-focused full-stack engineer who builds across the 3-tier architecture — React frontends, API design, and database services. Also brings mobile experience with React Native and leverages AI-native tooling for rapid, production-quality delivery.",
+      "Manages full MLOps pipelines with Docker, Kubernetes, and CI/CD. Also serves as the team's DBA and leads UI/UX direction.",
+      "Mobile-first full-stack engineer covering the entire 3-tier stack with React Native. Focused on software engineering craft rather than model development.",
+      "Builds LLM-powered applications and autonomous agent systems. Focuses on multi-agent orchestration and workflow automation.",
+      "Web-focused full-stack engineer who builds across the 3-tier architecture. Brings mobile experience with React Native and leverages AI-native tooling for rapid delivery.",
     ],
   },
   footer: {

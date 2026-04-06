@@ -21,7 +21,7 @@ function Avatar({ member }: { member: (typeof TEAM_MEMBERS)[number] }) {
           alt={member.name}
           fill
           sizes="80px"
-          className="object-cover"
+          className="object-cover object-top grayscale"
           unoptimized
         />
       </div>
@@ -68,8 +68,19 @@ export function Team() {
                   <div className="flex flex-col items-center md:flex-row md:items-start gap-4 mb-4">
                     <Avatar member={member} />
                     <div className="text-center md:text-left">
-                      <h3 className="text-xl font-semibold text-foreground group-hover:text-violet transition-colors">
-                        {member.name}
+                      <h3 className="text-xl font-semibold group-hover:text-violet transition-colors">
+                        {(() => {
+                          const match = member.name.match(/^([\u3131-\uD79D\s]+)\s+(.+)$/);
+                          if (match) {
+                            return (
+                              <>
+                                <span className="text-foreground">{match[1]}</span>{" "}
+                                <span className="text-gray-400">{match[2]}</span>
+                              </>
+                            );
+                          }
+                          return <span className="text-foreground">{member.name}</span>;
+                        })()}
                       </h3>
                       <span className="text-sm text-violet">{member.role}</span>
                     </div>
