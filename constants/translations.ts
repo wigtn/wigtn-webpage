@@ -69,6 +69,13 @@ export const TRANSLATIONS = {
       solution: "Pseudo-label distillation compresses a 30B teacher's parsing intelligence into a 2B student via LoRA fine-tuning on 2,667 Korean government document pages, achieving #1 retrieval performance across 6 parsers.",
       statusBadge: "Released",
     },
+    wigent: {
+      tagline: "Drop a topic, watch AI agents debate it live — then a landing page writes itself from the conclusions.",
+      description: "WIGENT is a multi-agent debate platform where a PM agent orchestrates auto-spawned domain experts in a Slack-style chat UI. Agents debate, challenge each other, retire, and summon new specialists. Once consensus is reached, the chat transforms into a landing page generated from the debate conclusions. Grand Prize winner at Build with TRAE Seoul — built by 3 engineers in 3.5 hours.",
+      problem: "Solo brainstorming is biased, team discussions take hours, and AI chat tools give single-perspective responses with no debate or convergence. There's no way to get the clash of viewpoints that produces strong ideas — quickly, with a tangible deliverable.",
+      solution: "AI agents autonomously debate your topic in a Slack-style UI — PM anchors the discussion, domain experts argue and get replaced, and the debate converges into a structured business idea that instantly renders as a landing page from 9 design templates.",
+      statusBadge: "Released",
+    },
     features: {
       wigvo_feature_dual: "Two parallel OpenAI Realtime sessions handle each side of the conversation independently, ensuring natural turn-taking.",
       wigvo_feature_phone: "Call any phone number on any carrier. Works with landlines, mobile phones, and VoIP — the recipient doesn't need any app.",
@@ -82,6 +89,10 @@ export const TRANSLATIONS = {
       wigvu_feature_translation: "Every sentence is translated with context-aware AI, preserving nuance, slang, and cultural meaning.",
       wigvu_feature_ai: "AI-generated summaries, difficulty scores, and keyword extraction help you find content at your level.",
       wigvu_feature_expression: "Key expressions and grammar patterns are automatically extracted and explained for deeper understanding.",
+      wigent_feature_orchestrator: "AsyncGenerator-based debate engine controls 30-turn free debates with automatic phase transitions, agent retirement at turns 12 and 22, and forced convergence after turn 25.",
+      wigent_feature_landing: "9 design templates (Glassmorphism, Neobrutalism, Editorial, etc.) render instantly when the debate concludes — no 60-second GPT wait. Dual-path rendering keeps GPT generation as a silent fallback.",
+      wigent_feature_ui: "Full Slack-style dark-theme chat with typing indicators, agent join/leave system messages, sidebar with online status, and Framer Motion page transitions.",
+      wigent_feature_hitl: "Users can reject the result. The PM announces the rejection, the team runs 8 more turns of focused debate, and a new landing page is generated — all without the user typing into the debate.",
     },
     stats: {
       avgLatency: "Avg. Latency",
@@ -95,6 +106,10 @@ export const TRANSLATIONS = {
       retrievalHit1: "Retrieval Hit@1 (#1)",
       trainingTime: "Training Time",
       parameters: "Parameters",
+      prototypeTime: "To Prototype",
+      commits: "Commits",
+      mergeConflicts: "Merge Conflicts",
+      agentPatterns: "Agent Patterns",
     },
     modes: {
       mode_v2v_title: "Voice-to-Voice",

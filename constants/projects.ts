@@ -2,6 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import { Phone, Globe, Mic, Shield, Brain, FileText, Zap, Database, Github } from "lucide-react";
 import { WIGTNOCR_SECTIONS } from "./wigtnocr-sections";
 import { WIGVO_SECTIONS } from "./wigvo-sections";
+import { WIGENT_SECTIONS } from "./wigent-sections";
 
 /* ─────────────── Shared sub-types (used by product detail blocks) ─────────────── */
 
@@ -131,7 +132,7 @@ export interface ProjectTimeline {
 
 export interface ProjectDetail {
   /** References existing productDetail.wigvo / productDetail.wigvu / productDetail.wigtnocr translation blobs. */
-  translationKey?: "wigvo" | "wigvu" | "wigtnocr";
+  translationKey?: "wigvo" | "wigvu" | "wigtnocr" | "wigent";
   liveUrl?: string;
   features?: ProductFeature[];
   stats?: ProductStat[];
@@ -397,6 +398,27 @@ export const PROJECTS: Project[] = [
     ],
     links: {
       github: "https://github.com/wigtn/wigent",
+    },
+    detail: {
+      translationKey: "wigent",
+      stats: [
+        { value: "55min", labelKey: "prototypeTime" },
+        { value: "26", labelKey: "commits" },
+        { value: "0", labelKey: "mergeConflicts" },
+        { value: "8", labelKey: "agentPatterns" },
+      ],
+      features: [
+        { icon: Brain, title: "Multi-Agent Orchestration", descriptionKey: "wigent_feature_orchestrator" },
+        { icon: Zap, title: "Instant Landing Page", descriptionKey: "wigent_feature_landing" },
+        { icon: Globe, title: "Slack-Style Debate UI", descriptionKey: "wigent_feature_ui" },
+        { icon: Shield, title: "Human-in-the-Loop", descriptionKey: "wigent_feature_hitl" },
+      ],
+      techStack: [
+        { category: "Framework & Language", items: ["Next.js 16 (App Router)", "React 19", "TypeScript (strict)", "Tailwind CSS v4", "Framer Motion"] },
+        { category: "AI & Backend", items: ["OpenAI GPT-4o", "SSE (Server-Sent Events)", "AsyncGenerator orchestrator", "AbortController (timeout/cancel)"] },
+        { category: "Frontend State", items: ["React useReducer (13 event types)", "SSE ReadableStream parser", "Sandbox iframe (landing page)", "localStorage (history)"] },
+      ],
+      researchSections: WIGENT_SECTIONS,
     },
   },
 
