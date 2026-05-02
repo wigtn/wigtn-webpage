@@ -1,55 +1,44 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import type {
-  AchievementResult,
-  Project,
-} from "@/constants/projects";
+import { Trophy } from "lucide-react";
+import type { AchievementResult, Project } from "@/constants/projects";
+import { CategoryCard, type BadgeTone, type CategoryCardLink } from "./CategoryCard";
 
 interface AwardsGridProps {
   projects: readonly Project[];
 }
 
-type Medal = "gold" | "silver" | "bronze";
-
-const MEDAL_STYLES: Record<Medal, { emoji: string; chip: string }> = {
-  gold: {
-    emoji: "🏆",
-    chip: "border-amber-300 bg-amber-50 text-amber-800",
-  },
-  silver: {
-    emoji: "🥈",
-    chip: "border-slate-300 bg-slate-50 text-slate-700",
-  },
-  bronze: {
-    emoji: "🥉",
-    chip: "border-orange-300 bg-orange-50 text-orange-800",
-  },
-};
-
-const RESULT_TO_MEDAL: Partial<Record<AchievementResult, Medal>> = {
-  winner: "gold",
-  "grand-prize": "gold",
-  "second-place": "silver",
-  "third-place": "bronze",
-};
-
+/* Badge label + tone derived from the achievement result. The repo's
+ * existing `sectionBadge` field can override the default label so a
+ * project carrying e.g. "2nd Place" still wins over the inferred form. */
 const RESULT_LABEL: Partial<Record<AchievementResult, string>> = {
   winner: "Winner",
   "grand-prize": "Grand Prize",
-  "second-place": "2nd Place",
+  "second-place": "Runner-up",
   "third-place": "3rd Place",
   finalist: "Finalist",
   accepted: "Accepted",
   participated: "Participated",
 };
 
-/**
- * Awards view — 3-col card grid (1-col mobile). Hackathon wins are
- * visual-impact-first, so cards beat a list. Medal emoji + colored chip
- * carries the result; event name + organizer carries the venue.
- */
+const RESULT_TONE: Partial<Record<AchievementResult, BadgeTone>> = {
+  winner: "amber",
+  "grand-prize": "amber",
+  "second-place": "slate",
+  "third-place": "slate",
+  finalist: "slate",
+  accepted: "violet",
+  participated: "gray",
+};
+
+function linksFor(project: Project): CategoryCardLink[] {
+  const out: CategoryCardLink[] = [];
+  if (project.links.github) out.push({ kind: "github", href: project.links.github });
+  if (project.links.live) out.push({ kind: "live", href: project.links.live });
+  if (project.links.video) out.push({ kind: "video", href: project.links.video });
+  return out;
+}
+
 export function AwardsGrid({ projects }: AwardsGridProps) {
   if (projects.length === 0) {
     return (
@@ -60,65 +49,43 @@ export function AwardsGrid({ projects }: AwardsGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
       {projects.map((project) => {
         const achievement = project.achievements?.[0];
-        const medal = achievement ? RESULT_TO_MEDAL[achievement.result] : undefined;
-        const label = achievement
-          ? project.sectionBadge && project.sectionBadge !== "Participated" && project.sectionBadge !== "Upcoming"
+        const result = achievement?.result;
+        const label =
+          (project.sectionBadge &&
+            project.sectionBadge !== "Participated" &&
+            project.sectionBadge !== "Upcoming"
             ? project.sectionBadge
-            : RESULT_LABEL[achievement.result] ?? "—"
-          : "—";
+            : null) ??
+          (result ? RESULT_LABEL[result] : null) ??
+          null;
+        const tone: BadgeTone =
+          (result && RESULT_TONE[result]) ?? "gray";
+
+        const meta = achievement
+          ? [achievement.event, achievement.organizer].filter(Boolean).join(" · ")
+          : null;
 
         return (
-          <Link
+          <CategoryCard
             key={project.id}
-            href={`/projects/${project.slug}/`}
-            className="group flex flex-col rounded-xl border border-black/[0.07] bg-white overflow-hidden transition-[border,box-shadow,transform] duration-300 hover:-translate-y-[2px] hover:border-violet/40 hover:shadow-[0_18px_40px_-22px_rgba(76,29,149,0.28)]"
-          >
-            {/* Hero image */}
-            <div className="relative aspect-[16/10] overflow-hidden bg-gray-50">
-              {project.media.poster && (
-                <Image
-                  src={project.media.poster}
-                  alt={`${project.name} — ${achievement?.event ?? "project"}`}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                  unoptimized
-                />
-              )}
-
-              {/* Medal badge top-left */}
-              {achievement && (
-                <span
-                  className={`absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-semibold ${
-                    medal ? MEDAL_STYLES[medal].chip : "border-gray-200 bg-white text-gray-700"
-                  }`}
-                >
-                  {medal && <span aria-hidden>{MEDAL_STYLES[medal].emoji}</span>}
-                  {label}
-                </span>
-              )}
-            </div>
-
-            {/* Body */}
-            <div className="flex flex-col flex-1 p-4 md:p-5">
-              <h3 className="text-base md:text-lg font-semibold text-foreground tracking-tight group-hover:text-violet transition-colors">
-                {project.name}
-              </h3>
-              <p className="mt-1.5 text-[12.5px] md:text-[13px] text-gray-600 leading-snug line-clamp-2">
-                {project.tagline}
-              </p>
-              {achievement && (
-                <p className="mt-3 text-[11.5px] text-gray-500">
-                  {[achievement.event, achievement.organizer]
-                    .filter(Boolean)
-                    .join(" · ")}
-                </p>
-              )}
-            </div>
-          </Link>
+            slug={project.slug}
+            name={project.name}
+            description={project.tagline}
+            meta={meta}
+            badge={label ? { label, tone } : null}
+            links={linksFor(project)}
+            visual={
+              <Trophy
+                className={`w-10 h-10 ${
+                  tone === "amber" ? "text-amber-500" : "text-gray-400"
+                }`}
+                strokeWidth={1.5}
+              />
+            }
+          />
         );
       })}
     </div>
