@@ -127,8 +127,10 @@ export function Navigation() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 bg-[#FAFAFA] ${
-          isScrolled ? "border-b border-gray-200" : ""
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+          isScrolled
+            ? "bg-white/70 backdrop-blur-md border-b border-gray-200/60"
+            : "bg-transparent"
         }`}
       >
         <nav className="max-w-6xl mx-auto px-6">

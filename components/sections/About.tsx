@@ -8,9 +8,11 @@ import { HOME_STATS } from "@/constants/projects";
 import { LogoLoop } from "./LogoLoop";
 
 const CAROUSEL_IMAGES = [
+  "/images/carousel/snowflake-hackathon-stage.jpg",
   "/images/carousel/wigvo-test1.jpg",
   "/images/carousel/trae_hackthon_seoul.png",
   "/images/carousel/wigtnocr-huggingface.png",
+  "/images/carousel/wigtn-flake-cortex.jpg",
   "/images/carousel/wigvo_logo.png",
   "/images/carousel/Gemini3_seoul_hackthon.jpg",
   "/images/carousel/wigss-npm.png",

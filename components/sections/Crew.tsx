@@ -234,11 +234,14 @@ export function Crew() {
         </div>
 
         <div className={animate_ ? "hero-tagline-in" : "opacity-0"}>
-          <h1 className="tagline-shimmer-strong text-balance text-2xl sm:text-3xl md:text-4xl font-semibold max-w-md md:max-w-3xl mx-auto leading-snug tracking-tight px-2">
-            {t.hero.headline}
-          </h1>
-          <p className="tagline-shimmer text-balance mt-4 text-sm sm:text-base md:text-lg max-w-md md:max-w-2xl mx-auto leading-relaxed px-2">
-            {t.hero.sub}
+          {/* Original two-line slogan — keeps the crew's voice intact while
+              the surrounding sections (Marquee, FeaturedWork) carry the
+              executive-grade proof signals. */}
+          <p className="tagline-shimmer text-balance text-base sm:text-lg max-w-md md:max-w-2xl mx-auto leading-relaxed px-2">
+            {t.hero.taglineLight}
+          </p>
+          <p className="tagline-shimmer-strong text-balance mt-3 text-xl sm:text-2xl md:text-3xl font-semibold max-w-md md:max-w-2xl mx-auto leading-snug tracking-tight px-2">
+            {t.hero.taglineStrong}
           </p>
 
           <div className="mt-8 flex items-center justify-center gap-3 flex-wrap">
