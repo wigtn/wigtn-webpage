@@ -99,7 +99,7 @@ export function Crew() {
   return (
     <section
       ref={sectionRef}
-      className="relative h-screen overflow-hidden flex flex-col items-center justify-center"
+      className="relative min-h-screen overflow-hidden flex flex-col items-center justify-center"
     >
       {/* SVG defs — knockout filter + hex pattern */}
       <svg

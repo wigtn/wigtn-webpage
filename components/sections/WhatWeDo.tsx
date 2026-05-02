@@ -43,7 +43,7 @@ export function WhatWeDo() {
   return (
     <section
       id="what-we-do"
-      className="relative py-20 md:py-28 overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-center py-20 md:py-28 overflow-hidden"
     >
       {/* Quiet violet washes — same vocabulary as the rest of the site. */}
       <div
@@ -63,11 +63,13 @@ export function WhatWeDo() {
         className="relative max-w-6xl mx-auto px-6 w-full"
       >
         {/* Two-column grid on lg+: heading/lead on the left, category
-            cards on the right. Stacks to a single column below lg so the
-            cards still read clearly on tablet/mobile. */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-start">
+            cards on the right. `items-center` keeps the left text block
+            and the right card grid vertically balanced — without it the
+            short heading sat near the top while the taller card column
+            stretched below, breaking the visual centerline. */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
           {/* ─── Left column — eyebrow + display heading + lead ─── */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
+          <div>
             <motion.div
               variants={itemVariants}
               className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-4"

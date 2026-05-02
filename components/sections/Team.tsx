@@ -81,11 +81,12 @@ function TeamCard({ member, bio }: TeamCardProps) {
 
         {/* Current role — present-tense day job at the parent company.
             Different dimension from the violet WIGTN-internal `role`
-            label above, so styled distinctly: neutral-gray, normal case,
-            normal weight. Color + case shift make it instantly readable
-            as a separate kind of information. */}
+            label above, so styled distinctly: dark foreground for clear
+            legibility, normal case, normal weight. Case + weight shift
+            (lowercase + non-bold) keeps it visually separate from the
+            uppercase violet WIGTN role above. */}
         {member.currentRole && (
-          <p className="mt-1 text-[12px] text-gray-500 leading-snug">
+          <p className="mt-1 text-[12.5px] text-foreground leading-snug">
             {processText(member.currentRole)}
           </p>
         )}
@@ -141,7 +142,7 @@ export function Team() {
   return (
     <section
       id="team"
-      className="relative py-20 md:py-28 overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-center py-20 md:py-28 overflow-hidden"
     >
       {/* Quiet violet washes */}
       <div

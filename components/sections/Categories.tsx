@@ -50,7 +50,7 @@ export function Categories() {
       if (!next) return;
       setActiveTab(next);
       const main = document.querySelector("main");
-      const target = document.getElementById("categories");
+      const target = document.getElementById("what-we-build");
       if (main && target) {
         const offset = target.offsetTop - 64;
         main.scrollTo({ top: offset, behavior: "smooth" });
@@ -68,7 +68,10 @@ export function Categories() {
   };
 
   return (
-    <section id="categories" className="relative py-20 md:py-28 overflow-hidden">
+    <section
+      id="what-we-build"
+      className="relative min-h-screen flex flex-col justify-center py-20 md:py-28 overflow-hidden"
+    >
       {/* Quiet violet washes — visual continuity with the rest of the site. */}
       <div
         aria-hidden
