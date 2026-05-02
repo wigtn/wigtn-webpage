@@ -36,6 +36,7 @@ function linksFor(project: Project): CategoryCardLink[] {
   if (project.links.github) out.push({ kind: "github", href: project.links.github });
   if (project.links.live) out.push({ kind: "live", href: project.links.live });
   if (project.links.video) out.push({ kind: "video", href: project.links.video });
+  if (project.links.news) out.push({ kind: "news", href: project.links.news });
   return out;
 }
 

@@ -178,6 +178,8 @@ export interface Project {
     live?: string;
     video?: string;
     huggingface?: string;
+    /** Press / news article URL — rendered with a newspaper icon. */
+    news?: string;
   };
   detail?: ProjectDetail;
 }
@@ -315,7 +317,7 @@ export const PROJECTS: Project[] = [
     sectionBadge: "Research",
     phase: "completed",
     featured: true,
-    publication: "EMNLP 2026 — Document AI Track (in preparation)",
+    publication: "EMNLP 2026 — Industry Track (in preparation)",
     homepageBadge: "EMNLP 2026 · IN PREP",
     homepageMetrics: ["#1 on KoGovDoc-Bench", "15× smaller, teacher-level accuracy", "Single-GPU"],
     tagline: "A 2B-parameter document parser that reads Korean government forms as accurately as a model 15x its size — ranked #1 on KoGovDoc.",
@@ -498,7 +500,8 @@ export const PROJECTS: Project[] = [
       },
     ],
     links: {
-      // github / video / live: to be added once public.
+      video: "https://www.youtube.com/watch?v=1YzSp3SdzTk",
+      news: "https://www.newswire.co.kr/newsRead.php?no=1033575",
     },
     detail: {
       translationKey: "wigtnflake",

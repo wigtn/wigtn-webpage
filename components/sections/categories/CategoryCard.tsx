@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Newspaper } from "lucide-react";
 import {
   GitHubIcon,
   YouTubeIcon,
@@ -37,7 +37,7 @@ export type BadgeTone =
   | "gray";
 
 export interface CategoryCardLink {
-  kind: "github" | "video" | "huggingface" | "live" | "npm";
+  kind: "github" | "video" | "huggingface" | "live" | "npm" | "news";
   href: string;
   label?: string;
 }
@@ -87,6 +87,10 @@ const LINK_ICON: Record<
   npm: {
     icon: <span className="text-[10px] font-mono">npm</span>,
     label: "npm",
+  },
+  news: {
+    icon: <Newspaper className="w-3.5 h-3.5" strokeWidth={1.75} />,
+    label: "News",
   },
 };
 

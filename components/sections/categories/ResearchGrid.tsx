@@ -20,10 +20,18 @@ const LOGO_OVERRIDES: Record<string, string> = {
 function badgeFor(publication?: string): { label: string; tone: BadgeTone } | null {
   if (!publication) return null;
   const lower = publication.toLowerCase();
-  if (lower.includes("accepted")) return { label: "Accepted", tone: "violet" };
+  // Pull the venue prefix ("ACL 2026", "EMNLP 2026") out of "Venue — Track
+  // (status)" so the badge label leads with the recognised name. The card
+  // already uppercases the badge text, so this renders as
+  // "ACL 2026 ACCEPTED" / "EMNLP 2026 IN PREP".
+  const venuePrefix = publication.split("—")[0].trim();
+
+  if (lower.includes("accepted"))
+    return { label: `${venuePrefix} Accepted`, tone: "violet" };
   if (lower.includes("in preparation") || lower.includes("in prep"))
-    return { label: "In Prep", tone: "slate" };
-  if (lower.includes("submitted")) return { label: "Submitted", tone: "slate" };
+    return { label: `${venuePrefix} In Prep`, tone: "slate" };
+  if (lower.includes("submitted"))
+    return { label: `${venuePrefix} Submitted`, tone: "slate" };
   return null;
 }
 
