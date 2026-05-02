@@ -28,7 +28,7 @@ export function PhoneMockup({
 }: PhoneMockupProps) {
   return (
     <div
-      className="relative mx-auto rounded-[36px] border-[8px] border-[#1a1a1a] bg-black overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.15)] w-[220px] h-[440px] md:w-[280px] md:h-[560px] flex-shrink-0"
+      className="relative mx-auto rounded-[32px] md:rounded-[36px] border-[6px] md:border-[8px] border-[#1a1a1a] bg-black overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.15)] w-[180px] h-[360px] md:w-[280px] md:h-[560px] flex-shrink-0"
       role="figure"
       aria-label={alt}
     >

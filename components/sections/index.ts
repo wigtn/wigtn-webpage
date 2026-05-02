@@ -1,6 +1,8 @@
 export { Navigation } from "./Navigation";
 export { Crew } from "./Crew";
+export { Marquee } from "./Marquee";
 export { About } from "./About";
+export { Pillars } from "./Pillars";
 export { Products } from "./Products";
 export { FeaturedWork } from "./FeaturedWork";
 export { Team } from "./Team";

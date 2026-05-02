@@ -1,7 +1,9 @@
 import {
   Navigation,
   Crew,
+  Marquee,
   About,
+  Pillars,
   Products,
   FeaturedWork,
   Team,
@@ -10,9 +12,11 @@ import {
 
 export default function Home() {
   return (
-    <main className="relative h-screen overflow-y-auto snap-y snap-proximity bg-[#FAFAFA]">
+    <main className="relative h-screen overflow-y-auto bg-[#FAFAFA] scroll-smooth">
       <Navigation />
       <Crew />
+      <Marquee />
+      <Pillars />
       <About />
       <Products />
       <FeaturedWork />

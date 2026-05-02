@@ -14,19 +14,26 @@ import {
 } from "@/constants/projects";
 import { useBudouX } from "@/lib/hooks/useBudouX";
 
-/** Filter keys accepted via `?category=` query param. */
-type FilterKey = "all" | Section;
+/**
+ * Filter keys accepted via `?category=` query param.
+ *
+ * `research` is a composite that selects both `models` and `papers` projects;
+ * the homepage menu treats them as a single research bucket since both are
+ * publication-track outputs.
+ */
+type FilterKey = "all" | "research" | Section;
 
 const FILTERS: { key: FilterKey; label: string }[] = [
   { key: "all", label: "All" },
-  { key: "products", label: SECTION_LABEL.products },
-  { key: "models", label: SECTION_LABEL.models },
-  { key: "papers", label: SECTION_LABEL.papers },
-  { key: "open-source", label: SECTION_LABEL["open-source"] },
+  { key: "products", label: "Services" },
+  { key: "research", label: "Research" },
   { key: "hackathon", label: SECTION_LABEL.hackathon },
+  { key: "open-source", label: "Tools" },
 ];
 
 const FILTER_KEYS = new Set<FilterKey>(FILTERS.map((f) => f.key));
+
+const RESEARCH_SECTIONS: Section[] = ["models", "papers"];
 
 const SECTION_COLOR: Record<Section, string> = {
   products: "text-emerald-600",
@@ -156,13 +163,15 @@ export function ProjectsIndex() {
       ? (rawCategory as FilterKey)
       : "all";
 
-  const filtered = useMemo(
-    () =>
-      active === "all"
-        ? PROJECTS
-        : PROJECTS.filter((p) => p.section === active),
-    [active],
-  );
+  const filtered = useMemo(() => {
+    if (active === "all") return PROJECTS;
+    if (active === "research") {
+      return PROJECTS.filter((p) =>
+        RESEARCH_SECTIONS.includes(p.section as Section),
+      );
+    }
+    return PROJECTS.filter((p) => p.section === active);
+  }, [active]);
 
   const setFilter = (key: FilterKey) => {
     const params = new URLSearchParams(searchParams.toString());

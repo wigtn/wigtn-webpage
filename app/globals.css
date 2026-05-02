@@ -12,6 +12,11 @@
     scroll-margin-top: 64px;
   }
 
+  /* Scroll snapping disabled at the container level (see app/page.tsx).
+   * Section navigation uses smooth scrollIntoView triggered by the top
+   * menu instead, so the page can be free-scrolled without being pulled
+   * back to a snap point. */
+
   body {
     background-color: #FAFAFA;
     color: #0A0A0A;
@@ -85,3 +90,252 @@
 .animate-carousel:hover {
   animation-play-state: paused;
 }
+
+/* Animated gradient text — slow horizontal slide of the gradient background.
+ * Used for the highlighted hero word so it has subtle life without flashing. */
+@keyframes text-shimmer {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.animate-text-shimmer {
+  background-size: 200% auto;
+  animation: text-shimmer 7s linear infinite;
+}
+
+/* ─── Hero entrance animations ───
+ * CSS keyframes (not framer-motion) so the initial state is rendered server-
+ * side via animation-fill-mode: both. This prevents the logo from flashing
+ * at its natural size between hydration and the first JS-driven frame. */
+@keyframes hero-logo-in {
+  0%   { opacity: 0; transform: scale(1.45); }
+  60%  { opacity: 1; transform: scale(0.96); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes hero-tagline-in {
+  0%   { opacity: 0; transform: translateY(48px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hero-flash {
+  0%   { opacity: 0; }
+  30%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes hero-fade-in {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.hero-logo-in {
+  animation: hero-logo-in 0.75s cubic-bezier(0.34, 1.35, 0.5, 1) 0.2s both;
+}
+
+.hero-tagline-in {
+  animation: hero-tagline-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
+}
+
+.hero-flash-in {
+  animation: hero-flash 0.32s ease-out 0.22s both;
+}
+
+.hero-fade-in {
+  animation: hero-fade-in 0.7s ease-out 1.8s both;
+}
+
+/* Loading-screen pulsing dots — three violet dots that pulse in sequence
+ * while the hero waits for the logo image to preload. */
+@keyframes loader-pulse {
+  0%, 80%, 100% { opacity: 0.25; transform: scale(0.85); }
+  40%           { opacity: 1;    transform: scale(1.05); }
+}
+
+.loader-dot {
+  animation: loader-pulse 1.2s ease-in-out infinite;
+}
+
+/* Stat sheen — single-pass diagonal sweep across a number tile when the
+ * count-up settles. Translates a violet→white→violet gradient strip from
+ * left to right; parent overflow-hidden clips it to the numeral box. */
+@keyframes stat-sheen {
+  0%   { transform: translateX(-130%); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: translateX(130%); opacity: 0; }
+}
+
+.stat-sheen {
+  animation: stat-sheen 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ─── Aurora bloom entrance ───
+ * Three soft, blurred gradient sheets that spread outward through the bg
+ * as the logo lands. Each layer scales from concentrated to filled and
+ * settles at a steady opacity — animation-fill-mode: forwards keeps the
+ * post-entrance state without continuous looping. The "spread" feeling
+ * comes from coordinated scale + opacity over heavily-blurred translucent
+ * gradients, not a hard expanding ring.
+ *
+ * Layer split:
+ *   • bloom    — central radial wash (violet → indigo → fuchsia core)
+ *   • sweep-a  — diagonal violet sheet, leans -8° → 0°
+ *   • sweep-b  — counter-diagonal indigo/fuchsia sheet, leans +8° → 0°
+ *   • veil     — full-section colour wash that gently fades on
+ */
+/* ─── Ink-spread entrance ───
+ *
+ * Four asymmetric paint blobs that bloom outward from slightly different
+ * starting points, each with its own scale / rotation / fade timing. The
+ * combined effect reads as drops of violet / indigo / fuchsia ink hitting
+ * water and bleeding outward — soft, organic, and ending at full
+ * transparency so the bg returns to its calm post-entrance state.
+ *
+ * Each blob's transform is scale + rotate only (no translate), so the
+ * outer wrapper can keep the blob centred at its anchor via
+ * translate(-50%, -50%) without conflicting with the keyframes.
+ */
+/* ─── Hero light-rays fade-in ───
+ *
+ * The rays mount after the entrance lightning has peaked, then quietly
+ * ramp from invisible to their resting opacity over ~1.4 s. `both` fill
+ * mode keeps them at the resting opacity for the rest of the session,
+ * matching the previous static `opacity-40`. */
+@keyframes hero-rays-in {
+  from { opacity: 0; }
+  to   { opacity: 0.4; }
+}
+
+.hero-rays-in {
+  animation: hero-rays-in 1.4s ease-out both;
+}
+
+/* ─── Hero lightning flash ───
+ *
+ * Single-shot fade for the WebGL lightning bolt: appears as the logo
+ * crashes in, holds briefly at peak, then fades to 0. The host element is
+ * unmounted by the parent after the animation duration so the canvas + RAF
+ * loop don't keep running for the lifetime of the page. */
+@keyframes hero-lightning-shot {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  35%  { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+
+.hero-lightning-shot {
+  animation: hero-lightning-shot 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+}
+
+/* ─── Tagline shimmer ───
+ *
+ * Sequential left-to-right shine across the two hero tagline lines.
+ * Line 1 sweeps first; once its violet band is fully off the right edge,
+ * line 2 takes the pass. The two never sweep at the same time.
+ *
+ * Mechanism:
+ *   • Both lines run the same 8 s keyframe. Inside the keyframe the bg
+ *     slides from `100%` → `0%` over the first 45 % of the cycle (= 3.6 s
+ *     of actual sweep) and then HOLDS at `0%` for the remaining 55 %
+ *     (= 4.4 s of gray). Holding lets the second line do its own sweep
+ *     while the first one rests.
+ *   • Line 2 starts the same 8 s cycle 4 s later (`animation-delay: 4s`),
+ *     so its sweep window (4–7.6 s) lands in line 1's hold period.
+ *   • `animation-fill-mode: backwards` shows line 2's 0 % keyframe state
+ *     during the 4 s pre-roll so the text isn't accidentally transparent
+ *     before its first sweep.
+ *
+ * Resulting cadence (per 8 s loop):
+ *   0.0 – 3.6 s   line 1 sweeps  (line 2 gray)
+ *   3.6 – 4.0 s   both gray
+ *   4.0 – 7.6 s   line 2 sweeps  (line 1 gray)
+ *   7.6 – 8.0 s   both gray
+ *   8.0 s         line 1 restarts; cycle repeats
+ *
+ * The bg-position safe range gotcha still holds: with
+ * `background-size: 250%`, only `0% → 100%` keeps the bg covering the
+ * element so `background-clip: text` doesn't render letters transparent.
+ * The animation stays inside that range. */
+@keyframes tagline-shimmer {
+  0%   { background-position: 100% 50%; }
+  45%  { background-position: 0% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.tagline-shimmer,
+.tagline-shimmer-strong {
+  background-size: 250% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: tagline-shimmer 8s linear infinite;
+  animation-fill-mode: backwards;
+}
+
+/* Line 1 — gray base, light violet sweep band. */
+.tagline-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    rgba(107, 114, 128, 1) 0%,
+    rgba(107, 114, 128, 1) 44%,
+    rgba(167, 139, 250, 1) 49%,
+    rgba(124, 58, 237, 1) 50%,
+    rgba(167, 139, 250, 1) 51%,
+    rgba(107, 114, 128, 1) 56%,
+    rgba(107, 114, 128, 1) 100%
+  );
+}
+
+/* Line 2 — deep violet-slate base (#2A2247 — coordinates with the bg
+ * violet rather than flat black) + brighter violet sweep, delayed 4 s so
+ * its sweep slots cleanly in after line 1's. */
+.tagline-shimmer-strong {
+  background-image: linear-gradient(
+    100deg,
+    rgba(42, 34, 71, 1) 0%,
+    rgba(42, 34, 71, 1) 44%,
+    rgba(196, 181, 253, 1) 49%,
+    rgba(124, 58, 237, 1) 50%,
+    rgba(196, 181, 253, 1) 51%,
+    rgba(42, 34, 71, 1) 56%,
+    rgba(42, 34, 71, 1) 100%
+  );
+  animation-delay: 4s;
+}
+
+/* ─── Squares background (reactbits-inspired) ───
+ * Subtle violet grid lines that drift slowly across the section. The grid
+ * is built from two crossing 1-px linear-gradients, sized to a fixed cell
+ * pitch, and the whole image slowly shifts by one cell per cycle so the
+ * pattern feels alive without ever animating individual cells. Centre is
+ * masked through a radial gradient so the logo + tagline always sit on a
+ * clean canvas. */
+@keyframes squares-drift {
+  0%   { background-position: 0 0, 0 0; }
+  100% { background-position: 64px 64px, 64px 64px; }
+}
+
+.squares-bg {
+  background-image:
+    linear-gradient(to right, rgba(124, 58, 237, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(124, 58, 237, 0.09) 1px, transparent 1px);
+  background-size: 64px 64px, 64px 64px;
+  animation: squares-drift 28s linear infinite;
+  -webkit-mask-image: radial-gradient(
+    ellipse at center,
+    transparent 14%,
+    black 50%,
+    black 85%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse at center,
+    transparent 14%,
+    black 50%,
+    black 85%,
+    transparent 100%
+  );
+}
+

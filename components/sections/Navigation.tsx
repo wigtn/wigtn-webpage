@@ -1,26 +1,33 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { NAV_ITEMS } from "@/constants";
+import type { NavItem } from "@/types";
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
+  const scrollIds = NAV_ITEMS.filter((item): item is NavItem & { id: string } =>
+    Boolean(item.id),
+  ).map((item) => item.id);
 
   const updateActiveSection = useCallback(() => {
-    // The scroll container is <main>, not window
     const main = document.querySelector("main");
     if (!main) return;
 
     const scrollTop = main.scrollTop;
     setIsScrolled(scrollTop > 50);
 
-    const sections = NAV_ITEMS.map(item => item.id);
     let currentSection = "";
 
-    for (const sectionId of sections) {
+    for (const sectionId of scrollIds) {
       const element = document.getElementById(sectionId);
       if (element) {
         const rect = element.getBoundingClientRect();
@@ -31,28 +38,90 @@ export function Navigation() {
     }
 
     setActiveSection(currentSection);
+    // scrollIds is derived from a static module-level constant, so its
+    // reference identity is stable for the lifetime of the component.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     const main = document.querySelector("main");
     if (!main) return;
 
-    main.addEventListener("scroll", updateActiveSection, { passive: true });
+    // rAF-throttle the scroll handler so we run at most one
+    // getBoundingClientRect sweep per frame even when the browser fires
+    // dozens of scroll events per wheel tick. Without this, every scroll
+    // pixel was triggering N section measurements + a setState round-trip.
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        updateActiveSection();
+      });
+    };
+
+    main.addEventListener("scroll", onScroll, { passive: true });
     updateActiveSection();
-    return () => main.removeEventListener("scroll", updateActiveSection);
+    return () => {
+      main.removeEventListener("scroll", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
   }, [updateActiveSection]);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+  const handleScrollClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    id: string,
+  ) => {
     e.preventDefault();
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth" });
     setIsMobileMenuOpen(false);
   };
 
+  // On the home page the logo scrolls back to the top of the snap container
+  // (Next's <Link> alone wouldn't scroll the inner <main>, only the window).
+  // Off-home, fall through so <Link> handles the route change normally.
   const handleLogoClick = (e: React.MouseEvent) => {
+    if (!isHome) return;
     e.preventDefault();
     const main = document.querySelector("main");
     if (main) main.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const renderNavLink = (item: NavItem, mobile = false) => {
+    const baseClass = mobile
+      ? "block w-full py-5 text-2xl font-semibold tracking-tight transition-colors"
+      : "text-sm transition-colors";
+    const isActive = item.id ? activeSection === item.id : false;
+    const stateClass = isActive
+      ? "text-violet font-semibold"
+      : mobile
+        ? "text-foreground hover:text-violet"
+        : "text-gray-600 hover:text-violet";
+
+    if (item.href) {
+      return (
+        <Link
+          key={item.label}
+          href={item.href}
+          onClick={() => setIsMobileMenuOpen(false)}
+          className={`${baseClass} ${stateClass}`}
+        >
+          {item.label}
+        </Link>
+      );
+    }
+
+    return (
+      <a
+        key={item.label}
+        href={`#${item.id}`}
+        onClick={(e) => handleScrollClick(e, item.id!)}
+        className={`${baseClass} ${stateClass}`}
+      >
+        {item.label}
+      </a>
+    );
   };
 
   return (
@@ -64,29 +133,16 @@ export function Navigation() {
       >
         <nav className="max-w-6xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
-            <a
-              href="#"
+            <Link
+              href="/"
               onClick={handleLogoClick}
               className="text-xl font-bold text-foreground hover:text-violet transition-colors"
             >
               WIGTN
-            </a>
+            </Link>
 
             <div className="hidden md:flex items-center gap-5">
-              {NAV_ITEMS.map((item) => (
-                <a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  onClick={(e) => handleNavClick(e, item.id)}
-                  className={`text-sm transition-colors ${
-                    activeSection === item.id
-                      ? "text-violet font-medium"
-                      : "text-gray-600 hover:text-violet"
-                  }`}
-                >
-                  {item.label}
-                </a>
-              ))}
+              {NAV_ITEMS.map((item) => renderNavLink(item))}
             </div>
 
             <div className="flex items-center gap-2 md:hidden">
@@ -106,21 +162,18 @@ export function Navigation() {
       </header>
 
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-30 bg-[#FAFAFA] pt-20 md:hidden">
-          <nav className="flex flex-col items-center gap-6 px-6">
+        <div
+          className="fixed inset-0 z-30 bg-white pt-20 md:hidden shadow-[0_24px_60px_-30px_rgba(0,0,0,0.25)]"
+        >
+          {/* Thin violet seam at the top of the panel — separates the menu
+              from the header so the white-on-white doesn't blur. */}
+          <div
+            aria-hidden
+            className="absolute top-16 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet/30 to-transparent"
+          />
+          <nav className="flex flex-col px-6 pt-2 divide-y divide-black/[0.07]">
             {NAV_ITEMS.map((item) => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                onClick={(e) => handleNavClick(e, item.id)}
-                className={`text-lg transition-colors ${
-                  activeSection === item.id
-                    ? "text-violet font-medium"
-                    : "text-foreground hover:text-violet"
-                }`}
-              >
-                {item.label}
-              </a>
+              <div key={item.label}>{renderNavLink(item, true)}</div>
             ))}
           </nav>
         </div>
