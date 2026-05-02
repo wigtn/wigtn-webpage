@@ -14,8 +14,29 @@ export const TRANSLATIONS = {
   },
   whatWeDo: {
     eyebrow: "What we do",
-    heading: "Five engineers, four categories, one bar.",
-    lead: "WIGTN is an independent crew of five AI engineers. We start from real-world friction, take ideas all the way to production, and prove what a small team of builders can ship in the AI-native era — across research, open source, hackathons, and products.",
+    heading: "We ship across four fronts.",
+    lead: "An independent crew of five AI engineers. We start from real-world friction and take ideas all the way to production-grade systems — across research, open source, awards, and products.",
+    categories: {
+      research: {
+        title: "Research",
+        description:
+          "Peer-reviewed papers at top NLP venues. ACL 2026 (accepted), EMNLP 2026 (in preparation).",
+      },
+      awards: {
+        title: "Awards",
+        description:
+          "International hackathon recognition. ByteDance Trae.ai Seoul winner, Snowflake AI Korea runner-up.",
+      },
+      openSource: {
+        title: "Open Source",
+        description:
+          "Tools used by the developer community. Claude Code plugins, npm packages, HuggingFace models.",
+      },
+      products: {
+        title: "Products",
+        description: "Mobile apps in active development.",
+      },
+    },
   },
   results: {
     heading: "What We've Built",
