@@ -32,11 +32,13 @@ export const TRANSLATIONS = {
     statOpenSource: "Open Source Repos",
   },
   team: {
+    // Order MUST match the member order in `constants/team.ts`:
+    // Harrison → Sangwoo → Eric → Hyeonsang → David.
     bios: [
       "Former construction PM with a decade of large-scale project experience. Now leading WIGTN, focused on AI modeling, product development, and applied research in GPU-accelerated computing.",
+      "Builds LLM-powered applications and autonomous agent systems. Focuses on multi-agent orchestration and workflow automation.",
       "Manages full MLOps pipelines with Docker, Kubernetes, and CI/CD. Also serves as the team's DBA and leads UI/UX direction.",
       "Mobile-first full-stack engineer covering the entire 3-tier stack with React Native. Focused on software engineering craft rather than model development.",
-      "Builds LLM-powered applications and autonomous agent systems. Focuses on multi-agent orchestration and workflow automation.",
       "Web-focused full-stack engineer who builds across the 3-tier architecture. Brings mobile experience with React Native and leverages AI-native tooling for rapid delivery.",
     ],
   },
