@@ -157,6 +157,20 @@ export interface Project {
   achievements?: Achievement[];
   publication?: string;
   featured?: boolean;
+  /**
+   * Optional homepage-only status badge rendered above the title in the
+   * Featured Work row. Lets us spell the credential explicitly (e.g.
+   * "ACL 2026 · ACCEPTED") instead of relying on the parsed `publication`
+   * string, which is tuned for the project detail page.
+   */
+  homepageBadge?: string;
+  /**
+   * Optional homepage-only metric pills rendered between the tagline and
+   * link buttons in the Featured Work row. Pulled from the project's
+   * load-bearing numbers so an executive scanning the page reads proof
+   * without parsing prose.
+   */
+  homepageMetrics?: string[];
   links: {
     github?: string;
     live?: string;
@@ -178,10 +192,10 @@ export const PHASE_LABEL: Record<Phase, string> = {
 /* ─────────────── Home-page stat bar ─────────────── */
 
 export const HOME_STATS: { value: string; label: string }[] = [
-  { value: "9", label: "projects" },
-  { value: "1", label: "grand prize" },
-  { value: "1", label: "paper" },
-  { value: "5", label: "engineers" },
+  { value: "9", label: "production systems shipped" },
+  { value: "1", label: "ACL 2026 paper accepted" },
+  { value: "1", label: "ByteDance TRAE Grand Prize" },
+  { value: "5", label: "full-stack AI engineers" },
 ];
 
 /* ─────────────── PROJECTS ─────────────── */
@@ -246,6 +260,8 @@ export const PROJECTS: Project[] = [
     phase: "completed",
     featured: true,
     publication: "EMNLP 2026 — Document AI Track (in preparation)",
+    homepageBadge: "EMNLP 2026 · IN PREP",
+    homepageMetrics: ["#1 on KoGovDoc-Bench", "15× smaller, teacher-level accuracy", "Single-GPU"],
     tagline: "A 2B-parameter document parser that reads Korean government forms as accurately as a model 15x its size — ranked #1 on KoGovDoc.",
     description: "WigtnOCR distills a 30B teacher model into a 2B student through pseudo-label distillation and LoRA fine-tuning, achieving teacher-level accuracy on OmniDocBench while running on a single consumer GPU. On the KoGovDoc Korean government document retrieval benchmark — a dataset of scanned civil forms, tax filings, and public notices — it ranks #1 overall, outperforming models with 10-30x more parameters.",
     gradient: "from-yellow-500 to-amber-400",
@@ -288,7 +304,9 @@ export const PROJECTS: Project[] = [
     sectionBadge: "Paper",
     phase: "completed",
     featured: true,
-    publication: "ACL 2026 — Speech & Multimodal Track (submitted)",
+    publication: "ACL 2026 — System Demonstrations (accepted)",
+    homepageBadge: "ACL 2026 · ACCEPTED",
+    homepageMetrics: ["148 production calls", "0 echo-loop incidents", "557ms avg latency"],
     tagline: "Real-time voice translation for phone calls — call anyone, in any language, with zero echo-loop incidents across 148 production calls.",
     description: "WIGVO runs two parallel AI interpreter sessions — one for each speaker — to deliver natural, bidirectional voice translation over standard phone lines. A software-only echo-cancellation pipeline eliminates feedback loops without dedicated hardware, achieving 557ms average latency and zero echo incidents across 148 real-world calls. The recipient answers a normal phone call; no app download required.",
     gradient: "from-violet to-purple-400",
@@ -381,6 +399,7 @@ export const PROJECTS: Project[] = [
     sectionBadge: "Grand Prize",
     phase: "completed",
     featured: true,
+    homepageMetrics: ["Built in 3.5 hours · 3 engineers", "ByteDance · Build with TRAE Seoul"],
     tagline: "Drop a topic, watch AI agents debate it live — PM orchestrates, experts spawn and retire, then a landing page writes itself from the conclusions.",
     description: "WIGENT is a multi-agent debate arena where a PM agent orchestrates auto-spawned domain experts in a Slack-style chat UI. Agents argue, challenge each other, retire when outmatched, and summon new specialists on the fly. Once consensus is reached, the system auto-generates a polished landing page from the debate conclusions. Grand Prize winner at Build with TRAE Seoul (ByteDance) — built by 3 engineers in 3.5 hours.",
     gradient: "from-yellow-400 to-amber-500",

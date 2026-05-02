@@ -4,10 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import LightRays from "./LightRays";
 import Lightning from "./Lightning";
+import { useLanguage } from "@/lib/i18n";
 
 type Phase = "loading" | "entering" | "ready";
 
 export function Crew() {
+  const { t } = useLanguage();
   const [phase, setPhase] = useState<Phase>("loading");
   // Lightning runs once on entrance, then unmounts so the WebGL RAF loop
   // doesn't keep rendering invisible frames for the rest of the session.
@@ -94,7 +96,8 @@ export function Crew() {
   }, []);
 
   const scrollToWork = () => {
-    const target = document.getElementById("work");
+    const target =
+      document.getElementById("featured") ?? document.getElementById("work");
     if (target) target.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -211,7 +214,12 @@ export function Crew() {
         </svg>
       </div>
 
-      {/* ═════ Centred content ═════ */}
+      {/* ═════ Centred content ═════
+       *   B2B-grade hero: logo as a small brand anchor, then the
+       *   positioning headline (the strong line), a one-line descriptor
+       *   listing what we actually ship, and a two-button CTA row. The
+       *   credential strip lives in the Marquee section directly below
+       *   so we don't double up on proof here. */}
       <div className="relative z-30 text-center px-6">
         <div className={animate_ ? "hero-logo-in" : "opacity-0"}>
           <Image
@@ -221,24 +229,33 @@ export function Crew() {
             height={644}
             priority
             style={{ filter: "url(#logo-knockout-white) contrast(1.05)" }}
-            className="mx-auto mb-8 w-[82vw] max-w-[460px] md:max-w-[560px] h-auto"
+            className="mx-auto mb-6 w-[60vw] max-w-[260px] md:max-w-[320px] h-auto"
           />
         </div>
 
-        {/* Tagline — both lines run the same left-to-right CSS shimmer.
-            Pure CSS (no JS, no motion values), so the bg-clip:text fill
-            never fights with re-renders or motion templates. */}
         <div className={animate_ ? "hero-tagline-in" : "opacity-0"}>
-          {/* Both lines run the same left-to-right shimmer keyframe. Line 2
-              uses the `-strong` variant — darker base + brighter sweep +
-              0.6 s offset — so the two reads as a coordinated wave rather
-              than a synced flicker. */}
-          <p className="tagline-shimmer text-balance text-base sm:text-lg max-w-md md:max-w-2xl mx-auto leading-relaxed px-2">
-            From idea to production — no seniors, no shortcuts. We ship.
+          <h1 className="tagline-shimmer-strong text-balance text-2xl sm:text-3xl md:text-4xl font-semibold max-w-md md:max-w-3xl mx-auto leading-snug tracking-tight px-2">
+            {t.hero.headline}
+          </h1>
+          <p className="tagline-shimmer text-balance mt-4 text-sm sm:text-base md:text-lg max-w-md md:max-w-2xl mx-auto leading-relaxed px-2">
+            {t.hero.sub}
           </p>
-          <p className="tagline-shimmer-strong text-balance mt-3 text-xl sm:text-2xl md:text-3xl font-semibold max-w-md md:max-w-2xl mx-auto leading-snug tracking-tight px-2">
-            We don&apos;t study AI. We just ship it.
-          </p>
+
+          <div className="mt-8 flex items-center justify-center gap-3 flex-wrap">
+            <button
+              onClick={scrollToWork}
+              className="inline-flex items-center gap-2 rounded-full bg-foreground text-white px-5 py-2.5 text-xs sm:text-sm font-medium tracking-wide transition-transform duration-200 hover:-translate-y-[1px] hover:bg-violet"
+            >
+              {t.hero.ctaPrimary}
+              <span aria-hidden>→</span>
+            </button>
+            <a
+              href="mailto:contact@wigtn.com"
+              className="inline-flex items-center gap-2 rounded-full border border-black/[0.12] bg-white/70 backdrop-blur-sm px-5 py-2.5 text-xs sm:text-sm font-medium tracking-wide text-foreground transition-colors duration-200 hover:border-violet/40 hover:text-violet"
+            >
+              {t.hero.ctaSecondary}
+            </a>
+          </div>
         </div>
       </div>
 
@@ -246,10 +263,9 @@ export function Crew() {
         onClick={scrollToWork}
         className={`${
           animate_ ? "hero-fade-in" : "opacity-0"
-        } absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-400 hover:text-violet transition-colors cursor-pointer z-10`}
+        } absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-gray-400 hover:text-violet transition-colors cursor-pointer z-10`}
         aria-label="Scroll to work"
       >
-        <span className="text-xs tracking-widest uppercase">Scroll</span>
         <svg
           className="w-5 h-5 animate-bounce"
           fill="none"

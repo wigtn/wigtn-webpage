@@ -179,6 +179,15 @@ function TeamCard({ member, bio, processText, index }: TeamCardProps) {
             </div>
           </div>
 
+          {/* Credential — verifiable one-line background, sits above the
+              bio so a scanning reader gets the signal first. Only renders
+              when explicitly set on the member. */}
+          {member.credential && (
+            <p className="text-[11.5px] sm:text-[12.5px] text-gray-700 font-medium leading-[1.55] mb-2 sm:mb-2.5">
+              {processText(member.credential)}
+            </p>
+          )}
+
           {/* Bio — full text, no clamp */}
           <p className="text-[12px] sm:text-[13.5px] text-gray-600 leading-[1.65] sm:leading-[1.7]">
             {processText(bio)}
@@ -262,8 +271,8 @@ export function Team() {
               <span>Team</span>
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-[-0.02em] leading-[1.05]">
-              Five engineers. Zero seniors.{" "}
-              <span className="text-gray-400">We ship.</span>
+              Five engineers shipping production AI.{" "}
+              <span className="text-gray-400">End to end.</span>
             </h2>
           </div>
           <div className="flex items-baseline gap-2 tabular-nums">
@@ -276,16 +285,22 @@ export function Team() {
           </div>
         </div>
 
-        {/* Card grid — 1 col mobile, 2 cols md+ */}
+        {/* Card grid — 1 col mobile, 2 cols md+. Members flagged
+            `featured` (the founder/lead) span both columns to anchor the
+            decision-maker visually before the rest of the crew. */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
           {TEAM_MEMBERS.map((member, index) => (
-            <TeamCard
+            <div
               key={member.name}
-              member={member}
-              bio={t.team.bios[index]}
-              processText={processText}
-              index={index}
-            />
+              className={member.featured ? "md:col-span-2" : undefined}
+            >
+              <TeamCard
+                member={member}
+                bio={t.team.bios[index]}
+                processText={processText}
+                index={index}
+              />
+            </div>
           ))}
         </div>
       </div>

@@ -2,10 +2,13 @@ import type { TeamMember } from "@/types";
 
 export const TEAM_MEMBERS: TeamMember[] = [
   {
-    name: "김형섭 Hyeongseob Kim",
+    name: "김형섭 Harrison Kim",
     role: "Founder & Crew Lead",
     bio: "Former construction PM with a decade of large-scale project experience. Now leading WIGTN, focused on AI modeling, product development, and applied research in GPU-accelerated computing.",
     image: "/images/team/hyeongseob_kim.jpg",
+    featured: true,
+    credential:
+      "Previously at Hyundai E&C and SoundMind. ACL 2026 first author. AI Research Engineer at BrainCrew (LangChain Korea Partner Co.).",
     expertise: ["AI/ML", "Product Strategy", "System Architecture", "Operations"],
     links: {
       github: "https://github.com/Hyeongseob91",

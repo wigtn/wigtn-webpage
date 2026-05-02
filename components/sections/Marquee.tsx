@@ -14,16 +14,12 @@ import { motion } from "framer-motion";
  */
 
 const ITEMS: string[] = [
-  "ACL 2026 — Speech & Multimodal",
-  "EMNLP 2026 — Document AI",
-  "Build with TRAE Seoul · Grand Prize",
-  "ByteDance · TRAE",
-  "OmniDocBench Top-Tier",
-  "KoGovDoc-Bench #1",
-  "Google Gemini Live Agent Challenge",
-  "Snowflake Korea 2026",
-  "npm:wigss",
-  "Claude Code Plugins",
+  "ACL 2026 · System Demonstrations · Accepted",
+  "EMNLP 2026 · Document AI · In Preparation",
+  "ByteDance · Build with TRAE Seoul · Grand Prize",
+  "KoGovDoc-Bench · #1",
+  "LangChain Korea Partner · BrainCrew",
+  "9 production projects shipped",
   "Hugging Face · Wigtn",
 ];
 

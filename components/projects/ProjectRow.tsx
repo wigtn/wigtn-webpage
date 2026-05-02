@@ -270,6 +270,18 @@ export function ProjectRow({
         {/* Text block */}
         <div className="col-span-12 md:col-span-8 min-w-0 order-2 flex flex-col">
           <div>
+            {/* Homepage status badge — sits ABOVE the title to give an
+                executive scanner the credential before they read the name.
+                Only renders when the project explicitly opts in via
+                `homepageBadge`, so the /projects index pages stay clean. */}
+            {project.homepageBadge && (
+              <div className="mb-2.5">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-violet/30 bg-violet/[0.06] px-2.5 py-1 text-[11px] font-mono font-semibold tracking-[0.12em] uppercase text-violet">
+                  {project.homepageBadge}
+                </span>
+              </div>
+            )}
+
             <div className="flex items-center gap-3 flex-wrap">
               <Link href={detailHref} className="inline-block">
                 <h3 className="text-2xl md:text-[2rem] font-semibold text-foreground group-hover:text-violet transition-colors leading-tight tracking-tight">
@@ -285,10 +297,26 @@ export function ProjectRow({
               {processText(project.tagline)}
             </p>
 
+            {/* Metric pills — load-bearing numbers split out of the prose so
+                they read at a glance. Only present on featured homepage rows
+                that opt in via `homepageMetrics`. */}
+            {project.homepageMetrics && project.homepageMetrics.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {project.homepageMetrics.map((metric) => (
+                  <span
+                    key={metric}
+                    className="inline-flex items-center rounded-md border border-black/[0.08] bg-white px-2 py-0.5 text-[11.5px] font-mono text-gray-700"
+                  >
+                    {metric}
+                  </span>
+                ))}
+              </div>
+            )}
+
             {/* Tag · meta — shown for every list variant except Hackathon,
                 which uses AwardBadge next to the title + meta-only line. */}
             {variant !== "hackathon" && (project.sectionBadge || meta) && (
-              <div className="mt-4 flex items-center flex-wrap gap-x-2 text-[13px]">
+              <div className="mt-3 flex items-center flex-wrap gap-x-2 text-[13px]">
                 {project.sectionBadge && (
                   <span className={`font-medium ${tagColor}`}>
                     {project.sectionBadge}
@@ -301,7 +329,7 @@ export function ProjectRow({
               </div>
             )}
             {variant === "hackathon" && meta && (
-              <div className="mt-4 text-[13px] text-gray-500">{meta}</div>
+              <div className="mt-3 text-[13px] text-gray-500">{meta}</div>
             )}
           </div>
 
