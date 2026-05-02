@@ -1,10 +1,8 @@
 import {
   Navigation,
   Crew,
-  About,
-  Pillars,
-  Products,
-  FeaturedWork,
+  WhatWeDo,
+  Categories,
   Team,
   Footer,
 } from "@/components/sections";
@@ -14,10 +12,8 @@ export default function Home() {
     <main className="relative h-screen overflow-y-auto bg-[#FAFAFA] scroll-smooth">
       <Navigation />
       <Crew />
-      <FeaturedWork />
-      <Pillars />
-      <About />
-      <Products />
+      <WhatWeDo />
+      <Categories />
       <Team />
       <Footer />
     </main>

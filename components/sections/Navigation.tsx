@@ -100,6 +100,27 @@ export function Navigation() {
         : "text-gray-600 hover:text-violet";
 
     if (item.href) {
+      // Hash-only links (e.g. "/#awards") are handled with a plain anchor
+      // so the browser fires `hashchange` reliably — Next.js Link's
+      // same-path-different-hash behaviour can swallow that event in
+      // App Router. Off-home navigation (e.g. starting on /projects)
+      // still works because the browser does a normal navigation when
+      // the path differs.
+      const isHashLink = item.href.startsWith("/#") || item.href.startsWith("#");
+
+      if (isHashLink) {
+        return (
+          <a
+            key={item.label}
+            href={item.href}
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={`${baseClass} ${stateClass}`}
+          >
+            {item.label}
+          </a>
+        );
+      }
+
       return (
         <Link
           key={item.label}

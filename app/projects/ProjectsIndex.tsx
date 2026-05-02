@@ -13,6 +13,7 @@ import {
   type Section,
 } from "@/constants/projects";
 import { useBudouX } from "@/lib/hooks/useBudouX";
+import { TabList } from "@/components/ui/TabList";
 
 /**
  * Filter keys accepted via `?category=` query param.
@@ -208,36 +209,18 @@ export function ProjectsIndex() {
         </div>
 
         {/* Filter chips */}
-        <div
-          role="tablist"
-          aria-label="Project categories"
-          className="flex flex-wrap gap-2 mb-10 md:mb-14"
-        >
-          {FILTERS.map((f) => {
-            const isActive = f.key === active;
-            return (
-              <button
-                key={f.key}
-                id={`projects-tab-${f.key}`}
-                role="tab"
-                aria-selected={isActive}
-                aria-controls="projects-tabpanel"
-                onClick={() => setFilter(f.key)}
-                className={`px-4 py-2 rounded-full border text-sm font-medium transition-colors ${
-                  isActive
-                    ? "border-violet bg-violet text-white"
-                    : "border-gray-200 bg-white text-gray-700 hover:border-violet hover:text-violet"
-                }`}
-              >
-                {f.label}
-              </button>
-            );
-          })}
-        </div>
+        <TabList<FilterKey>
+          tabs={FILTERS}
+          activeKey={active}
+          onChange={setFilter}
+          ariaLabel="Project categories"
+          idPrefix="projects-tab"
+          className="mb-10 md:mb-14"
+        />
 
         {/* Blog-style card list */}
         <div
-          id="projects-tabpanel"
+          id="projects-tab-panel"
           role="tabpanel"
           aria-labelledby={`projects-tab-${active}`}
           className="space-y-12"

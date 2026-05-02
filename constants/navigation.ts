@@ -7,11 +7,11 @@ import type { NavItem } from "@/types";
  * relevant slice immediately.
  */
 export const NAV_ITEMS: NavItem[] = [
-  { label: "About", id: "about" },
-  { label: "Services", href: "/projects/?category=products" },
-  { label: "Research", href: "/projects/?category=research" },
-  { label: "Hackathons", href: "/projects/?category=hackathon" },
-  { label: "Tools", href: "/projects/?category=open-source" },
+  { label: "What we do", id: "what-we-do" },
+  { label: "Research", href: "/#research" },
+  { label: "Awards", href: "/#awards" },
+  { label: "Open Source", href: "/#open-source" },
+  { label: "Products", href: "/#products" },
   { label: "Team", id: "team" },
 ];
 
