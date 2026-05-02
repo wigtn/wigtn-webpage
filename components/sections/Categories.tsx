@@ -2,24 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { TabList } from "@/components/ui/TabList";
 import { PROJECTS_BY_SECTION } from "@/constants/projects";
-import { ResearchTable } from "./categories/ResearchTable";
+import { ResearchGrid } from "./categories/ResearchGrid";
 import { AwardsGrid } from "./categories/AwardsGrid";
-import { OpenSourceList } from "./categories/OpenSourceList";
+import { OpenSourceGrid } from "./categories/OpenSourceGrid";
 import { ProductsGrid } from "./categories/ProductsGrid";
 
 /* ─────────────── Tab definitions ───────────────
  *
- * Four categories, each with the view shape that matches its evaluation
- * axis. The first tab is the default — Research leads because ACL
- * accepted + EMNLP in-prep is the strongest credibility signal in WIGTN's
- * portfolio for a B2B / academic reader.
- *
- * Hash routing is purely client-side — the homepage server-renders the
- * default Research view, then the effect below picks up `window.location.hash`
- * to switch tabs without scroll. Sharing `wigtn.com/#awards` lands a reader
- * on Awards on first paint (after hydration). */
+ * Four categories. The text-based inline nav (no pills, no boxes) sits
+ * directly under the section header. Active tab is violet semibold;
+ * inactive tabs are neutral gray. Tab counts are deliberately omitted —
+ * "Research · 2" reads as "only 2 papers" instead of "2 strong papers",
+ * and the cards themselves carry the volume signal. */
 
 type TabKey = "research" | "awards" | "open-source" | "products";
 
@@ -30,6 +25,13 @@ const HASH_TO_TAB: Record<string, TabKey> = {
   "#products": "products",
 };
 
+const TABS: { key: TabKey; label: string }[] = [
+  { key: "research", label: "Research" },
+  { key: "awards", label: "Awards" },
+  { key: "open-source", label: "Open Source" },
+  { key: "products", label: "Products" },
+];
+
 const RESEARCH_PROJECTS = [
   ...PROJECTS_BY_SECTION.papers,
   ...PROJECTS_BY_SECTION.models,
@@ -38,10 +40,6 @@ const RESEARCH_PROJECTS = [
 export function Categories() {
   const [activeTab, setActiveTab] = useState<TabKey>("research");
 
-  // Read the initial hash on mount, and listen for changes (covers
-  // back/forward navigation and clicks on nav-bar hash links). Internal
-  // tab clicks use `history.replaceState`, which deliberately does NOT
-  // fire `hashchange` — so we don't scroll on those.
   useEffect(() => {
     if (typeof window === "undefined") return;
     const fromHash = HASH_TO_TAB[window.location.hash];
@@ -51,12 +49,10 @@ export function Categories() {
       const next = HASH_TO_TAB[window.location.hash];
       if (!next) return;
       setActiveTab(next);
-      // Bring the section into view so a nav-bar click lands on Categories,
-      // not on whatever scroll position the page happened to be in.
       const main = document.querySelector("main");
       const target = document.getElementById("categories");
       if (main && target) {
-        const offset = target.offsetTop - 64; // leave room for the nav header
+        const offset = target.offsetTop - 64;
         main.scrollTo({ top: offset, behavior: "smooth" });
       }
     };
@@ -66,19 +62,10 @@ export function Categories() {
 
   const handleTabChange = (key: TabKey) => {
     setActiveTab(key);
-    // replaceState (not pushState) — clicking tabs shouldn't pollute the
-    // browser back-stack with one entry per click.
     if (typeof window !== "undefined") {
       window.history.replaceState(null, "", `#${key}`);
     }
   };
-
-  const tabs: { key: TabKey; label: string; count: number }[] = [
-    { key: "research", label: "Research", count: RESEARCH_PROJECTS.length },
-    { key: "awards", label: "Awards", count: PROJECTS_BY_SECTION.hackathon.length },
-    { key: "open-source", label: "Open Source", count: PROJECTS_BY_SECTION["open-source"].length },
-    { key: "products", label: "Products", count: PROJECTS_BY_SECTION.products.length },
-  ];
 
   return (
     <section id="categories" className="relative py-20 md:py-28 overflow-hidden">
@@ -93,56 +80,73 @@ export function Categories() {
       />
 
       <div className="relative max-w-6xl mx-auto px-6 w-full">
-        {/* Header — eyebrow + one short header line, left-aligned with the
-            same gutter as the rest of the page. No subtitle paragraph;
-            the tabs themselves carry the message. */}
+        {/* Header — eyebrow + a single short declarative line. No
+            "pick a category" command verb; the cards do the work. */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-2xl mb-8 md:mb-10"
+          className="max-w-2xl mb-6 md:mb-8"
         >
           <div className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-3">
             <span className="w-6 h-px bg-violet/40" />
             <span>What we build</span>
           </div>
-          <h2 className="text-balance text-lg md:text-xl font-semibold text-foreground tracking-tight leading-snug">
-            Pick a category to see what we&apos;ve shipped.
+          <h2 className="text-balance text-4xl md:text-5xl font-semibold text-foreground tracking-[-0.02em] leading-[1.1]">
+            What we&apos;ve shipped.
           </h2>
         </motion.div>
 
-        {/* Tab list — wrap with overflow-x-auto so 4 tabs don't crowd
-            a 375px viewport. The fade mask keeps the right edge soft. */}
+        {/* Text-based inline tab nav. No pills, no boxes, no borders.
+            Just text + `|` separators. Wraps to two rows on very narrow
+            viewports without losing the separator vocabulary. */}
         <div
-          className="-mx-6 px-6 mb-8 md:mb-10 overflow-x-auto"
-          style={{
-            maskImage:
-              "linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%)",
-            WebkitMaskImage:
-              "linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%)",
-          }}
+          role="tablist"
+          aria-label="Work categories"
+          className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-8 md:mb-10 text-[15px] md:text-base"
         >
-          <TabList<TabKey>
-            tabs={tabs}
-            activeKey={activeTab}
-            onChange={handleTabChange}
-            ariaLabel="Work categories"
-            idPrefix="categories-tab"
-            className="flex-nowrap min-w-max"
-          />
+          {TABS.map((tab, index) => {
+            const isActive = tab.key === activeTab;
+            return (
+              <span key={tab.key} className="inline-flex items-center gap-3">
+                <button
+                  type="button"
+                  role="tab"
+                  id={`categories-tab-${tab.key}`}
+                  aria-selected={isActive}
+                  aria-controls="categories-tab-panel"
+                  onClick={() => handleTabChange(tab.key)}
+                  className={`transition-colors ${
+                    isActive
+                      ? "text-violet font-semibold"
+                      : "text-gray-500 hover:text-violet"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+                {index < TABS.length - 1 && (
+                  <span
+                    aria-hidden
+                    className="text-gray-300 select-none"
+                  >
+                    |
+                  </span>
+                )}
+              </span>
+            );
+          })}
         </div>
 
-        {/* Tabpanel — single panel, content swaps based on activeTab.
-            Using one panel id keeps the aria-controls contract simple. */}
+        {/* Tabpanel — single panel, content swaps based on activeTab. */}
         <div
           id="categories-tab-panel"
           role="tabpanel"
           aria-labelledby={`categories-tab-${activeTab}`}
         >
-          {activeTab === "research" && <ResearchTable projects={RESEARCH_PROJECTS} />}
+          {activeTab === "research" && <ResearchGrid projects={RESEARCH_PROJECTS} />}
           {activeTab === "awards" && <AwardsGrid projects={PROJECTS_BY_SECTION.hackathon} />}
-          {activeTab === "open-source" && <OpenSourceList projects={PROJECTS_BY_SECTION["open-source"]} />}
+          {activeTab === "open-source" && <OpenSourceGrid projects={PROJECTS_BY_SECTION["open-source"]} />}
           {activeTab === "products" && <ProductsGrid projects={PROJECTS_BY_SECTION.products} />}
         </div>
       </div>
