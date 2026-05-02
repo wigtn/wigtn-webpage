@@ -5,6 +5,13 @@ export const TRANSLATIONS = {
     ctaPrimary: "See our work",
     ctaSecondary: "Contact",
     tagline: "We prove ourselves by what we build, not how long we've built.",
+    credentials: [
+      "ACL 2026 · ACCEPTED",
+      "EMNLP 2026 · IN PREP",
+      "ByteDance TRAE · GRAND PRIZE",
+      "Snowflake 2026 · TECH TRACK TOP 3",
+      "KoGovDoc · #1",
+    ],
   },
   about: {
     heading: "An AI-native builder crew that starts from real-world friction and ships production-grade systems end-to-end.",
@@ -13,6 +20,11 @@ export const TRANSLATIONS = {
       "We don't build demos. We build products that make people say, \"Wait, this actually works?\" We move fast, but we deliver results that leave a lasting impression — creating meaningful impact in remarkably short timeframes.",
       "Through research, open-source projects, and shipping production AI systems, we prove what a small team of builders can accomplish in the AI-Native era.",
     ],
+  },
+  whatWeDo: {
+    eyebrow: "What we do",
+    heading: "Five engineers, four categories, one bar.",
+    lead: "WIGTN is an independent crew of five AI engineers. We start from real-world friction, take ideas all the way to production, and prove what a small team of builders can ship in the AI-native era — across research, open source, hackathons, and products.",
   },
   results: {
     heading: "What We've Built",

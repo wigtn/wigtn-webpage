@@ -97,7 +97,9 @@ export function Crew() {
 
   const scrollToWork = () => {
     const target =
-      document.getElementById("featured") ?? document.getElementById("work");
+      document.getElementById("categories") ??
+      document.getElementById("featured") ??
+      document.getElementById("work");
     if (target) target.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -244,7 +246,21 @@ export function Crew() {
             {t.hero.taglineStrong}
           </p>
 
-          <div className="mt-8 flex items-center justify-center gap-3 flex-wrap">
+          {/* Credential strip — five recognised names above the fold so a
+              30-second exec scan picks up venue + awards before scrolling.
+              Static (not Marquee) because a moving ticker disperses the
+              first fixation; five pills are read in one glance. */}
+          <ul className="mt-7 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 max-w-md md:max-w-3xl mx-auto px-2">
+            {t.hero.credentials.map((credential) => (
+              <li key={credential}>
+                <span className="inline-flex items-center rounded-full border border-black/[0.10] bg-white/70 backdrop-blur-sm px-2.5 py-1 text-[10px] sm:text-[10.5px] font-mono font-semibold tracking-[0.12em] uppercase text-gray-700">
+                  {credential}
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-7 flex items-center justify-center gap-3 flex-wrap">
             <button
               onClick={scrollToWork}
               className="inline-flex items-center gap-2 rounded-full bg-foreground text-white px-5 py-2.5 text-xs sm:text-sm font-medium tracking-wide transition-transform duration-200 hover:-translate-y-[1px] hover:bg-violet"
