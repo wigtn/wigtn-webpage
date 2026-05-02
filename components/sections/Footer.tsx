@@ -6,7 +6,7 @@ import { GitHubIcon } from "@/components/ui/icons";
 export function Footer() {
 
   return (
-    <footer className="py-16 md:py-24">
+    <footer id="contact" className="py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
           {/* Left - Logo & Tagline */}
