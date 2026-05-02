@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import type { Project } from "@/constants/projects";
 import { GitHubIcon } from "@/components/ui/icons";
@@ -46,10 +47,26 @@ export function OpenSourceList({ projects }: OpenSourceListProps) {
               rel={githubHref ? "noopener noreferrer" : undefined}
               className="flex items-start gap-4 px-4 md:px-5 py-4 md:py-5"
             >
-              {/* Repo icon */}
-              <span className="mt-0.5 inline-flex items-center justify-center w-8 h-8 rounded-md border border-black/[0.08] bg-white text-gray-600 flex-shrink-0">
-                <GitHubIcon className="w-4 h-4" />
-              </span>
+              {/* Project thumbnail — uses the existing media.poster so the
+                  list reads with the same visual weight as the Awards/Products
+                  cards. Falls back to a GitHub-marked tile when no poster
+                  exists. */}
+              {project.media.poster ? (
+                <span className="relative block w-12 h-12 rounded-md overflow-hidden border border-black/[0.08] bg-gray-50 flex-shrink-0">
+                  <Image
+                    src={project.media.poster}
+                    alt=""
+                    fill
+                    sizes="48px"
+                    className="object-cover"
+                    unoptimized
+                  />
+                </span>
+              ) : (
+                <span className="inline-flex items-center justify-center w-12 h-12 rounded-md border border-black/[0.08] bg-white text-gray-600 flex-shrink-0">
+                  <GitHubIcon className="w-5 h-5" />
+                </span>
+              )}
 
               {/* Body */}
               <div className="flex-1 min-w-0">

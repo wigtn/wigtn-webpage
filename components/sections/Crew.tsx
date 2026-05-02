@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import LightRays from "./LightRays";
 import Lightning from "./Lightning";
 import { useLanguage } from "@/lib/i18n";
@@ -94,14 +93,6 @@ export function Crew() {
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
-
-  const scrollToWork = () => {
-    const target =
-      document.getElementById("categories") ??
-      document.getElementById("featured") ??
-      document.getElementById("work");
-    if (target) target.scrollIntoView({ behavior: "smooth" });
-  };
 
   const animate_ = phase !== "loading";
 
@@ -217,88 +208,19 @@ export function Crew() {
       </div>
 
       {/* ═════ Centred content ═════
-       *   B2B-grade hero: logo as a small brand anchor, then the
-       *   positioning headline (the strong line), a one-line descriptor
-       *   listing what we actually ship, and a two-button CTA row. The
-       *   credential strip lives in the Marquee section directly below
-       *   so we don't double up on proof here. */}
+       *   Slogan-only hero. Two shimmer lines, nothing else — no logo,
+       *   no credential strip, no CTAs, no scroll cue. Surrounding
+       *   sections carry the proof. */}
       <div className="relative z-30 text-center px-6">
-        <div className={animate_ ? "hero-logo-in" : "opacity-0"}>
-          <Image
-            src="/wigtn_logo.png"
-            alt="WIGTN"
-            width={920}
-            height={644}
-            priority
-            style={{ filter: "url(#logo-knockout-white) contrast(1.05)" }}
-            className="mx-auto mb-6 w-[60vw] max-w-[260px] md:max-w-[320px] h-auto"
-          />
-        </div>
-
         <div className={animate_ ? "hero-tagline-in" : "opacity-0"}>
-          {/* Original two-line slogan — keeps the crew's voice intact while
-              the surrounding sections (Marquee, FeaturedWork) carry the
-              executive-grade proof signals. */}
           <p className="tagline-shimmer text-balance text-base sm:text-lg max-w-md md:max-w-2xl mx-auto leading-relaxed px-2">
             {t.hero.taglineLight}
           </p>
           <p className="tagline-shimmer-strong text-balance mt-3 text-xl sm:text-2xl md:text-3xl font-semibold max-w-md md:max-w-2xl mx-auto leading-snug tracking-tight px-2">
             {t.hero.taglineStrong}
           </p>
-
-          {/* Credential strip — five recognised names above the fold so a
-              30-second exec scan picks up venue + awards before scrolling.
-              Static (not Marquee) because a moving ticker disperses the
-              first fixation; five pills are read in one glance. */}
-          <ul className="mt-7 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 max-w-md md:max-w-3xl mx-auto px-2">
-            {t.hero.credentials.map((credential) => (
-              <li key={credential}>
-                <span className="inline-flex items-center rounded-full border border-black/[0.10] bg-white/70 backdrop-blur-sm px-2.5 py-1 text-[10px] sm:text-[10.5px] font-mono font-semibold tracking-[0.12em] uppercase text-gray-700">
-                  {credential}
-                </span>
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-7 flex items-center justify-center gap-3 flex-wrap">
-            <button
-              onClick={scrollToWork}
-              className="inline-flex items-center gap-2 rounded-full bg-foreground text-white px-5 py-2.5 text-xs sm:text-sm font-medium tracking-wide transition-transform duration-200 hover:-translate-y-[1px] hover:bg-violet"
-            >
-              {t.hero.ctaPrimary}
-              <span aria-hidden>→</span>
-            </button>
-            <a
-              href="mailto:contact@wigtn.com"
-              className="inline-flex items-center gap-2 rounded-full border border-black/[0.12] bg-white/70 backdrop-blur-sm px-5 py-2.5 text-xs sm:text-sm font-medium tracking-wide text-foreground transition-colors duration-200 hover:border-violet/40 hover:text-violet"
-            >
-              {t.hero.ctaSecondary}
-            </a>
-          </div>
         </div>
       </div>
-
-      <button
-        onClick={scrollToWork}
-        className={`${
-          animate_ ? "hero-fade-in" : "opacity-0"
-        } absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-gray-400 hover:text-violet transition-colors cursor-pointer z-10`}
-        aria-label="Scroll to work"
-      >
-        <svg
-          className="w-5 h-5 animate-bounce"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
-      </button>
 
       {/* Loading overlay — white-tone backdrop matches the rest of the page
           so the transition into the hero is seamless. A single violet ring

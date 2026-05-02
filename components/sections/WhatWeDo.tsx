@@ -1,32 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import {
-  motion,
-  AnimatePresence,
-  animate,
-  useInView,
-} from "framer-motion";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/i18n";
 import { useBudouX } from "@/lib/hooks/useBudouX";
 import { HOME_STATS } from "@/constants/projects";
-
-/* ─────────────── Result grid tiles ───────────────
- *
- * Six results-first images replace the old `LogoLoop` carousel. The
- * carousel was event-heavy (hackathon photos), which read as
- * "this team attends events" instead of "this team ships things".
- * A static grid of model cards / stage stills / npm pages reads as
- * "here's what they made" in one fixation. */
-const RESULT_TILES: { src: string; alt: string }[] = [
-  { src: "/images/projects/wigvo_logo.png", alt: "WIGVO — real-time voice translation for phone calls" },
-  { src: "/images/projects/wigtnocr-huggingface.png", alt: "WigtnOCR — Hugging Face model card" },
-  { src: "/images/carousel/snowflake-hackathon-stage.jpg", alt: "WIGTN Flake — Snowflake AI & Data Hackathon Korea 2026 Tech Track Top 3" },
-  { src: "/images/carousel/trae_hackthon_seoul.png", alt: "WIGENT — ByteDance Build with TRAE Seoul Grand Prize" },
-  { src: "/images/carousel/wigss-npm.png", alt: "WIGSS — published on npm" },
-  { src: "/images/carousel/wigtnocr-logo.png", alt: "WigtnOCR — open-source release" },
-];
 
 const containerVariants = {
   hidden: {},
@@ -68,169 +45,54 @@ export function WhatWeDo() {
         whileInView="show"
         viewport={{ once: true, margin: "-100px" }}
         variants={containerVariants}
-        className="relative max-w-6xl mx-auto px-7 md:px-6 w-full"
+        className="relative max-w-6xl mx-auto px-6 w-full"
       >
-        {/* Pull-quote — promoted positioning line, sits at the top of
-            the section as the editorial anchor. */}
-        <motion.blockquote
-          variants={itemVariants}
-          className="text-balance text-[20px] sm:text-[24px] md:text-[30px] font-medium text-foreground tracking-tight leading-snug italic max-w-3xl mx-auto text-center mb-12 md:mb-16"
-        >
-          &ldquo;{t.hero.tagline}&rdquo;
-        </motion.blockquote>
-
-        {/* Eyebrow + headline + condensed lead paragraph. */}
-        <div className="text-left md:text-center max-w-3xl mx-auto mb-14 md:mb-16">
+        <div className="max-w-2xl">
+          {/* Eyebrow + one header + one short paragraph + a single-
+              column stat list. Everything left-aligned at the same gutter. */}
           <motion.div
             variants={itemVariants}
-            className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-4 md:mb-6 md:justify-center"
+            className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-3"
           >
             <span className="w-6 h-px bg-violet/40" />
             <span>{t.whatWeDo.eyebrow}</span>
-            <span className="hidden md:inline-block w-6 h-px bg-violet/40" />
           </motion.div>
 
           <motion.h2
             variants={itemVariants}
-            className="text-balance text-[24px] sm:text-[30px] md:text-[36px] font-semibold text-foreground tracking-tight leading-[1.2]"
+            className="text-balance text-lg md:text-xl font-semibold text-foreground tracking-tight leading-snug"
           >
             {t.whatWeDo.heading}
           </motion.h2>
 
           <motion.p
             variants={itemVariants}
-            className="mt-5 md:mt-7 text-[14.5px] md:text-[17px] text-gray-600 leading-[1.7] md:leading-[1.75] text-pretty"
+            className="mt-3 text-[14px] md:text-[15px] text-gray-600 leading-relaxed"
           >
             {processText(t.whatWeDo.lead)}
           </motion.p>
-        </div>
 
-        {/* Static result grid — replaces the old LogoLoop carousel. */}
-        <motion.div
-          variants={itemVariants}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-14 md:mb-20"
-        >
-          {RESULT_TILES.map((tile) => (
-            <div
-              key={tile.src}
-              className="group relative aspect-[4/3] overflow-hidden rounded-md border border-black/[0.07] bg-white"
-            >
-              <Image
-                src={tile.src}
-                alt={tile.alt}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-                className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                unoptimized
-              />
-            </div>
-          ))}
-        </motion.div>
-
-        {/* Counter tiles — odometer-style numerals, same animation as
-            the original About stat panel. */}
-        <motion.div variants={itemVariants} className="relative">
-          <div className="relative rounded-2xl md:rounded-3xl bg-gradient-to-br from-violet/[0.05] via-white to-indigo-50/60 ring-1 ring-violet/15 p-5 md:p-10 overflow-hidden">
-            {/* Decorative dot grid */}
-            <div
-              aria-hidden
-              className="absolute inset-0 pointer-events-none opacity-[0.45] [background-image:radial-gradient(rgba(124,58,237,0.12)_1px,transparent_1px)] [background-size:20px_20px] [mask-image:radial-gradient(ellipse_at_top_right,black,transparent_75%)]"
-            />
-
-            <div className="relative text-center mb-8 md:mb-10">
-              <div className="inline-flex items-center justify-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-2.5">
-                <span className="w-6 h-px bg-violet/40" />
-                <span>By the numbers</span>
-                <span className="w-6 h-px bg-violet/40" />
+          {/* Stats — vertical 1-column stack, no big font, no animation
+              panel. Each row is just `[value] [label]` so the four
+              outputs read as a tight list. */}
+          <motion.dl
+            variants={itemVariants}
+            className="mt-7 divide-y divide-black/[0.06] border-y border-black/[0.06]"
+          >
+            {HOME_STATS.map((stat) => (
+              <div
+                key={stat.label}
+                className="flex items-baseline gap-4 py-2.5"
+              >
+                <dt className="w-6 text-[15px] font-semibold text-foreground tabular-nums">
+                  {stat.value}
+                </dt>
+                <dd className="text-[14px] text-gray-600">{stat.label}</dd>
               </div>
-              <h3 className="text-balance text-xl md:text-[28px] font-bold text-foreground tracking-tight leading-tight">
-                What we&apos;ve shipped so far.
-              </h3>
-            </div>
-
-            <div className="relative grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-y-0 md:divide-x divide-violet/10">
-              {HOME_STATS.map((stat, i) => (
-                <StatTile key={stat.label} stat={stat} index={i} />
-              ))}
-            </div>
-          </div>
-        </motion.div>
+            ))}
+          </motion.dl>
+        </div>
       </motion.div>
     </section>
-  );
-}
-
-/* ─────────────── Stat tile ─────────────── */
-function StatTile({
-  stat,
-  index,
-}: {
-  stat: { value: string; label: string };
-  index: number;
-}) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
-  const [display, setDisplay] = useState("0");
-  const [settled, setSettled] = useState(false);
-
-  useEffect(() => {
-    const target = Number(stat.value);
-    if (!inView || Number.isNaN(target)) {
-      if (Number.isNaN(target)) setDisplay(stat.value);
-      setSettled(true);
-      return;
-    }
-    const startDelay = 250 + index * 90;
-    const startTimer = setTimeout(() => {
-      const ctrl = animate(0, target, {
-        duration: 1.4,
-        ease: [0.22, 1, 0.36, 1],
-        onUpdate: (n) => setDisplay(Math.round(n).toString()),
-        onComplete: () => setSettled(true),
-      });
-      return () => ctrl.stop();
-    }, startDelay);
-    return () => clearTimeout(startTimer);
-  }, [inView, stat.value, index]);
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 18, scale: 0.95 }}
-      animate={inView ? { opacity: 1, y: 0, scale: 1 } : undefined}
-      transition={{
-        type: "spring",
-        stiffness: 220,
-        damping: 22,
-        delay: 0.15 + index * 0.08,
-      }}
-      className="group relative md:px-6 first:md:pl-0 last:md:pr-0 flex flex-col items-center text-center"
-    >
-      <div className="text-[11px] md:text-[12px] text-gray-500 uppercase tracking-[0.18em] font-semibold mb-3 md:mb-4">
-        {stat.label}
-      </div>
-
-      <div className="relative h-[64px] md:h-[88px] w-full flex items-center justify-center overflow-hidden">
-        <AnimatePresence mode="popLayout" initial={false}>
-          <motion.span
-            key={display}
-            initial={{ y: "-110%", opacity: 0 }}
-            animate={{ y: "0%", opacity: 1 }}
-            exit={{ y: "110%", opacity: 0 }}
-            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-0 flex items-center justify-center text-[56px] md:text-[80px] font-bold text-foreground tabular-nums leading-none tracking-tight"
-          >
-            {display}
-          </motion.span>
-        </AnimatePresence>
-
-        {settled && (
-          <span
-            aria-hidden
-            className="absolute inset-0 pointer-events-none stat-sheen bg-gradient-to-r from-transparent via-violet/45 to-transparent mix-blend-overlay"
-          />
-        )}
-      </div>
-    </motion.div>
   );
 }
