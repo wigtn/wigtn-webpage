@@ -1,7 +1,7 @@
 export const TRANSLATIONS = {
   hero: {
-    taglineLight: "From idea to production — no seniors, no shortcuts. We ship.",
-    taglineStrong: "We don't study AI. We just ship it.",
+    taglineLight: "From research to products — five engineers, four fronts.",
+    taglineStrong: "An independent crew shipping production AI.",
     tagline: "We prove ourselves by what we build, not how long we've built.",
   },
   about: {

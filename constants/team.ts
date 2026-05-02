@@ -29,7 +29,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     },
   },
   {
-    name: "손상우 Sangwoo Son",
+    name: "손상우 Diego Son",
     role: "AI Engineer",
     bio: "Builds LLM-powered applications and autonomous agent systems. Focuses on multi-agent orchestration and workflow automation.",
     image: "/images/team/sangwoo_son.jpg",
