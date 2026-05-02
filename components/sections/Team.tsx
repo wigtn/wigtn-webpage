@@ -263,26 +263,16 @@ export function Team() {
       />
 
       <div className="relative max-w-6xl mx-auto px-6 w-full">
-        {/* Header */}
-        <div className="mb-12 md:mb-14 flex items-end justify-between gap-6 flex-wrap">
-          <div>
-            <div className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-4">
-              <span className="w-6 h-px bg-violet/40" />
-              <span>Team</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-[-0.02em] leading-[1.05]">
-              Five engineers shipping production AI.{" "}
-              <span className="text-gray-400">End to end.</span>
-            </h2>
+        {/* Header — eyebrow + one short header line, left-aligned with the
+            same gutter as What we do and Categories. */}
+        <div className="max-w-2xl mb-10 md:mb-12">
+          <div className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-3">
+            <span className="w-6 h-px bg-violet/40" />
+            <span>Team</span>
           </div>
-          <div className="flex items-baseline gap-2 tabular-nums">
-            <span className="text-2xl md:text-3xl font-bold text-foreground">
-              {String(TEAM_MEMBERS.length).padStart(2, "0")}
-            </span>
-            <span className="text-xs uppercase tracking-[0.16em] text-gray-400">
-              members
-            </span>
-          </div>
+          <h2 className="text-balance text-lg md:text-xl font-semibold text-foreground tracking-tight leading-snug">
+            Five engineers shipping production AI, end to end.
+          </h2>
         </div>
 
         {/* Card grid — 1 col mobile, 2 cols md+. Members flagged

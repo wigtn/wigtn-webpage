@@ -68,38 +68,30 @@ export function WhatWeDo() {
         whileInView="show"
         viewport={{ once: true, margin: "-100px" }}
         variants={containerVariants}
-        className="relative max-w-6xl mx-auto px-7 md:px-6 w-full"
+        className="relative max-w-6xl mx-auto px-6 w-full"
       >
-        {/* Pull-quote — promoted positioning line, sits at the top of
-            the section as the editorial anchor. */}
-        <motion.blockquote
-          variants={itemVariants}
-          className="text-balance text-[20px] sm:text-[24px] md:text-[30px] font-medium text-foreground tracking-tight leading-snug italic max-w-3xl mx-auto text-center mb-12 md:mb-16"
-        >
-          &ldquo;{t.hero.tagline}&rdquo;
-        </motion.blockquote>
-
-        {/* Eyebrow + headline + condensed lead paragraph. */}
-        <div className="text-left md:text-center max-w-3xl mx-auto mb-14 md:mb-16">
+        {/* Eyebrow + one header + one paragraph — left-aligned, no
+            outsized typography. The section header earns its place by
+            naming the section, not by shouting. */}
+        <div className="max-w-2xl mb-10 md:mb-14">
           <motion.div
             variants={itemVariants}
-            className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-4 md:mb-6 md:justify-center"
+            className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-3"
           >
             <span className="w-6 h-px bg-violet/40" />
             <span>{t.whatWeDo.eyebrow}</span>
-            <span className="hidden md:inline-block w-6 h-px bg-violet/40" />
           </motion.div>
 
           <motion.h2
             variants={itemVariants}
-            className="text-balance text-[24px] sm:text-[30px] md:text-[36px] font-semibold text-foreground tracking-tight leading-[1.2]"
+            className="text-balance text-lg md:text-xl font-semibold text-foreground tracking-tight leading-snug"
           >
             {t.whatWeDo.heading}
           </motion.h2>
 
           <motion.p
             variants={itemVariants}
-            className="mt-5 md:mt-7 text-[14.5px] md:text-[17px] text-gray-600 leading-[1.7] md:leading-[1.75] text-pretty"
+            className="mt-3 text-[14px] md:text-[15px] text-gray-600 leading-relaxed"
           >
             {processText(t.whatWeDo.lead)}
           </motion.p>

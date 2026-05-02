@@ -93,21 +93,22 @@ export function Categories() {
       />
 
       <div className="relative max-w-6xl mx-auto px-6 w-full">
-        {/* Header */}
+        {/* Header — eyebrow + one short header line, left-aligned with the
+            same gutter as the rest of the page. No subtitle paragraph;
+            the tabs themselves carry the message. */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-10 md:mb-12"
+          className="max-w-2xl mb-8 md:mb-10"
         >
-          <div className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-4">
+          <div className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-3">
             <span className="w-6 h-px bg-violet/40" />
             <span>Work</span>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-[-0.02em] leading-[1.05]">
-            Pick a category.{" "}
-            <span className="text-gray-400">See what we&apos;ve shipped.</span>
+          <h2 className="text-balance text-lg md:text-xl font-semibold text-foreground tracking-tight leading-snug">
+            Pick a category to see what we&apos;ve shipped.
           </h2>
         </motion.div>
 
