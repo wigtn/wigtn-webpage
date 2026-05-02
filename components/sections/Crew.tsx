@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import LightRays from "./LightRays";
 import Lightning from "./Lightning";
 import { useLanguage } from "@/lib/i18n";
@@ -209,22 +208,11 @@ export function Crew() {
       </div>
 
       {/* ═════ Centred content ═════
-       *   Logo + two shimmer slogan lines. Logo restored on top so the
-       *   brand anchor reads first; the surrounding sections carry the
-       *   proof signals. */}
-      <div className="relative z-30 text-center px-6 flex flex-col items-center">
-        <div className={animate_ ? "hero-logo-in" : "opacity-0"}>
-          <Image
-            src="/images/wigtn_logo_banner.jpg"
-            alt="WIGTN"
-            width={920}
-            height={280}
-            priority
-            unoptimized
-            className="block mx-auto h-16 sm:h-20 md:h-24 lg:h-28 w-auto mb-12 md:mb-16"
-          />
-        </div>
-
+       *   Two shimmer slogan lines. Logo removed pending a transparent
+       *   asset — the JPG had a white frame that didn't blend cleanly.
+       *   The section's outer flexbox (`items-center justify-center` on
+       *   the <section>) handles vertical + horizontal centering. */}
+      <div className="relative z-30 text-center px-6">
         <div className={animate_ ? "hero-tagline-in" : "opacity-0"}>
           <p className="tagline-shimmer text-balance text-base sm:text-lg max-w-md md:max-w-2xl mx-auto leading-relaxed px-2">
             {t.hero.taglineLight}
