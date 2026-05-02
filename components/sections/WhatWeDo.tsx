@@ -1,9 +1,24 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import { useBudouX } from "@/lib/hooks/useBudouX";
-import { HOME_STATS } from "@/constants/projects";
+
+/* ─────────────── Category previews ───────────────
+ *
+ * Each card here is a one-line introduction to a category that lives
+ * fully expanded in the <Categories /> tabbed section below. Clicking a
+ * card sets the URL hash, which `Categories.tsx`'s hashchange listener
+ * picks up to switch to the matching tab and smooth-scroll the section
+ * into view. Native <a href="#..."> handles the hash transition without
+ * a JS click handler — fewer moving parts, fewer SSR pitfalls. */
+const CATEGORY_KEYS = [
+  { hash: "#research", translationKey: "research" as const },
+  { hash: "#awards", translationKey: "awards" as const },
+  { hash: "#open-source", translationKey: "openSource" as const },
+  { hash: "#products", translationKey: "products" as const },
+];
 
 const containerVariants = {
   hidden: {},
@@ -47,50 +62,65 @@ export function WhatWeDo() {
         variants={containerVariants}
         className="relative max-w-6xl mx-auto px-6 w-full"
       >
-        <div className="max-w-2xl">
-          {/* Eyebrow + one header + one short paragraph + a single-
-              column stat list. Everything left-aligned at the same gutter. */}
-          <motion.div
-            variants={itemVariants}
-            className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-3"
-          >
-            <span className="w-6 h-px bg-violet/40" />
-            <span>{t.whatWeDo.eyebrow}</span>
-          </motion.div>
+        {/* Two-column grid on lg+: heading/lead on the left, category
+            cards on the right. Stacks to a single column below lg so the
+            cards still read clearly on tablet/mobile. */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-start">
+          {/* ─── Left column — eyebrow + display heading + lead ─── */}
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            <motion.div
+              variants={itemVariants}
+              className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-4"
+            >
+              <span className="w-6 h-px bg-violet/40" />
+              <span>{t.whatWeDo.eyebrow}</span>
+            </motion.div>
 
-          <motion.h2
-            variants={itemVariants}
-            className="text-balance text-lg md:text-xl font-semibold text-foreground tracking-tight leading-snug"
-          >
-            {t.whatWeDo.heading}
-          </motion.h2>
+            <motion.h2
+              variants={itemVariants}
+              className="text-balance text-4xl md:text-5xl font-semibold text-foreground tracking-[-0.02em] leading-[1.1]"
+            >
+              {t.whatWeDo.heading}
+            </motion.h2>
 
-          <motion.p
-            variants={itemVariants}
-            className="mt-3 text-[14px] md:text-[15px] text-gray-600 leading-relaxed"
-          >
-            {processText(t.whatWeDo.lead)}
-          </motion.p>
+            <motion.p
+              variants={itemVariants}
+              className="mt-5 md:mt-6 text-[14.5px] md:text-[16px] text-gray-600 leading-relaxed max-w-md"
+            >
+              {processText(t.whatWeDo.lead)}
+            </motion.p>
+          </div>
 
-          {/* Stats — vertical 1-column stack, no big font, no animation
-              panel. Each row is just `[value] [label]` so the four
-              outputs read as a tight list. */}
-          <motion.dl
+          {/* ─── Right column — 2×2 category preview grid ───
+              Each card is an anchor to the matching tab in <Categories />.
+              Clicking sets the hash, which the Categories component picks
+              up via its hashchange listener (switches tab + smooth-scrolls). */}
+          <motion.ul
             variants={itemVariants}
-            className="mt-7 divide-y divide-black/[0.06] border-y border-black/[0.06]"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4"
           >
-            {HOME_STATS.map((stat) => (
-              <div
-                key={stat.label}
-                className="flex items-baseline gap-4 py-2.5"
-              >
-                <dt className="w-6 text-[15px] font-semibold text-foreground tabular-nums">
-                  {stat.value}
-                </dt>
-                <dd className="text-[14px] text-gray-600">{stat.label}</dd>
-              </div>
-            ))}
-          </motion.dl>
+            {CATEGORY_KEYS.map(({ hash, translationKey }) => {
+              const cat = t.whatWeDo.categories[translationKey];
+              return (
+                <li key={hash}>
+                  <a
+                    href={hash}
+                    className="group relative flex flex-col h-full rounded-xl border border-black/[0.07] bg-white/70 backdrop-blur-sm p-5 md:p-6 transition-[border,box-shadow,transform] duration-300 hover:-translate-y-[2px] hover:border-violet/40 hover:shadow-[0_18px_40px_-22px_rgba(76,29,149,0.28)]"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="text-base md:text-lg font-semibold text-foreground tracking-tight group-hover:text-violet transition-colors">
+                        {cat.title}
+                      </h3>
+                      <ArrowUpRight className="w-4 h-4 text-gray-300 group-hover:text-violet transition-colors flex-shrink-0 mt-0.5" />
+                    </div>
+                    <p className="mt-2 text-[13px] md:text-[13.5px] text-gray-600 leading-relaxed">
+                      {processText(cat.description)}
+                    </p>
+                  </a>
+                </li>
+              );
+            })}
+          </motion.ul>
         </div>
       </motion.div>
     </section>
