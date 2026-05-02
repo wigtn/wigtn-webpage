@@ -79,9 +79,18 @@ function TeamCard({ member, bio }: TeamCardProps) {
           </span>
         </div>
 
-        {/* Credential — single verifiable line, only when explicitly set. */}
+        {/* Current role — what the member does today, outside of WIGTN.
+            Renders as the first credential line so a reader sees the
+            present-tense employment before the historical background. */}
+        {member.currentRole && (
+          <p className="mt-1.5 text-[12.5px] text-foreground font-medium leading-snug">
+            {processText(member.currentRole)}
+          </p>
+        )}
+
+        {/* Credential — historical background, single verifiable line. */}
         {member.credential && (
-          <p className="mt-1.5 text-[12.5px] text-gray-700 font-medium leading-snug">
+          <p className="mt-1 text-[12px] text-gray-500 leading-snug">
             {processText(member.credential)}
           </p>
         )}

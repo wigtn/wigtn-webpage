@@ -7,8 +7,10 @@ export const TEAM_MEMBERS: TeamMember[] = [
     bio: "Former construction PM with a decade of large-scale project experience. Now leading WIGTN, focused on AI modeling, product development, and applied research in GPU-accelerated computing.",
     image: "/images/team/hyeongseob_kim.jpg",
     featured: true,
+    currentRole:
+      "AI Research Engineer & Engineering Part Lead at BrainCrew (LangChain Global Partner Co.)",
     credential:
-      "Previously at Hyundai E&C and SoundMind. ACL 2026 first author. AI Research Engineer at BrainCrew (LangChain Korea Partner Co.).",
+      "Previously at Hyundai E&C and SoundMind · ACL 2026 first author.",
     expertise: ["AI/ML", "Product Strategy", "System Architecture", "Operations"],
     links: {
       github: "https://github.com/Hyeongseob91",
