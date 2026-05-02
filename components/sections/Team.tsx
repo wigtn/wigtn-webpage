@@ -79,18 +79,21 @@ function TeamCard({ member, bio }: TeamCardProps) {
           </span>
         </div>
 
-        {/* Current role — what the member does today, outside of WIGTN.
-            Renders as the first credential line so a reader sees the
-            present-tense employment before the historical background. */}
+        {/* Current role — present-tense day job at the parent company.
+            Different dimension from the violet WIGTN-internal `role`
+            label above, so styled distinctly: neutral-gray, normal case,
+            normal weight. Color + case shift make it instantly readable
+            as a separate kind of information. */}
         {member.currentRole && (
-          <p className="mt-1.5 text-[12.5px] text-foreground font-medium leading-snug">
+          <p className="mt-1 text-[12px] text-gray-500 leading-snug">
             {processText(member.currentRole)}
           </p>
         )}
 
-        {/* Credential — historical background, single verifiable line. */}
+        {/* Credential — historical background ("Ex-…"), small gray.
+            Currently only set on the founder. */}
         {member.credential && (
-          <p className="mt-1 text-[12px] text-gray-500 leading-snug">
+          <p className="mt-1 text-[11.5px] text-gray-400 leading-snug">
             {processText(member.credential)}
           </p>
         )}
@@ -100,46 +103,33 @@ function TeamCard({ member, bio }: TeamCardProps) {
           {processText(bio)}
         </p>
 
-        {/* Expertise chips + social links */}
-        <div className="mt-3 flex items-center gap-3 flex-wrap">
-          <div className="flex flex-wrap gap-1.5 flex-1 min-w-0">
-            {member.expertise.map((skill) => (
-              <span
-                key={skill}
-                className="px-2 py-0.5 text-[10.5px] font-medium text-gray-600 bg-gray-50 border border-black/[0.06] rounded-md"
+        {/* Social links — expertise chips removed entirely. */}
+        {member.links && (member.links.github || member.links.linkedin) && (
+          <div className="mt-3 flex gap-1">
+            {member.links.github && (
+              <a
+                href={member.links.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${member.name} on GitHub`}
+                className="w-7 h-7 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-violet hover:bg-violet/5 transition-colors"
               >
-                {skill}
-              </span>
-            ))}
+                <GitHubIcon className="w-3.5 h-3.5" />
+              </a>
+            )}
+            {member.links.linkedin && (
+              <a
+                href={member.links.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${member.name} on LinkedIn`}
+                className="w-7 h-7 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-violet hover:bg-violet/5 transition-colors"
+              >
+                <LinkedInIcon className="w-3.5 h-3.5" />
+              </a>
+            )}
           </div>
-
-          {member.links && (member.links.github || member.links.linkedin) && (
-            <div className="flex gap-1 flex-shrink-0">
-              {member.links.github && (
-                <a
-                  href={member.links.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${member.name} on GitHub`}
-                  className="w-7 h-7 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-violet hover:bg-violet/5 transition-colors"
-                >
-                  <GitHubIcon className="w-3.5 h-3.5" />
-                </a>
-              )}
-              {member.links.linkedin && (
-                <a
-                  href={member.links.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${member.name} on LinkedIn`}
-                  className="w-7 h-7 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-violet hover:bg-violet/5 transition-colors"
-                >
-                  <LinkedInIcon className="w-3.5 h-3.5" />
-                </a>
-              )}
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </article>
   );
