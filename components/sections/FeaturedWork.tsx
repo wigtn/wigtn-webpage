@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import {
   FEATURED_PROJECTS,
@@ -55,16 +56,24 @@ export function FeaturedWork() {
   const totalCount = PROJECTS.length;
 
   return (
-    <section id="work" className="snap-start py-16 md:py-24">
+    <section id="featured" className="min-h-screen py-16 md:py-24 flex flex-col justify-center">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="mb-12 md:mb-16 flex items-end justify-between gap-4 flex-wrap">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-12 md:mb-16 flex items-end justify-between gap-4 flex-wrap"
+        >
           <div>
-            <h2 className="text-section text-violet mb-2 tracking-wide">
-              Featured Work
+            <div className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-4">
+              <span className="w-6 h-px bg-violet/40" />
+              <span>Featured work</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-[-0.02em] leading-[1.05]">
+              The models, papers, and wins{" "}
+              <span className="text-gray-400">we&apos;re proudest of.</span>
             </h2>
-            <p className="text-lg md:text-xl text-foreground">
-              The models, papers, and wins we&apos;re proudest of.
-            </p>
           </div>
           <Link
             href="/projects/"
@@ -73,18 +82,29 @@ export function FeaturedWork() {
             See all {totalCount} projects
             <ArrowRight className="w-4 h-4" />
           </Link>
-        </div>
+        </motion.div>
 
         <div>
           {FEATURED_PROJECTS.map((project, i) => (
-            <ProjectRow
+            <motion.div
               key={project.id}
-              project={project}
-              index={i}
-              variant={VARIANT_FOR_SECTION[project.section]}
-              meta={metaFor(project)}
-              isLast={i === FEATURED_PROJECTS.length - 1}
-            />
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{
+                duration: 0.6,
+                delay: i * 0.08,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              <ProjectRow
+                project={project}
+                index={i}
+                variant={VARIANT_FOR_SECTION[project.section]}
+                meta={metaFor(project)}
+                isLast={i === FEATURED_PROJECTS.length - 1}
+              />
+            </motion.div>
           ))}
         </div>
       </div>

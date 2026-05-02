@@ -1,7 +1,11 @@
 // Navigation Types
+//
+// A nav entry either scrolls to a section on the current page (`id`) or
+// navigates to another route (`href`). Exactly one of the two should be set.
 export interface NavItem {
   label: string;
-  id: string;
+  id?: string;
+  href?: string;
 }
 
 // Team Types
