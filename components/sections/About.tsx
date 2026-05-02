@@ -71,6 +71,16 @@ export function About() {
         variants={containerVariants}
         className="relative max-w-5xl mx-auto px-7 md:px-5 w-full text-left md:text-center"
       >
+        {/* Editorial pull-quote — load-bearing positioning line promoted from
+            the footer. Sits above the eyebrow as the section's first read so
+            the team's stance lands before the explanatory copy. */}
+        <motion.blockquote
+          variants={itemVariants}
+          className="text-balance text-[18px] sm:text-[22px] md:text-[28px] font-medium text-foreground tracking-tight leading-snug italic md:mx-auto md:max-w-3xl mb-10 md:mb-14"
+        >
+          &ldquo;{t.hero.tagline}&rdquo;
+        </motion.blockquote>
+
         {/* Eyebrow — left-aligned on mobile, centred on desktop */}
         <motion.div
           variants={itemVariants}

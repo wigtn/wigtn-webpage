@@ -1,13 +1,17 @@
 export const TRANSLATIONS = {
   hero: {
+    headline: "An independent crew shipping production-grade AI.",
+    sub: "Real-time voice translation. Korean document AI. Production mobile apps. ACL 2026 paper accepted.",
+    ctaPrimary: "See our work",
+    ctaSecondary: "Contact",
     tagline: "We prove ourselves by what we build, not how long we've built.",
   },
   about: {
-    heading: "An AI-Native Builder Crew That Starts from Real Problems, Builds Without Senior Guidance, and Makes \"Wait, This Actually Works?\" a Reality",
+    heading: "An AI-native builder crew that starts from real-world friction and ships production-grade systems end-to-end.",
     paragraphs: [
-      "WIGTN is an independent development crew of five AI engineers. We start from real-world friction — the tangible inconveniences people face in everyday life and in the field — and take ideas all the way to production-grade systems, without relying on senior mentorship or hand-holding.",
+      "WIGTN is an independent development crew of five AI engineers. We start from real-world friction — the tangible inconveniences people face in everyday life and in the field — and take ideas all the way to production-grade systems.",
       "We don't build demos. We build products that make people say, \"Wait, this actually works?\" We move fast, but we deliver results that leave a lasting impression — creating meaningful impact in remarkably short timeframes.",
-      "Through hackathons, open-source projects, and community education, we learn by doing, proving what a small team of builders can accomplish in the AI-Native era.",
+      "Through research, open-source projects, and shipping production AI systems, we prove what a small team of builders can accomplish in the AI-Native era.",
     ],
   },
   results: {

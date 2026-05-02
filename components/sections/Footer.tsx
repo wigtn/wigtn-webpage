@@ -21,12 +21,10 @@ export function Footer() {
           <div className="text-left md:text-right">
             <span className="text-sm text-gray-400 block mb-1">Contact us</span>
             <a
-              href="https://mail.google.com/mail/?view=cm&to=wigtncrew@gmail.com"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:contact@wigtn.com"
               className="text-foreground hover:text-violet transition-colors"
             >
-              wigtncrew@gmail.com
+              contact@wigtn.com
             </a>
           </div>
         </div>
@@ -34,7 +32,7 @@ export function Footer() {
         {/* Bottom - Copyright & GitHub */}
         <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <span className="text-gray-400 text-sm">
-            Fast build, real ship. &copy; {new Date().getFullYear()} WIGTN
+            We build fast. We ship real products. &copy; {new Date().getFullYear()} WIGTN
           </span>
           <a
             href={SOCIAL_LINKS.github}

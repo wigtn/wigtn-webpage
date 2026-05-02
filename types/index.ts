@@ -17,6 +17,13 @@ export interface TeamMember {
   expertise: string[];
   image?: string;
   imagePosition?: string;
+  /** When true, the homepage Team grid renders this card spanning two
+   *  columns to mark the founder / lead. Optional; defaults to false. */
+  featured?: boolean;
+  /** Single-line background sentence shown above the bio on the homepage.
+   *  Use it to surface a credential a B2B reader can verify (prior role,
+   *  publication, partner affiliation). Leave blank to render nothing. */
+  credential?: string;
   links?: {
     github?: string;
     linkedin?: string;

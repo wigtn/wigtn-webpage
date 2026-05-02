@@ -16,10 +16,10 @@ export default function Home() {
       <Navigation />
       <Crew />
       <Marquee />
+      <FeaturedWork />
       <Pillars />
       <About />
       <Products />
-      <FeaturedWork />
       <Team />
       <Footer />
     </main>

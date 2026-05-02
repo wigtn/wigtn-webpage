@@ -99,7 +99,7 @@ From idea to deploy, zero friction. A single, unified Claude Code plugin with **
 ## Research
 
 ### WIGVO — Real-Time Voice Translation for Phone Calls
-> **ACL 2026 System Demonstrations** (submitted) &middot; Status: **Live**
+> **ACL 2026 System Demonstrations** (accepted) &middot; Status: **Live**
 
 Real-time bidirectional voice translation over actual PSTN phone lines. No apps needed on the recipient's end — just call. Dual-Session Echo Gating architecture. 0 echo-loop incidents across 148 production calls. 430+ passing tests. Production-deployed on Google Cloud Run.
 
