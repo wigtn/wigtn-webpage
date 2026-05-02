@@ -2,16 +2,7 @@ export const TRANSLATIONS = {
   hero: {
     taglineLight: "From idea to production — no seniors, no shortcuts. We ship.",
     taglineStrong: "We don't study AI. We just ship it.",
-    ctaPrimary: "See our work",
-    ctaSecondary: "Contact",
     tagline: "We prove ourselves by what we build, not how long we've built.",
-    credentials: [
-      "ACL 2026 · ACCEPTED",
-      "EMNLP 2026 · IN PREP",
-      "ByteDance TRAE · GRAND PRIZE",
-      "Snowflake 2026 · TECH TRACK TOP 3",
-      "KoGovDoc · #1",
-    ],
   },
   about: {
     heading: "An AI-native builder crew that starts from real-world friction and ships production-grade systems end-to-end.",
