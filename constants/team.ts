@@ -9,8 +9,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     featured: true,
     currentRole:
       "AI Research Engineer & Engineering Part Lead at BrainCrew (LangChain Global Partner Co.)",
-    credential:
-      "Previously at Hyundai E&C and SoundMind · ACL 2026 first author.",
+    credential: "Ex-Hyundai E&C, Soundmind",
     expertise: ["AI/ML", "Product Strategy", "System Architecture", "Operations"],
     links: {
       github: "https://github.com/Hyeongseob91",
