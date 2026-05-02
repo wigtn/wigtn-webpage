@@ -20,6 +20,7 @@ const TAG_COLOR: Record<SectionBadge, string> = {
   Paper: "text-[#185FA5]",
   Tool: "text-[#0F6E56]",
   "Grand Prize": "text-[#854F0B]",
+  "2nd Place": "text-[#5F6470]",
   Participated: "text-[#5F5E5A]",
   Upcoming: "text-[#888780] italic",
 };

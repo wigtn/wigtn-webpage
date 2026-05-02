@@ -3,6 +3,7 @@ import { Phone, Globe, Mic, Shield, Brain, FileText, Zap, Database, Github } fro
 import { WIGTNOCR_SECTIONS } from "./wigtnocr-sections";
 import { WIGVO_SECTIONS } from "./wigvo-sections";
 import { WIGENT_SECTIONS } from "./wigent-sections";
+import { WIGTN_FLAKE_SECTIONS } from "./wigtn-flake-sections";
 
 /* ─────────────── Shared sub-types (used by product detail blocks) ─────────────── */
 
@@ -73,6 +74,7 @@ export type SectionBadge =
   | "Paper"
   | "Tool"
   | "Grand Prize"
+  | "2nd Place"
   | "Participated"
   | "Upcoming";
 
@@ -131,8 +133,8 @@ export interface ProjectTimeline {
 }
 
 export interface ProjectDetail {
-  /** References existing productDetail.wigvo / productDetail.wigvu / productDetail.wigtnocr translation blobs. */
-  translationKey?: "wigvo" | "wigvu" | "wigtnocr" | "wigent";
+  /** References a productDetail.* translation blob — see the literal union for the full set. */
+  translationKey?: "wigvo" | "wigvu" | "wigtnocr" | "wigent" | "wigtnflake";
   liveUrl?: string;
   features?: ProductFeature[];
   stats?: ProductStat[];
@@ -252,51 +254,6 @@ export const PROJECTS: Project[] = [
   /* ─────── Open Source ─────── */
 
   {
-    id: "wigtnocr",
-    slug: "wigtnocr",
-    name: "WigtnOCR",
-    section: "models",
-    sectionBadge: "Research",
-    phase: "completed",
-    featured: true,
-    publication: "EMNLP 2026 — Document AI Track (in preparation)",
-    homepageBadge: "EMNLP 2026 · IN PREP",
-    homepageMetrics: ["#1 on KoGovDoc-Bench", "15× smaller, teacher-level accuracy", "Single-GPU"],
-    tagline: "A 2B-parameter document parser that reads Korean government forms as accurately as a model 15x its size — ranked #1 on KoGovDoc.",
-    description: "WigtnOCR distills a 30B teacher model into a 2B student through pseudo-label distillation and LoRA fine-tuning, achieving teacher-level accuracy on OmniDocBench while running on a single consumer GPU. On the KoGovDoc Korean government document retrieval benchmark — a dataset of scanned civil forms, tax filings, and public notices — it ranks #1 overall, outperforming models with 10-30x more parameters.",
-    gradient: "from-yellow-500 to-amber-400",
-    media: {
-      poster: "/images/projects/wigtnocr-huggingface.png",
-    },
-    timeline: {},
-    links: {
-      github: "https://github.com/wigtn/wigtnOCR-v1",
-      huggingface: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR",
-    },
-    detail: {
-      translationKey: "wigtnocr",
-      stats: [
-        { value: "0.649", labelKey: "tableTeds" },
-        { value: "0.739", labelKey: "retrievalHit1" },
-        { value: "31min", labelKey: "trainingTime" },
-        { value: "2B", labelKey: "parameters" },
-      ],
-      features: [
-        { icon: Brain, title: "Pseudo-Label Distillation", descriptionKey: "wigtnocr_feature_distillation" },
-        { icon: Zap, title: "LoRA Fine-tuning", descriptionKey: "wigtnocr_feature_lora" },
-        { icon: Database, title: "KoGovDoc-Bench", descriptionKey: "wigtnocr_feature_benchmark" },
-        { icon: Github, title: "Fully Open Source", descriptionKey: "wigtnocr_feature_opensource" },
-      ],
-      techStack: [
-        { category: "Model & Training", items: ["Qwen3-VL-2B-Instruct", "Qwen3-VL-30B-Instruct (Teacher)", "Qwen3.5-122B (Judge)", "ms-swift", "LoRA", "DeepSpeed ZeRO-2", "vLLM"] },
-        { category: "Evaluation & Retrieval", items: ["OmniDocBench (CVPR 2025)", "KoGovDoc-Bench", "MoC BC/CS (ACL 2025)", "BGE-M3", "FAISS", "Qwen2.5-1.5B-Instruct"] },
-        { category: "Infrastructure", items: ["2x NVIDIA RTX PRO 6000 Blackwell (96GB)", "HuggingFace", "GitHub", "Docker"] },
-      ],
-      researchSections: WIGTNOCR_SECTIONS,
-    },
-  },
-
-  {
     id: "wigvo",
     slug: "wigvo",
     name: "WIGVO",
@@ -351,6 +308,51 @@ export const PROJECTS: Project[] = [
   },
 
   {
+    id: "wigtnocr",
+    slug: "wigtnocr",
+    name: "WigtnOCR",
+    section: "models",
+    sectionBadge: "Research",
+    phase: "completed",
+    featured: true,
+    publication: "EMNLP 2026 — Document AI Track (in preparation)",
+    homepageBadge: "EMNLP 2026 · IN PREP",
+    homepageMetrics: ["#1 on KoGovDoc-Bench", "15× smaller, teacher-level accuracy", "Single-GPU"],
+    tagline: "A 2B-parameter document parser that reads Korean government forms as accurately as a model 15x its size — ranked #1 on KoGovDoc.",
+    description: "WigtnOCR distills a 30B teacher model into a 2B student through pseudo-label distillation and LoRA fine-tuning, achieving teacher-level accuracy on OmniDocBench while running on a single consumer GPU. On the KoGovDoc Korean government document retrieval benchmark — a dataset of scanned civil forms, tax filings, and public notices — it ranks #1 overall, outperforming models with 10-30x more parameters.",
+    gradient: "from-yellow-500 to-amber-400",
+    media: {
+      poster: "/images/projects/wigtnocr-huggingface.png",
+    },
+    timeline: {},
+    links: {
+      github: "https://github.com/wigtn/wigtnOCR-v1",
+      huggingface: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR",
+    },
+    detail: {
+      translationKey: "wigtnocr",
+      stats: [
+        { value: "0.649", labelKey: "tableTeds" },
+        { value: "0.739", labelKey: "retrievalHit1" },
+        { value: "31min", labelKey: "trainingTime" },
+        { value: "2B", labelKey: "parameters" },
+      ],
+      features: [
+        { icon: Brain, title: "Pseudo-Label Distillation", descriptionKey: "wigtnocr_feature_distillation" },
+        { icon: Zap, title: "LoRA Fine-tuning", descriptionKey: "wigtnocr_feature_lora" },
+        { icon: Database, title: "KoGovDoc-Bench", descriptionKey: "wigtnocr_feature_benchmark" },
+        { icon: Github, title: "Fully Open Source", descriptionKey: "wigtnocr_feature_opensource" },
+      ],
+      techStack: [
+        { category: "Model & Training", items: ["Qwen3-VL-2B-Instruct", "Qwen3-VL-30B-Instruct (Teacher)", "Qwen3.5-122B (Judge)", "ms-swift", "LoRA", "DeepSpeed ZeRO-2", "vLLM"] },
+        { category: "Evaluation & Retrieval", items: ["OmniDocBench (CVPR 2025)", "KoGovDoc-Bench", "MoC BC/CS (ACL 2025)", "BGE-M3", "FAISS", "Qwen2.5-1.5B-Instruct"] },
+        { category: "Infrastructure", items: ["2x NVIDIA RTX PRO 6000 Blackwell (96GB)", "HuggingFace", "GitHub", "Docker"] },
+      ],
+      researchSections: WIGTNOCR_SECTIONS,
+    },
+  },
+
+  {
     id: "wigss",
     slug: "wigss",
     name: "WIGSS",
@@ -398,7 +400,6 @@ export const PROJECTS: Project[] = [
     section: "hackathon",
     sectionBadge: "Grand Prize",
     phase: "completed",
-    featured: true,
     homepageMetrics: ["Built in 3.5 hours · 3 engineers", "ByteDance · Build with TRAE Seoul"],
     tagline: "Drop a topic, watch AI agents debate it live — PM orchestrates, experts spawn and retire, then a landing page writes itself from the conclusions.",
     description: "WIGENT is a multi-agent debate arena where a PM agent orchestrates auto-spawned domain experts in a Slack-style chat UI. Agents argue, challenge each other, retire when outmatched, and summon new specialists on the fly. Once consensus is reached, the system auto-generates a polished landing page from the debate conclusions. Grand Prize winner at Build with TRAE Seoul (ByteDance) — built by 3 engineers in 3.5 hours.",
@@ -472,27 +473,55 @@ export const PROJECTS: Project[] = [
   },
 
   {
-    id: "datapulse",
-    slug: "datapulse",
-    name: "DataPulse",
+    id: "wigtn-flake",
+    slug: "wigtn-flake",
+    name: "WIGTN Flake",
     section: "hackathon",
-    sectionBadge: "Upcoming",
-    phase: "in-progress",
-    tagline: "Decoupling Index.",
-    description: "A decoupling index and live data-driven signal platform built on Snowflake. Upcoming entry for Snowflake Korea 2026.",
-    gradient: "from-slate-500 to-slate-700",
+    sectionBadge: "2nd Place",
+    phase: "completed",
+    featured: true,
+    homepageBadge: "SNOWFLAKE 2026 · TECH TRACK TOP 3",
+    homepageMetrics: ["11 Snowflake Cortex functions", "5 AI experts × 4 datasets", "Tech Track · Top 3"],
+    tagline: "Pick what you want to do — open a cafe, target rental-appliance ads, find a billboard site, invest, or detect anomalies. Five Cortex-powered AI experts cross-query four real-world datasets and answer with a Top 3 ranking, anomaly badges, and a 6-month forecast.",
+    description: "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform. The user picks one of five preset goals (or types their own); a GPT-4o orchestrator summons five purpose-tuned experts who debate in a Slack-style chat while Cortex Analyst executes text-to-SQL across four Semantic Models — SPH (foot traffic + card sales), RichGo (real estate), NextTrade (markets), and AJD (telecom). ANOMALY_DETECTION auto-injects \"watch this district\" badges, FORECAST projects six months out, and the conversation converges into a ranked Top 3 with a concrete action checklist. Tech Track Top 3 at Snowflake AI & Data Hackathon Korea 2026.",
+    gradient: "from-sky-500 to-blue-600",
     media: {
-      poster: "https://opengraph.githubassets.com/1/wigtn/datapulse",
+      poster: "/images/projects/wigtn-flake-title.jpg",
     },
     timeline: {},
     achievements: [
       {
-        event: "Snowflake Korea 2026",
+        event: "Snowflake AI & Data Hackathon Korea 2026 — Tech Track",
         organizer: "Snowflake",
-        result: "upcoming",
+        result: "second-place",
+        note: "Tech Track Top 3",
       },
     ],
-    links: {},
+    links: {
+      // github / video / live: to be added once public.
+    },
+    detail: {
+      translationKey: "wigtnflake",
+      stats: [
+        { value: "11", labelKey: "snowflakeServices" },
+        { value: "5", labelKey: "aiExperts" },
+        { value: "Top 3", labelKey: "hackathonRank" },
+        { value: "4", labelKey: "datasetSize" },
+      ],
+      features: [
+        { icon: Brain, title: "Purpose-First UX", descriptionKey: "wigtnflake_feature_purpose" },
+        { icon: Database, title: "Cortex Analyst × 4", descriptionKey: "wigtnflake_feature_cortex" },
+        { icon: Zap, title: "ANOMALY_DETECTION", descriptionKey: "wigtnflake_feature_anomaly" },
+        { icon: Shield, title: "Hybrid AI Strategy", descriptionKey: "wigtnflake_feature_hybrid" },
+      ],
+      techStack: [
+        { category: "Snowflake Cortex", items: ["Cortex Agent", "Cortex Analyst × 4", "Cortex LLM (claude-4-sonnet)", "FORECAST", "ANOMALY_DETECTION", "AI_SENTIMENT", "AI_CLASSIFY", "data_to_chart", "Dynamic Tables × 2", "Python UDF × 2", "Semantic Model YAML × 4"] },
+        { category: "Application", items: ["Next.js 16 (App Router)", "React 19 (Compiler)", "TypeScript 5.9 (strict)", "Tailwind CSS 4", "Framer Motion 12", "Vega-Lite 6", "SSE streaming chat"] },
+        { category: "AI & Data", items: ["GPT-4o (debate personas)", "OpenAI SDK 6", "snowflake-sdk 1.15", "Tavily (web search)", "MOLIT public real-estate API"] },
+        { category: "Datasets", items: ["SPH (SKT foot traffic + Shinhan card + KCB income)", "RichGo (apartment AI price index)", "NextTrade (equity orders / fills)", "AJD 아정당 (telecom + GA4 + call center)"] },
+      ],
+      researchSections: WIGTN_FLAKE_SECTIONS,
+    },
   },
 ];
 

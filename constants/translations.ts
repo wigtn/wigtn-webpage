@@ -1,7 +1,7 @@
 export const TRANSLATIONS = {
   hero: {
-    headline: "An independent crew shipping production-grade AI.",
-    sub: "Real-time voice translation. Korean document AI. Production mobile apps. ACL 2026 paper accepted.",
+    taglineLight: "From idea to production — no seniors, no shortcuts. We ship.",
+    taglineStrong: "We don't study AI. We just ship it.",
     ctaPrimary: "See our work",
     ctaSecondary: "Contact",
     tagline: "We prove ourselves by what we build, not how long we've built.",
@@ -80,6 +80,13 @@ export const TRANSLATIONS = {
       solution: "AI agents autonomously debate your topic in a Slack-style UI — PM anchors the discussion, domain experts argue and get replaced, and the debate converges into a structured business idea that instantly renders as a landing page from 9 design templates.",
       statusBadge: "Released",
     },
+    wigtnflake: {
+      tagline: "Pick a goal, get a data-backed Top 3 of Seoul districts — five Cortex-powered AI experts debate the answer.",
+      description: "WIGTN Flake is a purpose-driven neighborhood-intelligence platform. The user picks a goal — open a cafe, target rental-appliance ads, place a billboard, invest, or detect anomalies — and five Cortex-powered AI experts cross-query four datasets (SPH, RichGo, NextTrade, AJD) over Cortex Analyst, ANOMALY_DETECTION, and FORECAST. The output is a ranked Top 3 of Seoul districts, anomaly badges, six-month projections, and a concrete action checklist. Tech Track Top 3 at Snowflake AI & Data Hackathon Korea 2026.",
+      problem: "Public-data dashboards in Korea answer \"how many people walk through Yeoksam-dong?\" but rarely \"so where should I open my cafe?\" Generic dashboards aren't goal-aware, single-perspective AI is too agreeable, and cross-querying real estate × foot traffic × card sales × telecom requires manual spreadsheet work that takes a week.",
+      solution: "Pick one of five preset purposes (or type your own). A GPT-4o orchestrator summons five purpose-tuned experts who debate in a Slack-style chat while Cortex Analyst runs text-to-SQL across four Semantic Models. ANOMALY_DETECTION auto-injects 'watch this district' badges, FORECAST projects six months out, and the report converges into a Top 3 ranking with a purpose-specific action checklist.",
+      statusBadge: "Top 3",
+    },
     features: {
       wigvo_feature_dual: "Two parallel OpenAI Realtime sessions handle each side of the conversation independently, ensuring natural turn-taking.",
       wigvo_feature_phone: "Call any phone number on any carrier. Works with landlines, mobile phones, and VoIP — the recipient doesn't need any app.",
@@ -97,6 +104,10 @@ export const TRANSLATIONS = {
       wigent_feature_landing: "9 design templates (Glassmorphism, Neobrutalism, Editorial, etc.) render instantly when the debate concludes — no 60-second GPT wait. Dual-path rendering keeps GPT generation as a silent fallback.",
       wigent_feature_ui: "Full Slack-style dark-theme chat with typing indicators, agent join/leave system messages, sidebar with online status, and Framer Motion page transitions.",
       wigent_feature_hitl: "Users can reject the result. The PM announces the rejection, the team runs 8 more turns of focused debate, and a new landing page is generated — all without the user typing into the debate.",
+      wigtnflake_feature_purpose: "Six purpose cards (cafe location, rental-appliance targeting, billboard placement, investment, anomaly detection, free-form). UX and orchestrator both branch from the chosen goal — every component carries the purpose context.",
+      wigtnflake_feature_cortex: "Cortex Analyst runs text-to-SQL across four Semantic Models (SPH, RichGo, NextTrade, AJD) — coordinated by Cortex Agent with a fall-through to direct Analyst calls under trial limits, then GPT-4o Function Calling, then pure GPT-4o.",
+      wigtnflake_feature_anomaly: "ANOMALY_DETECTION promoted from supporting role to demo lead — automatically injects 'watch this district' badges into the ranking. The 'wait, something's happening here' moment that anchors the demo.",
+      wigtnflake_feature_hybrid: "Cortex LLM (claude-4-sonnet) for streaming long-Korean reports; GPT-4o for debate personas and Function Calling. A streaming garbage-token detector triggers instant fall-over when Cortex LLM degrades.",
     },
     stats: {
       avgLatency: "Avg. Latency",
@@ -114,6 +125,10 @@ export const TRANSLATIONS = {
       commits: "Commits",
       mergeConflicts: "Merge Conflicts",
       agentPatterns: "Agent Patterns",
+      aiExperts: "AI Experts",
+      snowflakeServices: "Cortex Functions",
+      hackathonRank: "Tech Track",
+      datasetSize: "Datasets",
     },
     modes: {
       mode_v2v_title: "Voice-to-Voice",

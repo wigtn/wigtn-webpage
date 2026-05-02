@@ -1,7 +1,6 @@
 import {
   Navigation,
   Crew,
-  Marquee,
   About,
   Pillars,
   Products,
@@ -15,7 +14,6 @@ export default function Home() {
     <main className="relative h-screen overflow-y-auto bg-[#FAFAFA] scroll-smooth">
       <Navigation />
       <Crew />
-      <Marquee />
       <FeaturedWork />
       <Pillars />
       <About />
