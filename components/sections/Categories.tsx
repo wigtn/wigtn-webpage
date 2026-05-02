@@ -105,7 +105,7 @@ export function Categories() {
         >
           <div className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-3">
             <span className="w-6 h-px bg-violet/40" />
-            <span>Work</span>
+            <span>What we build</span>
           </div>
           <h2 className="text-balance text-lg md:text-xl font-semibold text-foreground tracking-tight leading-snug">
             Pick a category to see what we&apos;ve shipped.

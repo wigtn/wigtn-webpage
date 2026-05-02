@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/constants/projects";
 import { GitHubIcon, YouTubeIcon, HuggingFaceIcon } from "@/components/ui/icons";
@@ -50,16 +51,16 @@ export function ResearchTable({ projects }: ResearchTableProps) {
       <table className="hidden md:table w-full text-sm">
         <thead>
           <tr className="border-b border-black/[0.06] bg-gray-50/60">
-            <th className="text-left px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500 w-[28%]">
+            <th className="text-left px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500 w-[32%]">
               Project
             </th>
             <th className="text-left px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500">
               Venue
             </th>
-            <th className="text-left px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500 w-[18%]">
+            <th className="text-left px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500 w-[16%]">
               Status
             </th>
-            <th className="text-left px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500 w-[18%]">
+            <th className="text-left px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500 w-[16%]">
               Links
             </th>
           </tr>
@@ -74,15 +75,20 @@ export function ResearchTable({ projects }: ResearchTableProps) {
                 className="border-b border-black/[0.04] last:border-b-0 hover:bg-violet/[0.03] transition-colors"
               >
                 <td className="px-5 py-4">
-                  <Link
-                    href={`/projects/${project.slug}/`}
-                    className="font-semibold text-foreground hover:text-violet transition-colors"
-                  >
-                    {project.name}
-                  </Link>
-                  <p className="mt-1 text-[12.5px] text-gray-500 leading-snug line-clamp-2 max-w-md">
-                    {project.tagline}
-                  </p>
+                  <div className="flex items-center gap-3">
+                    <Thumbnail project={project} />
+                    <div className="min-w-0">
+                      <Link
+                        href={`/projects/${project.slug}/`}
+                        className="font-semibold text-foreground hover:text-violet transition-colors"
+                      >
+                        {project.name}
+                      </Link>
+                      <p className="mt-1 text-[12.5px] text-gray-500 leading-snug line-clamp-2 max-w-sm">
+                        {project.tagline}
+                      </p>
+                    </div>
+                  </div>
                 </td>
                 <td className="px-5 py-4 text-gray-700">{venue}</td>
                 <td className="px-5 py-4">
@@ -104,20 +110,24 @@ export function ResearchTable({ projects }: ResearchTableProps) {
           const venue = deriveVenue(project.publication);
           return (
             <li key={project.id} className="px-5 py-4">
-              <Link
-                href={`/projects/${project.slug}/`}
-                className="block"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <span className="font-semibold text-foreground">{project.name}</span>
-                  <StatusPill label={status.label} tone={status.tone} />
-                </div>
-                <p className="mt-1 text-[12.5px] text-gray-500 leading-snug">
-                  {project.tagline}
-                </p>
-                <p className="mt-2 text-[12px] text-gray-700">{venue}</p>
-                <div className="mt-2.5">
-                  <ProjectLinks project={project} />
+              <Link href={`/projects/${project.slug}/`} className="block">
+                <div className="flex items-start gap-3">
+                  <Thumbnail project={project} />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-3">
+                      <span className="font-semibold text-foreground">
+                        {project.name}
+                      </span>
+                      <StatusPill label={status.label} tone={status.tone} />
+                    </div>
+                    <p className="mt-1 text-[12.5px] text-gray-500 leading-snug">
+                      {project.tagline}
+                    </p>
+                    <p className="mt-2 text-[12px] text-gray-700">{venue}</p>
+                    <div className="mt-2.5">
+                      <ProjectLinks project={project} />
+                    </div>
+                  </div>
                 </div>
               </Link>
             </li>
@@ -125,6 +135,27 @@ export function ResearchTable({ projects }: ResearchTableProps) {
         })}
       </ul>
     </div>
+  );
+}
+
+function Thumbnail({ project }: { project: Project }) {
+  const src = project.media.poster;
+  if (!src) {
+    return (
+      <span className="block w-12 h-12 rounded-md border border-black/[0.07] bg-gray-50 flex-shrink-0" />
+    );
+  }
+  return (
+    <span className="relative block w-12 h-12 rounded-md overflow-hidden border border-black/[0.07] bg-gray-50 flex-shrink-0">
+      <Image
+        src={src}
+        alt=""
+        fill
+        sizes="48px"
+        className="object-cover"
+        unoptimized
+      />
+    </span>
   );
 }
 

@@ -194,10 +194,10 @@ export const PHASE_LABEL: Record<Phase, string> = {
 /* ─────────────── Home-page stat bar ─────────────── */
 
 export const HOME_STATS: { value: string; label: string }[] = [
-  { value: "9", label: "production systems shipped" },
   { value: "1", label: "ACL 2026 paper accepted" },
-  { value: "1", label: "ByteDance TRAE Grand Prize" },
-  { value: "5", label: "full-stack AI engineers" },
+  { value: "2", label: "hackathon awards" },
+  { value: "2", label: "open-source projects" },
+  { value: "2", label: "products in development" },
 ];
 
 /* ─────────────── PROJECTS ─────────────── */
