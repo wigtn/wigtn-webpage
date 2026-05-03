@@ -106,7 +106,7 @@ export function CategoryCard({
   return (
     <Link
       href={`/projects/${slug}/`}
-      className="group flex flex-col h-full rounded-xl border border-black/[0.07] bg-white overflow-hidden transition-[border,box-shadow,transform] duration-300 hover:-translate-y-[2px] hover:border-violet/40 hover:shadow-[0_18px_40px_-22px_rgba(76,29,149,0.28)]"
+      className="group flex flex-col h-full min-h-[340px] rounded-xl border border-black/[0.07] bg-white overflow-hidden transition-[border,box-shadow,transform] duration-300 hover:-translate-y-[2px] hover:border-violet/40 hover:shadow-[0_18px_40px_-22px_rgba(76,29,149,0.28)]"
     >
       {/* Visual area — uniform 140px tile. Badge sits in the corner so it
           never overlaps the centred visual. The visual itself is whatever
