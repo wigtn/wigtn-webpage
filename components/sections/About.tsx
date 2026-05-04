@@ -63,7 +63,7 @@ export function About() {
       />
       <div
         aria-hidden
-        className="absolute -bottom-32 -right-24 w-[360px] h-[360px] md:w-[480px] md:h-[480px] rounded-full bg-indigo-200/[0.16] blur-3xl pointer-events-none"
+        className="absolute -bottom-32 -right-24 w-[360px] h-[360px] md:w-[480px] md:h-[480px] rounded-full bg-violet/[0.10] blur-3xl pointer-events-none"
       />
 
       <motion.div

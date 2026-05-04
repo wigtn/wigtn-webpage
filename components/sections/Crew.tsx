@@ -99,7 +99,7 @@ export function Crew() {
       />
       <div
         aria-hidden
-        className="absolute -bottom-32 -right-32 sm:-bottom-40 sm:-right-40 w-[380px] h-[380px] sm:w-[540px] sm:h-[540px] rounded-full bg-indigo-300/[0.09] sm:bg-indigo-300/[0.13] blur-3xl pointer-events-none"
+        className="absolute -bottom-32 -right-32 sm:-bottom-40 sm:-right-40 w-[380px] h-[380px] sm:w-[540px] sm:h-[540px] rounded-full bg-violet/[0.09] sm:bg-violet/[0.13] blur-3xl pointer-events-none"
       />
 
       {/* ═════ One-shot lightning strike during entrance ═════

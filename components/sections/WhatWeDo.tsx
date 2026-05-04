@@ -55,7 +55,7 @@ export function WhatWeDo() {
       />
       <div
         aria-hidden
-        className="absolute -bottom-32 -left-24 w-[360px] h-[360px] md:w-[480px] md:h-[480px] rounded-full bg-indigo-200/[0.24] blur-3xl pointer-events-none"
+        className="absolute -bottom-32 -left-24 w-[360px] h-[360px] md:w-[480px] md:h-[480px] rounded-full bg-violet/[0.13] blur-3xl pointer-events-none"
       />
 
       <motion.div

@@ -82,7 +82,7 @@ export function Categories() {
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -right-32 w-[480px] h-[480px] rounded-full bg-indigo-200/[0.27] blur-3xl pointer-events-none"
+        className="absolute -bottom-40 -right-32 w-[480px] h-[480px] rounded-full bg-violet/[0.13] blur-3xl pointer-events-none"
       />
 
       <div className="relative max-w-6xl mx-auto px-6 w-full">
