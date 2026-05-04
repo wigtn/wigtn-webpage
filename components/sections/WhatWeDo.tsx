@@ -3,16 +3,14 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
-import { useBudouX } from "@/lib/hooks/useBudouX";
 
 /* ─────────────── Category previews ───────────────
  *
- * Each card here is a one-line introduction to a category that lives
- * fully expanded in the <Categories /> tabbed section below. Clicking a
- * card sets the URL hash, which `Categories.tsx`'s hashchange listener
- * picks up to switch to the matching tab and smooth-scroll the section
- * into view. Native <a href="#..."> handles the hash transition without
- * a JS click handler — fewer moving parts, fewer SSR pitfalls. */
+ * Each entry is an anchor link to the matching tab in <Categories />.
+ * Clicking sets the URL hash, which Categories.tsx's hashchange listener
+ * picks up to switch tabs and smooth-scroll the section into view.
+ * Native <a href="#..."> handles the hash transition without a JS click
+ * handler — fewer moving parts, fewer SSR pitfalls. */
 const CATEGORY_KEYS = [
   { hash: "#research", translationKey: "research" as const },
   { hash: "#awards", translationKey: "awards" as const },
@@ -38,17 +36,15 @@ const itemVariants = {
 
 export function WhatWeDo() {
   const { t } = useLanguage();
-  const { processText } = useBudouX();
 
   return (
     <section
       id="what-we-do"
       className="relative min-h-screen flex flex-col justify-center py-20 md:py-28 overflow-hidden"
     >
-      {/* Zigzag blob continuation — Crew ends bottom-RIGHT, so this
-          section opens with top-RIGHT to keep the violet flowing on the
-          same side. Closes at bottom-LEFT, handing off to Categories'
-          top-LEFT. Strength +50% over prior values. */}
+      {/* Zigzag blob continuation — top-RIGHT + bottom-LEFT to keep the
+          violet flowing on the right side from Crew, then hand off the
+          left side to Categories. */}
       <div
         aria-hidden
         className="absolute -top-40 -right-32 w-[420px] h-[420px] md:w-[520px] md:h-[520px] rounded-full bg-violet/[0.09] blur-3xl pointer-events-none"
@@ -65,11 +61,6 @@ export function WhatWeDo() {
         variants={containerVariants}
         className="relative max-w-6xl mx-auto px-6 w-full"
       >
-        {/* Two-column grid on lg+: heading/lead on the left, category
-            cards on the right. `items-center` keeps the left text block
-            and the right card grid vertically balanced — without it the
-            short heading sat near the top while the taller card column
-            stretched below, breaking the visual centerline. */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
           {/* ─── Left column — eyebrow + display heading + lead ─── */}
           <div>
@@ -88,21 +79,32 @@ export function WhatWeDo() {
               {t.whatWeDo.heading}
             </motion.h2>
 
+            {/* Lead paragraph — semantic chunks are wrapped in
+                `whitespace-nowrap` spans so hyphenated phrases never
+                break mid-phrase across line boundaries. The container's
+                `max-w-[42ch]` keeps the line count comfortable. */}
             <motion.p
               variants={itemVariants}
-              className="mt-5 md:mt-6 text-[14.5px] md:text-[16px] text-gray-600 leading-relaxed max-w-md"
+              className="mt-5 md:mt-6 text-[14.5px] md:text-[16px] text-gray-600 leading-relaxed max-w-[42ch]"
             >
-              {processText(t.whatWeDo.lead)}
+              An independent crew of 5 AI engineers. We start from{" "}
+              <span className="whitespace-nowrap">real-world friction</span>{" "}
+              and take ideas all the way to{" "}
+              <span className="whitespace-nowrap">production-grade systems</span>{" "}
+              — across research, open source, awards, and{" "}
+              <span className="whitespace-nowrap">products</span>.
             </motion.p>
           </div>
 
-          {/* ─── Right column — 2×2 category preview grid ───
-              Each card is an anchor to the matching tab in <Categories />.
-              Clicking sets the hash, which the Categories component picks
-              up via its hashchange listener (switches tab + smooth-scrolls). */}
+          {/* ─── Right column — typography-led anchor list ───
+              Border / background / shadow removed entirely. Each entry
+              is a 2x2 grid cell with a header row (title + ↗) over a
+              hairline divider, with a tone-down description below.
+              Hovering shifts title + arrow + underline to violet and
+              translates the arrow a hair toward its destination. */}
           <motion.ul
             variants={itemVariants}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-10"
           >
             {CATEGORY_KEYS.map(({ hash, translationKey }) => {
               const cat = t.whatWeDo.categories[translationKey];
@@ -110,16 +112,25 @@ export function WhatWeDo() {
                 <li key={hash}>
                   <a
                     href={hash}
-                    className="group relative flex flex-col h-full rounded-xl border border-black/[0.07] bg-white/70 backdrop-blur-sm p-5 md:p-6 transition-[border,box-shadow,transform] duration-300 hover:-translate-y-[2px] hover:border-violet/40 hover:shadow-[0_18px_40px_-22px_rgba(76,29,149,0.28)]"
+                    className="group block transition-colors duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet rounded-sm"
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <h3 className="text-base md:text-lg font-semibold text-foreground tracking-tight group-hover:text-violet transition-colors">
+                    {/* Header row — title + arrow */}
+                    <div className="flex items-baseline justify-between gap-3">
+                      <h3 className="text-2xl font-semibold tracking-tight text-foreground group-hover:text-violet transition-colors duration-200 ease-out">
                         {cat.title}
                       </h3>
-                      <ArrowUpRight className="w-4 h-4 text-gray-300 group-hover:text-violet transition-colors flex-shrink-0 mt-0.5" />
+                      <ArrowUpRight
+                        className="w-5 h-5 text-gray-300 group-hover:text-violet transition-all duration-200 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5 flex-shrink-0"
+                        strokeWidth={1.75}
+                      />
                     </div>
-                    <p className="mt-2 text-[13px] md:text-[13.5px] text-gray-600 leading-relaxed">
-                      {processText(cat.description)}
+
+                    {/* Hairline divider — switches to violet on hover */}
+                    <div className="mt-3 h-px w-full bg-gray-200 group-hover:bg-violet transition-colors duration-200 ease-out" />
+
+                    {/* Description — toned-down gray */}
+                    <p className="mt-3 text-[13.5px] md:text-[14px] text-gray-500 leading-relaxed">
+                      {cat.description}
                     </p>
                   </a>
                 </li>
