@@ -45,14 +45,17 @@ export function WhatWeDo() {
       id="what-we-do"
       className="relative min-h-screen flex flex-col justify-center py-20 md:py-28 overflow-hidden"
     >
-      {/* Quiet violet washes — same vocabulary as the rest of the site. */}
+      {/* Zigzag blob continuation — Crew ends bottom-RIGHT, so this
+          section opens with top-RIGHT to keep the violet flowing on the
+          same side. Closes at bottom-LEFT, handing off to Categories'
+          top-LEFT. Strength +50% over prior values. */}
       <div
         aria-hidden
-        className="absolute -top-40 -left-32 w-[420px] h-[420px] md:w-[520px] md:h-[520px] rounded-full bg-violet/[0.06] blur-3xl pointer-events-none"
+        className="absolute -top-40 -right-32 w-[420px] h-[420px] md:w-[520px] md:h-[520px] rounded-full bg-violet/[0.09] blur-3xl pointer-events-none"
       />
       <div
         aria-hidden
-        className="absolute -bottom-32 -right-24 w-[360px] h-[360px] md:w-[480px] md:h-[480px] rounded-full bg-indigo-200/[0.16] blur-3xl pointer-events-none"
+        className="absolute -bottom-32 -left-24 w-[360px] h-[360px] md:w-[480px] md:h-[480px] rounded-full bg-indigo-200/[0.24] blur-3xl pointer-events-none"
       />
 
       <motion.div
