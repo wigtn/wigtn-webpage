@@ -21,7 +21,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     featured: true,
     currentRole:
       "AI Research Engineer & Engineering Part Lead at BrainCrew (LangChain Global Partner Co.)",
-    credential: "Ex-Hyundai E&C, Soundmind",
+    credential: "Ex-Hyundai E&C",
     expertise: [],
     links: {
       github: "https://github.com/Hyeongseob91",
@@ -34,7 +34,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     bio: "Builds LLM-powered applications and autonomous agent systems. Focuses on multi-agent orchestration and workflow automation.",
     image: "/images/team/sangwoo_son.jpg",
     imagePosition: "left top",
-    currentRole: "AI Engineer & AX Team Lead at Soundmind",
+    currentRole: "AI Engineer & AX Team Lead",
     expertise: [],
     links: {
       github: "https://github.com/wigtn",
@@ -47,7 +47,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     bio: "Manages full MLOps pipelines with Docker, Kubernetes, and CI/CD. Also serves as the team's DBA and leads UI/UX direction.",
     image: "/images/team/jinmo_kim.png",
     imagePosition: "center 30%",
-    currentRole: "DevOps Engineer at Soundmind",
+    currentRole: "DevOps Engineer",
     expertise: [],
     links: {
       github: "https://github.com/moriroKim",
@@ -60,7 +60,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     bio: "Mobile-first full-stack engineer covering the entire 3-tier stack with React Native. Focused on software engineering craft rather than model development.",
     image: "/images/team/hyeonsang_kim.jpg",
     imagePosition: "center 35%",
-    currentRole: "Full-Stack Developer & MX Team Lead at Soundmind",
+    currentRole: "Full-Stack Developer & MX Team Lead",
     expertise: [],
     links: {
       github: "https://github.com/HyeonsangKim",
@@ -73,7 +73,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     bio: "Web-focused full-stack engineer who builds across the 3-tier architecture. Brings mobile experience with React Native and leverages AI-native tooling for rapid delivery.",
     image: "/images/team/hyunwoo_cho.jpg",
     imagePosition: "center 20%",
-    currentRole: "Full-Stack Developer at Soundmind",
+    currentRole: "Full-Stack Developer",
     expertise: [],
     links: {
       linkedin:
