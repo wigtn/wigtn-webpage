@@ -17,11 +17,18 @@ export function Footer() {
             </span>
           </div>
 
-          {/* Right - Contact */}
+          {/* Right - Contact
+              Opens Gmail's web compose window with the recipient
+              pre-filled instead of relying on the OS mailto handler.
+              A click that doesn't open *anything* (when no mailto
+              handler is registered) reads as broken. Opens in a new
+              tab so the user doesn't lose the WIGTN page on send. */}
           <div className="text-left md:text-right">
             <span className="text-sm text-gray-400 block mb-1">Contact us</span>
             <a
-              href="mailto:contact@wigtn.com"
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-foreground hover:text-violet transition-colors"
             >
               contact@wigtn.com
