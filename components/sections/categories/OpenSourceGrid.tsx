@@ -49,7 +49,7 @@ export function OpenSourceGrid({ projects }: OpenSourceGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 items-stretch">
       {projects.map((project) => (
         <CategoryCard
           key={project.id}
@@ -59,7 +59,8 @@ export function OpenSourceGrid({ projects }: OpenSourceGridProps) {
           meta={metaFor(project)}
           badge={badgeFor(project)}
           links={linksFor(project)}
-          visual={<GitHubIcon className="w-10 h-10 text-gray-700" />}
+          visualClassName="bg-gradient-to-br from-sky-50 to-sky-100"
+          visual={<GitHubIcon className="w-16 h-16 text-sky-700/80" />}
         />
       ))}
     </div>

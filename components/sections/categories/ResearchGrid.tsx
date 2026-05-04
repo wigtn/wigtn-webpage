@@ -58,7 +58,7 @@ export function ResearchGrid({ projects }: ResearchGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 items-stretch">
       {projects.map((project) => {
         const logoSrc = LOGO_OVERRIDES[project.slug] ?? project.media.poster;
         return (
@@ -70,17 +70,20 @@ export function ResearchGrid({ projects }: ResearchGridProps) {
             meta={venueFor(project.publication)}
             badge={badgeFor(project.publication)}
             links={linksFor(project)}
+            visualClassName="bg-gray-50"
             visual={
-              <div className="relative w-20 h-20 sm:w-24 sm:h-24">
-                <Image
-                  src={logoSrc}
-                  alt={`${project.name} logo`}
-                  fill
-                  sizes="96px"
-                  className="object-contain"
-                  unoptimized
-                />
-              </div>
+              // Full-bleed image — fills the 16:10 visual tile via
+              // object-cover. `object-position: center` centers wide
+              // diagrams (e.g. the WigtnOCR logo banner) so important
+              // detail isn't cropped to a corner.
+              <Image
+                src={logoSrc}
+                alt={`${project.name} preview`}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="object-cover object-center"
+                unoptimized
+              />
             }
           />
         );

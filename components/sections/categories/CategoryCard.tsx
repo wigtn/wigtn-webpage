@@ -16,16 +16,19 @@ import {
  * filtering a uniform grid, not jumping between unrelated UI paradigms.
  *
  * Card layout, top to bottom:
- *   1. Visual area  — fixed-height tile with the project logo / icon
- *                     centred via `object-contain`. Top-left corner
- *                     carries an optional badge that NEVER overlaps the
- *                     visual itself (it sits above the content area).
+ *   1. Visual area  — `aspect-[16/10]` tile. Each tab passes its own
+ *                     `visualClassName` (background / padding); the
+ *                     `visual` ReactNode is centered inside.
  *   2. Title        — semibold, hover→violet.
  *   3. Description  — one to two lines, gray-600.
  *   4. Meta         — venue / event / platform line, gray-500 small.
- *   5. Links row    — GitHub / Video / HF / Live / npm icons.
+ *   5. Links row    — pill-style chips. All chips same height/padding so
+ *                     the hit target is uniform regardless of label
+ *                     length (was a problem with inline text+icon).
  *
- * Cards in a grid stretch to equal height via `h-full + flex flex-col`.
+ * Cards in a grid stretch to equal height via `h-full + flex flex-col`,
+ * and the chip row sits at the bottom (`mt-auto`) so cards align even
+ * when descriptions differ in length.
  */
 
 export type BadgeTone =
@@ -51,10 +54,15 @@ interface CategoryCardProps {
   description: string;
   /** Venue / event / platform — gray meta line below the description. */
   meta?: string | null;
-  /** ReactNode rendered inside the visual area. Each tab decides what
-   *  this is — a project logo `<Image>`, a Lucide icon, or text initials.
-   *  Centred inside a fixed 140px-tall `bg-gray-50` tile. */
+  /** ReactNode rendered inside the visual area. */
   visual: ReactNode;
+  /** Tailwind classes appended to the visual-area wrapper — each tab
+   *  controls its own background and padding. Defaults to a neutral
+   *  gray fill. Examples:
+   *    - Research:   "bg-gray-50"           (image full-bleeds inside)
+   *    - Awards:     "bg-gradient-to-br from-amber-50 to-amber-100"
+   *    - OpenSource: "bg-gradient-to-br from-sky-50 to-sky-100"   */
+  visualClassName?: string;
   /** Top-left badge above the visual area. */
   badge?: { label: string; tone: BadgeTone } | null;
   /** External links rendered at the bottom of the card. */
@@ -74,22 +82,23 @@ const LINK_ICON: Record<
   CategoryCardLink["kind"],
   { icon: React.ReactNode; label: string }
 > = {
-  github: { icon: <GitHubIcon className="w-3.5 h-3.5" />, label: "GitHub" },
+  github: { icon: <GitHubIcon className="w-4 h-4" />, label: "GitHub" },
   video: {
-    icon: <YouTubeIcon className="w-3.5 h-3.5 text-red-600" />,
+    // YouTube red kept regardless of hover — brand recognition first.
+    icon: <YouTubeIcon className="w-4 h-4 text-red-600" />,
     label: "Video",
   },
   huggingface: {
-    icon: <HuggingFaceIcon className="w-3.5 h-3.5 rounded-full" />,
+    icon: <HuggingFaceIcon className="w-4 h-4 rounded-full" />,
     label: "HF",
   },
-  live: { icon: <ArrowUpRight className="w-3.5 h-3.5" />, label: "Live" },
+  live: { icon: <ArrowUpRight className="w-4 h-4" />, label: "Live" },
   npm: {
-    icon: <span className="text-[10px] font-mono">npm</span>,
+    icon: <span className="text-[10px] font-mono leading-none">npm</span>,
     label: "npm",
   },
   news: {
-    icon: <Newspaper className="w-3.5 h-3.5" strokeWidth={1.75} />,
+    icon: <Newspaper className="w-4 h-4" strokeWidth={1.75} />,
     label: "News",
   },
 };
@@ -100,21 +109,25 @@ export function CategoryCard({
   description,
   meta,
   visual,
+  visualClassName = "bg-gray-50",
   badge,
   links,
 }: CategoryCardProps) {
   return (
     <Link
       href={`/projects/${slug}/`}
-      className="group flex flex-col h-full min-h-[340px] rounded-xl border border-black/[0.07] bg-white overflow-hidden transition-[border,box-shadow,transform] duration-300 hover:-translate-y-[2px] hover:border-violet/40 hover:shadow-[0_18px_40px_-22px_rgba(76,29,149,0.28)]"
+      className="group flex flex-col h-full rounded-xl border border-black/[0.07] bg-white overflow-hidden transition-[border,box-shadow,transform] duration-300 hover:-translate-y-[2px] hover:border-violet/40 hover:shadow-[0_18px_40px_-22px_rgba(76,29,149,0.28)]"
     >
-      {/* Visual area — uniform 140px tile. Badge sits in the corner so it
-          never overlaps the centred visual. The visual itself is whatever
-          ReactNode the tab provides (logo, icon, or initials). */}
-      <div className="relative h-[140px] bg-gray-50/80 flex items-center justify-center px-4">
+      {/* Visual area — 16:10 aspect, fills the card width. The wrapper
+          background / padding is controlled per-tab via `visualClassName`
+          so Research can full-bleed an image while Awards can drop a
+          medal-tinted gradient behind a Lucide icon. */}
+      <div
+        className={`relative aspect-[16/10] flex items-center justify-center overflow-hidden ${visualClassName}`}
+      >
         {badge && (
           <span
-            className={`absolute top-3 left-3 inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-mono font-semibold tracking-[0.12em] uppercase ${BADGE_TONE[badge.tone]}`}
+            className={`absolute top-3 left-3 z-10 inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-mono font-semibold tracking-[0.12em] uppercase ${BADGE_TONE[badge.tone]}`}
           >
             {badge.label}
           </span>
@@ -124,7 +137,7 @@ export function CategoryCard({
       </div>
 
       {/* Content area */}
-      <div className="flex flex-col flex-1 p-5 gap-1.5">
+      <div className="flex flex-col flex-1 p-6 gap-1.5">
         <h3 className="text-base md:text-lg font-semibold text-foreground tracking-tight group-hover:text-violet transition-colors">
           {name}
         </h3>
@@ -135,8 +148,12 @@ export function CategoryCard({
           <p className="text-[11.5px] text-gray-500 mt-0.5">{meta}</p>
         )}
 
+        {/* Pill-style link chips. Uniform padding + height regardless of
+            label length, so the hit target is consistent across "Video"
+            (long) and "HF" (short). Sits at the card bottom via mt-auto
+            so cards with shorter descriptions still align. */}
         {links && links.length > 0 && (
-          <div className="flex flex-wrap items-center gap-3 mt-auto pt-3">
+          <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-gray-100">
             {links.map((link) => {
               const meta = LINK_ICON[link.kind];
               return (
@@ -145,8 +162,7 @@ export function CategoryCard({
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`${name} — ${link.label ?? meta.label}`}
-                  className="inline-flex items-center gap-1.5 text-[12px] text-gray-500 hover:text-violet transition-colors"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors duration-150 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
                   onClick={(e) => e.stopPropagation()}
                 >
                   {meta.icon}
