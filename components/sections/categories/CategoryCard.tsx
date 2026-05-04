@@ -162,7 +162,10 @@ export function CategoryCard({
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors duration-150 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
+                  // `min-w-[96px]` + `justify-center` keeps every chip
+                  // the same hit-target width regardless of label length
+                  // — "HF" no longer renders half the size of "GitHub".
+                  className="inline-flex items-center justify-center gap-1.5 min-w-[96px] rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors duration-150 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
                   onClick={(e) => e.stopPropagation()}
                 >
                   {meta.icon}

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Trophy } from "lucide-react";
 import type { AchievementResult, Project } from "@/constants/projects";
 import { CategoryCard, type BadgeTone, type CategoryCardLink } from "./CategoryCard";
@@ -31,10 +32,9 @@ const RESULT_TONE: Partial<Record<AchievementResult, BadgeTone>> = {
   participated: "gray",
 };
 
-/* Subtle gradient backgrounds keyed off the badge tone. The amber tier
- * marks Grand Prize / winner, slate marks 2nd-3rd-finalist, gray marks
- * "participated" (no medal). Saturation kept low so the card body text
- * stays the focal point. */
+/* Tier-tinted gradient — used as the wrapper fallback when a project
+ * has no poster image. With a poster the image full-bleeds and the
+ * gradient is hidden behind it. */
 const TONE_GRADIENT: Record<BadgeTone, string> = {
   amber: "bg-gradient-to-br from-amber-50 to-amber-100",
   slate: "bg-gradient-to-br from-slate-50 to-slate-100",
@@ -91,6 +91,8 @@ export function AwardsGrid({ projects }: AwardsGridProps) {
           ? [achievement.event, achievement.organizer].filter(Boolean).join(" · ")
           : null;
 
+        const hasPoster = Boolean(project.media.poster);
+
         return (
           <CategoryCard
             key={project.id}
@@ -100,12 +102,25 @@ export function AwardsGrid({ projects }: AwardsGridProps) {
             meta={meta}
             badge={label ? { label, tone } : null}
             links={linksFor(project)}
-            visualClassName={TONE_GRADIENT[tone]}
+            // Image cards use `bg-gray-50` so any letter-boxed gap reads
+            // as neutral; iconic fallbacks reuse the tier gradient.
+            visualClassName={hasPoster ? "bg-gray-50" : TONE_GRADIENT[tone]}
             visual={
-              <Trophy
-                className={`w-20 h-20 ${TROPHY_TONE[tone]}`}
-                strokeWidth={1.25}
-              />
+              hasPoster ? (
+                <Image
+                  src={project.media.poster}
+                  alt={`${project.name} preview`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover object-center"
+                  unoptimized
+                />
+              ) : (
+                <Trophy
+                  className={`w-20 h-20 ${TROPHY_TONE[tone]}`}
+                  strokeWidth={1.25}
+                />
+              )
             }
           />
         );
