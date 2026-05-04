@@ -31,6 +31,28 @@ const RESULT_TONE: Partial<Record<AchievementResult, BadgeTone>> = {
   participated: "gray",
 };
 
+/* Subtle gradient backgrounds keyed off the badge tone. The amber tier
+ * marks Grand Prize / winner, slate marks 2nd-3rd-finalist, gray marks
+ * "participated" (no medal). Saturation kept low so the card body text
+ * stays the focal point. */
+const TONE_GRADIENT: Record<BadgeTone, string> = {
+  amber: "bg-gradient-to-br from-amber-50 to-amber-100",
+  slate: "bg-gradient-to-br from-slate-50 to-slate-100",
+  gray: "bg-gradient-to-br from-gray-50 to-gray-100",
+  violet: "bg-gradient-to-br from-violet/[0.04] to-violet/[0.10]",
+  emerald: "bg-gradient-to-br from-emerald-50 to-emerald-100",
+  sky: "bg-gradient-to-br from-sky-50 to-sky-100",
+};
+
+const TROPHY_TONE: Record<BadgeTone, string> = {
+  amber: "text-amber-500",
+  slate: "text-slate-400",
+  gray: "text-gray-400",
+  violet: "text-violet",
+  emerald: "text-emerald-500",
+  sky: "text-sky-500",
+};
+
 function linksFor(project: Project): CategoryCardLink[] {
   const out: CategoryCardLink[] = [];
   if (project.links.github) out.push({ kind: "github", href: project.links.github });
@@ -50,7 +72,7 @@ export function AwardsGrid({ projects }: AwardsGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 items-stretch">
       {projects.map((project) => {
         const achievement = project.achievements?.[0];
         const result = achievement?.result;
@@ -78,12 +100,11 @@ export function AwardsGrid({ projects }: AwardsGridProps) {
             meta={meta}
             badge={label ? { label, tone } : null}
             links={linksFor(project)}
+            visualClassName={TONE_GRADIENT[tone]}
             visual={
               <Trophy
-                className={`w-10 h-10 ${
-                  tone === "amber" ? "text-amber-500" : "text-gray-400"
-                }`}
-                strokeWidth={1.5}
+                className={`w-20 h-20 ${TROPHY_TONE[tone]}`}
+                strokeWidth={1.25}
               />
             }
           />
