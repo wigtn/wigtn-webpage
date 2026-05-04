@@ -15,26 +15,27 @@ export const TRANSLATIONS = {
   whatWeDo: {
     eyebrow: "What we do",
     heading: "We ship across four fronts.",
-    lead: "An independent crew of five AI engineers. We start from real-world friction and take ideas all the way to production-grade systems — across research, open source, awards, and products.",
+    lead: "An independent crew of 5 AI engineers. We start from real-world friction and take ideas all the way to production-grade systems — across research, open source, awards, and products.",
     categories: {
       research: {
         title: "Research",
         description:
-          "Peer-reviewed papers at top NLP venues. ACL 2026 (accepted), EMNLP 2026 (in preparation).",
+          "Pursuing peer-reviewed research at top NLP venues like ACL and EMNLP.",
       },
       awards: {
         title: "Awards",
         description:
-          "International hackathon recognition. ByteDance Trae.ai Seoul winner, Snowflake AI Korea runner-up.",
+          "Competing at international AI hackathons run by ByteDance, Snowflake, Google, and more.",
       },
       openSource: {
         title: "Open Source",
         description:
-          "Tools used by the developer community. Claude Code plugins, npm packages, HuggingFace models.",
+          "Building tools the developer community can actually use — plugins, npm packages, model weights.",
       },
       products: {
         title: "Products",
-        description: "Mobile apps in active development.",
+        description:
+          "Shipping AI-native consumer and B2B products that solve real friction.",
       },
     },
   },
