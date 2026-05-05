@@ -145,25 +145,34 @@ export function CategoryCard({
         {visual}
       </div>
 
-      {/* Content area */}
+      {/* Content area
+          Heights of every block in this column are reserved with min-h
+          so the grid keeps the same vertical rhythm across all four
+          tabs — switching tabs no longer shifts the title/desc/meta/
+          chip-row baselines. `min-h-[2lh]` reserves exactly two lines
+          for the description even when it only fills one, and the
+          meta slot always renders (with NBSP fallback) so the chip
+          row never floats up. */}
       <div className="flex flex-col flex-1 p-6 gap-1.5">
-        <h3 className="text-base md:text-lg font-semibold text-foreground tracking-tight group-hover:text-violet transition-colors">
+        <h3 className="text-base md:text-lg font-semibold text-foreground tracking-tight group-hover:text-violet transition-colors line-clamp-1 min-h-[1lh]">
           {name}
         </h3>
-        <p className="text-[13px] text-gray-600 leading-relaxed line-clamp-2">
+        <p className="text-[13px] text-gray-600 leading-relaxed line-clamp-2 min-h-[2lh]">
           {description}
         </p>
-        {meta && (
-          <p className="text-[11.5px] text-gray-500 mt-0.5">{meta}</p>
-        )}
+        <p className="text-[11.5px] text-gray-500 mt-0.5 line-clamp-1 min-h-[1lh]">
+          {meta ?? " "}
+        </p>
 
         {/* Footer row — link chips on the left, optional award badge
             anchored to the right via `ml-auto` so the badge stays at
             the card edge whether or not the chip group renders. Sits
             at the card bottom via mt-auto so cards with shorter
-            descriptions still align. */}
-        {hasFooter && (
-          <div className="mt-auto pt-4 border-t border-gray-100 flex items-center gap-3">
+            descriptions still align. Always rendered (with min-height)
+            so cards in tabs without a footer still match the height of
+            cards in tabs that do. */}
+        {hasFooter ? (
+          <div className="mt-auto pt-4 border-t border-gray-100 flex items-center gap-3 min-h-[58px]">
             {hasLinks && (
               <div className="flex flex-wrap gap-2">
                 {links!.map((link) => {
@@ -189,6 +198,13 @@ export function CategoryCard({
             )}
             {awardBadge && <div className="ml-auto">{awardBadge}</div>}
           </div>
+        ) : (
+          // Empty footer placeholder — keeps cards in tabs without
+          // links/badges visually level with the others.
+          <div
+            aria-hidden
+            className="mt-auto pt-4 border-t border-gray-100 h-[58px]"
+          />
         )}
       </div>
     </Link>
