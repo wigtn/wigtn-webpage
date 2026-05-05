@@ -42,17 +42,7 @@ export function WhatWeDo() {
       id="what-we-do"
       className="relative min-h-screen flex flex-col justify-center py-20 md:py-28"
     >
-      {/* Zigzag blob continuation — top-RIGHT + bottom-LEFT to keep the
-          violet flowing on the right side from Crew, then hand off the
-          left side to Categories. */}
-      <div
-        aria-hidden
-        className="absolute -top-40 -right-32 w-[420px] h-[420px] md:w-[520px] md:h-[520px] rounded-full bg-violet/[0.10] blur-3xl pointer-events-none"
-      />
-      <div
-        aria-hidden
-        className="absolute -bottom-32 -left-24 w-[360px] h-[360px] md:w-[480px] md:h-[480px] rounded-full bg-violet/[0.10] blur-3xl pointer-events-none"
-      />
+      {/* Background blobs moved to page-level <BackgroundDecor />. */}
 
       <motion.div
         initial="hidden"

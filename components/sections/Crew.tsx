@@ -86,24 +86,11 @@ export function Crew() {
         </defs>
       </svg>
 
-      {/* ═════ Background — two corner orbs ═════
-       *
-       *   Zigzag pattern across the page: this section anchors orbs at
-       *   top-LEFT (violet) + bottom-RIGHT (indigo). The next section
-       *   (WhatWeDo) picks up on the right side at top-RIGHT, then flips
-       *   to bottom-LEFT — and so on. Strength bumped ~50% over the
-       *   previous values so the gradient reads clearly.  */}
-      {/* Uniform opacity across all section blobs (top + bottom + every
-          adjacent section) so the gradient density doesn't step at any
-          section boundary. */}
-      <div
-        aria-hidden
-        className="absolute -top-32 -left-32 sm:-top-40 sm:-left-40 w-[360px] h-[360px] sm:w-[520px] sm:h-[520px] rounded-full bg-violet/[0.10] blur-3xl pointer-events-none"
-      />
-      <div
-        aria-hidden
-        className="absolute -bottom-32 -right-32 sm:-bottom-40 sm:-right-40 w-[380px] h-[380px] sm:w-[540px] sm:h-[540px] rounded-full bg-violet/[0.10] blur-3xl pointer-events-none"
-      />
+      {/* Background blobs moved to page-level <BackgroundDecor /> so the
+          violet ambient gradient flows continuously across the entire
+          page. `overflow-hidden` is kept on this section because the
+          Lightning canvas below extends past the viewport edges and we
+          don't want it to leak into the rest of the page. */}
 
       {/* ═════ One-shot lightning strike during entrance ═════
        *   Whisper-soft: intensity 0.5 + 22 % wrapper opacity. The bolt
