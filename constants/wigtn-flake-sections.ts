@@ -1,7 +1,7 @@
 import type { ResearchSection } from "./projects";
 
 /**
- * WIGTN FLAKE — Snowflake AI & Data Hackathon Korea 2026, Tech Track Top 3.
+ * WIGTN FLAKE — Snowflake AI & Data Hackathon Korea 2026, Tech Track 2nd Place.
  *
  * Purpose-driven neighborhood-intelligence platform built on Snowflake Cortex.
  * Source of truth for this content: the wigtn-for-snowflake repository
@@ -27,8 +27,8 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
         images: [
           {
             src: "/images/projects/wigtn-flake-title.jpg",
-            alt: "Snowflake AI & Data Hackathon 2026 — Tech Track Top 3, WIGTN Flake announcement on stage.",
-            caption: "Tech Track Top 3 announcement — WIGTN Flake : Snowflake Cortex 기반 실시간 데이터 검증을 통한 '목적 중심 에이전트 토론' 플랫폼.",
+            alt: "Snowflake AI & Data Hackathon 2026 — Tech Track 2nd Place, WIGTN Flake announcement on stage.",
+            caption: "Tech Track 2nd Place announcement — WIGTN Flake : Snowflake Cortex 기반 실시간 데이터 검증을 통한 '목적 중심 에이전트 토론' 플랫폼.",
           },
         ],
       },
@@ -36,7 +36,7 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
         type: "highlights",
         title: "Key Results",
         items: [
-          "<strong>Snowflake AI &amp; Data Hackathon Korea 2026 — Tech Track Top 3</strong>",
+          "<strong>Snowflake AI &amp; Data Hackathon Korea 2026 — Tech Track 2nd Place</strong>",
           "<strong>11 Snowflake Cortex functions</strong> woven into a single user flow (Agent, Analyst × 4, LLM, FORECAST, ANOMALY_DETECTION, AI_SENTIMENT, AI_CLASSIFY, data_to_chart, Dynamic Tables × 2, Python UDF × 2, Semantic Model YAML × 4)",
           "<strong>5 AI experts × 4 datasets</strong> — purpose-tuned personas debate over SPH, RichGo, NextTrade, and AJD telemetry via Cortex Analyst text-to-SQL",
           "<strong>3-tier fallback architecture</strong> — Cortex Agent → Cortex Analyst direct → GPT-4o Function Calling — keeps the demo green even when trial limits hit",
@@ -283,7 +283,7 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
         rows: [
           { cells: ["Hackathon", "Snowflake AI &amp; Data Hackathon Korea 2026"] },
           { cells: ["Track", "Tech Track"] },
-          { cells: ["Result", "Top 3"], highlight: true },
+          { cells: ["Result", "2nd Place"], highlight: true },
           { cells: ["Snowflake Cortex functions used", "11"] },
           { cells: ["Datasets", "4 (SPH · RichGo · NextTrade · AJD)"] },
           { cells: ["Semantic Models", "4 YAML"] },

@@ -482,10 +482,10 @@ export const PROJECTS: Project[] = [
     sectionBadge: "2nd Place",
     phase: "completed",
     featured: true,
-    homepageBadge: "SNOWFLAKE 2026 · TECH TRACK TOP 3",
-    homepageMetrics: ["11 Snowflake Cortex functions", "5 AI experts × 4 datasets", "Tech Track · Top 3"],
+    homepageBadge: "SNOWFLAKE 2026 · TECH TRACK · 2ND PLACE",
+    homepageMetrics: ["11 Snowflake Cortex functions", "5 AI experts × 4 datasets", "Tech Track · 2nd Place"],
     tagline: "Pick what you want to do — open a cafe, target rental-appliance ads, find a billboard site, invest, or detect anomalies. Five Cortex-powered AI experts cross-query four real-world datasets and answer with a Top 3 ranking, anomaly badges, and a 6-month forecast.",
-    description: "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform. The user picks one of five preset goals (or types their own); a GPT-4o orchestrator summons five purpose-tuned experts who debate in a Slack-style chat while Cortex Analyst executes text-to-SQL across four Semantic Models — SPH (foot traffic + card sales), RichGo (real estate), NextTrade (markets), and AJD (telecom). ANOMALY_DETECTION auto-injects \"watch this district\" badges, FORECAST projects six months out, and the conversation converges into a ranked Top 3 with a concrete action checklist. Tech Track Top 3 at Snowflake AI & Data Hackathon Korea 2026.",
+    description: "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform. The user picks one of five preset goals (or types their own); a GPT-4o orchestrator summons five purpose-tuned experts who debate in a Slack-style chat while Cortex Analyst executes text-to-SQL across four Semantic Models — SPH (foot traffic + card sales), RichGo (real estate), NextTrade (markets), and AJD (telecom). ANOMALY_DETECTION auto-injects \"watch this district\" badges, FORECAST projects six months out, and the conversation converges into a ranked Top 3 with a concrete action checklist. Tech Track 2nd place at Snowflake AI & Data Hackathon Korea 2026.",
     gradient: "from-sky-500 to-blue-600",
     media: {
       // Stage banner used as the homepage Awards-card poster; the
@@ -500,7 +500,7 @@ export const PROJECTS: Project[] = [
         event: "Snowflake AI & Data Hackathon Korea 2026 — Tech Track",
         organizer: "Snowflake",
         result: "second-place",
-        note: "Tech Track Top 3",
+        note: "Tech Track 2nd Place",
       },
     ],
     links: {
@@ -512,7 +512,7 @@ export const PROJECTS: Project[] = [
       stats: [
         { value: "11", labelKey: "snowflakeServices" },
         { value: "5", labelKey: "aiExperts" },
-        { value: "Top 3", labelKey: "hackathonRank" },
+        { value: "2nd", labelKey: "hackathonRank" },
         { value: "4", labelKey: "datasetSize" },
       ],
       features: [

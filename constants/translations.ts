@@ -109,10 +109,10 @@ export const TRANSLATIONS = {
     },
     wigtnflake: {
       tagline: "Pick a goal, get a data-backed Top 3 of Seoul districts — five Cortex-powered AI experts debate the answer.",
-      description: "WIGTN Flake is a purpose-driven neighborhood-intelligence platform. The user picks a goal — open a cafe, target rental-appliance ads, place a billboard, invest, or detect anomalies — and five Cortex-powered AI experts cross-query four datasets (SPH, RichGo, NextTrade, AJD) over Cortex Analyst, ANOMALY_DETECTION, and FORECAST. The output is a ranked Top 3 of Seoul districts, anomaly badges, six-month projections, and a concrete action checklist. Tech Track Top 3 at Snowflake AI & Data Hackathon Korea 2026.",
+      description: "WIGTN Flake is a purpose-driven neighborhood-intelligence platform. The user picks a goal — open a cafe, target rental-appliance ads, place a billboard, invest, or detect anomalies — and five Cortex-powered AI experts cross-query four datasets (SPH, RichGo, NextTrade, AJD) over Cortex Analyst, ANOMALY_DETECTION, and FORECAST. The output is a ranked Top 3 of Seoul districts, anomaly badges, six-month projections, and a concrete action checklist. Tech Track 2nd place at Snowflake AI & Data Hackathon Korea 2026.",
       problem: "Public-data dashboards in Korea answer \"how many people walk through Yeoksam-dong?\" but rarely \"so where should I open my cafe?\" Generic dashboards aren't goal-aware, single-perspective AI is too agreeable, and cross-querying real estate × foot traffic × card sales × telecom requires manual spreadsheet work that takes a week.",
       solution: "Pick one of five preset purposes (or type your own). A GPT-4o orchestrator summons five purpose-tuned experts who debate in a Slack-style chat while Cortex Analyst runs text-to-SQL across four Semantic Models. ANOMALY_DETECTION auto-injects 'watch this district' badges, FORECAST projects six months out, and the report converges into a Top 3 ranking with a purpose-specific action checklist.",
-      statusBadge: "Top 3",
+      statusBadge: "2nd Place",
     },
     features: {
       wigvo_feature_dual: "Two parallel OpenAI Realtime sessions handle each side of the conversation independently, ensuring natural turn-taking.",
