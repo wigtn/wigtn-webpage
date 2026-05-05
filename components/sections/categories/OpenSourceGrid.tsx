@@ -66,7 +66,7 @@ export function OpenSourceGrid({ projects }: OpenSourceGridProps) {
           visualClassName="bg-white"
           visual={
             <Image
-              src="/images/projects/wigtn-logo.png"
+              src="/images/wigtn_logo_banner.jpg"
               alt="WIGTN brand mark"
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
