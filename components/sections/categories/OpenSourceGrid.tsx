@@ -1,7 +1,7 @@
 "use client";
 
+import Image from "next/image";
 import type { Project } from "@/constants/projects";
-import { GitHubIcon } from "@/components/ui/icons";
 import { CategoryCard, type CategoryCardLink } from "./CategoryCard";
 
 interface OpenSourceGridProps {
@@ -59,8 +59,21 @@ export function OpenSourceGrid({ projects }: OpenSourceGridProps) {
           meta={metaFor(project)}
           badge={badgeFor(project)}
           links={linksFor(project)}
-          visualClassName="bg-gradient-to-br from-sky-50 to-sky-100"
-          visual={<GitHubIcon className="w-16 h-16 text-sky-700/80" />}
+          // Open-source cards reuse the WIGTN brand mark — both repos
+          // (WIGSS, WIGTN Coding) live in the wigtn org, so the brand
+          // is the consistent identifier. `object-contain` so the logo's
+          // aspect doesn't get cropped at small card widths.
+          visualClassName="bg-white"
+          visual={
+            <Image
+              src="/images/projects/wigtn-logo.png"
+              alt="WIGTN brand mark"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-contain p-8"
+              unoptimized
+            />
+          }
         />
       ))}
     </div>

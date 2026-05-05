@@ -85,17 +85,6 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
           "<strong>Step 5 — Decision report.</strong> Top 3 ranking cards · anomaly signal badges · 6-month FORECAST charts · purpose-specific action checklist (\"secure 500m radius around the Banpo subway exit; peak 12-14h; lead with Instagram\").",
         ],
       },
-      {
-        type: "figure",
-        layout: "single",
-        images: [
-          {
-            src: "/images/projects/wigtn-flake-chat-ui.jpg",
-            alt: "WIGTN Flake chat UI — Slack-style debate between five Cortex-powered experts, with live Cortex Analyst query results and anomaly detection runs in side panels.",
-            caption: "Live debate UI — five experts argue while Cortex Analyst, FORECAST, and ANOMALY_DETECTION run side-by-side. The chat itself is the artifact.",
-          },
-        ],
-      },
     ],
   },
   {
@@ -139,8 +128,8 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
         layout: "single",
         images: [
           {
-            src: "/images/projects/wigtn-flake-architecture.jpg",
-            alt: "Architecture diagram — four hackathon datasets (RichGo + SPH, NextTrade, AJD) split by data shape and routed to Snowflake ML.FORECAST, Semantic Model registration, and sentiment scoring.",
+            src: "/images/projects/wigtn-flake-datasets.jpg",
+            alt: "Dataset assignment chart from the live presentation — four hackathon datasets routed to Snowflake ML.FORECAST, Semantic Model, and AI_SENTIMENT.",
             caption: "Four datasets, split by shape: time-series (RichGo + SPH) → ML.FORECAST · investment scenarios (NextTrade) → Semantic Model · sentiment (AJD) → AI_SENTIMENT.",
           },
         ],
@@ -171,6 +160,17 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
       {
         type: "prose",
         text: "Three layers, with a deliberate three-tier fallback so the demo stays green under any Snowflake trial constraint.",
+      },
+      {
+        type: "figure",
+        layout: "single",
+        images: [
+          {
+            src: "/images/projects/wigtn-flake-architecture.jpg",
+            alt: "WIGTN Flake 3-Layer Hybrid AI Architecture — Brain Layer (GPT-4o orchestrator) feeds Data Layer (Snowflake Cortex × 11 features over four marketplace datasets), which feeds Render Layer (Cortex LLM markdown) for the report output.",
+            caption: "Brain (GPT-4o orchestrator) → Data (Snowflake Cortex 11 features over SPH / RichGo / NextTrade / AJD) → Render (Cortex LLM markdown). Anomaly detection is the demo climax; GPT-4o is the safety-net fallback.",
+          },
+        ],
       },
       {
         type: "highlights",
