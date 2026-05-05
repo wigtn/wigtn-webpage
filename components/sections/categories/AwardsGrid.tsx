@@ -34,7 +34,9 @@ const RESULT_LABEL: Partial<Record<AchievementResult, string>> = {
   "third-place": "3rd Place",
   finalist: "Finalist",
   accepted: "Accepted",
-  participated: "Participated",
+  // `participated` intentionally omitted — we don't decorate cards with
+  // a "Participated" medal. The card simply carries no footer badge and
+  // matches the layout of the other tabs.
 };
 
 const RESULT_TONE: Partial<Record<AchievementResult, BadgeTone>> = {
