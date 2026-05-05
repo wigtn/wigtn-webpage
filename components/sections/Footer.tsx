@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { SOCIAL_LINKS } from "@/constants";
 import { GitHubIcon } from "@/components/ui/icons";
 
@@ -9,9 +10,18 @@ export function Footer() {
     <footer id="contact" className="py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
-          {/* Left - Logo & Tagline */}
+          {/* Left - Logo & Tagline
+              Logo image matches the nav bar's `h-7` so the brand mark
+              reads at the same weight in the footer as in the header. */}
           <div>
-            <span className="text-xl font-bold text-foreground block">WIGTN</span>
+            <Image
+              src="/images/WIGTN_LOGO_NAVY.png"
+              alt="WIGTN"
+              width={1600}
+              height={800}
+              unoptimized
+              className="h-7 w-auto mb-2"
+            />
             <span className="text-sm text-gray-400">
               We prove ourselves by what we build, not how long we&apos;ve built.
             </span>
