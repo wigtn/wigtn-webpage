@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { NAV_ITEMS } from "@/constants";
@@ -159,9 +160,20 @@ export function Navigation() {
             <Link
               href="/"
               onClick={handleLogoClick}
-              className="text-xl font-bold text-foreground hover:text-violet transition-colors"
+              aria-label="WIGTN — go to top"
+              className="inline-flex items-center transition-opacity hover:opacity-80"
             >
-              WIGTN
+              {/* Source asset is 1600×800 (2:1) — render at h-7 with
+                  w-auto so the wordmark scales proportionally. */}
+              <Image
+                src="/images/WIGTN_LOGO_NAVY.png"
+                alt="WIGTN"
+                width={1600}
+                height={800}
+                priority
+                unoptimized
+                className="h-7 w-auto"
+              />
             </Link>
 
             <div className="hidden md:flex items-center gap-5">
