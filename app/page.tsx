@@ -9,7 +9,7 @@ import {
 
 export default function Home() {
   return (
-    <main className="relative h-screen overflow-y-auto bg-[#FAFAFA] scroll-smooth">
+    <main className="relative h-screen overflow-y-auto overflow-x-hidden bg-[#FAFAFA] scroll-smooth">
       <Navigation />
       <Crew />
       <WhatWeDo />
