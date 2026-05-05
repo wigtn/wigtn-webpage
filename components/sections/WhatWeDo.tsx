@@ -87,7 +87,7 @@ export function WhatWeDo() {
               {" "}and take ideas all the way to{" "}
               <span className="whitespace-nowrap">production-grade systems</span>
               {" — across research, "}
-              <span className="whitespace-nowrap">open source</span>, awards,
+              awards, <span className="whitespace-nowrap">open source</span>,
               and products.
             </motion.p>
           </div>
