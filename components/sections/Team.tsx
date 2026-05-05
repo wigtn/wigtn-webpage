@@ -142,18 +142,18 @@ export function Team() {
   return (
     <section
       id="team"
-      className="relative min-h-screen flex flex-col justify-center py-20 md:py-28 overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-center py-20 md:py-28"
     >
       {/* Zigzag continuation — Categories ends bottom-RIGHT, so this
           section opens with top-RIGHT and closes at bottom-LEFT.
           Strength +50% over prior values. */}
       <div
         aria-hidden
-        className="absolute -top-32 -right-32 w-[480px] h-[480px] rounded-full bg-violet/[0.08] blur-3xl pointer-events-none"
+        className="absolute -top-32 -right-32 w-[480px] h-[480px] rounded-full bg-violet/[0.10] blur-3xl pointer-events-none"
       />
       <div
         aria-hidden
-        className="absolute -bottom-40 -left-32 w-[480px] h-[480px] rounded-full bg-violet/[0.13] blur-3xl pointer-events-none"
+        className="absolute -bottom-40 -left-32 w-[480px] h-[480px] rounded-full bg-violet/[0.10] blur-3xl pointer-events-none"
       />
 
       <div className="relative max-w-6xl mx-auto px-6 w-full">

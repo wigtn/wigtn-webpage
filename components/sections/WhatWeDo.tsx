@@ -40,18 +40,18 @@ export function WhatWeDo() {
   return (
     <section
       id="what-we-do"
-      className="relative min-h-screen flex flex-col justify-center py-20 md:py-28 overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-center py-20 md:py-28"
     >
       {/* Zigzag blob continuation — top-RIGHT + bottom-LEFT to keep the
           violet flowing on the right side from Crew, then hand off the
           left side to Categories. */}
       <div
         aria-hidden
-        className="absolute -top-40 -right-32 w-[420px] h-[420px] md:w-[520px] md:h-[520px] rounded-full bg-violet/[0.09] blur-3xl pointer-events-none"
+        className="absolute -top-40 -right-32 w-[420px] h-[420px] md:w-[520px] md:h-[520px] rounded-full bg-violet/[0.10] blur-3xl pointer-events-none"
       />
       <div
         aria-hidden
-        className="absolute -bottom-32 -left-24 w-[360px] h-[360px] md:w-[480px] md:h-[480px] rounded-full bg-violet/[0.13] blur-3xl pointer-events-none"
+        className="absolute -bottom-32 -left-24 w-[360px] h-[360px] md:w-[480px] md:h-[480px] rounded-full bg-violet/[0.10] blur-3xl pointer-events-none"
       />
 
       <motion.div
@@ -118,6 +118,27 @@ export function WhatWeDo() {
                 <li key={hash}>
                   <a
                     href={hash}
+                    onClick={(e) => {
+                      // Native anchor behaviour fails when the URL hash
+                      // already matches — the browser fires no event and
+                      // doesn't scroll. Manually scroll to the Categories
+                      // section so a re-click always brings the user back
+                      // to it. When the hash is changing, fall through to
+                      // the native handler so Categories.tsx's hashchange
+                      // listener picks up the tab switch.
+                      if (typeof window === "undefined") return;
+                      if (window.location.hash === hash) {
+                        e.preventDefault();
+                        const main = document.querySelector("main");
+                        const target = document.getElementById("what-we-build");
+                        if (main && target) {
+                          main.scrollTo({
+                            top: target.offsetTop - 64,
+                            behavior: "smooth",
+                          });
+                        }
+                      }
+                    }}
                     className="group block transition-colors duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet rounded-sm"
                   >
                     {/* Header row — title + arrow */}
