@@ -32,8 +32,9 @@ const PHASE_ICON_TONE: Record<Phase, string> = {
 };
 
 function linksFor(project: Project): CategoryCardLink[] {
+  // Products intentionally drop the GitHub link — these are our shipped
+  // products, so source visibility isn't appropriate.
   const out: CategoryCardLink[] = [];
-  if (project.links.github) out.push({ kind: "github", href: project.links.github });
   if (project.links.live) out.push({ kind: "live", href: project.links.live });
   if (project.links.video) out.push({ kind: "video", href: project.links.video });
   return out;
