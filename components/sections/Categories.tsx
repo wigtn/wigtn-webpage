@@ -72,18 +72,7 @@ export function Categories() {
       id="what-we-build"
       className="relative min-h-screen flex flex-col justify-center py-20 md:py-28"
     >
-      {/* Zigzag continuation — WhatWeDo ends bottom-LEFT, so this
-          section opens with top-LEFT to keep the violet flowing on the
-          same side. Closes at bottom-RIGHT, handing off to Team's
-          top-RIGHT. Strength +50% over prior values. */}
-      <div
-        aria-hidden
-        className="absolute -top-32 -left-24 w-[420px] h-[420px] rounded-full bg-violet/[0.10] blur-3xl pointer-events-none"
-      />
-      <div
-        aria-hidden
-        className="absolute -bottom-40 -right-32 w-[480px] h-[480px] rounded-full bg-violet/[0.10] blur-3xl pointer-events-none"
-      />
+      {/* Background blobs moved to page-level <BackgroundDecor />. */}
 
       <div className="relative max-w-6xl mx-auto px-6 w-full">
         {/* Header — eyebrow + a single short declarative line. No
