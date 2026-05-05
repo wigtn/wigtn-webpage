@@ -403,7 +403,7 @@ export const PROJECTS: Project[] = [
     sectionBadge: "Grand Prize",
     phase: "completed",
     homepageMetrics: ["Built in 3.5 hours · 3 engineers", "ByteDance · Build with TRAE Seoul"],
-    tagline: "Drop a topic, watch AI agents debate it live — PM orchestrates, experts spawn and retire, then a landing page writes itself from the conclusions.",
+    tagline: "Drop a topic, watch AI agents debate it live — a PM orchestrates experts who spawn and retire.",
     description: "WIGENT is a multi-agent debate arena where a PM agent orchestrates auto-spawned domain experts in a Slack-style chat UI. Agents argue, challenge each other, retire when outmatched, and summon new specialists on the fly. Once consensus is reached, the system auto-generates a polished landing page from the debate conclusions. Grand Prize winner at Build with TRAE Seoul (ByteDance) — built by 3 engineers in 3.5 hours.",
     gradient: "from-yellow-400 to-amber-500",
     media: {
@@ -451,7 +451,7 @@ export const PROJECTS: Project[] = [
     section: "hackathon",
     sectionBadge: "Participated",
     phase: "completed",
-    tagline: "AI museum curator.",
+    tagline: "AI museum curator that narrates exhibits in real time via Gemini Live.",
     description: "AI-powered cultural heritage companion. Point your camera at museum artifacts and have an AI curator explain them in real-time with historical context and restoration visualizations.",
     gradient: "from-amber-500 to-orange-400",
     media: {
@@ -484,7 +484,7 @@ export const PROJECTS: Project[] = [
     featured: true,
     homepageBadge: "SNOWFLAKE 2026 · TECH TRACK · 2ND PLACE",
     homepageMetrics: ["11 Snowflake Cortex functions", "5 AI experts × 4 datasets", "Tech Track · 2nd Place"],
-    tagline: "Pick what you want to do — open a cafe, target rental-appliance ads, find a billboard site, invest, or detect anomalies. Five Cortex-powered AI experts cross-query four real-world datasets and answer with a Top 3 ranking, anomaly badges, and a 6-month forecast.",
+    tagline: "Multi-agent debate platform on Snowflake Cortex — pick a goal, agents argue tradeoffs, you decide.",
     description: "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform. The user picks one of five preset goals (or types their own); a GPT-4o orchestrator summons five purpose-tuned experts who debate in a Slack-style chat while Cortex Analyst executes text-to-SQL across four Semantic Models — SPH (foot traffic + card sales), RichGo (real estate), NextTrade (markets), and AJD (telecom). ANOMALY_DETECTION auto-injects \"watch this district\" badges, FORECAST projects six months out, and the conversation converges into a ranked Top 3 with a concrete action checklist. Tech Track 2nd place at Snowflake AI & Data Hackathon Korea 2026.",
     gradient: "from-sky-500 to-blue-600",
     media: {

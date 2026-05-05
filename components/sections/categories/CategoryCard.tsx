@@ -67,6 +67,12 @@ interface CategoryCardProps {
   badge?: { label: string; tone: BadgeTone } | null;
   /** External links rendered at the bottom of the card. */
   links?: CategoryCardLink[];
+  /** Optional pre-rendered badge anchored to the right end of the
+   *  bottom action row — used by the Awards tab to put the medal
+   *  badge ("Grand Prize" etc.) at the card foot instead of overlaid
+   *  on the visual area. Caller controls styling so each tier can
+   *  carry distinct visual weight. */
+  awardBadge?: ReactNode;
 }
 
 const BADGE_TONE: Record<BadgeTone, string> = {
@@ -112,7 +118,10 @@ export function CategoryCard({
   visualClassName = "bg-gray-50",
   badge,
   links,
+  awardBadge,
 }: CategoryCardProps) {
+  const hasLinks = Boolean(links && links.length > 0);
+  const hasFooter = hasLinks || Boolean(awardBadge);
   return (
     <Link
       href={`/projects/${slug}/`}
@@ -148,31 +157,37 @@ export function CategoryCard({
           <p className="text-[11.5px] text-gray-500 mt-0.5">{meta}</p>
         )}
 
-        {/* Pill-style link chips. Uniform padding + height regardless of
-            label length, so the hit target is consistent across "Video"
-            (long) and "HF" (short). Sits at the card bottom via mt-auto
-            so cards with shorter descriptions still align. */}
-        {links && links.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-gray-100">
-            {links.map((link) => {
-              const meta = LINK_ICON[link.kind];
-              return (
-                <a
-                  key={`${link.kind}-${link.href}`}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  // `min-w-[96px]` + `justify-center` keeps every chip
-                  // the same hit-target width regardless of label length
-                  // — "HF" no longer renders half the size of "GitHub".
-                  className="inline-flex items-center justify-center gap-1.5 min-w-[96px] rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors duration-150 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {meta.icon}
-                  <span>{link.label ?? meta.label}</span>
-                </a>
-              );
-            })}
+        {/* Footer row — link chips on the left, optional award badge
+            anchored to the right via `ml-auto` so the badge stays at
+            the card edge whether or not the chip group renders. Sits
+            at the card bottom via mt-auto so cards with shorter
+            descriptions still align. */}
+        {hasFooter && (
+          <div className="mt-auto pt-4 border-t border-gray-100 flex items-center gap-3">
+            {hasLinks && (
+              <div className="flex flex-wrap gap-2">
+                {links!.map((link) => {
+                  const meta = LINK_ICON[link.kind];
+                  return (
+                    <a
+                      key={`${link.kind}-${link.href}`}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      // `min-w-[96px]` + `justify-center` keeps every chip
+                      // the same hit-target width regardless of label length
+                      // — "HF" no longer renders half the size of "GitHub".
+                      className="inline-flex items-center justify-center gap-1.5 min-w-[96px] rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors duration-150 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {meta.icon}
+                      <span>{link.label ?? meta.label}</span>
+                    </a>
+                  );
+                })}
+              </div>
+            )}
+            {awardBadge && <div className="ml-auto">{awardBadge}</div>}
           </div>
         )}
       </div>

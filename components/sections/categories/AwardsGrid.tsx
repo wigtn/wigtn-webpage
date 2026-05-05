@@ -9,13 +9,28 @@ interface AwardsGridProps {
   projects: readonly Project[];
 }
 
-/* Badge label + tone derived from the achievement result. The repo's
- * existing `sectionBadge` field can override the default label so a
- * project carrying e.g. "2nd Place" still wins over the inferred form. */
+/* ─────────────── Display order ───────────────
+ *
+ * Sorted by event date (most recent first), not by prize tier. Hard-
+ * coded slug map keeps the data file (`projects.ts`) untouched while
+ * still letting Awards control its own row order independently. If a
+ * future hackathon project lands without an entry in this map, it
+ * falls to the end. */
+const ORDER: Record<string, number> = {
+  "wigtn-flake": 0, // Snowflake AI & Data Hackathon Korea 2026 — most recent
+  timelens: 1, // Google Gemini Live Agent Challenge
+  wigent: 2, // ByteDance Build with TRAE Seoul (March 2026)
+};
+
+/* ─────────────── Badge label + tier-tone ───────────────
+ *
+ * Badge label derived from achievement result with project.sectionBadge
+ * as override. Tier-tone keys the visual style: amber for the win
+ * tier, slate for runner-up tier, ghost-gray for participation. */
 const RESULT_LABEL: Partial<Record<AchievementResult, string>> = {
   winner: "Winner",
   "grand-prize": "Grand Prize",
-  "second-place": "Runner-up",
+  "second-place": "2nd Place",
   "third-place": "3rd Place",
   finalist: "Finalist",
   accepted: "Accepted",
@@ -32,9 +47,24 @@ const RESULT_TONE: Partial<Record<AchievementResult, BadgeTone>> = {
   participated: "gray",
 };
 
-/* Tier-tinted gradient — used as the wrapper fallback when a project
- * has no poster image. With a poster the image full-bleeds and the
- * gradient is hidden behind it. */
+/* Footer-badge tier styles — three visual weights so a glance reads
+ * the medal level. Solid-amber for the strongest signal, soft-slate
+ * for the middle, ghost outline for participation. */
+const FOOTER_BADGE_CLASS: Record<BadgeTone, string> = {
+  amber:
+    "bg-amber-100 text-amber-800 border border-amber-200 font-semibold",
+  slate:
+    "bg-slate-100 text-slate-700 border border-slate-200 font-semibold",
+  gray: "text-gray-500 border border-gray-200 font-medium",
+  violet: "bg-violet/[0.08] text-violet border border-violet/30 font-semibold",
+  emerald:
+    "bg-emerald-100 text-emerald-800 border border-emerald-200 font-semibold",
+  sky: "bg-sky-100 text-sky-800 border border-sky-200 font-semibold",
+};
+
+/* Tier-tinted gradient — only used as the wrapper fallback when a
+ * project has no poster image. With a poster the image full-bleeds
+ * and the gradient is hidden behind it. */
 const TONE_GRADIENT: Record<BadgeTone, string> = {
   amber: "bg-gradient-to-br from-amber-50 to-amber-100",
   slate: "bg-gradient-to-br from-slate-50 to-slate-100",
@@ -72,9 +102,15 @@ export function AwardsGrid({ projects }: AwardsGridProps) {
     );
   }
 
+  // Stable sort — consistent rendering order regardless of array order
+  // in the underlying data file.
+  const ordered = [...projects].sort(
+    (a, b) => (ORDER[a.slug] ?? 99) - (ORDER[b.slug] ?? 99),
+  );
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 items-stretch">
-      {projects.map((project) => {
+      {ordered.map((project) => {
         const achievement = project.achievements?.[0];
         const result = achievement?.result;
         const label =
@@ -101,10 +137,10 @@ export function AwardsGrid({ projects }: AwardsGridProps) {
             name={project.name}
             description={project.tagline}
             meta={meta}
-            badge={label ? { label, tone } : null}
+            // Top-left visual-area badge intentionally null — the medal
+            // is now a footer badge so it doesn't overlay the image.
+            badge={null}
             links={linksFor(project)}
-            // Image cards use `bg-gray-50` so any letter-boxed gap reads
-            // as neutral; iconic fallbacks reuse the tier gradient.
             visualClassName={hasPoster ? "bg-gray-50" : TONE_GRADIENT[tone]}
             visual={
               hasPoster ? (
@@ -122,6 +158,15 @@ export function AwardsGrid({ projects }: AwardsGridProps) {
                   strokeWidth={1.25}
                 />
               )
+            }
+            awardBadge={
+              label ? (
+                <span
+                  className={`inline-flex items-center rounded-md px-2.5 py-1 text-[11px] tracking-[0.08em] uppercase ${FOOTER_BADGE_CLASS[tone]}`}
+                >
+                  {label}
+                </span>
+              ) : null
             }
           />
         );
