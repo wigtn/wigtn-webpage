@@ -79,20 +79,26 @@ export function WhatWeDo() {
               {t.whatWeDo.heading}
             </motion.h2>
 
-            {/* Lead paragraph — semantic chunks are wrapped in
-                `whitespace-nowrap` spans so hyphenated phrases never
-                break mid-phrase across line boundaries. The container's
-                `max-w-[42ch]` keeps the line count comfortable. */}
+            {/* Lead paragraph — semantic multi-word chunks are wrapped in
+                `whitespace-nowrap` spans so they never break mid-phrase
+                across line boundaries. The container's `max-w-[44ch]`
+                gives the lines enough room that the last line carries
+                more than a couple of words (no typographic widow).
+                Em-dash binds to the preceding chunk via NBSP so it
+                never lands alone at the start of a new line. */}
             <motion.p
               variants={itemVariants}
-              className="mt-5 md:mt-6 text-[14.5px] md:text-[16px] text-gray-600 leading-relaxed max-w-[42ch]"
+              className="mt-5 md:mt-6 text-[14.5px] md:text-[16px] text-gray-600 leading-relaxed max-w-[44ch]"
             >
-              An independent crew of 5 AI engineers. We start from{" "}
-              <span className="whitespace-nowrap">real-world friction</span>{" "}
-              and take ideas all the way to{" "}
-              <span className="whitespace-nowrap">production-grade systems</span>{" "}
-              — across research, open source, awards, and{" "}
-              <span className="whitespace-nowrap">products</span>.
+              An independent crew of{" "}
+              <span className="whitespace-nowrap">5 AI engineers</span>. We
+              start from{" "}
+              <span className="whitespace-nowrap">real-world friction</span>
+              {" "}and take ideas all the way to{" "}
+              <span className="whitespace-nowrap">production-grade systems</span>
+              {" — across research, "}
+              <span className="whitespace-nowrap">open source</span>, awards,
+              and products.
             </motion.p>
           </div>
 
