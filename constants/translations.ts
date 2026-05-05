@@ -1,7 +1,13 @@
 export const TRANSLATIONS = {
   hero: {
-    taglineLight: "From research to products — five engineers, four fronts.",
-    taglineStrong: "An independent crew shipping production AI.",
+    // Visual hierarchy was swapped on 2026-05-06: the identity statement
+    // ("AI-native engineering crew") now leads as the large/bold line,
+    // and the working-mode line ("Built fast…") sits below in small/gray.
+    // The Crew section renders these with inline JSX so it can wrap
+    // `AI-native` and `peer-reviewed` in `whitespace-nowrap` spans —
+    // the strings here are kept as the canonical English source.
+    taglineStrong: "An AI-native engineering crew.",
+    taglineLight: "Built fast. Shipped often. Sometimes peer-reviewed.",
     tagline: "We prove ourselves by what we build, not how long we've built.",
   },
   about: {
