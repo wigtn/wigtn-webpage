@@ -488,7 +488,11 @@ export const PROJECTS: Project[] = [
     description: "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform. The user picks one of five preset goals (or types their own); a GPT-4o orchestrator summons five purpose-tuned experts who debate in a Slack-style chat while Cortex Analyst executes text-to-SQL across four Semantic Models — SPH (foot traffic + card sales), RichGo (real estate), NextTrade (markets), and AJD (telecom). ANOMALY_DETECTION auto-injects \"watch this district\" badges, FORECAST projects six months out, and the conversation converges into a ranked Top 3 with a concrete action checklist. Tech Track Top 3 at Snowflake AI & Data Hackathon Korea 2026.",
     gradient: "from-sky-500 to-blue-600",
     media: {
-      poster: "/images/projects/wigtn-flake-title.jpg",
+      // Stage banner used as the homepage Awards-card poster; the
+      // project detail page swaps to the embedded YouTube iframe.
+      poster: "/images/projects/wigtn-flake-stage.jpg",
+      heroVideo: "https://youtu.be/1YzSp3SdzTk?si=_wQ17FZ_RWQVWq5l",
+      heroVideoType: "youtube",
     },
     timeline: {},
     achievements: [
