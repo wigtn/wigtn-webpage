@@ -1,15 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Lightning from "./Lightning";
 
 type Phase = "loading" | "entering" | "ready";
 
 export function Crew() {
   const [phase, setPhase] = useState<Phase>("loading");
-  // Lightning runs once on entrance, then unmounts so the WebGL RAF loop
-  // doesn't keep rendering invisible frames for the rest of the session.
-  const [showLightning, setShowLightning] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -21,12 +17,6 @@ export function Crew() {
       requestAnimationFrame(() => {
         if (!active) return;
         setPhase("entering");
-        // Fire the lightning bolt with the entrance, then unmount once
-        // its CSS fade-out has finished (animation = 1.4 s + 0.25 s delay).
-        setShowLightning(true);
-        setTimeout(() => {
-          if (active) setShowLightning(false);
-        }, 1800);
         setTimeout(() => {
           if (active) setPhase("ready");
         }, 2200);
@@ -86,24 +76,9 @@ export function Crew() {
 
       {/* Background blobs moved to page-level <BackgroundDecor /> so the
           violet ambient gradient flows continuously across the entire
-          page. `overflow-hidden` is kept on this section because the
-          Lightning canvas below extends past the viewport edges and we
-          don't want it to leak into the rest of the page. */}
-
-      {/* ═════ One-shot lightning strike during entrance ═════
-       *   Whisper-soft: intensity 0.5 + 22 % wrapper opacity. The bolt
-       *   barely shows as a faint violet shimmer that flashes through and
-       *   disappears — present, not shouty. */}
-      {showLightning && (
-        <div className="hero-lightning-shot absolute inset-0 pointer-events-none opacity-[0.22]">
-          <Lightning
-            hue={268}
-            speed={1.6}
-            intensity={0.5}
-            size={1.1}
-          />
-        </div>
-      )}
+          page. `overflow-hidden` is kept on the section as a safety
+          rail in case any descendant (e.g. tagline-in animation) ever
+          translates past the viewport edges. */}
 
       {/* ═════ Centred content ═════
        *   Two shimmer slogan lines. The hierarchy is identity-first:
@@ -117,10 +92,10 @@ export function Crew() {
        *   the <section>) handles vertical + horizontal centering. */}
       <div className="relative z-30 text-center px-6">
         <div className={animate_ ? "hero-tagline-in" : "opacity-0"}>
-          <p className="tagline-shimmer-strong text-balance text-xl sm:text-2xl md:text-3xl font-semibold max-w-md md:max-w-2xl mx-auto leading-snug tracking-tight px-2">
+          <p className="tagline-shimmer-strong text-balance text-3xl sm:text-4xl md:text-5xl font-semibold max-w-2xl md:max-w-3xl mx-auto leading-[1.1] tracking-tight px-2">
             An <span className="whitespace-nowrap">AI-native</span> engineering crew.
           </p>
-          <p className="tagline-shimmer text-balance mt-3 text-base sm:text-lg max-w-md md:max-w-2xl mx-auto leading-relaxed px-2">
+          <p className="tagline-shimmer text-balance mt-4 md:mt-5 text-xl sm:text-2xl max-w-xl md:max-w-2xl mx-auto leading-snug px-2">
             Built fast. Shipped often. Sometimes{" "}
             <span className="whitespace-nowrap">peer-reviewed</span>.
           </p>

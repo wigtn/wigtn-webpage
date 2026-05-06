@@ -163,8 +163,10 @@ export function Navigation() {
               aria-label="WIGTN — go to top"
               className="inline-flex items-center transition-opacity hover:opacity-80"
             >
-              {/* Source asset is 1600×800 (2:1) — render at h-7 with
-                  w-auto so the wordmark scales proportionally. */}
+              {/* Source asset is 1600×800 (2:1) — render at h-[34px]
+                  with w-auto so the wordmark scales proportionally.
+                  34px is +21% over the previous h-7 (28px); h-9 was too
+                  heavy and h-8 too timid for what we wanted. */}
               <Image
                 src="/images/WIGTN_LOGO_NAVY.png"
                 alt="WIGTN"
@@ -172,7 +174,7 @@ export function Navigation() {
                 height={800}
                 priority
                 unoptimized
-                className="h-7 w-auto"
+                className="h-[34px] w-auto"
               />
             </Link>
 
