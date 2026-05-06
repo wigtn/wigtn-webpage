@@ -153,14 +153,14 @@ export function CategoryCard({
           for the description even when it only fills one, and the
           meta slot always renders (with NBSP fallback) so the chip
           row never floats up. */}
-      <div className="flex flex-col flex-1 p-6 gap-1.5">
-        <h3 className="text-base md:text-lg font-semibold text-foreground tracking-tight group-hover:text-violet transition-colors line-clamp-1 min-h-[1lh]">
+      <div className="flex flex-col flex-1 p-4 sm:p-6 gap-1.5">
+        <h3 className="text-[15px] md:text-lg font-semibold text-foreground tracking-tight group-hover:text-violet transition-colors line-clamp-1 min-h-[1lh]">
           {name}
         </h3>
-        <p className="text-[13px] text-gray-600 leading-relaxed line-clamp-2 min-h-[2lh]">
+        <p className="text-[12.5px] sm:text-[13px] text-gray-600 leading-relaxed line-clamp-2 min-h-[2lh]">
           {description}
         </p>
-        <p className="text-[11.5px] text-gray-500 mt-0.5 line-clamp-1 min-h-[1lh]">
+        <p className="text-[11px] sm:text-[11.5px] text-gray-500 mt-0.5 line-clamp-1 min-h-[1lh]">
           {meta ?? " "}
         </p>
 
@@ -172,7 +172,7 @@ export function CategoryCard({
             so cards in tabs without a footer still match the height of
             cards in tabs that do. */}
         {hasFooter ? (
-          <div className="mt-auto pt-4 border-t border-gray-100 flex items-center gap-3 min-h-[58px]">
+          <div className="mt-auto pt-3 sm:pt-4 border-t border-gray-100 flex items-center gap-2 sm:gap-3 min-h-[52px] sm:min-h-[58px]">
             {hasLinks && (
               <div className="flex flex-wrap gap-2">
                 {links!.map((link) => {
@@ -186,7 +186,7 @@ export function CategoryCard({
                       // `min-w-[96px]` + `justify-center` keeps every chip
                       // the same hit-target width regardless of label length
                       // — "HF" no longer renders half the size of "GitHub".
-                      className="inline-flex items-center justify-center gap-1.5 min-w-[96px] rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors duration-150 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
+                      className="inline-flex items-center justify-center gap-1.5 min-w-[80px] sm:min-w-[96px] rounded-lg border border-gray-200 bg-white px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 transition-colors duration-150 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
                       onClick={(e) => e.stopPropagation()}
                     >
                       {meta.icon}
@@ -203,7 +203,7 @@ export function CategoryCard({
           // links/badges visually level with the others.
           <div
             aria-hidden
-            className="mt-auto pt-4 border-t border-gray-100 h-[58px]"
+            className="mt-auto pt-3 sm:pt-4 border-t border-gray-100 h-[52px] sm:h-[58px]"
           />
         )}
       </div>
