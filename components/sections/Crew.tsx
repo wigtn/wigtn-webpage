@@ -92,7 +92,7 @@ export function Crew() {
        *   the <section>) handles vertical + horizontal centering. */}
       <div className="relative z-30 text-center px-6">
         <div className={animate_ ? "hero-tagline-in" : "opacity-0"}>
-          <p className="tagline-shimmer-strong text-balance text-3xl sm:text-4xl md:text-5xl font-semibold max-w-2xl md:max-w-3xl mx-auto leading-[1.1] tracking-tight px-2">
+          <p className="tagline-shimmer-strong text-balance text-3xl sm:text-4xl md:text-5xl font-semibold max-w-2xl md:max-w-3xl mx-auto leading-[1.2] tracking-tight px-2 pb-1">
             An <span className="whitespace-nowrap">AI-native</span> engineering crew.
           </p>
           <p className="tagline-shimmer text-balance mt-4 md:mt-5 text-xl sm:text-2xl max-w-xl md:max-w-2xl mx-auto leading-snug px-2">
