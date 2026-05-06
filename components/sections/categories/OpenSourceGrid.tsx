@@ -62,11 +62,13 @@ export function OpenSourceGrid({ projects }: OpenSourceGridProps) {
           // Open-source cards reuse the WIGTN brand mark — both repos
           // (WIGSS, WIGTN Coding) live in the wigtn org, so the brand
           // is the consistent identifier. `object-contain` so the logo's
-          // aspect doesn't get cropped at small card widths.
+          // aspect doesn't get cropped at small card widths. Source is
+          // the canonical 1600×800 wordmark PNG (transparent bg, navy
+          // letters + violet dot) — same asset as the nav/footer logo.
           visualClassName="bg-white"
           visual={
             <Image
-              src="/images/wigtn_logo_banner.jpg"
+              src="/images/WIGTN_LOGO_NAVY.png"
               alt="WIGTN brand mark"
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
