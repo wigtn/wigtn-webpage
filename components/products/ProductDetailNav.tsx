@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
@@ -23,9 +24,17 @@ export function ProductDetailNav() {
             <span className="text-gray-300">|</span>
             <Link
               href="/"
-              className="text-xl font-bold text-foreground hover:text-violet transition-colors"
+              aria-label="WIGTN — back to home"
+              className="inline-flex items-center transition-opacity hover:opacity-80"
             >
-              WIGTN
+              <Image
+                src="/images/WIGTN_LOGO_NAVY.png"
+                alt="WIGTN"
+                width={1600}
+                height={800}
+                unoptimized
+                className="h-[34px] w-auto"
+              />
             </Link>
           </div>
         </div>
