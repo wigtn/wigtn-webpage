@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { TokenCounter } from "./TokenCounter";
 
 type Phase = "loading" | "entering" | "ready";
 
@@ -99,6 +100,7 @@ export function Crew() {
             Built fast. Shipped often. Sometimes{" "}
             <span className="whitespace-nowrap">peer-reviewed</span>.
           </p>
+          <TokenCounter />
         </div>
       </div>
 
