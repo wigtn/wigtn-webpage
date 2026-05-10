@@ -1,5 +1,6 @@
 export { Navigation } from "./Navigation";
 export { Crew } from "./Crew";
+export { TokenCounter } from "./TokenCounter";
 export { WhatWeDo } from "./WhatWeDo";
 export { Categories } from "./Categories";
 export { Team } from "./Team";
