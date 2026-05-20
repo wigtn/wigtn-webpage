@@ -58,7 +58,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: "김현상 Maximus Kim",
     role: "AI Product Engineer",
     bio: "Mobile-first full-stack engineer covering the entire 3-tier stack with React Native. Focused on software engineering craft rather than model development.",
-    image: "/images/team/hyeonsang_kim.jpg",
+    image: "/images/team/hyeonsang_kim.jpeg",
     imagePosition: "center 35%",
     currentRole: "Full-Stack Developer & MX Team Lead",
     expertise: [],
