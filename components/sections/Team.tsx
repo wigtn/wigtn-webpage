@@ -161,7 +161,7 @@ export function Team() {
             <span>Who we are</span>
           </div>
           <h2 className="text-balance text-lg md:text-xl font-semibold text-foreground tracking-tight leading-snug">
-            Five engineers shipping production AI, end to end.
+            5 engineers shipping production AI, end to end.
           </h2>
         </motion.div>
 
