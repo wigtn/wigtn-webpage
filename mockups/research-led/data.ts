@@ -442,6 +442,22 @@ export const getArticle = (slug: string) => ARTICLES.find((a) => a.slug === slug
 
 /* Homepage teasers — a few highlights only; the rest lives on sub-pages. */
 export const SELECTED_WORK = [getArticle("wigtnocr")!, getArticle("wigvo")!];
+
+/* Swipe carousel — image-led highlights (all have posters). */
+export const HIGHLIGHTS: { article: Article; short: string }[] = [
+  { article: getArticle("wigtnocr")!, short: "WigtnOCR" },
+  { article: getArticle("wigvo")!, short: "WIGVO" },
+  { article: getArticle("snowflake-korea-2026")!, short: "Snowflake ’26" },
+  { article: getArticle("trae-seoul-grand-prize")!, short: "TRAE Seoul" },
+  { article: getArticle("gemini-live-challenge")!, short: "Gemini Live" },
+];
+
+/* Scroll-highlight strengths (SORI "Our strength"). */
+export const STRENGTHS = [
+  { kicker: "Published at ACL & EMNLP", title: "Peer-reviewed research" },
+  { kicker: "Research → systems enterprises run", title: "Applied AI consulting" },
+  { kicker: "Models, tools, and plugins in the open", title: "Open source by default" },
+];
 export const LATEST_NEWS = [
   getArticle("snowflake-korea-2026")!,
   getArticle("trae-seoul-grand-prize")!,

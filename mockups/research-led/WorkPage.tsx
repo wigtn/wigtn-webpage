@@ -19,11 +19,11 @@ export function WorkPage() {
         {WORK_GROUPS.filter((g) => g.items.length > 0).map((group) => (
           <section key={group.label}>
             <div className="mb-8 flex items-center gap-4">
-              <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-gray-500">
+              <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-zinc-500">
                 {group.label}
               </span>
-              <span className="h-px flex-1 bg-gray-200" />
-              <span className="font-mono text-xs text-gray-400">{group.items.length}</span>
+              <span className="h-px flex-1 bg-white/10" />
+              <span className="font-mono text-xs text-zinc-600">{group.items.length}</span>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {group.items.map((a, i) => (

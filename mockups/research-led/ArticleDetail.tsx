@@ -1,10 +1,9 @@
 "use client";
 
 /**
- * Article detail — the page a card opens into. One layout serves every
- * kind (report / event / community / insight); kind-specific bits (event
- * place, insight video bumper) render conditionally. Content comes from
- * data.ts by slug, standing in for a future MDX render.
+ * Article detail — dark. One layout serves every kind (report / event /
+ * community / insight); kind-specific bits render conditionally. Content
+ * comes from data.ts by slug, standing in for a future MDX render.
  */
 
 import Link from "next/link";
@@ -25,10 +24,10 @@ const KIND_LABEL: Record<Article["kind"], string> = {
 function BlockView({ block }: { block: Block }) {
   switch (block.t) {
     case "h":
-      return <h2 className="mt-12 mb-4 text-2xl font-semibold tracking-tight">{block.text}</h2>;
+      return <h2 className="mt-12 mb-4 text-2xl font-semibold tracking-tight text-white">{block.text}</h2>;
     case "quote":
       return (
-        <blockquote className="my-8 border-l-2 border-violet pl-5 text-xl font-medium leading-snug text-foreground">
+        <blockquote className="my-8 border-l-2 border-brand pl-5 text-xl font-medium leading-snug text-white">
           {block.text}
         </blockquote>
       );
@@ -36,15 +35,15 @@ function BlockView({ block }: { block: Block }) {
       return (
         <ul className="my-5 space-y-2.5">
           {block.items.map((it) => (
-            <li key={it} className="flex gap-3 text-gray-600 leading-relaxed">
-              <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-violet" />
+            <li key={it} className="flex gap-3 text-zinc-400 leading-relaxed">
+              <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-light" />
               <span>{it}</span>
             </li>
           ))}
         </ul>
       );
     default:
-      return <p className="my-5 text-lg leading-relaxed text-gray-600">{block.text}</p>;
+      return <p className="my-5 text-lg leading-relaxed text-zinc-400">{block.text}</p>;
   }
 }
 
@@ -53,12 +52,12 @@ export function ArticleDetail({ slug }: { slug: string }) {
 
   if (!article) {
     return (
-      <div className="relative min-h-screen bg-[#FAFAFA] text-[#0A0A0A] font-sans antialiased">
+      <div className="relative min-h-screen bg-[#0A0A0A] text-white font-sans antialiased">
         <BackdropDecor />
         <SiteHeader />
         <main className="relative z-10 max-w-3xl mx-auto px-6 py-32 text-center">
           <h1 className="text-3xl font-semibold tracking-tight">Article not found</h1>
-          <Link href={HOME} className="mt-6 inline-flex items-center gap-2 text-violet-dark hover:text-violet">
+          <Link href={HOME} className="mt-6 inline-flex items-center gap-2 text-brand-light hover:text-white">
             <ArrowLeft size={16} /> Back to home
           </Link>
         </main>
@@ -71,33 +70,28 @@ export function ArticleDetail({ slug }: { slug: string }) {
   const related = ARTICLES.filter((a) => a.kind === article.kind && a.slug !== article.slug).slice(0, 3);
 
   return (
-    <div className="relative min-h-screen bg-[#FAFAFA] text-[#0A0A0A] font-sans antialiased">
+    <div className="relative min-h-screen bg-[#0A0A0A] text-white font-sans antialiased selection:bg-brand/30">
       <BackdropDecor />
       <SiteHeader />
 
       <main className="relative z-10">
-        <article className="max-w-3xl mx-auto px-6 pt-12 pb-8 md:pt-16">
+        <article className="max-w-3xl mx-auto px-6 pt-24 pb-8 md:pt-28">
           {/* Back + breadcrumb — reports live on /work, everything else on /news */}
           <Link
             href={article.kind === "report" ? WORK : NEWS}
-            className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-foreground transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-white transition-colors"
           >
             <ArrowLeft size={15} /> {article.kind === "report" ? "Work" : "News"}
           </Link>
 
           {/* Header */}
-          <motion.header
-            variants={rise}
-            initial="hidden"
-            animate="show"
-            className="mt-6"
-          >
+          <motion.header variants={rise} initial="hidden" animate="show" className="mt-6">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-violet">
+              <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-brand-light">
                 {article.tag}
               </span>
               {article.placeholder && (
-                <span className="text-[10px] font-semibold tracking-[0.1em] uppercase text-gray-400 border border-gray-200 rounded-full px-2 py-0.5">
+                <span className="text-[10px] font-semibold tracking-[0.1em] uppercase text-zinc-500 border border-white/15 rounded-full px-2 py-0.5">
                   Placeholder
                 </span>
               )}
@@ -105,9 +99,9 @@ export function ArticleDetail({ slug }: { slug: string }) {
             <h1 className="mt-3 text-[clamp(1.9rem,4.5vw,3rem)] font-bold tracking-tight leading-[1.1]">
               {article.title}
             </h1>
-            <p className="mt-4 text-lg text-gray-500 leading-relaxed">{article.summary}</p>
+            <p className="mt-4 text-lg text-zinc-400 leading-relaxed">{article.summary}</p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-400">
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-zinc-500">
               <span className="inline-flex items-center gap-1.5">
                 <Calendar size={14} /> {article.date}
               </span>
@@ -136,7 +130,7 @@ export function ArticleDetail({ slug }: { slug: string }) {
                     href={l.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-2 text-sm font-medium hover:border-foreground hover:text-foreground text-gray-600 transition-colors"
+                    className="inline-flex items-center gap-1.5 rounded-sm border border-white/20 px-4 py-2 text-sm font-medium text-zinc-300 hover:border-white hover:text-white transition-colors"
                   >
                     {l.label} <ArrowUpRight size={14} />
                   </a>
@@ -151,10 +145,10 @@ export function ArticleDetail({ slug }: { slug: string }) {
             custom={1}
             initial="hidden"
             animate="show"
-            className="relative mt-8 aspect-[16/8] rounded-2xl overflow-hidden border border-gray-200 bg-gradient-to-br from-violet/15 via-violet/5 to-transparent flex items-center justify-center"
+            className="relative mt-8 aspect-[16/8] rounded-lg overflow-hidden border border-white/10 bg-gradient-to-br from-brand/20 via-brand/5 to-transparent flex items-center justify-center"
           >
             {article.image && (
-              <img src={article.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+              <img src={article.image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-90" />
             )}
             {article.video ? (
               <a
@@ -162,14 +156,14 @@ export function ArticleDetail({ slug }: { slug: string }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Play video"
-                className="relative h-16 w-16 rounded-full bg-white/90 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-lg"
+                className="relative h-16 w-16 rounded-full bg-white flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-lg"
               >
-                <Play className="text-violet-dark ml-1" size={26} fill="currentColor" />
+                <Play className="text-[#0A0A0A] ml-1" size={26} fill="currentColor" />
               </a>
             ) : article.image ? null : EventIcon ? (
-              <EventIcon className="text-violet/60" size={56} strokeWidth={1.25} />
+              <EventIcon className="text-brand-light/70" size={56} strokeWidth={1.25} />
             ) : (
-              <span className="font-mono text-7xl font-bold text-violet/25 select-none">w.</span>
+              <span className="font-mono text-7xl font-bold text-brand/30 select-none">w.</span>
             )}
           </motion.div>
 
@@ -180,14 +174,12 @@ export function ArticleDetail({ slug }: { slug: string }) {
             ))}
           </motion.div>
 
-          {/* Share / CTA strip */}
-          <div className="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-gray-200 bg-white/60 px-6 py-5">
-            <p className="text-sm text-gray-500">
-              Working on something like this? We consult on exactly this.
-            </p>
+          {/* CTA strip */}
+          <div className="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-white/10 bg-white/[0.03] px-6 py-5">
+            <p className="text-sm text-zinc-400">Working on something like this? Let's talk.</p>
             <a
               href="mailto:contact@wigtn.com"
-              className="inline-flex items-center gap-2 rounded-full bg-foreground text-white px-5 py-2.5 text-sm font-medium hover:bg-violet-dark transition-colors"
+              className="inline-flex items-center gap-2 rounded-sm bg-brand text-white px-5 py-2.5 text-sm font-semibold uppercase tracking-wide hover:bg-brand-light hover:text-[#0A0A0A] transition-colors"
             >
               Talk to us <ArrowUpRight size={16} />
             </a>
@@ -198,10 +190,10 @@ export function ArticleDetail({ slug }: { slug: string }) {
         {related.length > 0 && (
           <section className="max-w-6xl mx-auto px-6 py-16 md:py-20">
             <div className="flex items-center gap-4 mb-8">
-              <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-gray-500">
+              <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-zinc-500">
                 More from {KIND_LABEL[article.kind]}
               </span>
-              <span className="h-px flex-1 bg-gray-200" />
+              <span className="h-px flex-1 bg-white/10" />
             </div>
             <div className="grid md:grid-cols-3 gap-6">
               {related.map((r, i) => (
@@ -215,15 +207,15 @@ export function ArticleDetail({ slug }: { slug: string }) {
                 >
                   <Link
                     href={articleHref(r.slug)}
-                    className="group block rounded-2xl border border-gray-200 bg-white/70 p-6 hover:border-violet/40 hover:shadow-[0_8px_30px_rgba(139,92,246,0.08)] transition-all"
+                    className="group block rounded-lg border border-white/10 bg-white/[0.02] p-6 hover:border-brand/50 hover:bg-white/[0.04] transition-all"
                   >
-                    <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-violet">
+                    <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-brand-light">
                       {r.tag}
                     </span>
-                    <h3 className="mt-2 text-lg font-semibold leading-snug group-hover:text-violet-dark transition-colors">
+                    <h3 className="mt-2 text-lg font-semibold leading-snug text-white group-hover:text-brand-light transition-colors">
                       {r.title}
                     </h3>
-                    <div className="mt-3 text-xs text-gray-400">{r.date}</div>
+                    <div className="mt-3 font-mono text-xs text-zinc-600">{r.date}</div>
                   </Link>
                 </motion.div>
               ))}

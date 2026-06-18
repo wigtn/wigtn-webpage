@@ -16,7 +16,7 @@ export function TeamPage() {
         {/* Philosophy */}
         <div className="max-w-2xl">
           {ABOUT.paragraphs.map((para) => (
-            <p key={para} className="mt-4 text-gray-500 leading-relaxed">
+            <p key={para} className="mt-4 text-zinc-400 leading-relaxed">
               {para}
             </p>
           ))}
@@ -24,7 +24,7 @@ export function TeamPage() {
             {TEAM_BADGES.map((b) => (
               <span
                 key={b}
-                className="rounded-full border border-gray-200 bg-white/60 px-4 py-2 text-sm text-gray-600"
+                className="rounded-full border border-white/15 bg-white/[0.03] px-4 py-2 text-sm text-zinc-300"
               >
                 {b}
               </span>
@@ -42,32 +42,32 @@ export function TeamPage() {
               initial="hidden"
               whileInView="show"
               viewport={VIEWPORT}
-              className="group rounded-2xl border border-gray-200 bg-white/70 overflow-hidden hover:border-violet/40 transition-colors"
+              className="group rounded-lg border border-white/10 bg-white/[0.02] overflow-hidden hover:border-brand/50 transition-colors"
             >
-              <div className="aspect-[4/3] overflow-hidden bg-gray-100">
+              <div className="aspect-[4/3] overflow-hidden bg-white/[0.03]">
                 <img
                   src={m.image}
                   alt={m.name}
                   style={m.imagePosition ? { objectPosition: m.imagePosition } : undefined}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
               <div className="p-5">
-                <div className="text-[11px] font-semibold tracking-[0.14em] uppercase text-violet">
+                <div className="text-[11px] font-semibold tracking-[0.14em] uppercase text-brand-light">
                   {m.role}
                 </div>
-                <h3 className="mt-1.5 text-lg font-semibold tracking-tight">{m.name}</h3>
-                <div className="mt-1 text-sm text-gray-500">{m.currentRole}</div>
-                {m.credential && <div className="mt-0.5 text-xs text-gray-400">{m.credential}</div>}
-                <p className="mt-3 text-sm text-gray-500 leading-relaxed">{m.bio}</p>
+                <h3 className="mt-1.5 text-lg font-semibold tracking-tight text-white">{m.name}</h3>
+                <div className="mt-1 text-sm text-zinc-400">{m.currentRole}</div>
+                {m.credential && <div className="mt-0.5 text-xs text-zinc-600">{m.credential}</div>}
+                <p className="mt-3 text-sm text-zinc-400 leading-relaxed">{m.bio}</p>
                 <div className="mt-4 flex items-center gap-3">
                   {m.github && (
-                    <a href={m.github} target="_blank" rel="noreferrer" aria-label={`${m.name} GitHub`} className="text-gray-400 hover:text-foreground transition-colors">
+                    <a href={m.github} target="_blank" rel="noreferrer" aria-label={`${m.name} GitHub`} className="text-zinc-500 hover:text-white transition-colors">
                       <Github size={18} />
                     </a>
                   )}
                   {m.linkedin && (
-                    <a href={m.linkedin} target="_blank" rel="noreferrer" aria-label={`${m.name} LinkedIn`} className="text-gray-400 hover:text-foreground transition-colors">
+                    <a href={m.linkedin} target="_blank" rel="noreferrer" aria-label={`${m.name} LinkedIn`} className="text-zinc-500 hover:text-white transition-colors">
                       <Linkedin size={18} />
                     </a>
                   )}

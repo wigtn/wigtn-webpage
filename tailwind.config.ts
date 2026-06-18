@@ -17,6 +17,13 @@ const config: Config = {
           light: "#A78BFA",
           dark: "#7C3AED",
         },
+        /* Pantone 265 C (standard conversion) — research-led mockup accent.
+         * Swap these three hexes if the exact brand spec differs. */
+        brand: {
+          DEFAULT: "#753BBD",
+          light: "#9D7BE0",
+          dark: "#5A2E97",
+        },
       },
       fontFamily: {
         sans: ["Pretendard Variable", "Pretendard", "-apple-system", "BlinkMacSystemFont", "system-ui", "Roboto", "sans-serif"],
