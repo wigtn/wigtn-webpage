@@ -82,6 +82,7 @@ export type TeamMember = {
   imagePosition?: string;
   github?: string;
   linkedin?: string;
+  expertise: string[];
 };
 
 export const TEAM: TeamMember[] = [
@@ -94,6 +95,7 @@ export const TEAM: TeamMember[] = [
     image: "/images/team/hyeongseob_kim.jpg",
     github: "https://github.com/Hyeongseob91",
     linkedin: "https://linkedin.com/in/harrison-hyeongseob-kim",
+    expertise: ["AI Modeling", "GPU Computing", "Applied Research"],
   },
   {
     name: "Diego Son 손상우",
@@ -104,6 +106,7 @@ export const TEAM: TeamMember[] = [
     imagePosition: "left top",
     github: "https://github.com/wigtn",
     linkedin: "https://linkedin.com/in/sangwooson",
+    expertise: ["Multi-Agent Systems", "Agent Orchestration", "LLM Apps"],
   },
   {
     name: "Eric Kim 김진모",
@@ -114,6 +117,7 @@ export const TEAM: TeamMember[] = [
     imagePosition: "center 30%",
     github: "https://github.com/moriroKim",
     linkedin: "https://www.linkedin.com/in/jinmo-kim-62878533b/",
+    expertise: ["MLOps", "Infra (Docker/K8s)", "CI/CD · DBA"],
   },
   {
     name: "Maximus Kim 김현상",
@@ -124,6 +128,7 @@ export const TEAM: TeamMember[] = [
     imagePosition: "center 35%",
     github: "https://github.com/HyeonsangKim",
     linkedin: "https://www.linkedin.com/in/hyeonsang-kim-5a7a67260/",
+    expertise: ["Full-Stack", "React Native", "Mobile"],
   },
   {
     name: "David Cho 조현우",
@@ -134,6 +139,7 @@ export const TEAM: TeamMember[] = [
     imagePosition: "center 20%",
     github: "https://github.com/starz-woo",
     linkedin: "https://www.linkedin.com/in/%ED%98%84%EC%9A%B0-%EC%A1%B0-8a6800393/",
+    expertise: ["Full-Stack", "Web", "AI-native Tooling"],
   },
 ];
 
@@ -457,6 +463,131 @@ export const STRENGTHS = [
   { kicker: "Published at ACL & EMNLP", title: "Peer-reviewed research" },
   { kicker: "Research → systems enterprises run", title: "Applied AI consulting" },
   { kicker: "Models, tools, and plugins in the open", title: "Open source by default" },
+];
+
+/* ── Research & Tech Assets (homepage centerpiece) ── */
+
+/* Publications — venue + status emphasized as the proof of research depth. */
+export const PUBLICATIONS = [
+  { venue: "ACL 2026", status: "Accepted · System Demonstrations", slug: "wigvo" },
+  { venue: "EMNLP 2026", status: "In preparation · Industry Track", slug: "wigtnocr" },
+];
+
+/* Open source & models — platform-labelled cards (no fabricated metrics). */
+export const OPEN_SOURCE = [
+  {
+    name: "WigtnOCR",
+    platform: "HuggingFace + GitHub",
+    desc: "2B Korean document parser — #1 on KoGovDoc-Bench. Weights, data, and eval open.",
+    href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR",
+    slug: "wigtnocr",
+  },
+  {
+    name: "WIGSS",
+    platform: "npm",
+    desc: "Drag UI in the browser, watch the source rewrite itself. Always-on AI agent.",
+    href: "https://npmjs.com/package/wigss",
+    slug: "wigss",
+  },
+  {
+    name: "WIGTN Coding",
+    platform: "GitHub",
+    desc: "A Claude Code plugin ecosystem — 12 agents, 3 skills, 17 design styles.",
+    href: "https://github.com/wigtn/wigtn-plugins-with-claude-code",
+    slug: "wigtn-coding",
+  },
+];
+
+/* Demos / playground — real, clickable links that boost trust. */
+export const DEMOS = [
+  { name: "TimeLens", tag: "Live", desc: "AI museum curator via Gemini Live.", href: "https://timelens-852253134165.asia-northeast3.run.app/" },
+  { name: "WigtnOCR", tag: "Try on HF", desc: "2B Korean document parser.", href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR" },
+  { name: "WIGVO", tag: "Watch", desc: "Real-time phone-call translation.", href: "https://youtu.be/_ixVEnHJxjk" },
+];
+
+/* Milestones — the build-in-public track record, oldest → newest, one per
+ * month since founding. Horizontal swipe rail on the homepage; each card's
+ * photo rises into view on scroll. Items without a real photo yet leave the
+ * frame blank (placeholder: true). The 4 data-less entries (OBA, IWSLT,
+ * Qualcomm, Product) carry editable placeholder copy until real text lands. */
+export type Milestone = {
+  month: string; // short month label, e.g. "Jan"
+  date: string; // "2026.01"
+  label: string; // chip
+  title: string; // short headline
+  text: string; // one-liner
+  image?: string; // optional photo — blank frame when absent
+  slug?: string; // optional link to the full article
+  upcoming?: boolean; // future / roadmap entry
+  placeholder?: boolean; // copy not finalized yet
+};
+
+export const MILESTONES: Milestone[] = [
+  {
+    month: "Jan",
+    date: "2026.01",
+    label: "Founded",
+    title: "WIGTN founded",
+    text: "Five AI engineers form an independent crew to do hands-on, open research.",
+  },
+  {
+    month: "Feb",
+    date: "2026.02",
+    label: "ACL 2026",
+    title: "WIGVO accepted to ACL",
+    text: "Real-time phone-call translation accepted to ACL 2026 — System Demonstrations.",
+    image: "/images/projects/wigvo_screenshot_call.png",
+    slug: "wigvo",
+  },
+  {
+    month: "Mar",
+    date: "2026.03",
+    label: "Grand Prize",
+    title: "Build with TRAE Seoul",
+    text: "WIGENT, a multi-agent debate arena, wins the Grand Prize (ByteDance).",
+    image: "/images/projects/trae_hackthon_seoul.png",
+    slug: "trae-seoul-grand-prize",
+  },
+  {
+    month: "Apr",
+    date: "2026.04",
+    label: "2nd Place",
+    title: "Snowflake AI & Data Hackathon",
+    text: "WIGTN Flake takes 2nd in the Tech Track, built on Snowflake Cortex.",
+    image: "/images/projects/wigtn-flake-stage.jpg",
+    slug: "snowflake-korea-2026",
+  },
+  {
+    month: "May",
+    date: "2026.05",
+    label: "Top 6",
+    title: "OBA Hackathon",
+    text: "Finished in the Top 6 at the OBA Hackathon.",
+  },
+  {
+    month: "Jun",
+    date: "2026.06",
+    label: "IWSLT 2026",
+    title: "IWSLT 2026",
+    text: "Presented our work at IWSLT 2026.",
+  },
+  {
+    month: "Jul",
+    date: "2026.07",
+    label: "Qualcomm",
+    title: "Qualcomm HQ meeting",
+    text: "Invited to a meeting at Qualcomm headquarters.",
+    upcoming: true,
+  },
+  {
+    month: "Aug",
+    date: "2026.08",
+    label: "Product",
+    title: "First product",
+    text: "Our first product — to be announced.",
+    upcoming: true,
+    placeholder: true,
+  },
 ];
 export const LATEST_NEWS = [
   getArticle("snowflake-korea-2026")!,

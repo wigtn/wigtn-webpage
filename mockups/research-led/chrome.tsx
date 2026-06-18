@@ -81,7 +81,7 @@ export function SiteFooter() {
     <footer className="relative z-10 border-t border-white/10">
       {/* Big CTA */}
       <div className="max-w-6xl mx-auto px-6 py-20 md:py-28 text-center">
-        <h2 className="text-[clamp(2.25rem,6vw,4.5rem)] font-bold tracking-tight leading-[1.05]">
+        <h2 className="font-display text-[clamp(2.25rem,6vw,4.5rem)] font-bold tracking-tight leading-[1.05]">
           Let's build something.
         </h2>
         <a
@@ -147,7 +147,7 @@ export function SiteFooter() {
 /* Sub-page shell — dark backdrop + header + footer. */
 export function PageShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-screen bg-[#0A0A0A] text-white font-sans antialiased selection:bg-brand/30">
+    <div className="relative min-h-screen bg-[#0A0A0A] text-white font-body antialiased selection:bg-brand/30">
       <BackdropDecor />
       <SiteHeader />
       <main className="relative z-10">{children}</main>
@@ -172,7 +172,7 @@ export function PageHero({
         <span className="h-1.5 w-1.5 rounded-full bg-brand-light" />
         {eyebrow}
       </span>
-      <h1 className="text-[clamp(2.25rem,5.5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.05] max-w-3xl">
+      <h1 className="font-display text-[clamp(2.25rem,5.5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.05] max-w-3xl">
         {title}
       </h1>
       {lead && <p className="mt-5 max-w-2xl text-lg md:text-xl text-zinc-400 leading-relaxed">{lead}</p>}
@@ -180,29 +180,16 @@ export function PageHero({
   );
 }
 
-/* Page-level ambient background — faint grid + brand glow on black. */
+/* Page-level ambient background — a single soft brand glow on black. */
 export function BackdropDecor() {
   return (
-    <>
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 z-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px)",
-          backgroundSize: "72px 72px",
-          maskImage: "radial-gradient(120% 90% at 50% 0%, #000 35%, transparent 90%)",
-          WebkitMaskImage: "radial-gradient(120% 90% at 50% 0%, #000 35%, transparent 90%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 z-0"
-        style={{
-          background:
-            "radial-gradient(55% 45% at 50% -5%, rgba(117,59,189,0.22), transparent 70%)",
-        }}
-      />
-    </>
+    <div
+      aria-hidden
+      className="pointer-events-none fixed inset-0 z-0"
+      style={{
+        background:
+          "radial-gradient(55% 45% at 50% -5%, rgba(117,59,189,0.18), transparent 70%)",
+      }}
+    />
   );
 }

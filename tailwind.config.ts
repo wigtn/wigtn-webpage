@@ -27,6 +27,9 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["Pretendard Variable", "Pretendard", "-apple-system", "BlinkMacSystemFont", "system-ui", "Roboto", "sans-serif"],
+        // Trendy, open-licensed pair scoped to the research-led mockup.
+        display: ["var(--font-display)", "Pretendard Variable", "system-ui", "sans-serif"],
+        body: ["var(--font-body)", "Pretendard Variable", "system-ui", "sans-serif"],
       },
     },
   },
