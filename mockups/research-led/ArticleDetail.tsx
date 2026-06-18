@@ -10,7 +10,9 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, Calendar, MapPin, Play, Clock, User } from "lucide-react";
-import { HOME, articleHref, getArticle, ARTICLES, type Block, type Article } from "./data";
+import { HOME, WORK, NEWS, articleHref, getArticle, ARTICLES, type Block, type Article } from "./data";
+// `import Link from "next/link"` above shadows data's `Link` type — use
+// `article.links` inline instead of importing that type here.
 import { SiteHeader, SiteFooter, BackdropDecor, EVENT_ICON, rise } from "./chrome";
 
 const KIND_LABEL: Record<Article["kind"], string> = {
@@ -75,12 +77,12 @@ export function ArticleDetail({ slug }: { slug: string }) {
 
       <main className="relative z-10">
         <article className="max-w-3xl mx-auto px-6 pt-12 pb-8 md:pt-16">
-          {/* Back + breadcrumb */}
+          {/* Back + breadcrumb — reports live on /work, everything else on /news */}
           <Link
-            href={`${HOME}#${article.kind === "report" ? "research" : article.kind === "insight" ? "insights" : article.kind}`}
+            href={article.kind === "report" ? WORK : NEWS}
             className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-foreground transition-colors"
           >
-            <ArrowLeft size={15} /> {KIND_LABEL[article.kind]}
+            <ArrowLeft size={15} /> {article.kind === "report" ? "Work" : "News"}
           </Link>
 
           {/* Header */}
@@ -90,9 +92,16 @@ export function ArticleDetail({ slug }: { slug: string }) {
             animate="show"
             className="mt-6"
           >
-            <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-violet">
-              {article.tag}
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-violet">
+                {article.tag}
+              </span>
+              {article.placeholder && (
+                <span className="text-[10px] font-semibold tracking-[0.1em] uppercase text-gray-400 border border-gray-200 rounded-full px-2 py-0.5">
+                  Placeholder
+                </span>
+              )}
+            </div>
             <h1 className="mt-3 text-[clamp(1.9rem,4.5vw,3rem)] font-bold tracking-tight leading-[1.1]">
               {article.title}
             </h1>
@@ -118,6 +127,22 @@ export function ArticleDetail({ slug }: { slug: string }) {
                 </span>
               )}
             </div>
+
+            {article.links && article.links.length > 0 && (
+              <div className="mt-5 flex flex-wrap gap-2">
+                {article.links.map((l) => (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-2 text-sm font-medium hover:border-foreground hover:text-foreground text-gray-600 transition-colors"
+                  >
+                    {l.label} <ArrowUpRight size={14} />
+                  </a>
+                ))}
+              </div>
+            )}
           </motion.header>
 
           {/* Hero visual */}
@@ -128,11 +153,20 @@ export function ArticleDetail({ slug }: { slug: string }) {
             animate="show"
             className="relative mt-8 aspect-[16/8] rounded-2xl overflow-hidden border border-gray-200 bg-gradient-to-br from-violet/15 via-violet/5 to-transparent flex items-center justify-center"
           >
+            {article.image && (
+              <img src={article.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+            )}
             {article.video ? (
-              <div className="h-16 w-16 rounded-full bg-white/90 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform">
+              <a
+                href={article.videoUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Play video"
+                className="relative h-16 w-16 rounded-full bg-white/90 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-lg"
+              >
                 <Play className="text-violet-dark ml-1" size={26} fill="currentColor" />
-              </div>
-            ) : EventIcon ? (
+              </a>
+            ) : article.image ? null : EventIcon ? (
               <EventIcon className="text-violet/60" size={56} strokeWidth={1.25} />
             ) : (
               <span className="font-mono text-7xl font-bold text-violet/25 select-none">w.</span>

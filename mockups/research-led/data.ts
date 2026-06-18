@@ -1,36 +1,142 @@
 /**
  * MOCKUP DATA — research-led renewal
  * ------------------------------------------------------------------
- * Single source of truth for the mockup. Pure, serializable data (no
- * React/icons) so it can be imported by both the static-export route
- * (generateStaticParams) and the client components. Icons are referenced
- * by string key and mapped to components in chrome.tsx.
+ * Now filled with REAL WIGTN content (sourced from constants/*.ts):
+ * papers/models, hackathon awards, open source, team, partners, videos.
  *
- * This stands in for the future MDX-backed content model: each Article
- * here ≈ one /content/*.mdx file (frontmatter + body blocks).
+ * Per the strategy, Projects/Products (WIGEX, WIGVU consumer apps) are
+ * intentionally excluded — this is a research-led site. WigtnOCR / WIGVO
+ * appear under Research because they are papers/models, not products.
+ *
+ * Community (meetups/seminars) has no real data yet, so those entries are
+ * left as placeholder mock — flagged with `placeholder: true`.
+ *
+ * Pure, serializable data (no React/icons) so the static-export route can
+ * import it. Stands in for the future MDX-backed content model.
  */
 
 export const HOME = "/mockups/research-led/";
+export const WORK = `${HOME}work/`;
+export const NEWS = `${HOME}news/`;
+export const TEAM_PAGE = `${HOME}team/`;
 export const articleHref = (slug: string) => `${HOME}${slug}/`;
 
+/* Reference-led structure (Next Securities / MakinaRocks): the homepage is
+ * a short teaser; depth lives on these sub-pages. Nav points to pages, not
+ * in-page anchors. */
 export const NAV = [
-  { label: "Research", id: "research" },
-  { label: "Events", id: "events" },
-  { label: "Community", id: "community" },
-  { label: "Insights", id: "insights" },
-  { label: "Partners", id: "partners" },
-  { label: "Team", id: "team" },
+  { label: "Work", href: WORK },
+  { label: "News", href: NEWS },
+  { label: "Team", href: TEAM_PAGE },
 ];
 
+/* What we do — capability pillars (philosophy/capability-led, not output
+ * lists). Drops "Products" per the research-led direction. */
+export const PILLARS = [
+  {
+    title: "Research",
+    body: "Peer-reviewed work at venues like ACL and EMNLP — studied in the open.",
+  },
+  {
+    title: "Enterprise Consulting",
+    body: "We turn that research into systems enterprises can actually run.",
+  },
+  {
+    title: "Open Source",
+    body: "Tools, models, and plugins the developer community uses.",
+  },
+];
+
+/* Real proof points (from constants/projects.ts achievements). */
 export const STATS = [
-  { value: "40+", label: "Reports published" },
-  { value: "12", label: "Enterprise engagements" },
-  { value: "7", label: "Peer-reviewed papers" },
-  { value: "2.4k", label: "Community members" },
+  { value: "ACL ’26", label: "Paper accepted" },
+  { value: "#1", label: "on KoGovDoc-Bench" },
+  { value: "2", label: "Hackathon awards" },
+  { value: "5", label: "AI engineers" },
 ];
 
-export const PARTNERS = ["MEGACODE", "PARTNER 02", "PARTNER 03", "PARTNER 04", "PARTNER 05"];
-export const POWERED_BY = ["ANTHROPIC", "OPENAI", "GOOGLE", "MICROSOFT", "AWS", "VERCEL"];
+/* Official partners. MEGACODE (contract in progress) + BrainCrew (LangChain
+ * Global Partner Co., Harrison's parent company). Remaining slots are mock
+ * placeholders until real partners land. */
+export const PARTNERS = ["MEGACODE", "BRAINCREW", "PARTNER 03", "PARTNER 04", "PARTNER 05"];
+
+/* Tech stack actually used across WIGTN projects — demoted "Powered by". */
+export const POWERED_BY = ["ANTHROPIC", "OPENAI", "GOOGLE", "SNOWFLAKE", "HUGGINGFACE", "AWS", "VERCEL"];
+
+/* About copy (from constants/translations.ts, research-led trim). */
+export const ABOUT = {
+  heading: "Researchers and builders who start from real-world friction and ship production-grade systems.",
+  paragraphs: [
+    "WIGTN is an independent crew of five AI engineers. We study AI in the open — publishing at venues like ACL and EMNLP — and turn that research into systems enterprises can actually run.",
+    "We don't build demos. We move fast, but we deliver results that hold up: peer-reviewed papers, award-winning systems, and open-source tools the developer community uses.",
+  ],
+};
+
+export type TeamMember = {
+  name: string;
+  role: string;
+  currentRole: string;
+  credential?: string;
+  bio: string;
+  image: string;
+  imagePosition?: string;
+  github?: string;
+  linkedin?: string;
+};
+
+export const TEAM: TeamMember[] = [
+  {
+    name: "Harrison Kim 김형섭",
+    role: "Founder & Crew Lead",
+    currentRole: "AI Research Engineer & Engineering Part Lead, BrainCrew",
+    credential: "Ex-Hyundai E&C",
+    bio: "Former construction PM with a decade of large-scale project experience. Leads WIGTN — AI modeling, product development, and GPU-accelerated computing research.",
+    image: "/images/team/hyeongseob_kim.jpg",
+    github: "https://github.com/Hyeongseob91",
+    linkedin: "https://linkedin.com/in/harrison-hyeongseob-kim",
+  },
+  {
+    name: "Diego Son 손상우",
+    role: "AI Engineer",
+    currentRole: "AI Engineer & AX Team Lead",
+    bio: "Builds LLM-powered applications and autonomous agent systems. Focuses on multi-agent orchestration and workflow automation.",
+    image: "/images/team/sangwoo_son.jpg",
+    imagePosition: "left top",
+    github: "https://github.com/wigtn",
+    linkedin: "https://linkedin.com/in/sangwooson",
+  },
+  {
+    name: "Eric Kim 김진모",
+    role: "MLOps Engineer",
+    currentRole: "DevOps Engineer",
+    bio: "Manages full MLOps pipelines with Docker, Kubernetes, and CI/CD. Team DBA and UI/UX direction lead.",
+    image: "/images/team/jinmo_kim.png",
+    imagePosition: "center 30%",
+    github: "https://github.com/moriroKim",
+    linkedin: "https://www.linkedin.com/in/jinmo-kim-62878533b/",
+  },
+  {
+    name: "Maximus Kim 김현상",
+    role: "AI Product Engineer",
+    currentRole: "Full-Stack Developer & MX Team Lead",
+    bio: "Mobile-first full-stack engineer covering the entire 3-tier stack with React Native. Focused on software engineering craft.",
+    image: "/images/team/hyeonsang_kim.jpg",
+    imagePosition: "center 35%",
+    github: "https://github.com/HyeonsangKim",
+    linkedin: "https://www.linkedin.com/in/hyeonsang-kim-5a7a67260/",
+  },
+  {
+    name: "David Cho 조현우",
+    role: "AI Product Engineer",
+    currentRole: "Full-Stack Developer",
+    bio: "Web-focused full-stack engineer who builds across the 3-tier architecture, with React Native experience and AI-native tooling for rapid delivery.",
+    image: "/images/team/hyunwoo_cho.png",
+    imagePosition: "center 20%",
+    github: "https://github.com/starz-woo",
+    linkedin: "https://www.linkedin.com/in/%ED%98%84%EC%9A%B0-%EC%A1%B0-8a6800393/",
+  },
+];
+
 export const TEAM_BADGES = ["AI Research", "Enterprise Consulting", "Open Source", "Deep-tech"];
 
 export type Kind = "report" | "event" | "community" | "insight";
@@ -41,6 +147,8 @@ export type Block =
   | { t: "quote"; text: string }
   | { t: "list"; items: string[] };
 
+export type Link = { label: string; href: string };
+
 export type Article = {
   slug: string;
   kind: Kind;
@@ -50,207 +158,209 @@ export type Article = {
   date: string;
   readTime?: string;
   author?: string;
-  place?: string; // events
-  icon?: "trophy" | "pin"; // events
+  place?: string;
+  icon?: "trophy" | "pin";
   featured?: boolean;
-  video?: boolean; // insight with a YouTube bumper
+  video?: boolean;
+  videoUrl?: string;
+  image?: string;
+  links?: Link[];
+  placeholder?: boolean; // not-yet-real content kept as mock
   body: Block[];
 };
 
-const lorem = (s: string): Block => ({ t: "p", text: s });
+const p = (text: string): Block => ({ t: "p", text });
 
 export const ARTICLES: Article[] = [
-  /* ── Research ── */
+  /* ───────── Research (real) ───────── */
   {
-    slug: "on-device-korean-ocr",
+    slug: "wigtnocr",
     kind: "report",
-    tag: "TECHNICAL REPORT",
-    title: "On-device Korean OCR: accuracy/latency trade-offs in lightweight VLMs",
+    tag: "MODEL · EMNLP 2026 (IN PREP)",
+    title: "WigtnOCR: a 2B parser that reads Korean gov forms like a model 15× its size",
     summary:
-      "Quantization strategies and benchmarks for Korean document recognition at the edge — reaching 92% of cloud accuracy at 17ms latency, and a candid look at where it breaks down.",
-    date: "2026.05.28",
+      "A 2B-parameter document parser distilled from a 30B teacher — ranked #1 on the KoGovDoc Korean government-document benchmark while running on a single consumer GPU.",
+    date: "2026.05.20",
     readTime: "12 min",
     author: "WIGTN Research",
     featured: true,
+    image: "/images/projects/wigtnocr-huggingface.png",
+    links: [
+      { label: "GitHub", href: "https://github.com/wigtn/wigtnOCR-v1" },
+      { label: "HuggingFace", href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR" },
+    ],
     body: [
-      { t: "h", text: "Why edge OCR, and why Korean" },
-      lorem(
-        "Cloud OCR is accurate but it is not always an option: privacy-sensitive documents, intermittent connectivity, and per-call cost all push recognition back onto the device. Korean adds its own difficulty — a large syllable inventory, dense layouts, and mixed Hangul/Latin/number scripts that trip up models tuned on English receipts.",
+      { t: "h", text: "The problem" },
+      p(
+        "Existing OCR and rule-based parsers fail on Korean government documents — missing tables, forms, and complex layouts. State-of-the-art VLM parsers are tuned for English/Chinese, and 30B models are too expensive to deploy in production.",
       ),
-      lorem(
-        "We set out to answer a narrow, practical question: how close can a 4B-parameter vision-language model running fully on-device get to a frontier cloud pipeline, and what does it cost in latency?",
-      ),
-      { t: "h", text: "Setup" },
-      lorem(
-        "We evaluated three quantization schemes (INT8, INT4 weight-only, and a mixed 4/8-bit layout) against an FP16 baseline on a 5,000-page internal corpus of Korean business documents — invoices, contracts, and scanned forms.",
+      { t: "h", text: "The approach" },
+      p(
+        "WigtnOCR distills a 30B teacher into a 2B student through pseudo-label distillation and LoRA fine-tuning on 2,667 Korean government document pages — reaching teacher-level accuracy on OmniDocBench while running on a single consumer GPU.",
       ),
       { t: "list", items: [
-        "Model: 4B VLM, vision encoder frozen, decoder fine-tuned on 1.2M Korean lines",
-        "Hardware: Apple M-series NPU and a mid-range Android SoC",
-        "Metric: normalized edit distance (CER) and end-to-end latency per page",
+        "Student: Qwen3-VL-2B-Instruct · Teacher: Qwen3-VL-30B-Instruct",
+        "LoRA rank=8 fine-tuning, trained in 31 minutes with DeepSpeed ZeRO-2",
+        "#1 overall on KoGovDoc-Bench across 6 parsers — beating models 10–30× larger",
       ] },
-      { t: "quote", text: "The headline: INT4 weight-only reaches 92% of cloud accuracy at 17ms/page — but the last 8% is where the real engineering lives." },
-      { t: "h", text: "Where it breaks down" },
-      lorem(
-        "Failures clustered in three places: handwritten annotations, low-contrast stamps overlapping text, and tables where cell boundaries are implied rather than ruled. INT4 degraded fastest on stamps; the mixed-precision layout recovered most of that gap at a 1.4× latency cost.",
-      ),
-      lorem(
-        "Our recommendation for production: ship INT4 as the default path and fall back to mixed-precision only when a lightweight confidence head flags a page. That keeps the median fast while protecting the tail.",
-      ),
+      { t: "quote", text: "Teacher-level accuracy at 1/15th the size, on hardware you already own — that is the whole point." },
+      { t: "h", text: "Open" },
+      p("Model weights, training data, and evaluation code are all released on HuggingFace and GitHub."),
     ],
   },
   {
-    slug: "token-economics-agent-orchestration",
+    slug: "wigvo",
     kind: "report",
-    tag: "RESEARCH NOTE",
-    title: "The token economics of agent orchestration",
+    tag: "PAPER · ACL 2026 (ACCEPTED)",
+    title: "WIGVO: real-time phone-call translation with zero echo across 148 calls",
     summary:
-      "We decompose the cost structure of multi-agent pipelines and show where context caching cut inference spend 3.4×.",
-    date: "2026.05.11",
-    readTime: "8 min",
+      "Two parallel AI interpreter sessions deliver bidirectional voice translation over standard phone lines — 557ms average latency, zero echo-loop incidents. Accepted to ACL 2026 System Demonstrations.",
+    date: "2026.02.18",
+    readTime: "10 min",
     author: "WIGTN Research",
+    image: "/images/projects/wigvo_logo.png",
+    links: [
+      { label: "GitHub", href: "https://github.com/wigtn/wigvo-v2" },
+      { label: "Watch demo", href: "https://youtu.be/_ixVEnHJxjk" },
+    ],
     body: [
-      { t: "h", text: "The hidden bill" },
-      lorem(
-        "Multi-agent systems feel cheap to prototype and expensive to run. The cost rarely shows up in the obvious place — the final answer — and instead hides in the orchestration: re-sent context, redundant tool descriptions, and verifier passes that re-read everything.",
+      { t: "h", text: "Call anyone, in any language" },
+      p(
+        "K-Culture brought millions to Korea — but everyday phone calls hit a language wall. WIGVO runs two parallel AI interpreter sessions, one per speaker, for natural bidirectional translation over normal phone lines. The recipient just answers a call; no app required.",
       ),
       { t: "list", items: [
-        "Re-sent system + tool context across hops: ~46% of total tokens",
-        "Verifier / critic passes: ~28%",
-        "Actual task reasoning: ~26%",
+        "557ms average latency across 169 production calls",
+        "Software-only echo cancellation — zero echo-loop incidents, no dedicated hardware",
+        "$0.27 per minute · OpenAI Realtime API + Twilio Media Streams",
       ] },
-      { t: "quote", text: "Most agent bills are not reasoning bills. They are repetition bills." },
-      { t: "h", text: "What helped" },
-      lorem(
-        "Prompt-prefix caching on the shared context collapsed the first bucket almost entirely, taking total spend down 3.4× on our reference pipeline without touching task quality. The lesson generalizes: cache the parts that do not change, and only pay for the delta.",
+      { t: "quote", text: "Accepted to ACL 2026 — System Demonstrations." },
+    ],
+  },
+  {
+    slug: "wigss",
+    kind: "report",
+    tag: "OPEN SOURCE · npm",
+    title: "WIGSS: drag UI in the browser, watch the source rewrite itself",
+    summary:
+      "Visual code refactoring with an always-on AI agent — point it at your dev server, rearrange components in the browser, and the source updates itself. Published on npm.",
+    date: "2026.04.10",
+    readTime: "5 min",
+    author: "WIGTN",
+    image: "/images/carousel/wigss-npm.png",
+    links: [
+      { label: "GitHub", href: "https://github.com/wigtn/wigss" },
+      { label: "npm", href: "https://npmjs.com/package/wigss" },
+    ],
+    body: [
+      p(
+        "WIGSS connects to your running dev server, lets you visually drag and rearrange UI components in the browser, and rewrites the underlying source with an always-on AI agent. Drag UI, code rewrites itself.",
       ),
     ],
   },
   {
-    slug: "enterprise-rag-failure-modes",
+    slug: "wigtn-coding",
     kind: "report",
-    tag: "WHITEPAPER",
-    title: "A taxonomy of failure modes in enterprise RAG",
+    tag: "OPEN SOURCE",
+    title: "WIGTN Coding: a Claude Code plugin ecosystem — idea to deploy, zero friction",
     summary:
-      "Seven categories of RAG failure collected across 12 enterprise engagements, each with a concrete mitigation.",
-    date: "2026.04.22",
-    readTime: "15 min",
-    author: "WIGTN Consulting",
-    body: [
-      { t: "h", text: "From anecdotes to a taxonomy" },
-      lorem(
-        "Across a year of enterprise engagements we kept seeing the same RAG failures described in different words. This whitepaper names them, so teams can diagnose instead of guess.",
-      ),
-      { t: "list", items: [
-        "Retrieval miss — the answer was never fetched",
-        "Context dilution — too many chunks drowned the right one",
-        "Stale source — the index lagged the system of record",
-        "Permission leak — retrieval ignored row-level access",
-        "Format mismatch — tables flattened into unusable text",
-        "Confident fabrication — the model filled a retrieval gap",
-        "Evaluation blindness — no metric caught any of the above",
-      ] },
-      { t: "quote", text: "RAG rarely fails loudly. It fails plausibly — which is worse." },
-      lorem(
-        "For each category we ship a minimal reproduction and a mitigation that does not require re-architecting the stack. The permission-leak section, in particular, has saved two clients from shipping a compliance incident.",
-      ),
-    ],
-  },
-  {
-    slug: "speculative-decoding-cost-benefit",
-    kind: "report",
-    tag: "RESEARCH NOTE",
-    title: "Speculative decoding: the real-world cost/benefit",
-    summary:
-      "When the draft model actually pays for itself — and the workloads where it quietly costs you more.",
-    date: "2026.04.03",
+      "12 agents, 3 skills, and 17 design styles working together with team-based parallel execution for a 3–5× speedup.",
+    date: "2026.03.28",
     readTime: "6 min",
-    author: "WIGTN Research",
+    author: "WIGTN",
+    links: [{ label: "GitHub", href: "https://github.com/wigtn/wigtn-plugins-with-claude-code" }],
     body: [
-      { t: "h", text: "The promise vs the invoice" },
-      lorem(
-        "Speculative decoding speeds up generation by letting a small draft model propose tokens a larger model verifies. The speedup is real — but it is workload-dependent, and on some traffic shapes the draft model is pure overhead.",
+      p(
+        "A unified Claude Code plugin that takes you from idea to deploy with zero friction — 12 agents, 3 skills, and 17 design styles, coordinated by team-based parallel execution for a 3–5× speedup.",
       ),
-      lorem(
-        "We measured acceptance rates across chat, code, and long-form summarization. Code accepted drafts most often (predictable token distributions); creative long-form accepted least, occasionally making the speculative path slower than plain decoding.",
-      ),
-      { t: "quote", text: "Speculative decoding is a bet on predictability. Price the bet per workload, not per model." },
     ],
   },
 
-  /* ── Events ── */
+  /* ───────── Events (real) ───────── */
   {
-    slug: "neurips-2026-best-paper",
+    slug: "trae-seoul-grand-prize",
     kind: "event",
-    tag: "AWARD",
+    tag: "GRAND PRIZE",
     icon: "trophy",
-    title: "Best Paper at the NeurIPS 2026 workshop",
+    title: "Grand Prize — Build with TRAE Seoul (ByteDance)",
     summary:
-      "Our research team's paper was selected as best paper in the efficient-inference track.",
-    date: "2026.05.30",
-    place: "San Diego, USA",
+      "WIGENT, a multi-agent debate arena, won the Grand Prize — built by 3 engineers in 3.5 hours.",
+    date: "2026",
+    place: "Seoul, KOR",
+    author: "ByteDance",
+    image: "/images/projects/trae_hackthon_seoul.png",
+    links: [{ label: "GitHub", href: "https://github.com/wigtn/wigent" }],
     body: [
-      lorem(
-        "At the NeurIPS 2026 Efficient Inference workshop, our paper on mixed-precision on-device decoding received the Best Paper award out of 140 submissions.",
+      p(
+        "WIGENT is a multi-agent debate arena where a PM agent orchestrates auto-spawned domain experts in a Slack-style chat. Agents argue, challenge each other, retire when outmatched, and summon new specialists — then the system auto-generates a landing page from the debate conclusions.",
       ),
-      { t: "h", text: "What the paper argues" },
-      lorem(
-        "The core contribution is a confidence-gated precision switch: run cheap INT4 by default, and escalate to mixed precision only on tokens the model is unsure about. The result is frontier-class quality at edge-class latency.",
-      ),
-      { t: "quote", text: "“A rare paper that is both rigorous and immediately shippable.” — workshop committee" },
-      lorem(
-        "Slides, the camera-ready PDF, and our reference implementation are linked from the WIGTN research index. We will run a community deep-dive on it at the next Tech Meetup.",
-      ),
+      { t: "quote", text: "Grand Prize at Build with TRAE Seoul — built by 3 engineers in 3.5 hours." },
     ],
   },
   {
-    slug: "icml-2026-oral",
+    slug: "snowflake-korea-2026",
     kind: "event",
-    tag: "CONFERENCE",
-    icon: "pin",
-    title: "Oral accepted at ICML 2026",
+    tag: "2ND PLACE · TECH TRACK",
+    icon: "trophy",
+    title: "2nd Place, Tech Track — Snowflake AI & Data Hackathon Korea 2026",
     summary:
-      "Our work on on-device multimodal reasoning was accepted for an oral session.",
-    date: "2026.04.18",
+      "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform — five AI experts debate across four datasets.",
+    date: "2026",
     place: "Seoul, KOR",
+    author: "Snowflake",
+    image: "/images/projects/wigtn-flake-stage.jpg",
+    links: [
+      { label: "Watch demo", href: "https://www.youtube.com/watch?v=1YzSp3SdzTk" },
+      { label: "Press", href: "https://www.newswire.co.kr/newsRead.php?no=1033575" },
+    ],
     body: [
-      lorem(
-        "ICML 2026 accepted our submission on on-device multimodal reasoning for an oral presentation — roughly the top 2% of submissions.",
+      p(
+        "Pick a goal — open a cafe, place a billboard, invest — and a GPT-4o orchestrator summons five purpose-tuned experts who debate in a Slack-style chat while Cortex Analyst runs text-to-SQL across four Semantic Models (foot traffic, real estate, markets, telecom).",
       ),
-      { t: "h", text: "The talk" },
-      lorem(
-        "We show that small multimodal models, given the right routing between vision and language experts, can match much larger models on document and chart understanding while staying inside a phone's memory budget.",
-      ),
-      lorem(
-        "If you are attending in Seoul, come find the WIGTN crew — we will be running an informal office-hours table after the session.",
+      { t: "list", items: [
+        "11 Snowflake Cortex functions · 5 AI experts × 4 datasets",
+        "ANOMALY_DETECTION auto-flags districts to watch; FORECAST projects six months out",
+        "Converges into a ranked Top 3 with a concrete action checklist",
+      ] },
+      { t: "quote", text: "Tech Track 2nd Place at Snowflake AI & Data Hackathon Korea 2026." },
+    ],
+  },
+  {
+    slug: "gemini-live-challenge",
+    kind: "event",
+    tag: "CHALLENGE",
+    icon: "pin",
+    title: "Google Gemini Live Agent Challenge — TimeLens",
+    summary:
+      "An AI museum curator that narrates exhibits in real time via Gemini Live, with historical context and restoration visualizations.",
+    date: "2026",
+    place: "Online",
+    author: "Google",
+    image: "/images/carousel/timelens_hero.png",
+    links: [
+      { label: "Live", href: "https://timelens-852253134165.asia-northeast3.run.app/" },
+      { label: "GitHub", href: "https://github.com/wigtn/wigtn-timelens" },
+      { label: "Watch", href: "https://youtu.be/ITaMtVO5jFg" },
+    ],
+    body: [
+      p(
+        "Point your camera at a museum artifact and an AI curator explains it in real time — historical context, significance, and restoration visualizations — powered by Gemini Live.",
       ),
     ],
   },
 
-  /* ── Community ── */
+  /* ───────── Community (placeholder mock — no real data yet) ───────── */
   {
     slug: "tech-meetup-07-inference-optimization",
     kind: "community",
     tag: "MEETUP",
     title: "WIGTN Tech Meetup #07 — Inference optimization in practice",
-    summary:
-      "Quantization, KV cache, and speculative decoding from a practitioner's view. 80+ attendees.",
+    summary: "Quantization, KV cache, and speculative decoding from a practitioner's view. (Placeholder)",
     date: "2026.06.05",
     place: "Seoul, KOR",
+    placeholder: true,
     body: [
-      lorem(
-        "Our seventh Tech Meetup packed the room with 80+ engineers for a hands-on evening on making inference fast and cheap without a research lab's budget.",
-      ),
-      { t: "h", text: "Three talks" },
-      { t: "list", items: [
-        "Quantization that survives production — what to measure before you ship",
-        "KV cache management for long-context chat",
-        "Speculative decoding: when the draft model earns its keep",
-      ] },
-      { t: "quote", text: "The best question of the night: “How do you know your quantized model degraded before your users tell you?”" },
-      lorem(
-        "Slides and the full recording are linked below. The next meetup will be a deep-dive on our NeurIPS best-paper method — RSVP opens soon.",
-      ),
+      { t: "quote", text: "Placeholder — community meetups/seminars have no real data yet. This stands in to show the layout." },
+      p("Quantization, KV cache, and speculative decoding from a practitioner's view. Slides and recording would be linked here."),
     ],
   },
   {
@@ -258,74 +368,65 @@ export const ARTICLES: Article[] = [
     kind: "community",
     tag: "SEMINAR",
     title: "Open Seminar: How should we evaluate agents?",
-    summary:
-      "Slides and recording from our public talk on designing evaluation metrics for production agents.",
+    summary: "Designing evaluation metrics for production agents. (Placeholder)",
     date: "2026.05.20",
     place: "Online",
+    placeholder: true,
     body: [
-      { t: "h", text: "Why evaluation is the hard part" },
-      lorem(
-        "Everyone can build an agent in an afternoon. Knowing whether it got better or worse between two versions is the part that separates a demo from a product. This seminar laid out a practical evaluation playbook.",
-      ),
-      { t: "list", items: [
-        "Task-level outcome metrics over vibes",
-        "Trajectory checks: did it take a sane path, not just a lucky answer?",
-        "Cost and latency as first-class metrics, not afterthoughts",
-      ] },
-      { t: "quote", text: "If you cannot diff two agent versions on a number, you are not iterating — you are gambling." },
+      { t: "quote", text: "Placeholder — kept as mock until real seminar content exists." },
+      p("A practical evaluation playbook for production agents: outcome metrics over vibes, trajectory checks, and cost/latency as first-class metrics."),
     ],
   },
 
-  /* ── Insights ── */
+  /* ───────── Tech Insights (real videos + note) ───────── */
   {
-    slug: "why-we-bet-on-small-models",
+    slug: "wigvo-realtime-translation-video",
     kind: "insight",
-    tag: "INSIGHT",
-    title: "Why we bet on small models",
-    summary: "Where lightweight models win on cost, latency, and privacy.",
-    date: "2026.06.01",
-    readTime: "5 min",
-    author: "Harrison Kim",
+    tag: "VIDEO",
+    title: "How WIGVO translates a phone call in real time",
+    summary: "A walkthrough of the dual-session architecture and software-only echo cancellation behind WIGVO.",
+    date: "2026.03.02",
+    author: "WIGTN",
     video: true,
+    videoUrl: "https://youtu.be/_ixVEnHJxjk",
+    links: [{ label: "Watch on YouTube", href: "https://youtu.be/_ixVEnHJxjk" }],
     body: [
-      lorem(
-        "The industry narrative says bigger is better. Our consulting experience says: for most enterprise problems, the right-sized model that runs where the data lives beats the biggest model behind an API.",
-      ),
-      { t: "h", text: "Three axes where small wins" },
-      { t: "list", items: [
-        "Cost — predictable, no per-token surprises at scale",
-        "Latency — no network round-trip; the model is on the device",
-        "Privacy — sensitive data never leaves the building",
-      ] },
-      { t: "quote", text: "The question is rarely “is this model smart enough?” It is “is this the smallest model that is smart enough?”" },
-      lorem(
-        "Watch the 10-minute explainer for the full argument, including the benchmarks behind our on-device OCR work.",
-      ),
+      p("A 10-minute walkthrough of how WIGVO runs two parallel AI interpreter sessions over a normal phone line, and how the software-only echo-cancellation pipeline keeps the conversation natural."),
     ],
   },
   {
-    slug: "three-illusions-llm-adoption",
+    slug: "wigtn-flake-cortex-debate-video",
+    kind: "insight",
+    tag: "VIDEO",
+    title: "WIGTN Flake: five AI experts debate where to open your cafe",
+    summary: "Watch Cortex-powered experts cross-query four datasets and converge on a ranked Top 3 of Seoul districts.",
+    date: "2026.04.15",
+    author: "WIGTN",
+    video: true,
+    videoUrl: "https://www.youtube.com/watch?v=1YzSp3SdzTk",
+    links: [{ label: "Watch on YouTube", href: "https://www.youtube.com/watch?v=1YzSp3SdzTk" }],
+    body: [
+      p("The Snowflake hackathon demo: pick a purpose, five purpose-tuned experts debate over Cortex Analyst, and the conversation converges into a data-backed Top 3 with an action checklist."),
+    ],
+  },
+  {
+    slug: "why-we-distill-30b-into-2b",
     kind: "insight",
     tag: "INSIGHT",
-    title: "Three illusions about LLM adoption, from the consulting floor",
-    summary: "The expectations enterprises most often get wrong — and how we correct them.",
-    date: "2026.05.14",
-    readTime: "7 min",
-    author: "WIGTN Consulting",
+    title: "Why we distill 30B into 2B instead of serving the big model",
+    summary: "Cost, latency, and where the data lives — the case for small, on-device models from our WigtnOCR work.",
+    date: "2026.05.22",
+    readTime: "5 min",
+    author: "WIGTN Research",
     body: [
-      { t: "h", text: "Illusion 1: the model is the product" },
-      lorem(
-        "The model is the smallest part. Retrieval, evaluation, guardrails, and the boring plumbing around it are where projects succeed or stall.",
-      ),
-      { t: "h", text: "Illusion 2: more context is always better" },
-      lorem(
-        "Stuffing the prompt with everything dilutes the signal and inflates the bill. Precision beats volume.",
-      ),
-      { t: "h", text: "Illusion 3: a demo is a deployment" },
-      lorem(
-        "A demo proves the happy path exists. A deployment survives the unhappy ones. The distance between them is most of the work — and most of the value.",
-      ),
-      { t: "quote", text: "Our job is rarely to make the demo better. It is to make the other 90% boring and reliable." },
+      { t: "h", text: "Right-sized beats biggest" },
+      p("For most enterprise problems, the right-sized model that runs where the data lives beats the biggest model behind an API. WigtnOCR is our proof: a 2B student matched its 30B teacher on the benchmark that mattered."),
+      { t: "list", items: [
+        "Cost — predictable, no per-token surprises at scale",
+        "Latency — single consumer GPU, no network round-trip",
+        "Privacy — sensitive government documents never leave the building",
+      ] },
+      { t: "quote", text: "The question is rarely “is this model smart enough?” It is “is this the smallest model that is smart enough?”" },
     ],
   },
 ];
@@ -338,3 +439,19 @@ export const EVENTS = byKind("event");
 export const COMMUNITY = byKind("community");
 export const INSIGHTS = byKind("insight");
 export const getArticle = (slug: string) => ARTICLES.find((a) => a.slug === slug);
+
+/* Homepage teasers — a few highlights only; the rest lives on sub-pages. */
+export const SELECTED_WORK = [getArticle("wigtnocr")!, getArticle("wigvo")!];
+export const LATEST_NEWS = [
+  getArticle("snowflake-korea-2026")!,
+  getArticle("trae-seoul-grand-prize")!,
+  getArticle("wigvo-realtime-translation-video")!,
+];
+
+/* Sub-page groupings */
+export const WORK_GROUPS = [
+  { label: "Papers & Models", items: ARTICLES.filter((a) => a.kind === "report" && /PAPER|MODEL/.test(a.tag)) },
+  { label: "Open Source", items: ARTICLES.filter((a) => a.kind === "report" && a.tag.includes("OPEN SOURCE")) },
+  { label: "Awards", items: EVENTS },
+];
+export const NEWS_FEED = [...EVENTS, ...INSIGHTS, ...COMMUNITY];

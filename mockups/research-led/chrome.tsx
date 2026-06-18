@@ -50,10 +50,10 @@ export function SiteHeader() {
         </Link>
         <ul className="hidden md:flex items-center gap-7 text-sm text-gray-500">
           {NAV.map((n) => (
-            <li key={n.id}>
-              <a href={`${HOME}#${n.id}`} className="hover:text-foreground transition-colors">
+            <li key={n.href}>
+              <Link href={n.href} className="hover:text-foreground transition-colors">
                 {n.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
@@ -94,6 +94,42 @@ export function SiteFooter() {
         </div>
       </div>
     </footer>
+  );
+}
+
+/* Sub-page shell — backdrop + header + footer around page content. */
+export function PageShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative min-h-screen bg-[#FAFAFA] text-[#0A0A0A] font-sans antialiased">
+      <BackdropDecor />
+      <SiteHeader />
+      <main className="relative z-10">{children}</main>
+      <SiteFooter />
+    </div>
+  );
+}
+
+/* Sub-page hero — eyebrow + display title + lead. */
+export function PageHero({
+  eyebrow,
+  title,
+  lead,
+}: {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+}) {
+  return (
+    <section className="max-w-6xl mx-auto px-6 pt-20 pb-10 md:pt-28 md:pb-14">
+      <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] uppercase text-violet mb-5">
+        <span className="h-1.5 w-1.5 rounded-full bg-violet" />
+        {eyebrow}
+      </span>
+      <h1 className="text-[clamp(2.25rem,5.5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.05] max-w-3xl">
+        {title}
+      </h1>
+      {lead && <p className="mt-5 max-w-2xl text-lg md:text-xl text-gray-500 leading-relaxed">{lead}</p>}
+    </section>
   );
 }
 
