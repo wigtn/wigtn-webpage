@@ -170,7 +170,9 @@ export function ArticleDetail({ slug }: { slug: string }) {
           <div className="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-white/10 bg-white/[0.03] px-6 py-5">
             <p className="text-sm text-zinc-400">Working on something like this? Let's talk.</p>
             <a
-              href="mailto:contact@wigtn.com"
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-sm bg-brand text-white px-5 py-2.5 text-sm font-semibold uppercase tracking-wide hover:bg-brand-light hover:text-[#0A0A0A] transition-colors"
             >
               Talk to us <ArrowUpRight size={16} />
