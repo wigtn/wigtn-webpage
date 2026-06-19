@@ -14,8 +14,13 @@ export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
     <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
       <Link
         href={articleHref(a.slug)}
-        className="group flex h-full flex-col overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] hover:border-brand/50 hover:bg-white/[0.04] transition-all"
+        className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white/[0.025] ring-1 ring-inset ring-white/[0.07] transition-all duration-300 hover:bg-white/[0.04] hover:ring-white/15"
       >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          style={{ background: "radial-gradient(420px circle at 50% -10%, rgba(117,59,189,0.16), transparent 70%)" }}
+        />
         <div className="relative aspect-[16/9] overflow-hidden bg-white/[0.03]">
           {a.image ? (
             <img
@@ -34,7 +39,7 @@ export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
             </span>
           )}
         </div>
-        <div className="flex flex-1 flex-col p-5">
+        <div className="relative flex flex-1 flex-col p-5">
           <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-brand-light">
             {a.tag}
           </span>

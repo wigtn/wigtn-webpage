@@ -16,7 +16,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
-import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
+import { ArrowUpRight, ArrowRight, X, Expand, Github, Youtube, Aperture } from "lucide-react";
 import {
   WORK,
   NEWS,
@@ -33,6 +33,31 @@ import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, rise, VIEWPORT } from
 /* Shared tile surface — flat elevation + inset hairline, brand glow on hover. */
 const TILE =
   "group relative flex flex-col overflow-hidden rounded-2xl bg-white/[0.025] ring-1 ring-inset ring-white/[0.07] transition-all duration-300 hover:bg-white/[0.045] hover:ring-white/15";
+
+/* Platform glyph that fills the small tiles' middle — npm/GitHub/HF/YouTube. */
+function AssetGlyph({ kind }: { kind: string }) {
+  const cls = "text-zinc-600 transition-colors duration-300 group-hover:text-brand-light";
+  switch (kind) {
+    case "npm":
+      return (
+        <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor" className={cls} aria-hidden>
+          <path d="M0 7.334v8h6.666v1.332H12v-1.332h12v-8H0zm6.666 6.664H5.334v-4H3.999v4H1.335V8.667h5.331v5.331zm4 0v1.336H8.001V8.667h5.334v5.332h-2.669v-.001zm12.001 0h-1.33v-4h-1.336v4h-1.33v-4h-1.335v4h-2.671V8.667h8.002v5.331z" />
+        </svg>
+      );
+    case "huggingface":
+      return <span className="text-[40px] leading-none grayscale transition-all duration-300 group-hover:grayscale-0" aria-hidden>🤗</span>;
+    case "youtube":
+      return <Youtube size={42} strokeWidth={1.5} className={cls} aria-hidden />;
+    case "live":
+      return <Aperture size={40} strokeWidth={1.5} className={cls} aria-hidden />;
+    default:
+      return <Github size={40} strokeWidth={1.5} className={cls} aria-hidden />;
+  }
+}
+const osGlyph = (platform: string) =>
+  /npm/i.test(platform) ? "npm" : /hugging/i.test(platform) ? "huggingface" : "github";
+const demoGlyph = (tag: string) =>
+  /hf/i.test(tag) ? "huggingface" : /watch/i.test(tag) ? "youtube" : "live";
 
 /* Soft brand spotlight that fades in on hover (top-center). */
 function TileGlow() {
@@ -126,7 +151,7 @@ function MilestoneColumn({
   const dotScale = useTransform(rel, [-1, 0, 1], [1, 1.7, 1]);
 
   return (
-    <div className="grid h-[440px] w-[260px] shrink-0 grid-rows-[1fr_auto_auto] px-3">
+    <div className="grid h-[360px] w-[260px] shrink-0 grid-rows-[1fr_auto_auto] px-3">
       {/* bubble — rises in only when this node is centered */}
       <motion.div
         style={{ opacity: bubbleOpacity, y: bubbleY, scale: bubbleScale }}
@@ -195,29 +220,28 @@ function MilestoneColumn({
 }
 
 /* ─────────────── Milestones — scroll-driven center-focus timeline ─────────────── */
+// Column width (px) — must match MilestoneColumn's w-[260px] (box-border).
+const COL = 260;
+
 function MilestoneTimeline() {
   const wrap = useRef<HTMLDivElement>(null);
-  const track = useRef<HTMLDivElement>(null);
-  const [dist, setDist] = useState(0);
   const [lightbox, setLightbox] = useState<string | null>(null);
 
-  useEffect(() => {
-    const measure = () => {
-      const el = track.current;
-      if (!el) return;
-      setDist(Math.max(0, el.scrollWidth - window.innerWidth));
-    };
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, []);
+  // Symmetric 50vw-COL/2 spacers center the first & last columns at the two
+  // ends, so horizontal travel is exactly (N-1)·COL regardless of viewport —
+  // no DOM measurement needed, and x ↔ center stay perfectly in sync.
+  const LAST = MILESTONES.length - 1;
+  const dist = LAST * COL;
 
   const { scrollYProgress } = useScroll({ target: wrap, offset: ["start start", "end end"] });
-  // Spring-smooth the scroll so fast flicks glide instead of snapping past.
-  const smooth = useSpring(scrollYProgress, { stiffness: 42, damping: 18, mass: 0.45 });
-  const x = useTransform(smooth, [0, 1], [0, -dist]);
-  // Which column is centered, as a continuous index (0 → last).
-  const center = useTransform(smooth, [0, 1], [0, MILESTONES.length - 1]);
+  // Spring-smooth the scroll. Overdamped (no overshoot) so it never snaps past.
+  const smooth = useSpring(scrollYProgress, { stiffness: 50, damping: 28, mass: 0.5 });
+  // Finish the travel by 85% of the scroll, then DWELL on the last node for the
+  // remaining 15% — guarantees you actually reach Aug (and the spring settles)
+  // before the section unpins into whatever comes next.
+  const END = 0.85;
+  const x = useTransform(smooth, [0, END], [0, -dist]);
+  const center = useTransform(smooth, [0, END], [0, LAST]);
 
   useEffect(() => {
     if (!lightbox) return;
@@ -232,7 +256,8 @@ function MilestoneTimeline() {
 
   return (
     <>
-      <section ref={wrap} style={{ height: `calc(100vh + ${dist}px)` }} className="relative">
+      {/* 1.8× the horizontal distance in vertical scroll → calmer travel. */}
+      <section ref={wrap} style={{ height: `calc(100vh + ${Math.round(dist * 1.8)}px)` }} className="relative">
         {/* ambient brand glow */}
         <div
           aria-hidden
@@ -243,7 +268,7 @@ function MilestoneTimeline() {
           <div className="mx-auto w-full max-w-6xl px-6">
             <IndexRule n="02" label="Milestones — building in public" />
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <h2 className="max-w-2xl font-display text-[clamp(1.6rem,3.6vw,2.4rem)] font-semibold tracking-tight leading-tight">
+              <h2 className="max-w-2xl text-[clamp(1.6rem,3.6vw,2.4rem)] font-semibold tracking-tight leading-tight">
                 Eight months, founding to first product.
               </h2>
               <span className="inline-flex items-center gap-2 font-mono text-xs text-zinc-500">
@@ -252,13 +277,13 @@ function MilestoneTimeline() {
             </div>
           </div>
 
-          {/* center-focus track */}
-          <motion.div ref={track} style={{ x }} className="mt-5 flex will-change-transform">
-            <div className="shrink-0 w-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))]" />
+          {/* center-focus track — symmetric spacers center first & last node */}
+          <motion.div style={{ x }} className="mt-1 flex will-change-transform">
+            <div className="shrink-0" style={{ width: `calc(50vw - ${COL / 2}px)` }} />
             {MILESTONES.map((m, i) => (
               <MilestoneColumn key={m.date} m={m} index={i} center={center} onExpand={setLightbox} />
             ))}
-            <div className="shrink-0 w-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))]" />
+            <div className="shrink-0" style={{ width: `calc(50vw - ${COL / 2}px)` }} />
           </motion.div>
 
           <div className="mx-auto mt-8 w-full max-w-6xl px-6">
@@ -298,16 +323,30 @@ function MilestoneTimeline() {
 
 /* ─────────────── Page ─────────────── */
 let introPlayed = false;
+const INTRO_KEY = "rl-intro-played";
 
 export function ResearchLedHome() {
   const [introDone, setIntroDone] = useState(introPlayed);
 
+  // Play the intro once per browser session — not every time you click the
+  // logo to come back home (survives client nav AND full reloads in-session).
+  useEffect(() => {
+    if (introPlayed) return;
+    if (sessionStorage.getItem(INTRO_KEY) === "1") {
+      introPlayed = true;
+      setIntroDone(true);
+    }
+  }, []);
+
   return (
-    <div className="relative min-h-screen overflow-x-clip bg-[#0A0A0A] text-white font-body antialiased selection:bg-brand/30">
+    <div className="relative min-h-screen overflow-x-clip bg-[#0A0A0A] text-white font-sans antialiased selection:bg-brand/30">
       {!introDone && (
         <Preloader
           onDone={() => {
             introPlayed = true;
+            try {
+              sessionStorage.setItem(INTRO_KEY, "1");
+            } catch {}
             setIntroDone(true);
           }}
         />
@@ -333,7 +372,7 @@ export function ResearchLedHome() {
             custom={1}
             initial="hidden"
             animate="show"
-            className="max-w-4xl font-display text-[clamp(2.5rem,7.5vw,5.5rem)] font-bold tracking-[-0.03em] leading-[1.0]"
+            className="max-w-4xl text-[clamp(2.5rem,7.5vw,5.5rem)] font-bold tracking-[-0.03em] leading-[1.0]"
           >
             We do AI research in the <span className="text-brand-light">open</span> — and ship it.
           </motion.h1>
@@ -447,7 +486,9 @@ export function ResearchLedHome() {
                           />
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0d] via-transparent to-transparent" />
-                        <span className="absolute left-6 top-5 rounded-full bg-black/45 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wide text-brand-light backdrop-blur-sm">
+                        {/* top scrim so the badge stays legible over light screenshots */}
+                        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/75 to-transparent" />
+                        <span className="absolute left-6 top-5 rounded-full bg-black/70 px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-white ring-1 ring-white/15 backdrop-blur-md">
                           {os.platform}
                         </span>
                         <ArrowUpRight size={18} className="absolute right-5 top-5 text-white/80 transition-colors group-hover:text-brand-light" />
@@ -455,7 +496,7 @@ export function ResearchLedHome() {
                       {/* body */}
                       <div className="relative flex flex-1 flex-col justify-end p-7">
                         <TileGlow />
-                        <h3 className="relative font-display text-3xl font-semibold tracking-tight text-white">
+                        <h3 className="relative text-3xl font-semibold tracking-tight text-white">
                           {os.name}
                         </h3>
                         <p className="relative mt-2.5 max-w-md text-sm leading-relaxed text-zinc-400">{os.desc}</p>
@@ -493,9 +534,12 @@ export function ResearchLedHome() {
                       </span>
                       <ArrowUpRight size={16} className="text-zinc-500 transition-colors group-hover:text-brand-light" />
                     </div>
-                    <div className="relative mt-auto pt-10">
+                    <div className="relative flex flex-1 items-center py-4">
+                      <AssetGlyph kind={osGlyph(os.platform)} />
+                    </div>
+                    <div className="relative">
                       <h3 className="text-lg font-semibold tracking-tight text-white">{os.name}</h3>
-                      <p className="mt-2.5 text-sm leading-relaxed text-zinc-400">{os.desc}</p>
+                      <p className="mt-2 text-sm leading-relaxed text-zinc-400">{os.desc}</p>
                     </div>
                   </motion.a>
                 );
@@ -527,7 +571,10 @@ export function ResearchLedHome() {
                     </span>
                     <ArrowUpRight size={16} className="text-zinc-500 transition-colors group-hover:text-brand-light" />
                   </div>
-                  <div className="relative mt-auto pt-8">
+                  <div className="relative flex flex-1 items-center py-4">
+                    <AssetGlyph kind={demoGlyph(d.tag)} />
+                  </div>
+                  <div className="relative">
                     <h3 className="text-lg font-semibold tracking-tight text-white">{d.name}</h3>
                     <p className="mt-1.5 text-sm leading-relaxed text-zinc-400">{d.desc}</p>
                   </div>
@@ -552,7 +599,7 @@ export function ResearchLedHome() {
               <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light">
                 Let’s collaborate
               </span>
-              <h3 className="mt-5 max-w-2xl font-display text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.1]">
+              <h3 className="mt-5 max-w-2xl text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.1]">
                 PoC, joint research, or applied AI — proposals are always welcome.
               </h3>
               <p className="mt-5 max-w-xl text-zinc-400 leading-relaxed">

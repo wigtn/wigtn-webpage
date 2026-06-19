@@ -9,7 +9,7 @@
  */
 
 import Link from "next/link";
-import { Trophy, MapPin, ArrowUpRight } from "lucide-react";
+import { Trophy, MapPin, ArrowUpRight, ArrowLeft } from "lucide-react";
 import { HOME, NAV } from "./data";
 
 export const EVENT_ICON = { trophy: Trophy, pin: MapPin } as const;
@@ -81,7 +81,7 @@ export function SiteFooter() {
     <footer className="relative z-10 border-t border-white/10">
       {/* Big CTA */}
       <div className="max-w-6xl mx-auto px-6 py-20 md:py-28 text-center">
-        <h2 className="font-display text-[clamp(2.25rem,6vw,4.5rem)] font-bold tracking-tight leading-[1.05]">
+        <h2 className="text-[clamp(2.25rem,6vw,4.5rem)] font-bold tracking-tight leading-[1.05]">
           Let's build something.
         </h2>
         <a
@@ -147,7 +147,7 @@ export function SiteFooter() {
 /* Sub-page shell — dark backdrop + header + footer. */
 export function PageShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-screen bg-[#0A0A0A] text-white font-body antialiased selection:bg-brand/30">
+    <div className="relative min-h-screen bg-[#0A0A0A] text-white font-sans antialiased selection:bg-brand/30">
       <BackdropDecor />
       <SiteHeader />
       <main className="relative z-10">{children}</main>
@@ -156,23 +156,34 @@ export function PageShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* Sub-page hero — eyebrow + display title + lead. */
+/* Sub-page hero — back link + eyebrow + display title + lead. */
 export function PageHero({
   eyebrow,
   title,
   lead,
+  backHref = HOME,
+  backLabel = "Back to home",
 }: {
   eyebrow: string;
   title: string;
   lead?: string;
+  backHref?: string;
+  backLabel?: string;
 }) {
   return (
     <section className="max-w-6xl mx-auto px-6 pt-24 pb-10 md:pt-32 md:pb-14">
-      <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light mb-5">
+      <Link
+        href={backHref}
+        className="group mb-7 inline-flex items-center gap-1.5 text-sm font-medium text-zinc-400 transition-colors hover:text-white"
+      >
+        <ArrowLeft size={15} className="transition-transform group-hover:-translate-x-0.5" />
+        {backLabel}
+      </Link>
+      <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light mb-5">
         <span className="h-1.5 w-1.5 rounded-full bg-brand-light" />
         {eyebrow}
-      </span>
-      <h1 className="font-display text-[clamp(2.25rem,5.5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.05] max-w-3xl">
+      </div>
+      <h1 className="text-[clamp(2.25rem,5.5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.05] max-w-3xl">
         {title}
       </h1>
       {lead && <p className="mt-5 max-w-2xl text-lg md:text-xl text-zinc-400 leading-relaxed">{lead}</p>}
