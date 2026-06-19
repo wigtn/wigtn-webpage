@@ -46,6 +46,20 @@ export const CAPABILITIES = [
     title: "AI R&D",
     body: "We keep pushing the frontier through hands-on, applied research, publishing and competing in the open as we go. Whatever we learn flows straight back into the systems we build for you, so your results are production-ready and grounded in work that has been tested against the state of the art.",
   },
+  {
+    title: "Web Agency",
+    body: "Beyond AI, we design and ship polished marketing sites and web products from first concept to launch. The same crew that builds our AI systems handles the web work, so you get fast, modern, and accessible front-ends without coordinating a separate vendor or stitching tools together.",
+  },
+];
+
+/* Reference / portfolio links shown on the Product page. */
+export const REFERENCES = [
+  {
+    name: "AruStay",
+    tag: "Sample",
+    desc: "A stay-booking web experience designed and built by WIGTN.",
+    href: "https://arustay-mockup.vercel.app/",
+  },
 ];
 
 /* Real proof points (from constants/projects.ts achievements). */
