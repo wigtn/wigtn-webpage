@@ -61,16 +61,27 @@ export function SiteHeader() {
 
         {/* right-aligned nav (desktop) */}
         <ul className="hidden items-center gap-2 md:flex">
-          {NAV.map((n) => (
-            <li key={n.href}>
-              <Link
-                href={n.href}
-                className="rounded-full px-3.5 py-1.5 text-sm text-zinc-400 transition-colors hover:bg-white/[0.06] hover:text-white"
-              >
-                {n.label}
-              </Link>
-            </li>
-          ))}
+          {NAV.map((n) =>
+            n.disabled ? (
+              <li key={n.label}>
+                <span
+                  aria-disabled="true"
+                  className="cursor-default rounded-full px-3.5 py-1.5 text-sm text-zinc-600 select-none"
+                >
+                  {n.label}
+                </span>
+              </li>
+            ) : (
+              <li key={n.label}>
+                <Link
+                  href={n.href}
+                  className="rounded-full px-3.5 py-1.5 text-sm text-zinc-400 transition-colors hover:bg-white/[0.06] hover:text-white"
+                >
+                  {n.label}
+                </Link>
+              </li>
+            ),
+          )}
         </ul>
 
         {/* mobile menu toggle */}
@@ -90,17 +101,28 @@ export function SiteHeader() {
       {open && (
         <div id="rl-mobile-nav" className="border-t border-white/[0.08] bg-[#0A0A0A]/95 backdrop-blur-md md:hidden">
           <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-4">
-            {NAV.map((n) => (
-              <li key={n.href}>
-                <Link
-                  href={n.href}
-                  onClick={() => setOpen(false)}
-                  className="block rounded-lg px-3 py-2.5 text-zinc-300 transition-colors hover:bg-white/[0.06] hover:text-white"
-                >
-                  {n.label}
-                </Link>
-              </li>
-            ))}
+            {NAV.map((n) =>
+              n.disabled ? (
+                <li key={n.label}>
+                  <span
+                    aria-disabled="true"
+                    className="block cursor-default rounded-lg px-3 py-2.5 text-zinc-600 select-none"
+                  >
+                    {n.label}
+                  </span>
+                </li>
+              ) : (
+                <li key={n.label}>
+                  <Link
+                    href={n.href}
+                    onClick={() => setOpen(false)}
+                    className="block rounded-lg px-3 py-2.5 text-zinc-300 transition-colors hover:bg-white/[0.06] hover:text-white"
+                  >
+                    {n.label}
+                  </Link>
+                </li>
+              ),
+            )}
           </ul>
         </div>
       )}
@@ -126,13 +148,19 @@ export function SiteFooter() {
                 Explore
               </div>
               <ul className="space-y-2.5 text-sm text-zinc-400">
-                {NAV.map((n) => (
-                  <li key={n.href}>
-                    <Link href={n.href} className="hover:text-white transition-colors">
+                {NAV.map((n) =>
+                  n.disabled ? (
+                    <li key={n.label} className="cursor-default text-zinc-600 select-none">
                       {n.label}
-                    </Link>
-                  </li>
-                ))}
+                    </li>
+                  ) : (
+                    <li key={n.label}>
+                      <Link href={n.href} className="hover:text-white transition-colors">
+                        {n.label}
+                      </Link>
+                    </li>
+                  ),
+                )}
               </ul>
             </div>
             <div>
@@ -141,7 +169,12 @@ export function SiteFooter() {
               </div>
               <ul className="space-y-2.5 text-sm text-zinc-400">
                 <li>
-                  <a href="mailto:contact@wigtn.com" className="hover:text-white transition-colors">
+                  <a
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white transition-colors"
+                  >
                     contact@wigtn.com
                   </a>
                 </li>

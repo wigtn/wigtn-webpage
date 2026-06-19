@@ -388,7 +388,9 @@ export function ResearchLedHome() {
             operations. Tell us the problem, and we’ll tell you what it takes to solve it.
           </p>
           <a
-            href="mailto:contact@wigtn.com"
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"
+            target="_blank"
+            rel="noopener noreferrer"
             className="mt-9 inline-flex items-center gap-2 rounded-md bg-brand-light px-6 py-3.5 text-base font-semibold text-[#0A0A0A] transition-colors hover:bg-white"
           >
             contact@wigtn.com <ArrowUpRight size={18} />

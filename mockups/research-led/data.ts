@@ -24,10 +24,11 @@ export const articleHref = (slug: string) => `${HOME}${slug}/`;
 /* Reference-led structure (Next Securities / MakinaRocks): the homepage is
  * a short teaser; depth lives on these sub-pages. Nav points to pages, not
  * in-page anchors. */
-export const NAV = [
+export const NAV: { label: string; href: string; disabled?: boolean }[] = [
   { label: "About", href: TEAM_PAGE },
   { label: "News", href: NEWS },
   { label: "Product", href: WORK },
+  { label: "Careers", href: "#", disabled: true },
 ];
 
 /* What we do FOR ENTERPRISES — service-framed capability pillars. This is the
