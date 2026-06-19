@@ -157,7 +157,7 @@ function MilestoneColumn({
         style={{ opacity: bubbleOpacity, y: bubbleY, scale: bubbleScale }}
         className="flex flex-col justify-end origin-bottom"
       >
-        <div className="rounded-xl border border-white/10 bg-white/[0.04] p-2.5 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.9)] backdrop-blur-sm">
+        <div className="rounded-xl border border-white/10 bg-[#141416] p-2.5 shadow-[0_14px_36px_-22px_rgba(0,0,0,0.7)]">
           {m.image && (
             <button
               type="button"
@@ -171,7 +171,7 @@ function MilestoneColumn({
                 style={{ scale: photoScale }}
                 className="absolute inset-0 h-full w-full object-cover"
               />
-              <span className="absolute right-1.5 top-1.5 grid h-6 w-6 place-items-center rounded-full bg-black/55 text-white opacity-0 backdrop-blur-sm transition-opacity group-hover/photo:opacity-100">
+              <span className="absolute right-1.5 top-1.5 grid h-6 w-6 place-items-center rounded-full bg-black/70 text-white opacity-0 transition-opacity group-hover/photo:opacity-100">
                 <Expand size={11} />
               </span>
             </button>
@@ -372,7 +372,7 @@ export function ResearchLedHome() {
             custom={1}
             initial="hidden"
             animate="show"
-            className="max-w-4xl text-[clamp(2.5rem,7.5vw,5.5rem)] font-bold tracking-[-0.03em] leading-[1.0]"
+            className="max-w-4xl text-[clamp(2.25rem,6vw,4.5rem)] font-bold tracking-[-0.03em] leading-[1.02]"
           >
             We do AI research in the <span className="text-brand-light">open</span> — and ship it.
           </motion.h1>
@@ -435,6 +435,8 @@ export function ResearchLedHome() {
             <div className="divide-y divide-white/10 border-y border-white/10">
               {PUBLICATIONS.map((pub, i) => {
                 const a = getArticle(pub.slug)!;
+                const accepted = /accepted/i.test(pub.status);
+                const statusText = accepted ? pub.status.replace(/^accepted\s*·?\s*/i, "") : pub.status;
                 return (
                   <motion.div key={pub.slug} variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
                     <Link href={articleHref(pub.slug)} className="group flex items-start gap-6 py-6">
@@ -443,7 +445,15 @@ export function ResearchLedHome() {
                         <h3 className="text-lg font-semibold leading-snug text-white group-hover:text-brand-light transition-colors">
                           {a.title}
                         </h3>
-                        <div className="mt-1 text-sm text-zinc-500">{pub.status}</div>
+                        <div className="mt-1.5 flex flex-wrap items-center gap-2 text-sm text-zinc-500">
+                          {accepted && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-400 ring-1 ring-inset ring-emerald-500/30">
+                              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                              Accepted
+                            </span>
+                          )}
+                          {statusText && <span>{statusText}</span>}
+                        </div>
                       </div>
                       <ArrowUpRight size={18} className="mt-1 shrink-0 text-zinc-600 group-hover:text-brand-light transition-colors" />
                     </Link>

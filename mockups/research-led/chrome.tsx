@@ -8,8 +8,9 @@
  * (swap for a real white logo asset when available).
  */
 
+import { useState } from "react";
 import Link from "next/link";
-import { Trophy, MapPin, ArrowUpRight, ArrowLeft } from "lucide-react";
+import { Trophy, MapPin, ArrowUpRight, ArrowLeft, Menu, X } from "lucide-react";
 import { HOME, NAV } from "./data";
 
 export const EVENT_ICON = { trophy: Trophy, pin: MapPin } as const;
@@ -50,28 +51,76 @@ export function IndexRule({ n, label }: { n: string; label: string }) {
 }
 
 export function SiteHeader() {
+  const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-md bg-[#0A0A0A]/70 border-b border-white/10">
-      <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-[#0A0A0A]/70 backdrop-blur-md">
+      <nav className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link href={HOME} aria-label="WIGTN home" className="shrink-0">
           <Wordmark />
         </Link>
-        <ul className="hidden md:flex items-center gap-8 text-[13px] font-medium tracking-wide uppercase text-zinc-400">
+
+        {/* centered nav (desktop) */}
+        <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex">
           {NAV.map((n) => (
             <li key={n.href}>
-              <Link href={n.href} className="hover:text-white transition-colors">
+              <Link
+                href={n.href}
+                className="rounded-full px-3.5 py-1.5 text-sm text-zinc-400 transition-colors hover:bg-white/[0.06] hover:text-white"
+              >
                 {n.label}
               </Link>
             </li>
           ))}
         </ul>
-        <a
-          href="mailto:contact@wigtn.com"
-          className="text-[13px] font-medium tracking-wide uppercase text-zinc-400 hover:text-white transition-colors"
-        >
-          Contact
-        </a>
+
+        {/* right side */}
+        <div className="flex items-center gap-2">
+          <a
+            href="mailto:contact@wigtn.com"
+            className="hidden items-center gap-1.5 rounded-full border border-white/15 px-4 py-1.5 text-sm font-medium text-zinc-200 transition-colors hover:border-white hover:bg-white hover:text-[#0A0A0A] md:inline-flex"
+          >
+            Contact <ArrowUpRight size={14} />
+          </a>
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="rl-mobile-nav"
+            className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-zinc-300 transition-colors hover:border-white hover:text-white md:hidden"
+          >
+            {open ? <X size={17} /> : <Menu size={17} />}
+          </button>
+        </div>
       </nav>
+
+      {/* mobile dropdown */}
+      {open && (
+        <div id="rl-mobile-nav" className="border-t border-white/[0.08] bg-[#0A0A0A]/95 backdrop-blur-md md:hidden">
+          <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-4">
+            {NAV.map((n) => (
+              <li key={n.href}>
+                <Link
+                  href={n.href}
+                  onClick={() => setOpen(false)}
+                  className="block rounded-lg px-3 py-2.5 text-zinc-300 transition-colors hover:bg-white/[0.06] hover:text-white"
+                >
+                  {n.label}
+                </Link>
+              </li>
+            ))}
+            <li className="mt-1">
+              <a
+                href="mailto:contact@wigtn.com"
+                onClick={() => setOpen(false)}
+                className="flex items-center justify-between rounded-lg bg-brand px-3 py-2.5 font-medium text-white"
+              >
+                Contact <ArrowUpRight size={15} />
+              </a>
+            </li>
+          </ul>
+        </div>
+      )}
     </header>
   );
 }
