@@ -119,7 +119,7 @@ export const TEAM: TeamMember[] = [
     role: "AI Engineer",
     currentRole: "AI Engineer & AX Team Lead",
     bio: "Builds LLM-powered applications and autonomous agent systems. Focuses on multi-agent orchestration and workflow automation.",
-    image: "/images/team/sangwoo_son.jpg",
+    image: "/images/team/sangwoo_son.png",
     imagePosition: "left top",
     github: "https://github.com/wigtn",
     linkedin: "https://linkedin.com/in/sangwooson",
