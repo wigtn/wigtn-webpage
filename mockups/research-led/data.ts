@@ -15,7 +15,7 @@
  * import it. Stands in for the future MDX-backed content model.
  */
 
-export const HOME = "/mockups/research-led/";
+export const HOME = "/";
 export const WORK = `${HOME}work/`;
 export const NEWS = `${HOME}news/`;
 export const TEAM_PAGE = `${HOME}team/`;
