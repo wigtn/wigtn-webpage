@@ -16,95 +16,10 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
-import { ArrowUpRight, ArrowRight, X, Expand, Github, Youtube, Aperture } from "lucide-react";
-import {
-  WORK,
-  NEWS,
-  STATS,
-  PUBLICATIONS,
-  OPEN_SOURCE,
-  DEMOS,
-  MILESTONES,
-  articleHref,
-  getArticle,
-} from "./data";
+import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
+import { CAPABILITIES, PARTNERS, MILESTONES, NEWSROOM, NEWS } from "./data";
 import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, rise, VIEWPORT } from "./chrome";
-
-/* Shared tile surface — flat elevation + inset hairline, brand glow on hover. */
-const TILE =
-  "group relative flex flex-col overflow-hidden rounded-2xl bg-white/[0.025] ring-1 ring-inset ring-white/[0.07] transition-all duration-300 hover:bg-white/[0.045] hover:ring-white/15";
-
-/* Platform glyph that fills the small tiles' middle — npm/GitHub/HF/YouTube. */
-function AssetGlyph({ kind }: { kind: string }) {
-  const cls = "text-zinc-600 transition-colors duration-300 group-hover:text-brand-light";
-  switch (kind) {
-    case "npm":
-      return (
-        <svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor" className={cls} aria-hidden>
-          <path d="M0 7.334v8h6.666v1.332H12v-1.332h12v-8H0zm6.666 6.664H5.334v-4H3.999v4H1.335V8.667h5.331v5.331zm4 0v1.336H8.001V8.667h5.334v5.332h-2.669v-.001zm12.001 0h-1.33v-4h-1.336v4h-1.33v-4h-1.335v4h-2.671V8.667h8.002v5.331z" />
-        </svg>
-      );
-    case "huggingface":
-      return <span className="text-[40px] leading-none grayscale transition-all duration-300 group-hover:grayscale-0" aria-hidden>🤗</span>;
-    case "youtube":
-      return <Youtube size={42} strokeWidth={1.5} className={cls} aria-hidden />;
-    case "live":
-      return <Aperture size={40} strokeWidth={1.5} className={cls} aria-hidden />;
-    default:
-      return <Github size={40} strokeWidth={1.5} className={cls} aria-hidden />;
-  }
-}
-const osGlyph = (platform: string) =>
-  /npm/i.test(platform) ? "npm" : /hugging/i.test(platform) ? "huggingface" : "github";
-const demoGlyph = (tag: string) =>
-  /hf/i.test(tag) ? "huggingface" : /watch/i.test(tag) ? "youtube" : "live";
-
-/* Soft brand spotlight that fades in on hover (top-center). */
-function TileGlow() {
-  return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-      style={{ background: "radial-gradient(420px circle at 50% -10%, rgba(117,59,189,0.16), transparent 70%)" }}
-    />
-  );
-}
-
-/* ─────────────── Preloader ─────────────── */
-function Preloader({ onDone }: { onDone: () => void }) {
-  const [hide, setHide] = useState(false);
-  const doneRef = useRef(false);
-
-  const finish = () => {
-    if (doneRef.current) return;
-    doneRef.current = true;
-    setHide(true);
-    setTimeout(onDone, 700);
-  };
-
-  useEffect(() => {
-    const t = setTimeout(finish, 6000);
-    return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return (
-    <div
-      className={`fixed inset-0 z-[70] flex items-center justify-center bg-[#0A0A0A] transition-opacity duration-700 ${
-        hide ? "opacity-0 pointer-events-none" : "opacity-100"
-      }`}
-    >
-      <video
-        src="/WIGTN%20Intro/03_Dynamic-Black.mp4"
-        autoPlay
-        muted
-        playsInline
-        onEnded={finish}
-        className="h-full w-full object-cover mix-blend-screen"
-      />
-    </div>
-  );
-}
+import { ArticleCard } from "./cards";
 
 function ViewAll({ href, label }: { href: string; label: string }) {
   return (
@@ -118,10 +33,11 @@ function ViewAll({ href, label }: { href: string; label: string }) {
   );
 }
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
+/* Full-width section divider — hairline within the page gutter. */
+function Divider() {
   return (
-    <div className="mb-6 text-[11px] font-semibold tracking-[0.22em] uppercase text-zinc-500">
-      {children}
+    <div className="max-w-6xl mx-auto px-6">
+      <div className="border-t border-white/10" />
     </div>
   );
 }
@@ -258,21 +174,15 @@ function MilestoneTimeline() {
     <>
       {/* 1.8× the horizontal distance in vertical scroll → calmer travel. */}
       <section ref={wrap} style={{ height: `calc(100vh + ${Math.round(dist * 1.8)}px)` }} className="relative">
-        {/* ambient brand glow */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{ background: "radial-gradient(50% 45% at 50% 55%, rgba(117,59,189,0.10), transparent 70%)" }}
-        />
         <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
           <div className="mx-auto w-full max-w-6xl px-6">
-            <IndexRule n="02" label="Milestones — building in public" />
+            <IndexRule n="04" label="Track record" />
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <h2 className="max-w-2xl text-[clamp(1.6rem,3.6vw,2.4rem)] font-semibold tracking-tight leading-tight">
                 Eight months, founding to first product.
               </h2>
               <span className="inline-flex items-center gap-2 font-mono text-xs text-zinc-500">
-                scroll to travel <ArrowRight size={13} />
+                scroll to follow the timeline <ArrowRight size={13} />
               </span>
             </div>
           </div>
@@ -287,7 +197,7 @@ function MilestoneTimeline() {
           </motion.div>
 
           <div className="mx-auto mt-8 w-full max-w-6xl px-6">
-            <ViewAll href={NEWS} label="Read our notes" />
+            <ViewAll href={NEWS} label="Read the full story" />
           </div>
         </div>
       </section>
@@ -322,59 +232,44 @@ function MilestoneTimeline() {
 }
 
 /* ─────────────── Page ─────────────── */
-let introPlayed = false;
-const INTRO_KEY = "rl-intro-played";
 
 export function ResearchLedHome() {
-  const [introDone, setIntroDone] = useState(introPlayed);
-
-  // Play the intro once per browser session — not every time you click the
-  // logo to come back home (survives client nav AND full reloads in-session).
-  useEffect(() => {
-    if (introPlayed) return;
-    if (sessionStorage.getItem(INTRO_KEY) === "1") {
-      introPlayed = true;
-      setIntroDone(true);
-    }
-  }, []);
-
   return (
     <div className="relative min-h-screen overflow-x-clip bg-[#0A0A0A] text-white font-sans antialiased selection:bg-brand/30">
-      {!introDone && (
-        <Preloader
-          onDone={() => {
-            introPlayed = true;
-            try {
-              sessionStorage.setItem(INTRO_KEY, "1");
-            } catch {}
-            setIntroDone(true);
-          }}
-        />
-      )}
       <BackdropDecor />
       <SiteHeader />
 
       <main className="relative z-10">
         {/* ───── 1. Hero — identity & vision ───── */}
-        <section className="max-w-6xl mx-auto px-6 pt-32 pb-16 md:pt-44 md:pb-24">
-          <motion.span
-            variants={rise}
-            initial="hidden"
-            animate="show"
-            className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light mb-8"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-brand-light" />
-            AI research &amp; engineering crew
-          </motion.span>
+        <section className="relative isolate overflow-hidden">
+          {/* Intro video — top banner, muted, loops continuously. Sits ABOVE
+              the content (no overlap), shown crisp (no opacity/blend filter). */}
+          <div className="relative h-[44vh] min-h-[300px] w-full overflow-hidden md:h-[56vh]">
+            <video
+              src="/WIGTN%20Intro/03_Dynamic-Black.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              aria-hidden
+              className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+            />
+            {/* fade the video's bottom edge into the page */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-b from-transparent to-[#0A0A0A]"
+            />
+          </div>
 
+          <div className="max-w-6xl mx-auto px-6 pt-16 pb-16 md:pt-20 md:pb-24">
           <motion.h1
             variants={rise}
-            custom={1}
             initial="hidden"
             animate="show"
-            className="max-w-4xl text-[clamp(2.25rem,6vw,4.5rem)] font-bold tracking-[-0.03em] leading-[1.02]"
+            className="max-w-4xl text-balance text-[clamp(2.25rem,6vw,4.5rem)] font-bold tracking-[-0.03em] leading-[1.05]"
           >
-            We do AI research in the <span className="text-brand-light">open</span> — and ship it.
+            Your partner for enterprise{" "}
+            <span className="text-brand-light">AI transformation</span>.
           </motion.h1>
 
           <motion.p
@@ -382,248 +277,120 @@ export function ResearchLedHome() {
             custom={2}
             initial="hidden"
             animate="show"
-            className="mt-10 max-w-xl text-lg md:text-xl text-zinc-400 leading-relaxed"
+            className="mt-8 max-w-2xl text-pretty text-lg md:text-xl text-zinc-400 leading-relaxed"
           >
-            We don’t write papers to file them away — we ship the research. Open models,
-            award-winning systems, and tools the developer community actually uses.
+            We start from your requirements and bring AI into the way your team already
+            works — from the first idea to a system running in production.
           </motion.p>
-
-          <motion.div
-            variants={rise}
-            custom={3}
-            initial="hidden"
-            animate="show"
-            className="mt-12 flex flex-wrap gap-3"
-          >
-            <Link
-              href={WORK}
-              className="inline-flex items-center gap-2 rounded-sm bg-brand px-7 py-3.5 text-sm font-semibold uppercase tracking-wide text-white hover:bg-brand-light hover:text-[#0A0A0A] transition-colors"
-            >
-              See our research <ArrowUpRight size={16} />
-            </Link>
-            <a
-              href="mailto:contact@wigtn.com"
-              className="inline-flex items-center gap-2 rounded-sm border border-white/20 px-7 py-3.5 text-sm font-semibold uppercase tracking-wide text-zinc-300 hover:border-white hover:text-white transition-colors"
-            >
-              Work with us
-            </a>
-          </motion.div>
-
-          <motion.div
-            variants={rise}
-            custom={4}
-            initial="hidden"
-            animate="show"
-            className="mt-24 grid grid-cols-2 gap-y-8 gap-x-6 border-t border-white/10 pt-10 sm:flex sm:flex-wrap sm:gap-x-16"
-          >
-            {STATS.map((s) => (
-              <div key={s.label}>
-                <div className="text-2xl md:text-3xl font-bold tracking-tight">{s.value}</div>
-                <div className="mt-1.5 font-mono text-xs md:text-sm text-zinc-500">{s.label}</div>
-              </div>
-            ))}
-          </motion.div>
-        </section>
-
-        {/* ───── 2. Research & Tech Assets (centerpiece) ───── */}
-        <section className="max-w-6xl mx-auto px-6 pt-28 md:pt-40">
-          <IndexRule n="01" label="Research & Tech Assets" />
-
-          {/* Publications */}
-          <div className="mb-20">
-            <Eyebrow>Publications</Eyebrow>
-            <div className="divide-y divide-white/10 border-y border-white/10">
-              {PUBLICATIONS.map((pub, i) => {
-                const a = getArticle(pub.slug)!;
-                const accepted = /accepted/i.test(pub.status);
-                const statusText = accepted ? pub.status.replace(/^accepted\s*·?\s*/i, "") : pub.status;
-                return (
-                  <motion.div key={pub.slug} variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
-                    <Link href={articleHref(pub.slug)} className="group flex items-start gap-6 py-6">
-                      <span className="w-28 shrink-0 font-mono text-sm text-brand-light">{pub.venue}</span>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold leading-snug text-white group-hover:text-brand-light transition-colors">
-                          {a.title}
-                        </h3>
-                        <div className="mt-1.5 flex flex-wrap items-center gap-2 text-sm text-zinc-500">
-                          {accepted && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-400 ring-1 ring-inset ring-emerald-500/30">
-                              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                              Accepted
-                            </span>
-                          )}
-                          {statusText && <span>{statusText}</span>}
-                        </div>
-                      </div>
-                      <ArrowUpRight size={18} className="mt-1 shrink-0 text-zinc-600 group-hover:text-brand-light transition-colors" />
-                    </Link>
-                  </motion.div>
-                );
-              })}
-            </div>
           </div>
         </section>
 
-        {/* Open source (bento) + Demos (uniform grid) */}
-        <section className="max-w-6xl mx-auto px-6 pt-20 pb-28 md:pt-24 md:pb-40">
-          <div className="mb-20">
-            <Eyebrow>Open source &amp; models</Eyebrow>
-            <div className="grid gap-4 md:grid-cols-3 md:auto-rows-[188px]">
-              {OPEN_SOURCE.map((os, i) => {
-                const featured = i === 0;
-                const art = os.slug ? getArticle(os.slug) : undefined;
-                if (featured) {
-                  return (
-                    <motion.a
-                      key={os.name}
-                      href={os.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      variants={rise}
-                      custom={i}
-                      initial="hidden"
-                      whileInView="show"
-                      viewport={VIEWPORT}
-                      className={`${TILE} md:col-span-2 md:row-span-2`}
-                    >
-                      {/* image header — visible, crisp, with a soft fade into the body */}
-                      <div className="relative h-52 shrink-0 overflow-hidden">
-                        {art?.image && (
-                          <img
-                            src={art.image}
-                            alt=""
-                            className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
-                          />
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0d] via-transparent to-transparent" />
-                        {/* top scrim so the badge stays legible over light screenshots */}
-                        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/75 to-transparent" />
-                        <span className="absolute left-6 top-5 rounded-full bg-black/70 px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-white ring-1 ring-white/15 backdrop-blur-md">
-                          {os.platform}
-                        </span>
-                        <ArrowUpRight size={18} className="absolute right-5 top-5 text-white/80 transition-colors group-hover:text-brand-light" />
-                      </div>
-                      {/* body */}
-                      <div className="relative flex flex-1 flex-col justify-end p-7">
-                        <TileGlow />
-                        <h3 className="relative text-3xl font-semibold tracking-tight text-white">
-                          {os.name}
-                        </h3>
-                        <p className="relative mt-2.5 max-w-md text-sm leading-relaxed text-zinc-400">{os.desc}</p>
-                        <div className="relative mt-5 flex flex-wrap gap-2">
-                          {["#1 KoGovDoc-Bench", "2B params", "Runs on 1 GPU"].map((t) => (
-                            <span
-                              key={t}
-                              className="rounded-full border border-white/12 bg-white/[0.03] px-2.5 py-1 text-[11px] font-medium text-zinc-300"
-                            >
-                              {t}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.a>
-                  );
-                }
-                return (
-                  <motion.a
-                    key={os.name}
-                    href={os.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    variants={rise}
-                    custom={i}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={VIEWPORT}
-                    className={`${TILE} p-7`}
-                  >
-                    <TileGlow />
-                    <div className="relative flex items-start justify-between">
-                      <span className="font-mono text-[11px] uppercase tracking-wide text-brand-light">
-                        {os.platform}
-                      </span>
-                      <ArrowUpRight size={16} className="text-zinc-500 transition-colors group-hover:text-brand-light" />
-                    </div>
-                    <div className="relative flex flex-1 items-center py-4">
-                      <AssetGlyph kind={osGlyph(os.platform)} />
-                    </div>
-                    <div className="relative">
-                      <h3 className="text-lg font-semibold tracking-tight text-white">{os.name}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-zinc-400">{os.desc}</p>
-                    </div>
-                  </motion.a>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Demos — uniform 3-up grid */}
-          <div>
-            <Eyebrow>Demos &amp; playground</Eyebrow>
-            <div className="grid gap-4 sm:grid-cols-3">
-              {DEMOS.map((d, i) => (
-                <motion.a
-                  key={d.name}
-                  href={d.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  variants={rise}
-                  custom={i}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={VIEWPORT}
-                  className={`${TILE} min-h-[176px] p-6`}
-                >
-                  <TileGlow />
-                  <div className="relative flex items-center justify-between">
-                    <span className="rounded-full bg-brand/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-brand-light">
-                      {d.tag}
-                    </span>
-                    <ArrowUpRight size={16} className="text-zinc-500 transition-colors group-hover:text-brand-light" />
-                  </div>
-                  <div className="relative flex flex-1 items-center py-4">
-                    <AssetGlyph kind={demoGlyph(d.tag)} />
-                  </div>
-                  <div className="relative">
-                    <h3 className="text-lg font-semibold tracking-tight text-white">{d.name}</h3>
-                    <p className="mt-1.5 text-sm leading-relaxed text-zinc-400">{d.desc}</p>
-                  </div>
-                </motion.a>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ───── 3. Milestones — horizontal timeline ───── */}
-        <MilestoneTimeline />
-
-        {/* ───── 4. CTA — collaborate (PoC) ───── */}
-        <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
-          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.015] p-10 md:p-16">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full"
-              style={{ background: "radial-gradient(circle, rgba(117,59,189,0.25), transparent 70%)" }}
-            />
-            <div className="relative">
-              <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light">
-                Let’s collaborate
-              </span>
-              <h3 className="mt-5 max-w-2xl text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.1]">
-                PoC, joint research, or applied AI — proposals are always welcome.
-              </h3>
-              <p className="mt-5 max-w-xl text-zinc-400 leading-relaxed">
-                We turn open research into systems enterprises can actually run. Tell us the problem;
-                we’ll tell you what’s possible.
-              </p>
-              <a
-                href="mailto:contact@wigtn.com"
-                className="mt-9 inline-flex items-center gap-2 rounded-sm bg-brand px-7 py-3.5 text-sm font-semibold uppercase tracking-wide text-white hover:bg-brand-light hover:text-[#0A0A0A] transition-colors"
+        {/* ───── 2. What we do — large-type, outline-free text layout ───── */}
+        <section id="capabilities" className="max-w-6xl mx-auto px-6 pt-28 md:pt-40 scroll-mt-24">
+          <h2 className="text-[clamp(2.5rem,7.5vw,6rem)] font-bold tracking-[-0.03em] leading-[0.98] text-brand-light">
+            What we do
+          </h2>
+          <div className="mt-16 md:mt-24 divide-y divide-white/10 border-t border-white/10">
+            {CAPABILITIES.map((c, i) => (
+              <motion.div
+                key={c.title}
+                variants={rise}
+                custom={i}
+                initial="hidden"
+                whileInView="show"
+                viewport={VIEWPORT}
+                className="grid gap-3 py-10 md:grid-cols-[5rem_1fr] md:gap-12 md:py-14"
               >
-                contact@wigtn.com <ArrowUpRight size={16} />
-              </a>
-            </div>
+                <span className="font-mono text-3xl text-brand-light">{`0${i + 1}`}</span>
+                <div>
+                  <h3 className="text-2xl md:text-4xl font-semibold tracking-tight text-white">
+                    {c.title}
+                  </h3>
+                  <p className="mt-4 max-w-2xl text-pretty text-base md:text-lg leading-relaxed text-zinc-400">
+                    {c.body}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
           </div>
+        </section>
+
+        {/* ───── Partners — centered logo wall (text stand-ins until assets land) ───── */}
+        <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
+          <h2 className="text-center text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight">
+            Partners
+          </h2>
+          <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 md:mt-16">
+            {PARTNERS.map((name) => (
+              <motion.div
+                key={name}
+                variants={rise}
+                initial="hidden"
+                whileInView="show"
+                viewport={VIEWPORT}
+                className="flex items-center justify-center"
+              >
+                {/* TODO: replace with <img> partner logo once assets exist */}
+                <span className="text-xl font-semibold tracking-tight text-zinc-300 md:text-2xl">
+                  {name}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* ───── 3. Newsroom — featured news as article cards ───── */}
+        <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <h2 className="text-[clamp(2.5rem,7.5vw,6rem)] font-bold tracking-[-0.03em] leading-[0.98] text-brand-light">
+              Newsroom
+            </h2>
+            <ViewAll href={NEWS} label="All news" />
+          </div>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 md:mt-16">
+            {NEWSROOM.map((a, i) => (
+              <ArticleCard key={a.slug} a={a} i={i} />
+            ))}
+          </div>
+        </section>
+
+        <Divider />
+
+        {/* ───── 4. Product — coming soon ───── */}
+        <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
+          <h2 className="text-[clamp(2.5rem,7.5vw,6rem)] font-bold tracking-[-0.03em] leading-[0.98] text-brand-light">
+            Product
+          </h2>
+          <p className="mt-8 text-pretty text-lg md:text-xl text-zinc-500">
+            Coming soon. Our first product is in the works — stay tuned.
+          </p>
+        </section>
+
+        <Divider />
+
+        {/* ───── Track record — horizontal timeline (disabled for now) ───── */}
+        {/* <MilestoneTimeline /> */}
+
+        {/* ───── 5. CTA — text layout; only the contact link is boxed in purple ───── */}
+        <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
+          <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light">
+            Start your AI transformation
+          </span>
+          <h3 className="mt-5 max-w-2xl text-balance text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.1]">
+            Tell us where AI should move the needle — we’ll show you what’s possible.
+          </h3>
+          <p className="mt-5 max-w-xl text-pretty text-zinc-400 leading-relaxed">
+            PoC, joint research, or a production system your team can run — we turn open
+            research into AI that holds up in your operations.
+          </p>
+          <a
+            href="mailto:contact@wigtn.com"
+            className="mt-9 inline-flex items-center gap-2 rounded-md bg-brand-light px-6 py-3.5 text-base font-semibold text-[#0A0A0A] transition-colors hover:bg-white"
+          >
+            contact@wigtn.com <ArrowUpRight size={18} />
+          </a>
         </section>
       </main>
 

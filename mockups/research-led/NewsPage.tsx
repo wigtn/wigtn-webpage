@@ -15,9 +15,9 @@ export function NewsPage() {
   return (
     <PageShell>
       <PageHero
-        eyebrow="News"
         title="What's happening."
-        lead="Conference acceptances, awards, talks, and the videos we publish along the way."
+        titleClassName="text-brand-light"
+        lead="Papers, awards, and talks — newest first."
       />
 
       <div className="max-w-6xl mx-auto px-6 pb-24">

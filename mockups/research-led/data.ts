@@ -25,25 +25,25 @@ export const articleHref = (slug: string) => `${HOME}${slug}/`;
  * a short teaser; depth lives on these sub-pages. Nav points to pages, not
  * in-page anchors. */
 export const NAV = [
-  { label: "Work", href: WORK },
+  { label: "About", href: TEAM_PAGE },
   { label: "News", href: NEWS },
-  { label: "Team", href: TEAM_PAGE },
+  { label: "Product", href: WORK },
 ];
 
-/* What we do — capability pillars (philosophy/capability-led, not output
- * lists). Drops "Products" per the research-led direction. */
-export const PILLARS = [
+/* What we do FOR ENTERPRISES — service-framed capability pillars. This is the
+ * "we can help your company" promise; research/OSS below are the proof. */
+export const CAPABILITIES = [
+  {
+    title: "AX Consulting",
+    body: "We start from your requirements, map where AI actually moves the needle, and lay out a clear path to get there.",
+  },
+  {
+    title: "AI System Integration",
+    body: "We build AI capabilities into the products and workflows you already run — added to your stack, not bolted on beside it.",
+  },
   {
     title: "Research",
-    body: "Peer-reviewed work at venues like ACL and EMNLP — studied in the open.",
-  },
-  {
-    title: "Enterprise Consulting",
-    body: "We turn that research into systems enterprises can actually run.",
-  },
-  {
-    title: "Open Source",
-    body: "Tools, models, and plugins the developer community uses.",
+    body: "We keep pushing the frontier through applied research, and bring what we learn straight back into what we build for you.",
   },
 ];
 
@@ -52,13 +52,13 @@ export const STATS = [
   { value: "ACL ’26", label: "Paper accepted" },
   { value: "#1", label: "on KoGovDoc-Bench" },
   { value: "2", label: "Hackathon awards" },
-  { value: "5", label: "AI engineers" },
+  { value: "3", label: "Open-source releases" },
 ];
 
-/* Official partners. MEGACODE (contract in progress) + BrainCrew (LangChain
- * Global Partner Co., Harrison's parent company). Remaining slots are mock
- * placeholders until real partners land. */
-export const PARTNERS = ["MEGACODE", "BRAINCREW", "PARTNER 03", "PARTNER 04", "PARTNER 05"];
+/* Real business relationships — shown as a "working with" trust band.
+ * TODO: drop real logo assets into /images/partners and swap the text
+ * wordmarks in the view for <img> once they exist. */
+export const PARTNERS = ["Mind AI", "MEGA Code", "Tripla", "Arustay"];
 
 /* Tech stack actually used across WIGTN projects — demoted "Powered by". */
 export const POWERED_BY = ["ANTHROPIC", "OPENAI", "GOOGLE", "SNOWFLAKE", "HUGGINGFACE", "AWS", "VERCEL"];
@@ -221,7 +221,7 @@ export const ARTICLES: Article[] = [
     title: "WIGVO: real-time phone-call translation with zero echo across 148 calls",
     summary:
       "Two parallel AI interpreter sessions deliver bidirectional voice translation over standard phone lines — 557ms average latency, zero echo-loop incidents. Accepted to ACL 2026 System Demonstrations.",
-    date: "2026.02.18",
+    date: "2026.04.27",
     readTime: "10 min",
     author: "WIGTN Research",
     image: "/images/projects/wigvo_logo.png",
@@ -290,7 +290,7 @@ export const ARTICLES: Article[] = [
     title: "Grand Prize — Build with TRAE Seoul (ByteDance)",
     summary:
       "WIGENT, a multi-agent debate arena, won the Grand Prize — built by 3 engineers in 3.5 hours.",
-    date: "2026",
+    date: "2026.03.28",
     place: "Seoul, KOR",
     author: "ByteDance",
     image: "/images/projects/trae_hackthon_seoul.png",
@@ -310,7 +310,7 @@ export const ARTICLES: Article[] = [
     title: "2nd Place, Tech Track — Snowflake AI & Data Hackathon Korea 2026",
     summary:
       "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform — five AI experts debate across four datasets.",
-    date: "2026",
+    date: "2026.04.29",
     place: "Seoul, KOR",
     author: "Snowflake",
     image: "/images/projects/wigtn-flake-stage.jpg",
@@ -440,6 +440,13 @@ export const ARTICLES: Article[] = [
 /* Selectors */
 export const byKind = (k: Kind) => ARTICLES.filter((a) => a.kind === k);
 export const FEATURED = ARTICLES.find((a) => a.featured)!;
+/* Curated homepage "newsroom" — research credibility & wins told as article
+ * cards with imagery (papers, conference reports, awards), not a dry list. */
+export const NEWSROOM = [
+  ARTICLES.find((a) => a.slug === "snowflake-korea-2026")!, // 2026.04.29
+  ARTICLES.find((a) => a.slug === "wigvo")!, // 2026.04.27
+  ARTICLES.find((a) => a.slug === "trae-seoul-grand-prize")!, // 2026.03.28
+];
 export const REPORTS = byKind("report").filter((a) => !a.featured);
 export const EVENTS = byKind("event");
 export const COMMUNITY = byKind("community");
@@ -481,6 +488,7 @@ export const OPEN_SOURCE = [
     desc: "2B Korean document parser — #1 on KoGovDoc-Bench. Weights, data, and eval open.",
     href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR",
     slug: "wigtnocr",
+    metrics: ["#1 KoGovDoc-Bench", "2B params", "Runs on 1 GPU"],
   },
   {
     name: "WIGSS",
@@ -488,6 +496,7 @@ export const OPEN_SOURCE = [
     desc: "Drag UI in the browser, watch the source rewrite itself. Always-on AI agent.",
     href: "https://npmjs.com/package/wigss",
     slug: "wigss",
+    metrics: ["Browser-native", "AI refactor agent", "npm"],
   },
   {
     name: "WIGTN Coding",
@@ -495,6 +504,7 @@ export const OPEN_SOURCE = [
     desc: "A Claude Code plugin ecosystem — 12 agents, 3 skills, 17 design styles.",
     href: "https://github.com/wigtn/wigtn-plugins-with-claude-code",
     slug: "wigtn-coding",
+    metrics: ["12 agents", "3 skills", "17 design styles"],
   },
 ];
 
@@ -567,16 +577,16 @@ export const MILESTONES: Milestone[] = [
   {
     month: "Jun",
     date: "2026.06",
-    label: "IWSLT 2026",
-    title: "IWSLT 2026",
-    text: "Presented our work at IWSLT 2026.",
+    label: "Mind AI",
+    title: "Mind AI — Technical Collaboration",
+    text: "Domestic test partner for MEGA Code.",
   },
   {
     month: "Jul",
     date: "2026.07",
-    label: "Qualcomm",
-    title: "Qualcomm HQ meeting",
-    text: "Invited to a meeting at Qualcomm headquarters.",
+    label: "IWSLT 2026",
+    title: "IWSLT 2026",
+    text: "Invited Talk.",
     upcoming: true,
   },
   {
@@ -601,4 +611,9 @@ export const WORK_GROUPS = [
   { label: "Open Source", items: ARTICLES.filter((a) => a.kind === "report" && a.tag.includes("OPEN SOURCE")) },
   { label: "Awards", items: EVENTS },
 ];
-export const NEWS_FEED = [...EVENTS, ...INSIGHTS, ...COMMUNITY];
+/* News feed — every real article (papers, awards, talks, releases), newest
+ * first. Reports are included here since there is no separate Work page.
+ * Placeholder/mock entries are excluded. */
+export const NEWS_FEED = ARTICLES.filter((a) => !a.placeholder).sort((a, b) =>
+  a.date < b.date ? 1 : a.date > b.date ? -1 : 0,
+);

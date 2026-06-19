@@ -10,7 +10,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Trophy, MapPin, ArrowUpRight, ArrowLeft, Menu, X } from "lucide-react";
+import { Trophy, MapPin, Menu, X } from "lucide-react";
 import { HOME, NAV } from "./data";
 
 export const EVENT_ICON = { trophy: Trophy, pin: MapPin } as const;
@@ -59,8 +59,8 @@ export function SiteHeader() {
           <Wordmark />
         </Link>
 
-        {/* centered nav (desktop) */}
-        <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex">
+        {/* right-aligned nav (desktop) */}
+        <ul className="hidden items-center gap-2 md:flex">
           {NAV.map((n) => (
             <li key={n.href}>
               <Link
@@ -73,25 +73,17 @@ export function SiteHeader() {
           ))}
         </ul>
 
-        {/* right side */}
-        <div className="flex items-center gap-2">
-          <a
-            href="mailto:contact@wigtn.com"
-            className="hidden items-center gap-1.5 rounded-full border border-white/15 px-4 py-1.5 text-sm font-medium text-zinc-200 transition-colors hover:border-white hover:bg-white hover:text-[#0A0A0A] md:inline-flex"
-          >
-            Contact <ArrowUpRight size={14} />
-          </a>
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            aria-controls="rl-mobile-nav"
-            className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-zinc-300 transition-colors hover:border-white hover:text-white md:hidden"
-          >
-            {open ? <X size={17} /> : <Menu size={17} />}
-          </button>
-        </div>
+        {/* mobile menu toggle */}
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="rl-mobile-nav"
+          className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-zinc-300 transition-colors hover:border-white hover:text-white md:hidden"
+        >
+          {open ? <X size={17} /> : <Menu size={17} />}
+        </button>
       </nav>
 
       {/* mobile dropdown */}
@@ -109,15 +101,6 @@ export function SiteHeader() {
                 </Link>
               </li>
             ))}
-            <li className="mt-1">
-              <a
-                href="mailto:contact@wigtn.com"
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-between rounded-lg bg-brand px-3 py-2.5 font-medium text-white"
-              >
-                Contact <ArrowUpRight size={15} />
-              </a>
-            </li>
           </ul>
         </div>
       )}
@@ -127,23 +110,10 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="relative z-10 border-t border-white/10">
-      {/* Big CTA */}
-      <div className="max-w-6xl mx-auto px-6 py-20 md:py-28 text-center">
-        <h2 className="text-[clamp(2.25rem,6vw,4.5rem)] font-bold tracking-tight leading-[1.05]">
-          Let's build something.
-        </h2>
-        <a
-          href="mailto:contact@wigtn.com"
-          className="mt-8 inline-flex items-center gap-2 rounded-sm bg-brand px-7 py-3.5 text-sm font-semibold uppercase tracking-wide text-white hover:bg-brand-light hover:text-[#0A0A0A] transition-colors"
-        >
-          Talk to us <ArrowUpRight size={16} />
-        </a>
-      </div>
-
+    <footer className="relative z-10">
       {/* Footer columns */}
-      <div className="max-w-6xl mx-auto px-6 pb-10">
-        <div className="border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between gap-10">
+      <div className="max-w-6xl mx-auto px-6 pb-10 pt-16 md:pt-20">
+        <div className="flex flex-col md:flex-row justify-between gap-10">
           <div>
             <Wordmark className="h-9 md:h-11" />
             <p className="mt-4 max-w-xs text-sm text-zinc-500">
@@ -180,6 +150,11 @@ export function SiteFooter() {
                     GitHub
                   </a>
                 </li>
+                <li>
+                  <a href="https://huggingface.co/Wigtn" className="hover:text-white transition-colors">
+                    Hugging Face
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
@@ -205,34 +180,24 @@ export function PageShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* Sub-page hero — back link + eyebrow + display title + lead. */
+/* Sub-page hero — display title + lead (no back link / eyebrow). */
 export function PageHero({
-  eyebrow,
   title,
   lead,
-  backHref = HOME,
-  backLabel = "Back to home",
+  titleClassName = "",
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   lead?: string;
   backHref?: string;
   backLabel?: string;
+  titleClassName?: string;
 }) {
   return (
-    <section className="max-w-6xl mx-auto px-6 pt-24 pb-10 md:pt-32 md:pb-14">
-      <Link
-        href={backHref}
-        className="group mb-7 inline-flex items-center gap-1.5 text-sm font-medium text-zinc-400 transition-colors hover:text-white"
+    <section className="max-w-6xl mx-auto px-6 pt-28 pb-10 md:pt-36 md:pb-14">
+      <h1
+        className={`text-[clamp(2.25rem,5.5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.05] max-w-3xl ${titleClassName}`}
       >
-        <ArrowLeft size={15} className="transition-transform group-hover:-translate-x-0.5" />
-        {backLabel}
-      </Link>
-      <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light mb-5">
-        <span className="h-1.5 w-1.5 rounded-full bg-brand-light" />
-        {eyebrow}
-      </div>
-      <h1 className="text-[clamp(2.25rem,5.5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.05] max-w-3xl">
         {title}
       </h1>
       {lead && <p className="mt-5 max-w-2xl text-lg md:text-xl text-zinc-400 leading-relaxed">{lead}</p>}

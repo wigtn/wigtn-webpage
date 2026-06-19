@@ -9,7 +9,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, Calendar, MapPin, Play, Clock, User } from "lucide-react";
-import { HOME, WORK, NEWS, articleHref, getArticle, ARTICLES, type Block, type Article } from "./data";
+import { HOME, articleHref, getArticle, ARTICLES, type Block, type Article } from "./data";
 // `import Link from "next/link"` above shadows data's `Link` type — use
 // `article.links` inline instead of importing that type here.
 import { SiteHeader, SiteFooter, BackdropDecor, EVENT_ICON, rise } from "./chrome";
@@ -76,16 +76,8 @@ export function ArticleDetail({ slug }: { slug: string }) {
 
       <main className="relative z-10">
         <article className="max-w-3xl mx-auto px-6 pt-24 pb-8 md:pt-28">
-          {/* Back + breadcrumb — reports live on /work, everything else on /news */}
-          <Link
-            href={article.kind === "report" ? WORK : NEWS}
-            className="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-white transition-colors"
-          >
-            <ArrowLeft size={15} /> {article.kind === "report" ? "Work" : "News"}
-          </Link>
-
           {/* Header */}
-          <motion.header variants={rise} initial="hidden" animate="show" className="mt-6">
+          <motion.header variants={rise} initial="hidden" animate="show">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-brand-light">
                 {article.tag}
