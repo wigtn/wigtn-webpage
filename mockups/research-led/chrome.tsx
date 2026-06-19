@@ -138,8 +138,8 @@ export function SiteFooter() {
         <div className="flex flex-col md:flex-row justify-between gap-10">
           <div>
             <Wordmark className="h-9 md:h-11" />
-            <p className="mt-4 max-w-xs text-sm text-zinc-500">
-              Deep-tech research &amp; consulting. We prove it by what we publish.
+            <p className="mt-4 max-w-sm text-pretty text-sm text-zinc-500">
+              Deep-tech research and consulting, proven by what we publish.
             </p>
           </div>
           <div className="flex gap-16">
