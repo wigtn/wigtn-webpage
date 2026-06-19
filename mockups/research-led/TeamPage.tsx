@@ -2,6 +2,7 @@
 
 /** /about — founder profile, company history (연혁), and the members. */
 
+import { Fragment } from "react";
 import { motion } from "framer-motion";
 import { PageShell, PageHero, rise, VIEWPORT } from "./chrome";
 import { TEAM, MILESTONES } from "./data";
@@ -15,13 +16,13 @@ function Divider() {
   );
 }
 
-/* Founder's career — most recent first (top), earliest last (bottom). */
+/* Founder's career — current (현) first, former (전) below. */
 const FOUNDER_CAREER = [
-  { period: "2026 ~ Present", company: "BrainCrew", role: "Engineering Lead" },
-  { period: "2025 ~ 2026", company: "SoundMind", role: "AI Research Engineer" },
-  { period: "2022 ~ 2024", company: "Hyundai E&C", role: "Construction Engineer" },
-  { period: "2016 ~ 2022", company: "Donggeuk E&C", role: "Construction Engineer" },
-  { period: "2014 ~ 2016", company: "Doosan E&C", role: "Construction Engineer" },
+  { status: "현", company: "BrainCrew", role: "Engineering Lead" },
+  { status: "전", company: "SoundMind", role: "AI Research Engineer" },
+  { status: "전", company: "Hyundai E&C", role: "Construction Engineer" },
+  { status: "전", company: "Donggeuk E&C", role: "Construction Engineer" },
+  { status: "전", company: "Doosan E&C", role: "Construction Engineer" },
 ];
 
 export function TeamPage() {
@@ -61,15 +62,21 @@ export function TeamPage() {
             <div className="text-[11px] font-semibold tracking-[0.22em] uppercase text-zinc-500">
               Career
             </div>
-            <ul className="mt-5 space-y-2.5">
+            <div className="mt-5 grid grid-cols-[auto_auto_1fr] items-baseline gap-x-5 gap-y-2.5 text-base md:text-lg">
               {FOUNDER_CAREER.map((c) => (
-                <li key={c.company} className="text-base text-zinc-400 md:text-lg">
-                  <span className="text-zinc-500">{c.period}</span>,{" "}
-                  <span className="font-medium text-white">{c.company}</span>,{" "}
-                  <span>{c.role}</span>
-                </li>
+                <Fragment key={c.company}>
+                  <span
+                    className={
+                      c.status === "현" ? "font-medium text-brand-light" : "text-zinc-600"
+                    }
+                  >
+                    {c.status}
+                  </span>
+                  <span className="font-medium text-white">{c.company}</span>
+                  <span className="text-zinc-400">{c.role}</span>
+                </Fragment>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
       </section>
