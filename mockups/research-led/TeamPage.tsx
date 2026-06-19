@@ -16,13 +16,13 @@ function Divider() {
   );
 }
 
-/* Founder's career — current (현) first, former (전) below. */
+/* Founder's career — current (現) first, former (前) below. */
 const FOUNDER_CAREER = [
-  { status: "현", company: "BrainCrew", role: "Engineering Lead" },
-  { status: "전", company: "SoundMind", role: "AI Research Engineer" },
-  { status: "전", company: "Hyundai E&C", role: "Construction Engineer" },
-  { status: "전", company: "Donggeuk E&C", role: "Construction Engineer" },
-  { status: "전", company: "Doosan E&C", role: "Construction Engineer" },
+  { status: "現", company: "BrainCrew", role: "Engineering Lead" },
+  { status: "前", company: "SoundMind", role: "AI Research Engineer" },
+  { status: "前", company: "Hyundai E&C", role: "Construction Engineer" },
+  { status: "前", company: "Donggeuk E&C", role: "Construction Engineer" },
+  { status: "前", company: "Doosan E&C", role: "Construction Engineer" },
 ];
 
 export function TeamPage() {
@@ -67,7 +67,7 @@ export function TeamPage() {
                 <Fragment key={c.company}>
                   <span
                     className={
-                      c.status === "현" ? "font-medium text-brand-light" : "text-zinc-600"
+                      c.status === "現" ? "font-medium text-brand-light" : "text-zinc-600"
                     }
                   >
                     {c.status}
