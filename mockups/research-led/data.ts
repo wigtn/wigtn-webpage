@@ -52,13 +52,15 @@ export const CAPABILITIES = [
   },
 ];
 
-/* Reference / portfolio links shown on the Product page. */
+/* Reference / portfolio work shown on the Product page (Web Agency). */
 export const REFERENCES = [
   {
     name: "AruStay",
+    type: "Accommodation booking",
     tag: "Sample",
-    desc: "A stay-booking web experience designed and built by WIGTN.",
+    desc: "A cozy stay-booking experience for Seoul, designed and built by WIGTN.",
     href: "https://arustay-mockup.vercel.app/",
+    image: "/images/references/arustay.png",
   },
 ];
 

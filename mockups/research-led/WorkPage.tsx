@@ -19,31 +19,54 @@ export function WorkPage() {
           Stay tuned. We’ll announce it here when it’s ready.
         </p>
 
-        {/* Reference */}
-        <div className="mt-20 md:mt-24">
+        {/* Reference — Web Agency portfolio */}
+        <div className="mt-24 md:mt-28">
           <div className="text-[11px] font-semibold tracking-[0.22em] uppercase text-zinc-500">
-            Reference
+            Web Agency
           </div>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <h2 className="mt-3 text-[clamp(2.5rem,7.5vw,6rem)] font-bold tracking-[-0.03em] leading-[0.98] text-brand-light">
+            Reference
+          </h2>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 md:mt-16">
             {REFERENCES.map((r) => (
               <a
                 key={r.name}
                 href={r.href}
                 target="_blank"
                 rel="noreferrer"
-                className="group relative flex flex-col rounded-2xl bg-white/[0.025] p-6 ring-1 ring-inset ring-white/[0.07] transition-all duration-300 hover:bg-white/[0.045] hover:ring-white/15"
+                className="group relative flex flex-col overflow-hidden rounded-2xl bg-white/[0.025] ring-1 ring-inset ring-white/[0.07] transition-all duration-300 hover:bg-white/[0.045] hover:ring-white/15"
               >
-                <div className="flex items-center justify-between">
-                  <span className="rounded-full bg-brand/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-brand-light">
-                    {r.tag}
-                  </span>
-                  <ArrowUpRight
-                    size={16}
-                    className="text-zinc-500 transition-colors group-hover:text-brand-light"
-                  />
+                <div className="relative aspect-[16/9] overflow-hidden bg-white/[0.03]">
+                  {r.image ? (
+                    <img
+                      src={r.image}
+                      alt={r.name}
+                      className="h-full w-full object-cover object-top opacity-90 transition-transform duration-500 group-hover:scale-105 group-hover:opacity-100"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center">
+                      <span className="font-mono text-5xl font-bold text-brand/30 select-none">w.</span>
+                    </div>
+                  )}
                 </div>
-                <h3 className="mt-6 text-lg font-semibold tracking-tight text-white">{r.name}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-zinc-400">{r.desc}</p>
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-[11px] font-semibold uppercase tracking-wide text-brand-light">
+                      {r.type}
+                    </span>
+                    <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+                      {r.tag}
+                    </span>
+                  </div>
+                  <h3 className="mt-3 flex items-center gap-1.5 text-lg font-semibold tracking-tight text-white">
+                    {r.name}
+                    <ArrowUpRight
+                      size={15}
+                      className="text-zinc-500 transition-colors group-hover:text-brand-light"
+                    />
+                  </h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-zinc-400">{r.desc}</p>
+                </div>
               </a>
             ))}
           </div>
