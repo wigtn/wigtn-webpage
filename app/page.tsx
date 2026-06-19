@@ -1,28 +1,10 @@
-import {
-  Navigation,
-  Crew,
-  WhatWeDo,
-  Categories,
-  Team,
-  Footer,
-} from "@/components/sections";
-import { BackgroundDecor } from "@/components/BackgroundDecor";
+import { ResearchLedHome } from "@/mockups/research-led/ResearchLedHome";
 
+/**
+ * Homepage — the research-led company site (promoted from the mockup).
+ * The previous landing (components/sections/*) is retained in the repo but
+ * no longer routed.
+ */
 export default function Home() {
-  return (
-    <main className="relative h-screen overflow-y-auto overflow-x-hidden bg-[#FAFAFA] scroll-smooth">
-      {/* Inner relative wrapper grows to total content height so
-          BackgroundDecor's absolute layer spans the full scroll, not just
-          the viewport. */}
-      <div className="relative">
-        <BackgroundDecor />
-        <Navigation />
-        <Crew />
-        <WhatWeDo />
-        <Categories />
-        <Team />
-        <Footer />
-      </div>
-    </main>
-  );
+  return <ResearchLedHome />;
 }
