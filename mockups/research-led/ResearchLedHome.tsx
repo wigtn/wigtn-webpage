@@ -378,12 +378,14 @@ export function ResearchLedHome() {
           <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light">
             Start your AI transformation
           </span>
-          <h3 className="mt-5 max-w-2xl text-balance text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.1]">
-            Tell us where AI should move the needle — we’ll show you what’s possible.
+          <h3 className="mt-5 max-w-3xl text-pretty text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.15]">
+            Tell us where AI should move the needle in your business, and we’ll show you
+            what’s genuinely possible for the way your team works today.
           </h3>
-          <p className="mt-5 max-w-xl text-pretty text-zinc-400 leading-relaxed">
-            PoC, joint research, or a production system your team can run — we turn open
-            research into AI that holds up in your operations.
+          <p className="mt-6 max-w-2xl text-pretty text-zinc-400 leading-relaxed">
+            Whether it’s a proof of concept, a joint research project, or a full production
+            system your team can rely on, we turn open research into AI that holds up in real
+            operations. Tell us the problem, and we’ll tell you what it takes to solve it.
           </p>
           <a
             href="mailto:contact@wigtn.com"
