@@ -83,6 +83,39 @@ export function TeamPage() {
 
       <Divider />
 
+      {/* ── Members — circular avatars in a row ── */}
+      <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
+        <h2 className="text-center text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight">Members</h2>
+        <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 md:mt-16">
+          {members.map((m, i) => (
+            <motion.div
+              key={m.name}
+              variants={rise}
+              custom={i}
+              initial="hidden"
+              whileInView="show"
+              viewport={VIEWPORT}
+              className="flex flex-col items-center text-center"
+            >
+              <div className="h-32 w-32 overflow-hidden rounded-full bg-white/[0.04] ring-1 ring-inset ring-white/10 md:h-40 md:w-40">
+                <img
+                  src={m.image}
+                  alt={m.name}
+                  style={m.imagePosition ? { objectPosition: m.imagePosition } : undefined}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <h3 className="mt-5 text-base font-semibold tracking-tight text-white md:text-lg">
+                {m.name}
+              </h3>
+              <div className="mt-1 text-sm text-brand-light">{m.role}</div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      <Divider />
+
       {/* ── History (연혁) — left-aligned header, centered timeline ── */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
         <h2 className="text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-brand-light">History</h2>
@@ -123,39 +156,6 @@ export function TeamPage() {
               );
             })}
           </ul>
-        </div>
-      </section>
-
-      <Divider />
-
-      {/* ── Members — circular avatars in a row ── */}
-      <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
-        <h2 className="text-center text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight">Members</h2>
-        <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 md:mt-16">
-          {members.map((m, i) => (
-            <motion.div
-              key={m.name}
-              variants={rise}
-              custom={i}
-              initial="hidden"
-              whileInView="show"
-              viewport={VIEWPORT}
-              className="flex flex-col items-center text-center"
-            >
-              <div className="h-32 w-32 overflow-hidden rounded-full bg-white/[0.04] ring-1 ring-inset ring-white/10 md:h-40 md:w-40">
-                <img
-                  src={m.image}
-                  alt={m.name}
-                  style={m.imagePosition ? { objectPosition: m.imagePosition } : undefined}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <h3 className="mt-5 text-base font-semibold tracking-tight text-white md:text-lg">
-                {m.name}
-              </h3>
-              <div className="mt-1 text-sm text-brand-light">{m.role}</div>
-            </motion.div>
-          ))}
         </div>
       </section>
     </PageShell>
