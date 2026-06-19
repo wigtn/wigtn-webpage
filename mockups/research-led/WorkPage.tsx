@@ -21,12 +21,12 @@ export function WorkPage() {
 
         {/* Reference — Web Agency portfolio */}
         <div className="mt-24 md:mt-28">
-          <div className="text-[11px] font-semibold tracking-[0.22em] uppercase text-zinc-500">
-            Web Agency
-          </div>
-          <h2 className="mt-3 text-[clamp(2.5rem,7.5vw,6rem)] font-bold tracking-[-0.03em] leading-[0.98] text-brand-light">
+          <h2 className="text-[clamp(2.25rem,5.5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.05] text-brand-light">
             Reference
           </h2>
+          <div className="mt-2 text-lg md:text-xl font-medium text-zinc-500">
+            Web Agency
+          </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 md:mt-16">
             {REFERENCES.map((r) => (
               <a

@@ -21,7 +21,7 @@ const FOUNDER_CAREER = [
   { status: "現", company: "BrainCrew", role: "Engineering Lead" },
   { status: "前", company: "SoundMind", role: "AI Research Engineer" },
   { status: "前", company: "Hyundai E&C", role: "Construction Engineer" },
-  { status: "前", company: "Donggeuk E&C", role: "Construction Engineer" },
+  { status: "前", company: "DongKuk E&C", role: "Construction Engineer" },
   { status: "前", company: "Doosan E&C", role: "Construction Engineer" },
 ];
 
