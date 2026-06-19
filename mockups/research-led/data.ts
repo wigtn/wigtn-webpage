@@ -35,15 +35,15 @@ export const NAV = [
 export const CAPABILITIES = [
   {
     title: "AX Consulting",
-    body: "We start from your requirements, map where AI actually moves the needle, and lay out a clear path to get there.",
+    body: "We start from the problems your business actually has, not from a list of AI features. Together we map where AI can create real leverage, weigh what is feasible against what is worth doing, and hand you a clear, prioritized roadmap you can act on with confidence.",
   },
   {
     title: "AI System Integration",
-    body: "We build AI capabilities into the products and workflows you already run — added to your stack, not bolted on beside it.",
+    body: "We build AI capabilities directly into the products and workflows your team already relies on, so the value shows up inside your stack instead of sitting in a separate tool. From agents and retrieval to automation, we design around your data, your security model, and real production traffic.",
   },
   {
-    title: "Research",
-    body: "We keep pushing the frontier through applied research, and bring what we learn straight back into what we build for you.",
+    title: "AI R&D",
+    body: "We keep pushing the frontier through hands-on, applied research, publishing and competing in the open as we go. Whatever we learn flows straight back into the systems we build for you, so your results are production-ready and grounded in work that has been tested against the state of the art.",
   },
 ];
 
@@ -124,7 +124,7 @@ export const TEAM: TeamMember[] = [
     role: "AI Product Engineer",
     currentRole: "Full-Stack Developer & MX Team Lead",
     bio: "Mobile-first full-stack engineer covering the entire 3-tier stack with React Native. Focused on software engineering craft.",
-    image: "/images/team/hyeonsang_kim.jpg",
+    image: "/images/team/hyeonsang_kim.jpeg",
     imagePosition: "center 35%",
     github: "https://github.com/HyeonsangKim",
     linkedin: "https://www.linkedin.com/in/hyeonsang-kim-5a7a67260/",

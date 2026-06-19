@@ -38,7 +38,7 @@ export function TeamPage() {
       />
 
       {/* ── Founder — portrait + name + title (left), career history (right) ── */}
-      <section className="max-w-6xl mx-auto px-6 pb-28 md:pb-36">
+      <section className="max-w-6xl mx-auto px-6 pt-16 pb-28 md:pt-28 md:pb-36">
         <div className="flex flex-col items-center justify-center gap-10 md:flex-row md:items-center md:gap-16">
           {/* left: portrait, name, title */}
           <div className="flex flex-col items-center text-center">
