@@ -43,3 +43,6 @@ docs/prd
 
 # source assets
 app/wigtn_logo.*
+memory-lake/
+.claude/
+PLANNING/
