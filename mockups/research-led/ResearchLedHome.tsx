@@ -305,13 +305,16 @@ export function ResearchLedHome() {
         {/* ───── 2. What we do — sticky left header + compact right list (no cards) ───── */}
         <section id="capabilities" className="max-w-6xl mx-auto px-6 pt-28 md:pt-40 scroll-mt-24">
           <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
-            {/* left — sticky header, doesn't consume vertical space while the list scrolls */}
+            {/* left — sticky header + eyebrow + CTA, anchors the column while the list scrolls */}
             <div className="md:sticky md:top-24 md:self-start">
-              <h2 className="font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.02] text-brand-light">
+              <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-zinc-500">
+                Services · 01–04
+              </span>
+              <h2 className="mt-4 font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.02] text-brand-light">
                 What we do
               </h2>
               <p className="mt-5 max-w-xs text-pretty leading-relaxed text-zinc-500">
-                Four ways we bring AI into the way your team already works.
+                From AI strategy to systems in production — and the web work to ship them.
               </p>
             </div>
 
