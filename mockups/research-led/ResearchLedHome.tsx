@@ -1,16 +1,16 @@
 "use client";
 
 /**
- * MOCKUP — Research-led homepage (dark, 2026-trendy)
+ * Research-led homepage (dark, enterprise-AI positioning)
  * ------------------------------------------------------------------
- * "Our tech & vision IS the product." Built on current patterns:
- *   - Bento grid for tech assets (asymmetric, aligned tiles)
- *   - Dark-mode elevation layers (grey gradients, not flat black)
- *   - A real horizontal timeline: line + nodes are the hero, media is
- *     a small thumbnail, click-to-expand
- *   - Full-bleed gallery band
- * Sections: 1 Hero · 2 Research & Tech Assets · 3 Milestones · 4 CTA.
- * No team section, no hiring. Dark base (#0A0A0A) + Pantone 265 (`brand`).
+ * Card-less, type-led layout. Built on current patterns:
+ *   - Display grotesk (Space Grotesk) headlines + mono (JetBrains Mono)
+ *     micro-labels; Pretendard body
+ *   - Dark base (#0A0A0A), single accent = Pantone 265 (`brand`)
+ *   - Editorial sections separated by hairlines, not boxes/cards
+ *   - "What we do": sticky left header + compact right capability list
+ * Sections: 1 Hero · 2 What we do · Partners · 3 Newsroom · 4 Product · 5 CTA.
+ * MilestoneTimeline is retained but currently unrouted.
  */
 
 import { useEffect, useRef, useState } from "react";
@@ -33,15 +33,16 @@ function ViewAll({ href, label }: { href: string; label: string }) {
   );
 }
 
-/* Keyword chips — replaces dense prose with scannable tags inside a tile. */
+/* Keyword labels — scannable metadata, not boxed chips (no card aesthetic). */
 function Tags({ tags, className = "" }: { tags: string[]; className?: string }) {
   return (
-    <div className={`flex flex-wrap gap-2 ${className}`}>
+    <div className={`flex flex-wrap gap-x-6 gap-y-2 ${className}`}>
       {tags.map((t) => (
         <span
           key={t}
-          className="rounded-full border border-white/10 bg-white/[0.02] px-2.5 py-1 text-[11px] text-zinc-400"
+          className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-zinc-500"
         >
+          <span aria-hidden className="h-1 w-1 rounded-full bg-brand-light/70" />
           {t}
         </span>
       ))}
@@ -301,15 +302,22 @@ export function ResearchLedHome() {
           </div>
         </section>
 
-        {/* ───── 2. What we do — asymmetric bento (featured tile + 3-up) ───── */}
+        {/* ───── 2. What we do — sticky left header + compact right list (no cards) ───── */}
         <section id="capabilities" className="max-w-6xl mx-auto px-6 pt-28 md:pt-40 scroll-mt-24">
-          <h2 className="font-display text-[clamp(2.5rem,7.5vw,6rem)] font-bold tracking-[-0.03em] leading-[0.98] text-brand-light">
-            What we do
-          </h2>
-          <div className="mt-12 grid gap-4 md:mt-16 md:grid-cols-6">
-            {CAPABILITIES.map((c, i) => {
-              const featured = i === 0;
-              return (
+          <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
+            {/* left — sticky header, doesn't consume vertical space while the list scrolls */}
+            <div className="md:sticky md:top-24 md:self-start">
+              <h2 className="font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.02] text-brand-light">
+                What we do
+              </h2>
+              <p className="mt-5 max-w-xs text-pretty leading-relaxed text-zinc-500">
+                Four ways we bring AI into the way your team already works.
+              </p>
+            </div>
+
+            {/* right — index + title + lead + labels (body dropped to keep rows short) */}
+            <div className="divide-y divide-white/10 border-t border-white/10">
+              {CAPABILITIES.map((c, i) => (
                 <motion.div
                   key={c.title}
                   variants={rise}
@@ -317,42 +325,19 @@ export function ResearchLedHome() {
                   initial="hidden"
                   whileInView="show"
                   viewport={VIEWPORT}
-                  className={`group relative flex flex-col rounded-2xl bg-white/[0.025] ring-1 ring-inset ring-white/[0.07] transition-colors hover:bg-white/[0.04] hover:ring-white/15 ${
-                    featured ? "p-8 md:col-span-6 md:p-12" : "p-7 md:col-span-2 md:p-8"
-                  }`}
+                  className="flex items-start gap-5 py-8 md:py-10"
                 >
-                  {featured ? (
-                    /* featured — two columns so the wide tile's right half fills */
-                    <div className="grid gap-6 md:grid-cols-[1fr_1.45fr] md:gap-12">
-                      <div>
-                        <span className="font-mono text-sm text-brand-light">01</span>
-                        <h3 className="mt-4 font-display text-3xl font-semibold tracking-tight text-white md:text-4xl">
-                          {c.title}
-                        </h3>
-                      </div>
-                      <div>
-                        <p className="text-pretty text-lg font-medium leading-relaxed text-white md:text-xl">
-                          {c.lead}
-                        </p>
-                        <p className="mt-3 text-pretty leading-relaxed text-zinc-500">{c.body}</p>
-                        <Tags tags={c.tags} className="mt-6" />
-                      </div>
-                    </div>
-                  ) : (
-                    /* sub tile — lead (white) + one supporting line + chips pinned to bottom */
-                    <>
-                      <span className="font-mono text-sm text-brand-light">{`0${i + 1}`}</span>
-                      <h3 className="mt-4 font-display text-xl font-semibold tracking-tight text-white md:text-2xl">
-                        {c.title}
-                      </h3>
-                      <p className="mt-3 text-pretty leading-relaxed text-white/90">{c.lead}</p>
-                      <p className="mt-2 text-pretty text-sm leading-relaxed text-zinc-500">{c.body}</p>
-                      <Tags tags={c.tags} className="mt-auto pt-6" />
-                    </>
-                  )}
+                  <span className="pt-1.5 font-mono text-sm text-brand-light">{`0${i + 1}`}</span>
+                  <div>
+                    <h3 className="font-display text-2xl font-semibold tracking-tight text-white md:text-3xl">
+                      {c.title}
+                    </h3>
+                    <p className="mt-3 text-pretty leading-relaxed text-zinc-300">{c.lead}</p>
+                    <Tags tags={c.tags} className="mt-4" />
+                  </div>
                 </motion.div>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </section>
 
@@ -399,20 +384,20 @@ export function ResearchLedHome() {
 
         <Divider />
 
-        {/* ───── 4. Product — compact "in development" teaser panel ───── */}
-        <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
-          <div className="flex flex-col gap-6 rounded-2xl border border-white/10 bg-white/[0.02] p-8 md:flex-row md:items-center md:justify-between md:p-12">
+        {/* ───── 4. Product — card-less text band with inline status ───── */}
+        <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light">
                 Product
               </span>
-              <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight text-white md:text-3xl">
+              <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-white md:text-4xl">
                 Our first product is in the works.
               </h2>
-              <p className="mt-2 text-pretty text-zinc-500">Coming soon — stay tuned.</p>
+              <p className="mt-3 text-pretty text-zinc-500">Coming soon — stay tuned.</p>
             </div>
-            <span className="inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-white/15 px-4 py-2 font-mono text-xs text-zinc-400 md:self-auto">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-light" />
+            <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-zinc-500">
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-brand-light" />
               In development
             </span>
           </div>
