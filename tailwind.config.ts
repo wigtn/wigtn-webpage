@@ -27,6 +27,12 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["Pretendard Variable", "Pretendard", "-apple-system", "BlinkMacSystemFont", "system-ui", "Roboto", "sans-serif"],
+        /* Display grotesk for headlines. Latin glyphs render in Space Grotesk;
+         * Hangul falls back per-glyph to Pretendard, so mixed KR/EN titles work. */
+        display: ["Space Grotesk", "Pretendard Variable", "Pretendard", "-apple-system", "BlinkMacSystemFont", "system-ui", "sans-serif"],
+        /* Real mono so index numbers / dates / labels stop falling back to the
+         * OS default (Menlo vs Consolas) — this is the research-lab texture. */
+        mono: ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
       },
     },
   },

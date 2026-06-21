@@ -36,19 +36,27 @@ export const NAV: { label: string; href: string; disabled?: boolean }[] = [
 export const CAPABILITIES = [
   {
     title: "AX Consulting",
-    body: "We start from the problems your business actually has, not from a list of AI features. Together we map where AI can create real leverage, weigh what is feasible against what is worth doing, and hand you a clear, prioritized roadmap you can act on with confidence.",
+    lead: "We start from your real problems, not a list of AI features.",
+    body: "Together we map where AI creates real leverage and hand you a clear, prioritized roadmap you can act on.",
+    tags: ["Opportunity mapping", "Feasibility", "Roadmap"],
   },
   {
     title: "AI System Integration",
-    body: "We build AI capabilities directly into the products and workflows your team already relies on, so the value shows up inside your stack instead of sitting in a separate tool. From agents and retrieval to automation, we design around your data, your security model, and real production traffic.",
+    lead: "We build AI into the products and workflows your team already uses.",
+    body: "Designed around your data, security model, and real production traffic — not a separate tool.",
+    tags: ["Agents", "Retrieval", "Automation"],
   },
   {
     title: "AI R&D",
-    body: "We keep pushing the frontier through hands-on, applied research, publishing and competing in the open as we go. Whatever we learn flows straight back into the systems we build for you, so your results are production-ready and grounded in work that has been tested against the state of the art.",
+    lead: "We push the frontier through hands-on, applied research.",
+    body: "Publishing and competing in the open, then folding what we learn back into your systems.",
+    tags: ["Applied research", "Publishing", "Production-ready"],
   },
   {
     title: "Web Agency",
-    body: "Beyond AI, we design and ship polished marketing sites and web products from first concept to launch. The same crew that builds our AI systems handles the web work, so you get fast, modern, and accessible front-ends without coordinating a separate vendor or stitching tools together.",
+    lead: "Beyond AI, we design and ship polished web products end to end.",
+    body: "The same crew builds fast, modern, accessible front-ends — no separate vendor to coordinate.",
+    tags: ["Marketing sites", "Web products", "Design → launch"],
   },
 ];
 
