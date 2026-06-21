@@ -1,16 +1,16 @@
 "use client";
 
 /**
- * MOCKUP — Research-led homepage (dark, 2026-trendy)
+ * Research-led homepage (dark, enterprise-AI positioning)
  * ------------------------------------------------------------------
- * "Our tech & vision IS the product." Built on current patterns:
- *   - Bento grid for tech assets (asymmetric, aligned tiles)
- *   - Dark-mode elevation layers (grey gradients, not flat black)
- *   - A real horizontal timeline: line + nodes are the hero, media is
- *     a small thumbnail, click-to-expand
- *   - Full-bleed gallery band
- * Sections: 1 Hero · 2 Research & Tech Assets · 3 Milestones · 4 CTA.
- * No team section, no hiring. Dark base (#0A0A0A) + Pantone 265 (`brand`).
+ * Card-less, type-led layout. Built on current patterns:
+ *   - Display grotesk (Space Grotesk) headlines + mono (JetBrains Mono)
+ *     micro-labels; Pretendard body
+ *   - Dark base (#0A0A0A), single accent = Pantone 265 (`brand`)
+ *   - Editorial sections separated by hairlines, not boxes/cards
+ *   - "What we do": sticky left header + compact right capability list
+ * Sections: 1 Hero · 2 What we do · Partners · 3 Newsroom · 4 Product · 5 CTA.
+ * MilestoneTimeline is retained but currently unrouted.
  */
 
 import { useEffect, useRef, useState } from "react";
@@ -30,6 +30,23 @@ function ViewAll({ href, label }: { href: string; label: string }) {
       {label}
       <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
     </Link>
+  );
+}
+
+/* Keyword labels — scannable metadata, not boxed chips (no card aesthetic). */
+function Tags({ tags, className = "" }: { tags: string[]; className?: string }) {
+  return (
+    <div className={`flex flex-wrap gap-x-6 gap-y-2 ${className}`}>
+      {tags.map((t) => (
+        <span
+          key={t}
+          className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-zinc-500"
+        >
+          <span aria-hidden className="h-1 w-1 rounded-full bg-brand-light/70" />
+          {t}
+        </span>
+      ))}
+    </div>
   );
 }
 
@@ -178,7 +195,7 @@ function MilestoneTimeline() {
           <div className="mx-auto w-full max-w-6xl px-6">
             <IndexRule n="04" label="Track record" />
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <h2 className="max-w-2xl text-[clamp(1.6rem,3.6vw,2.4rem)] font-semibold tracking-tight leading-tight">
+              <h2 className="font-display max-w-2xl text-[clamp(1.6rem,3.6vw,2.4rem)] font-semibold tracking-tight leading-tight">
                 Eight months, founding to first product.
               </h2>
               <span className="inline-flex items-center gap-2 font-mono text-xs text-zinc-500">
@@ -266,7 +283,7 @@ export function ResearchLedHome() {
             variants={rise}
             initial="hidden"
             animate="show"
-            className="max-w-4xl text-balance text-[clamp(2.25rem,6vw,4.5rem)] font-bold tracking-[-0.03em] leading-[1.05]"
+            className="font-display max-w-4xl text-balance text-[clamp(2.25rem,6vw,4.5rem)] font-bold tracking-[-0.03em] leading-[1.05]"
           >
             Your partner for enterprise{" "}
             <span className="text-brand-light">AI transformation</span>.
@@ -285,39 +302,51 @@ export function ResearchLedHome() {
           </div>
         </section>
 
-        {/* ───── 2. What we do — large-type, outline-free text layout ───── */}
+        {/* ───── 2. What we do — sticky left header + compact right list (no cards) ───── */}
         <section id="capabilities" className="max-w-6xl mx-auto px-6 pt-28 md:pt-40 scroll-mt-24">
-          <h2 className="text-[clamp(2.5rem,7.5vw,6rem)] font-bold tracking-[-0.03em] leading-[0.98] text-brand-light">
-            What we do
-          </h2>
-          <div className="mt-16 md:mt-24 divide-y divide-white/10 border-t border-white/10">
-            {CAPABILITIES.map((c, i) => (
-              <motion.div
-                key={c.title}
-                variants={rise}
-                custom={i}
-                initial="hidden"
-                whileInView="show"
-                viewport={VIEWPORT}
-                className="grid gap-3 py-10 md:grid-cols-[5rem_1fr] md:gap-12 md:py-14"
-              >
-                <span className="font-mono text-3xl text-brand-light">{`0${i + 1}`}</span>
-                <div>
-                  <h3 className="text-2xl md:text-4xl font-semibold tracking-tight text-white">
-                    {c.title}
-                  </h3>
-                  <p className="mt-4 max-w-2xl text-pretty text-base md:text-lg leading-relaxed text-zinc-400">
-                    {c.body}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
+          <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
+            {/* left — sticky header + eyebrow + CTA, anchors the column while the list scrolls */}
+            <div className="md:sticky md:top-24 md:self-start">
+              <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-zinc-500">
+                Services · 01–04
+              </span>
+              <h2 className="mt-4 font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.02] text-brand-light">
+                What we do
+              </h2>
+              <p className="mt-5 max-w-xs text-pretty leading-relaxed text-zinc-500">
+                From AI strategy to systems in production — and the web work to ship them.
+              </p>
+            </div>
+
+            {/* right — index + title + lead + labels (body dropped to keep rows short) */}
+            <div className="divide-y divide-white/10 border-t border-white/10">
+              {CAPABILITIES.map((c, i) => (
+                <motion.div
+                  key={c.title}
+                  variants={rise}
+                  custom={i}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={VIEWPORT}
+                  className="flex items-start gap-5 py-8 md:py-10"
+                >
+                  <span className="pt-1.5 font-mono text-sm text-brand-light">{`0${i + 1}`}</span>
+                  <div>
+                    <h3 className="font-display text-2xl font-semibold tracking-tight text-white md:text-3xl">
+                      {c.title}
+                    </h3>
+                    <p className="mt-3 text-pretty leading-relaxed text-zinc-300">{c.lead}</p>
+                    <Tags tags={c.tags} className="mt-4" />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </section>
 
         {/* ───── Partners — centered logo wall (text stand-ins until assets land) ───── */}
         <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
-          <h2 className="text-center text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight">
+          <h2 className="font-display text-center text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight">
             Partners
           </h2>
           <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 md:mt-16">
@@ -344,7 +373,7 @@ export function ResearchLedHome() {
         {/* ───── 3. Newsroom — featured news as article cards ───── */}
         <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <h2 className="text-[clamp(2.5rem,7.5vw,6rem)] font-bold tracking-[-0.03em] leading-[0.98] text-brand-light">
+            <h2 className="font-display text-[clamp(2.5rem,7.5vw,6rem)] font-bold tracking-[-0.03em] leading-[0.98] text-brand-light">
               Newsroom
             </h2>
             <ViewAll href={NEWS} label="All news" />
@@ -358,27 +387,31 @@ export function ResearchLedHome() {
 
         <Divider />
 
-        {/* ───── 4. Product — coming soon ───── */}
-        <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
-          <h2 className="text-[clamp(2.5rem,7.5vw,6rem)] font-bold tracking-[-0.03em] leading-[0.98] text-brand-light">
-            Product
-          </h2>
-          <p className="mt-8 text-pretty text-lg md:text-xl text-zinc-500">
-            Coming soon. Our first product is in the works — stay tuned.
-          </p>
+        {/* ───── 4. Product — card-less text band with inline status ───── */}
+        <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div>
+              <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light">
+                Product
+              </span>
+              <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-white md:text-4xl">
+                Our first product is in the works.
+              </h2>
+              <p className="mt-3 text-pretty text-zinc-500">Coming soon — stay tuned.</p>
+            </div>
+            <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-zinc-500">
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-brand-light" />
+              In development
+            </span>
+          </div>
         </section>
-
-        <Divider />
-
-        {/* ───── Track record — horizontal timeline (disabled for now) ───── */}
-        {/* <MilestoneTimeline /> */}
 
         {/* ───── 5. CTA — text layout; only the contact link is boxed in purple ───── */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
           <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light">
             Start your AI transformation
           </span>
-          <h3 className="mt-5 max-w-3xl text-pretty text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.15]">
+          <h3 className="mt-5 font-display max-w-3xl text-pretty text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.15]">
             Tell us where AI should move the needle in your business, and we’ll show you
             what’s genuinely possible for the way your team works today.
           </h3>

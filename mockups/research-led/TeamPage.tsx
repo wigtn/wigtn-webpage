@@ -51,7 +51,7 @@ export function TeamPage() {
                 className="h-full w-full object-cover"
               />
             </div>
-            <h2 className="mt-6 text-2xl md:text-3xl font-bold tracking-tight text-white">
+            <h2 className="mt-6 font-display text-2xl md:text-3xl font-bold tracking-tight text-white">
               {founder.name}
             </h2>
             <div className="mt-1.5 font-medium text-brand-light">Founder &amp; CEO</div>
@@ -85,7 +85,7 @@ export function TeamPage() {
 
       {/* ── Members — circular avatars in a row ── */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
-        <h2 className="text-center text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight">Members</h2>
+        <h2 className="font-display text-center text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight">Members</h2>
         <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 md:mt-16">
           {members.map((m, i) => (
             <motion.div
@@ -118,7 +118,7 @@ export function TeamPage() {
 
       {/* ── History (연혁) — left-aligned header, centered timeline ── */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
-        <h2 className="text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-brand-light">History</h2>
+        <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-brand-light">History</h2>
 
         <div className="relative mx-auto mt-14 max-w-3xl md:mt-20">
           {/* center pipeline */}
