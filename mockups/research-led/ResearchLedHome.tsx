@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Research-led homepage (dark, enterprise-AI positioning)
+ * Research-led homepage (dark, open-community positioning)
  * ------------------------------------------------------------------
  * Card-less, type-led layout. Built on current patterns:
  *   - Display grotesk (Space Grotesk) headlines + mono (JetBrains Mono)
@@ -9,7 +9,7 @@
  *   - Dark base (#0A0A0A), single accent = Pantone 265 (`brand`)
  *   - Editorial sections separated by hairlines, not boxes/cards
  *   - "What we do": sticky left header + compact right capability list
- * Sections: 1 Hero · 2 What we do · Partners · 3 Newsroom · 4 Product · 5 CTA.
+ * Sections: 1 Hero · 2 What we do · Friends · 3 Newsroom · 4 Community · 5 CTA.
  * MilestoneTimeline is retained but currently unrouted.
  */
 
@@ -285,8 +285,8 @@ export function ResearchLedHome() {
             animate="show"
             className="font-display max-w-4xl text-balance text-[clamp(2.25rem,6vw,4.5rem)] font-bold tracking-[-0.03em] leading-[1.05]"
           >
-            Your partner for enterprise{" "}
-            <span className="text-brand-light">AI transformation</span>.
+            We learn, build, and{" "}
+            <span className="text-brand-light">share AI in the open</span>.
           </motion.h1>
 
           <motion.p
@@ -296,8 +296,9 @@ export function ResearchLedHome() {
             animate="show"
             className="mt-8 max-w-2xl text-pretty text-lg md:text-xl text-zinc-400 leading-relaxed"
           >
-            We start from your requirements and bring AI into the way your team already
-            works — from the first idea to a system running in production.
+            WIGTN is a community of AI builders. We publish research, release open-source
+            models and tools, and pass on everything we learn — through meetups, seminars,
+            and code anyone can use.
           </motion.p>
           </div>
         </section>
@@ -308,13 +309,13 @@ export function ResearchLedHome() {
             {/* left — sticky header + eyebrow + CTA, anchors the column while the list scrolls */}
             <div className="md:sticky md:top-24 md:self-start">
               <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-zinc-500">
-                Services · 01–04
+                Activities · 01–04
               </span>
               <h2 className="mt-4 font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.02] text-brand-light">
-                What we do
+                What we do together
               </h2>
               <p className="mt-5 max-w-xs text-pretty leading-relaxed text-zinc-500">
-                From AI strategy to systems in production — and the web work to ship them.
+                From open research to open source — and the meetups where we share it all.
               </p>
             </div>
 
@@ -344,10 +345,10 @@ export function ResearchLedHome() {
           </div>
         </section>
 
-        {/* ───── Partners — centered logo wall (text stand-ins until assets land) ───── */}
+        {/* ───── Friends — centered logo wall (text stand-ins until assets land) ───── */}
         <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
           <h2 className="font-display text-center text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight">
-            Partners
+            Friends &amp; Collaborators
           </h2>
           <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 md:mt-16">
             {PARTNERS.map((name) => (
@@ -387,21 +388,23 @@ export function ResearchLedHome() {
 
         <Divider />
 
-        {/* ───── 4. Product — card-less text band with inline status ───── */}
+        {/* ───── 4. Community — card-less text band with inline status ───── */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light">
-                Product
+                Community
               </span>
               <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-white md:text-4xl">
-                Our first product is in the works.
+                Meetups and open seminars are on the way.
               </h2>
-              <p className="mt-3 text-pretty text-zinc-500">Coming soon — stay tuned.</p>
+              <p className="mt-3 text-pretty text-zinc-500">
+                Talks, study groups, and demos — open to anyone who builds with AI.
+              </p>
             </div>
             <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-zinc-500">
               <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-brand-light" />
-              In development
+              First meetup in planning
             </span>
           </div>
         </section>
@@ -409,16 +412,15 @@ export function ResearchLedHome() {
         {/* ───── 5. CTA — text layout; only the contact link is boxed in purple ───── */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
           <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light">
-            Start your AI transformation
+            Join the community
           </span>
           <h3 className="mt-5 font-display max-w-3xl text-pretty text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.15]">
-            Tell us where AI should move the needle in your business, and we’ll show you
-            what’s genuinely possible for the way your team works today.
+            If you like building AI in the open, come build it with us.
           </h3>
           <p className="mt-6 max-w-2xl text-pretty text-zinc-400 leading-relaxed">
-            Whether it’s a proof of concept, a joint research project, or a full production
-            system your team can rely on, we turn open research into AI that holds up in real
-            operations. Tell us the problem, and we’ll tell you what it takes to solve it.
+            Come to a meetup, join a study group, contribute to one of our open-source
+            projects — or just say hi. Whatever you’re building, there’s a seat for you
+            here.
           </p>
           <a
             href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"

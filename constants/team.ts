@@ -3,19 +3,19 @@ import type { TeamMember } from "@/types";
 /**
  * WIGTN crew — five members. Two cross-cutting role dimensions per member:
  *
- *   1. `role`         — WIGTN-internal role (e.g. "Founder & Crew Lead").
+ *   1. `role`         — WIGTN-internal role (e.g. "Organizer & Crew Lead").
  *                       Rendered as the violet uppercase label on the card.
  *   2. `currentRole`  — Day-job role at the member's parent company. Rendered
  *                       as a neutral-gray normal-case line below the violet
  *                       label so the two dimensions are visually distinct.
  *
  * `credential` (the "Ex-…" prior-employer line) is currently set on the
- * founder only — other members have no prior employers worth surfacing.
+ * organizer only — other members have no prior employers worth surfacing.
  */
 export const TEAM_MEMBERS: TeamMember[] = [
   {
     name: "김형섭 Harrison Kim",
-    role: "Founder & Crew Lead",
+    role: "Organizer & Crew Lead",
     bio: "Former construction PM with a decade of large-scale project experience. Now leading WIGTN, focused on AI modeling, product development, and applied research in GPU-accelerated computing.",
     image: "/images/team/hyeongseob_kim.jpg",
     featured: true,

@@ -1,6 +1,6 @@
 "use client";
 
-/** /about — founder profile, company history (연혁), and the members. */
+/** /about — organizer profile, community history (연혁), and the members. */
 
 import { Fragment } from "react";
 import { motion } from "framer-motion";
@@ -16,7 +16,7 @@ function Divider() {
   );
 }
 
-/* Founder's career — current (現) first, former (前) below. */
+/* Organizer's career — current (現) first, former (前) below. */
 const FOUNDER_CAREER = [
   { status: "現", company: "BrainCrew", role: "Engineering Lead" },
   { status: "前", company: "SoundMind", role: "AI Research Engineer" },
@@ -34,11 +34,11 @@ export function TeamPage() {
     <PageShell>
       <PageHero
         title="Who we are."
-        lead="An AI crew turning research into systems enterprises run."
+        lead="A community of AI builders sharing research, code, and everything we learn."
         titleClassName="text-brand-light"
       />
 
-      {/* ── Founder — portrait + name + title (left), career history (right) ── */}
+      {/* ── Organizer — portrait + name + title (left), career history (right) ── */}
       <section className="max-w-6xl mx-auto px-6 pt-16 pb-28 md:pt-28 md:pb-36">
         <div className="flex flex-col items-center justify-center gap-10 md:flex-row md:items-center md:gap-16">
           {/* left: portrait, name, title */}
@@ -54,7 +54,7 @@ export function TeamPage() {
             <h2 className="mt-6 font-display text-2xl md:text-3xl font-bold tracking-tight text-white">
               {founder.name}
             </h2>
-            <div className="mt-1.5 font-medium text-brand-light">Founder &amp; CEO</div>
+            <div className="mt-1.5 font-medium text-brand-light">{founder.role}</div>
           </div>
 
           {/* right: career history */}
