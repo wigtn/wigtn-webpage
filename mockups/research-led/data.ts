@@ -531,7 +531,7 @@ export const DEMOS = [
  * month since founding. Horizontal swipe rail on the homepage; each card's
  * photo rises into view on scroll. Items without a real photo yet leave the
  * frame blank (placeholder: true). The 4 data-less entries (OBA, IWSLT,
- * Qualcomm, Product) carry editable placeholder copy until real text lands. */
+ * Qualcomm, Meetup) carry editable placeholder copy until real text lands. */
 export type Milestone = {
   month: string; // short month label, e.g. "Jan"
   date: string; // "2026.01"

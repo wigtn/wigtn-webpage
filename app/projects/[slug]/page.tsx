@@ -1,36 +1,20 @@
 import type { Metadata } from "next";
-import { PROJECTS, PROJECTS_BY_SLUG } from "@/constants/projects";
-import { ProjectDetail } from "./ProjectDetail";
+import { PROJECTS } from "@/constants/projects";
+import { LegacyRedirect } from "../LegacyRedirect";
+
+/** Legacy route — old per-project detail pages. Still exported for every
+ * old slug so previously shared/indexed URLs land on a redirect stub
+ * instead of a 404. ProjectDetail.tsx is retained but no longer routed. */
 
 export function generateStaticParams() {
   return PROJECTS.map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
-  const project = PROJECTS_BY_SLUG[slug];
-  if (!project) return { title: "Project | WIGTN" };
+export const metadata: Metadata = {
+  title: "Projects | WIGTN",
+  robots: { index: false },
+};
 
-  return {
-    title: `${project.name} | WIGTN`,
-    description: project.description,
-    openGraph: {
-      title: project.name,
-      description: project.description,
-      images: project.media.poster ? [project.media.poster] : undefined,
-    },
-  };
-}
-
-export default async function ProjectPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  return <ProjectDetail slug={slug} />;
+export default function ProjectPage() {
+  return <LegacyRedirect />;
 }
