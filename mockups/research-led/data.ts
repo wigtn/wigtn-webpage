@@ -27,48 +27,35 @@ export const articleHref = (slug: string) => `${HOME}${slug}/`;
 export const NAV: { label: string; href: string; disabled?: boolean }[] = [
   { label: "About", href: TEAM_PAGE },
   { label: "News", href: NEWS },
-  { label: "Product", href: WORK },
-  { label: "Careers", href: "#", disabled: true },
+  { label: "Projects", href: WORK },
 ];
 
-/* What we do FOR ENTERPRISES — service-framed capability pillars. This is the
- * "we can help your company" promise; research/OSS below are the proof. */
+/* What we do TOGETHER — community activity pillars. Everything is framed as
+ * shared, in-the-open work; the research/OSS below are the receipts. */
 export const CAPABILITIES = [
   {
-    title: "AX Consulting",
-    lead: "We start from your real problems, not a list of AI features.",
-    body: "Together we map where AI creates real leverage and hand you a clear, prioritized roadmap you can act on.",
-    tags: ["Opportunity mapping", "Feasibility", "Roadmap"],
+    title: "Open Research",
+    lead: "We study AI in the open and publish what we find.",
+    body: "Peer-reviewed papers at venues like ACL and EMNLP — written together, shared with everyone.",
+    tags: ["ACL 2026", "EMNLP 2026", "Benchmarks"],
   },
   {
-    title: "AI System Integration",
-    lead: "We build AI into the products and workflows your team already uses.",
-    body: "Designed around your data, security model, and real production traffic — not a separate tool.",
-    tags: ["Agents", "Retrieval", "Automation"],
+    title: "Open Source",
+    lead: "Everything we build ships in the open — models, tools, plugins.",
+    body: "Weights, training data, and eval code released on HuggingFace, GitHub, and npm for anyone to use.",
+    tags: ["HuggingFace", "GitHub", "npm"],
   },
   {
-    title: "AI R&D",
-    lead: "We push the frontier through hands-on, applied research.",
-    body: "Publishing and competing in the open, then folding what we learn back into your systems.",
-    tags: ["Applied research", "Publishing", "Production-ready"],
+    title: "Meetups & Seminars",
+    lead: "We share what we learn, face to face.",
+    body: "Tech meetups and open seminars where builders swap real production lessons — everyone is welcome.",
+    tags: ["Tech meetups", "Open seminars", "Study groups"],
   },
   {
-    title: "Web Agency",
-    lead: "Beyond AI, we design and ship polished web products end to end.",
-    body: "The same crew builds fast, modern, accessible front-ends — no separate vendor to coordinate.",
-    tags: ["Marketing sites", "Web products", "Design → launch"],
-  },
-];
-
-/* Reference / portfolio work shown on the Product page (Web Agency). */
-export const REFERENCES = [
-  {
-    name: "AruStay",
-    type: "Accommodation booking",
-    tag: "Sample",
-    desc: "A cozy stay-booking experience for Seoul, designed and built by WIGTN.",
-    href: "https://arustay-mockup.vercel.app/",
-    image: "/images/references/arustay.png",
+    title: "Hackathons & Challenges",
+    lead: "We team up, build in public, and put our ideas on stage.",
+    body: "Grand Prize at Build with TRAE Seoul, 2nd at Snowflake Korea — built with and alongside the community.",
+    tags: ["Grand Prize", "Team builds", "Build in public"],
   },
 ];
 
@@ -80,7 +67,7 @@ export const STATS = [
   { value: "3", label: "Open-source releases" },
 ];
 
-/* Real business relationships — shown as a "working with" trust band.
+/* Friends & collaborators — teams and communities we build alongside.
  * TODO: drop real logo assets into /images/partners and swap the text
  * wordmarks in the view for <img> once they exist. */
 export const PARTNERS = ["Mind AI", "MEGA Code", "Tripla", "Arustay"];
@@ -88,12 +75,12 @@ export const PARTNERS = ["Mind AI", "MEGA Code", "Tripla", "Arustay"];
 /* Tech stack actually used across WIGTN projects — demoted "Powered by". */
 export const POWERED_BY = ["ANTHROPIC", "OPENAI", "GOOGLE", "SNOWFLAKE", "HUGGINGFACE", "AWS", "VERCEL"];
 
-/* About copy (from constants/translations.ts, research-led trim). */
+/* About copy — community framing. */
 export const ABOUT = {
-  heading: "Researchers and builders who start from real-world friction and ship production-grade systems.",
+  heading: "A community of AI builders who learn together and share everything in the open.",
   paragraphs: [
-    "WIGTN is an independent crew of five AI engineers. We study AI in the open — publishing at venues like ACL and EMNLP — and turn that research into systems enterprises can actually run.",
-    "We don't build demos. We move fast, but we deliver results that hold up: peer-reviewed papers, award-winning systems, and open-source tools the developer community uses.",
+    "WIGTN is an independent community of five AI builders. We study AI in the open — publishing at venues like ACL and EMNLP — and release everything we make so anyone can build on it.",
+    "We don't keep what we learn to ourselves. Peer-reviewed papers, award-winning hackathon builds, and open-source models and tools — all shared back with the developer community.",
   ],
 };
 
@@ -113,7 +100,7 @@ export type TeamMember = {
 export const TEAM: TeamMember[] = [
   {
     name: "Harrison Kim 김형섭",
-    role: "Founder & Crew Lead",
+    role: "Organizer & Crew Lead",
     currentRole: "AI Research Engineer & Engineering Part Lead, BrainCrew",
     credential: "Ex-Hyundai E&C",
     bio: "Former construction PM with a decade of large-scale project experience. Leads WIGTN — AI modeling, product development, and GPU-accelerated computing research.",
@@ -168,7 +155,7 @@ export const TEAM: TeamMember[] = [
   },
 ];
 
-export const TEAM_BADGES = ["AI Research", "Enterprise Consulting", "Open Source", "Deep-tech"];
+export const TEAM_BADGES = ["AI Research", "Open Source", "Meetups", "Hackathons"];
 
 export type Kind = "report" | "event" | "community" | "insight";
 
@@ -493,7 +480,7 @@ export const HIGHLIGHTS: { article: Article; short: string }[] = [
 /* Scroll-highlight strengths (SORI "Our strength"). */
 export const STRENGTHS = [
   { kicker: "Published at ACL & EMNLP", title: "Peer-reviewed research" },
-  { kicker: "Research → systems enterprises run", title: "Applied AI consulting" },
+  { kicker: "Meetups, seminars, and study groups", title: "Learning together" },
   { kicker: "Models, tools, and plugins in the open", title: "Open source by default" },
 ];
 
@@ -563,7 +550,7 @@ export const MILESTONES: Milestone[] = [
     date: "2026.01",
     label: "Founded",
     title: "WIGTN founded",
-    text: "Five AI engineers form an independent crew to do hands-on, open research.",
+    text: "Five AI builders come together as an open community to learn and build in public.",
   },
   {
     month: "Feb",
@@ -617,9 +604,9 @@ export const MILESTONES: Milestone[] = [
   {
     month: "Aug",
     date: "2026.08",
-    label: "Product",
-    title: "First product",
-    text: "Our first product — to be announced.",
+    label: "Meetup",
+    title: "First community meetup",
+    text: "Our first open meetup — details to be announced.",
     upcoming: true,
     placeholder: true,
   },
