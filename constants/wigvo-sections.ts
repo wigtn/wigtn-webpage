@@ -116,7 +116,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       },
       {
         type: "prose",
-        text: "<strong>Result:</strong> Echo loop rate reduced from <strong>8/10 initial calls → 0/148 production calls</strong>.",
+        text: "<strong>Result:</strong> Echo loop rate reduced from <strong>8/10 initial calls → 0/147 completed evaluation calls</strong>.",
       },
     ],
   },
@@ -189,7 +189,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
   },
   {
     id: "key-metrics",
-    title: "Key Metrics — 148 Production Calls",
+    title: "Key Metrics — 155 Evaluated Calls",
     blocks: [
       {
         type: "prose",
@@ -199,7 +199,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
         type: "list",
         items: [
           "Session A P50: <strong>555ms</strong> / P95: 1,169ms",
-          "Session B P50: <strong>2,868ms</strong> (correlated with utterance length, Pearson r=0.400)",
+          "Session B P50: <strong>2,684ms</strong> (the phone-originating path is ASR-bound)",
           "First message P50: 1,215ms (cold start)",
         ],
       },
@@ -210,7 +210,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       {
         type: "list",
         items: [
-          "Echo loops: <strong>0 / 148 calls</strong> (prototype 80% → 0%)",
+          "Echo loops: <strong>0 / 147 completed calls</strong> (prototype 80% → 0%)",
           "Echo gate activations per call: avg 7.0",
           "VAD false positives per call: avg 1.8",
           "Hallucination blocks per call: avg 0.7",
@@ -224,9 +224,9 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       {
         type: "list",
         items: [
-          "V2V: $0.30/min · T2V: $0.29/min",
-          "After architecture optimization: <strong>$0.18/min (33% reduction)</strong>",
-          "Mode distribution: T2V 116 calls (68.6%) · V2V 52 calls (30.8%) · Agent 1 call (0.6%)",
+          "Average evaluated cost: <strong>$0.28/min</strong>",
+          "Cost reflects the provider stack and pricing period used in the field evaluation",
+          "Evaluation scope: 155 calls, 148 instrumented, 147 completed",
         ],
       },
     ],

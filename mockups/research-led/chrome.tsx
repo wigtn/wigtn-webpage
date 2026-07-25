@@ -4,8 +4,7 @@
  * Shared chrome — dark, SORI-inspired. Black base (#0A0A0A), white text,
  * single accent = Pantone 265 (`brand` token in tailwind.config). Sticky
  * always-on header; footer carries a big CTA + a "system status" tech
- * detail. The navy wordmark is inverted to pure white for the dark base
- * (swap for a real white logo asset when available).
+ * detail. The shared white wordmark is used directly on the dark base.
  */
 
 import { useState } from "react";
@@ -27,13 +26,12 @@ export const rise = {
 
 export const VIEWPORT = { once: true, margin: "-12% 0px" } as const;
 
-/* White wordmark from the navy asset (brightness-0 invert → pure white). */
 function Wordmark({ className = "h-7 md:h-8" }: { className?: string }) {
   return (
     <img
-      src="/images/WIGTN_LOGO_NAVY.png"
+      src="/images/WIGTN_LOGO_WHITE.png"
       alt="WIGTN"
-      className={`${className} w-auto [filter:brightness(0)_invert(1)]`}
+      className={`${className} w-auto`}
     />
   );
 }
@@ -132,7 +130,7 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="relative z-10">
+    <footer className="relative z-10 bg-[#0A0A0A] text-white">
       {/* Footer columns */}
       <div className="max-w-6xl mx-auto px-6 pb-10 pt-16 md:pt-20">
         <div className="flex flex-col md:flex-row justify-between gap-10">

@@ -15,11 +15,11 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
     blocks: [
       {
         type: "prose",
-        text: "WIGTN Flake is a purpose-driven neighborhood-intelligence platform. Pick what you actually want to do — open a cafe, target rental-appliance ads, choose a billboard site, invest in real estate, or detect anomalies in your existing trade area — and a five-agent Cortex Analyst team cross-queries four real-world datasets to answer with a Top 3 ranking, anomaly badges, a 6-month forecast, and a concrete action checklist.",
+        text: "WIGTN Flake is a purpose-driven neighborhood-intelligence platform. Pick what you actually want to do — open a cafe, target rental-appliance ads, choose a billboard site, invest in real estate, or detect anomalies in your existing trade area — and five agents examine evidence from three actively selected datasets before returning a Top 3 ranking and an action checklist.",
       },
       {
         type: "prose",
-        text: "Built for Snowflake AI &amp; Data Hackathon Korea 2026 (Tech Track), the project deliberately weaves <strong>11 Snowflake Cortex capabilities</strong> into a coherent decision flow rather than a checklist demo. The user never sees raw SQL. They see five experts argue about which Seoul district fits their goal — backed live by Cortex Analyst, ANOMALY_DETECTION, and FORECAST queries running underneath the chat.",
+        text: "Built for Snowflake AI &amp; Data Hackathon Korea 2026 (Tech Track), the project uses <strong>seven verified Cortex capabilities</strong> along its production path. A later code-path audit corrected the original four-dataset / eleven-capability presentation claim: NextTrade was connected but effectively unselected, Cortex Agent was dead code, and TOP_INSIGHTS fell back to dynamic-table SQL.",
       },
       {
         type: "figure",
@@ -37,9 +37,9 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
         title: "Key Results",
         items: [
           "<strong>Snowflake AI &amp; Data Hackathon Korea 2026 — Tech Track 2nd Place</strong>",
-          "<strong>11 Snowflake Cortex functions</strong> woven into a single user flow (Agent, Analyst × 4, LLM, FORECAST, ANOMALY_DETECTION, AI_SENTIMENT, AI_CLASSIFY, data_to_chart, Dynamic Tables × 2, Python UDF × 2, Semantic Model YAML × 4)",
-          "<strong>5 AI experts × 4 datasets</strong> — purpose-tuned personas debate over SPH, RichGo, NextTrade, and AJD telemetry via Cortex Analyst text-to-SQL",
-          "<strong>3-tier fallback architecture</strong> — Cortex Agent → Cortex Analyst direct → GPT-4o Function Calling — keeps the demo green even when trial limits hit",
+          "<strong>7 verified Cortex capabilities</strong> along the audited production path",
+          "<strong>5 AI experts × 3 active datasets</strong> — purpose-tuned personas debate over SPH, RichGo, and AJD evidence",
+          "<strong>Audited fallback behavior</strong> — TOP_INSIGHTS fails over to dynamic-table SQL; Cortex Agent is not counted as a live capability",
           "<strong>Anomaly detection promoted to lead role</strong> — ranking results auto-inject \"watch this district\" badges, the demo's climax moment",
         ],
       },
@@ -81,7 +81,7 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
           "<strong>Step 1 — Purpose selection.</strong> Six cards: Cafe/restaurant location · Rental-appliance target zones · Billboard placement · Real-estate investment · Trade-area anomaly detection · or free-form input.",
           "<strong>Step 2 — District context.</strong> AI suggests candidates, or the user names districts directly. Goal + districts together become the analysis brief.",
           "<strong>Step 3 — Expert orchestration.</strong> A GPT-4o orchestrator summons five purpose-tuned experts: PM facilitator, data analyst (Cortex Analyst), forecast analyst (FORECAST + ANOMALY_DETECTION), insight analyst (DNA + AI_CLASSIFY), and sentiment/news analyst (AI_SENTIMENT + Tavily).",
-          "<strong>Step 4 — Cortex execution.</strong> Cortex Analyst runs text_to_sql over four Semantic Models. ANOMALY_DETECTION and FORECAST run in parallel via <code>Promise.all</code>, results converge in the warehouse, and the data analyst speaks the merged finding.",
+          "<strong>Step 4 — Cortex execution.</strong> Cortex Analyst runs text_to_sql over the three Semantic Models selected by the audited path. Supported ANOMALY_DETECTION and FORECAST signals converge with the analyst output before the data analyst speaks the merged finding.",
           "<strong>Step 5 — Decision report.</strong> Top 3 ranking cards · anomaly signal badges · 6-month FORECAST charts · purpose-specific action checklist (\"secure 500m radius around the Banpo subway exit; peak 12-14h; lead with Instagram\").",
         ],
       },
@@ -117,7 +117,7 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
   {
     id: "snowflake-features",
     title: "Snowflake Features Used",
-    subtitle: "11 capabilities, woven not checklisted",
+    subtitle: "Seven capabilities verified on the production path",
     blocks: [
       {
         type: "prose",
@@ -130,7 +130,7 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
           {
             src: "/images/projects/wigtn-flake-datasets.jpg",
             alt: "Dataset assignment chart from the live presentation — four hackathon datasets routed to Snowflake ML.FORECAST, Semantic Model, and AI_SENTIMENT.",
-            caption: "Four datasets, split by shape: time-series (RichGo + SPH) → ML.FORECAST · investment scenarios (NextTrade) → Semantic Model · sentiment (AJD) → AI_SENTIMENT.",
+            caption: "The presentation listed four connected datasets. The production audit found three were actively selected: SPH, RichGo, and AJD.",
           },
         ],
       },
@@ -138,17 +138,13 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
         type: "table",
         headers: ["#", "Feature", "Role"],
         rows: [
-          { cells: ["1", "Cortex Agent", "Goal-aware cross-query orchestration over four Semantic Models. Falls back to direct Cortex Analyst calls under trial limits."] },
-          { cells: ["2", "Cortex Analyst × 4", "Natural-language → SQL over SPH / RichGo / NextTrade / AJD Semantic Models."] },
-          { cells: ["3", "Cortex LLM (claude-4-sonnet)", "Final report markdown generation — streaming, long-Korean-context strength. Garbage-token detection auto-fails over to GPT-4o."] },
-          { cells: ["4", "FORECAST", "6-month projections on price / card sales / foot traffic for the Top 3 ranked districts."] },
-          { cells: ["5", "ANOMALY_DETECTION ⭐", "Promoted to lead role — auto-injects anomaly badges into the ranking. The demo climax."], highlight: true },
-          { cells: ["6", "AI_SENTIMENT", "Local call-center / news sentiment fed into ranking weights as a risk factor."] },
-          { cells: ["7", "AI_CLASSIFY", "Classifies ranking results into growing / stable / declining types."] },
-          { cells: ["8", "data_to_chart", "Auto-generates the Top 3 comparison chart with no manual chart spec."] },
-          { cells: ["9", "Dynamic Tables × 2", "<code>DT_DISTRICT_HEALTH</code> and <code>DT_DISTRICT_DNA</code> — refreshed health and similarity-matrix tables, extensible per purpose."] },
-          { cells: ["10", "Python UDF × 2", "Decoupling index, district-DNA similarity, purpose-fit score — all callable from SQL."] },
-          { cells: ["11", "Semantic Model YAML × 4", "Per-dataset semantic definitions — the contract that makes Cortex Analyst answers reliable."] },
+          { cells: ["1", "Cortex Analyst", "Natural-language → SQL over the actively selected SPH / RichGo / AJD Semantic Models."] },
+          { cells: ["2", "Cortex LLM", "Final-report markdown generation with a GPT-4o safety fallback."] },
+          { cells: ["3", "FORECAST", "Projection signals for supported time-series paths."] },
+          { cells: ["4", "ANOMALY_DETECTION ⭐", "Anomaly badges for candidate districts."], highlight: true },
+          { cells: ["5", "AI_SENTIMENT", "Sentiment evidence where the selected data path supports it."] },
+          { cells: ["6", "AI_CLASSIFY", "Classification signals used in the report path."] },
+          { cells: ["7", "data_to_chart", "Chart output for the comparison view."] },
         ],
       },
     ],
@@ -168,7 +164,7 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
           {
             src: "/images/projects/wigtn-flake-architecture.jpg",
             alt: "WIGTN Flake 3-Layer Hybrid AI Architecture — Brain Layer (GPT-4o orchestrator) feeds Data Layer (Snowflake Cortex × 11 features over four marketplace datasets), which feeds Render Layer (Cortex LLM markdown) for the report output.",
-            caption: "Brain (GPT-4o orchestrator) → Data (Snowflake Cortex 11 features over SPH / RichGo / NextTrade / AJD) → Render (Cortex LLM markdown). Anomaly detection is the demo climax; GPT-4o is the safety-net fallback.",
+            caption: "Brain (GPT-4o orchestrator) → Data (seven verified Cortex capabilities over three actively selected datasets) → Render (Cortex LLM markdown). The architecture image reflects the original presentation; the text reflects the later production audit.",
           },
         ],
       },
@@ -178,16 +174,16 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
         items: [
           "<strong>UI layer.</strong> Next.js 16 App Router with PurposeSelector → PurposeChatInput → live SSE chat → decision report. Slack-style chat with typing indicators, agent join/leave events, and Vega-Lite charts inline.",
           "<strong>Orchestrator.</strong> Purpose context injection → expert summoning (purpose-tuned personas) → SSE event yield. Handles parallel ML calls (FORECAST + ANOMALY_DETECTION via <code>Promise.all</code>) and merges results in the warehouse.",
-          "<strong>Snowflake infrastructure.</strong> Four Semantic Models, two Dynamic Tables, two Python UDFs, three pre-trained FORECAST models, AI SQL functions. Cortex Agent on top.",
+          "<strong>Snowflake infrastructure.</strong> Three actively selected Semantic Models plus Cortex analysis, ML, and AI SQL functions. Connected assets are documented separately from production-path usage.",
         ],
       },
       {
         type: "highlights",
         title: "3-Tier Fallback",
         items: [
-          "<strong>Tier 1 — Cortex Agent.</strong> Cortex Analyst × 4 + data_to_chart routed by Cortex Agent. The happy path.",
-          "<strong>Tier 2 — Cortex Analyst direct + GPT-4o Function Calling.</strong> Four GPT tools — <code>execute_snowflake_sql</code>, <code>web_search</code> (Tavily), <code>real_estate_transaction</code> (MOLIT), <code>statistical_analysis</code> — when Cortex Agent hits trial limits.",
-          "<strong>Tier 3 — GPT-4o pure inference.</strong> Final safety net so the demo never freezes.",
+          "<strong>Audited live path.</strong> Direct Cortex Analyst calls provide grounded SQL results; Cortex Agent is not counted because the audited code path does not execute it.",
+          "<strong>Application fallback.</strong> GPT-4o Function Calling handles supported tool calls when the warehouse path is unavailable.",
+          "<strong>Report fallback.</strong> GPT-4o replaces degraded Cortex LLM output after garbage-token detection.",
         ],
       },
     ],
@@ -219,16 +215,16 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
   },
   {
     id: "datasets",
-    title: "Datasets — All Four Used",
+    title: "Datasets — Three Actively Selected",
     blocks: [
       {
         type: "table",
-        caption: "Four datasets, all wired to Semantic Models and used live during the demo",
+        caption: "Three datasets were actively selected; NextTrade was connected but effectively unused in the audited path",
         headers: ["Provider", "Dataset", "Coverage", "Period", "Use"],
         rows: [
           { cells: ["SPH", "SKT foot traffic + Shinhan card sales + KCB asset / income", "Seocho · Yeongdeungpo · Jung-gu", "2021–2025 monthly", "Population / consumption / income"] },
           { cells: ["RichGo", "Apartment AI price index (sale / lease)", "Seocho · Yeongdeungpo · Jung-gu", "2012–2024", "Real-estate time series + FORECAST"] },
-          { cells: ["NextTrade", "Stock quote / fill / program-trading", "All listed equities", "Real-time", "Equity-vs-property trend cross-check"] },
+          { cells: ["NextTrade", "Stock quote / fill / program-trading", "All listed equities", "Real-time", "Connected; not actively selected in the audited path"] },
           { cells: ["AJD (아정당)", "Telecom contracts + GA4 + call center + rentals", "All Korean districts", "2024–", "Move-in trends + AI_SENTIMENT"] },
         ],
       },
@@ -264,8 +260,8 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
         items: [
           "<strong>Purpose-first.</strong> UX and code both start from \"what is this analysis for\". Every component carries a purpose context.",
           "<strong>Hybrid AI.</strong> Cortex (data / SQL / report) + GPT-4o (debate personas) — pick the best model per layer.",
-          "<strong>Snowflake = leading role.</strong> 11 Cortex capabilities present throughout the demo, woven not checklisted.",
-          "<strong>All four datasets, used live.</strong> SPH, RichGo, NextTrade, AJD — every one wired to a Semantic Model and queried during the demo.",
+          "<strong>Snowflake = leading role.</strong> Seven Cortex capabilities are verified along the production path.",
+          "<strong>Connected ≠ used.</strong> SPH, RichGo, and AJD were actively selected; NextTrade was connected but effectively unused.",
           "<strong>Demo-first.</strong> The 10-minute video is the first round of judging. Demo climax = the anomaly-detection moment.",
           "<strong>Reuse the WIGENT base.</strong> 90%+ of the orchestrator and chat components carry over from WIGENT (Build with TRAE Seoul winner).",
           "<strong>Honest engineering.</strong> What the slide claims and what the code does must match. Decisions are benchmark-backed.",

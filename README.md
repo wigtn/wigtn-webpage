@@ -46,7 +46,7 @@
 
 | Project | What it is | Links |
 |---------|------------|-------|
-| **WIGVO** | Real-time bidirectional voice translation over standard phone lines | [Demo](https://youtu.be/_ixVEnHJxjk) · [Code](https://github.com/wigtn/wigvo-v2) |
+| **WIGVO** | Real-time bidirectional voice translation over standard phone lines | [Demo](https://www.youtube.com/watch?v=jK1CDOQExLw) · [Code](https://github.com/wigtn/wigvo-v2) |
 | **WigtnOCR** | 2B Korean document parser distilled from a 30B teacher | [Model](https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR) · [Code](https://github.com/wigtn/wigtnOCR-v1) |
 | **WIGSS** | Drag UI in the browser and watch the source rewrite itself | [npm](https://npmjs.com/package/wigss) · [Code](https://github.com/wigtn/wigss) |
 | **WIGTN Coding** | A Claude Code plugin ecosystem — 12 agents, 3 skills, 17 design styles | [Code](https://github.com/wigtn/wigtn-plugins-with-claude-code) |

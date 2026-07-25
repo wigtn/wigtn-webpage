@@ -18,6 +18,7 @@
 export const HOME = "/";
 export const WORK = `${HOME}work/`;
 export const NEWS = `${HOME}news/`;
+export const TECH_REPORTS_PAGE = `${HOME}tech-reports/`;
 export const TEAM_PAGE = `${HOME}team/`;
 export const articleHref = (slug: string) => `${HOME}${slug}/`;
 
@@ -26,6 +27,7 @@ export const articleHref = (slug: string) => `${HOME}${slug}/`;
  * in-page anchors. */
 export const NAV: { label: string; href: string; disabled?: boolean }[] = [
   { label: "About", href: TEAM_PAGE },
+  { label: "Tech Reports", href: TECH_REPORTS_PAGE },
   { label: "News", href: NEWS },
   { label: "Projects", href: WORK },
 ];
@@ -183,6 +185,7 @@ export type Article = {
   videoUrl?: string;
   image?: string;
   links?: Link[];
+  sourceNote?: string;
   placeholder?: boolean; // not-yet-real content kept as mock
   body: Block[];
 };
@@ -194,10 +197,10 @@ export const ARTICLES: Article[] = [
   {
     slug: "wigtnocr",
     kind: "report",
-    tag: "MODEL · EMNLP 2026 (IN PREP)",
-    title: "WigtnOCR: a 2B parser that reads Korean gov forms like a model 15× its size",
+    tag: "MODEL RELEASE · OPEN",
+    title: "WigtnOCR: Distilling a 30B document parser into 2B",
     summary:
-      "A 2B-parameter document parser distilled from a 30B teacher — ranked #1 on the KoGovDoc Korean government-document benchmark while running on a single consumer GPU.",
+      "WigtnOCR compresses Qwen3-VL-30B into a 2B parser trained for Korean government documents. It leads Hit@1, Hit@5, and MRR@10 in the released six-parser KoGovDoc evaluation.",
     date: "2026.05.20",
     readTime: "12 min",
     author: "WIGTN Research",
@@ -207,39 +210,88 @@ export const ARTICLES: Article[] = [
       { label: "GitHub", href: "https://github.com/wigtn/wigtnOCR-v1" },
       { label: "HuggingFace", href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR" },
     ],
+    sourceNote:
+      "This report summarizes the released WigtnOCR repository, model card, training recipe, and evaluation artifacts. It is a WIGTN model report, not a peer-reviewed paper.",
     body: [
-      { t: "h", text: "The problem" },
+      { t: "h", text: "Why document structure matters" },
       p(
-        "Existing OCR and rule-based parsers fail on Korean government documents — missing tables, forms, and complex layouts. State-of-the-art VLM parsers are tuned for English/Chinese, and 30B models are too expensive to deploy in production.",
+        "Korean government PDFs mix scanned pages, dense tables, forms, stamps, charts, and multi-column text. Plain OCR can recover characters while losing the structure that tells a retrieval system which values belong together. A parser for this domain has to preserve headings, tables, formulas, and reading order in one consistent output.",
       ),
-      { t: "h", text: "The approach" },
       p(
-        "WigtnOCR distills a 30B teacher into a 2B student through pseudo-label distillation and LoRA fine-tuning on 2,667 Korean government document pages — reaching teacher-level accuracy on OmniDocBench while running on a single consumer GPU.",
+        "The project therefore evaluates two things separately. OmniDocBench measures intrinsic parsing quality. KoGovDoc measures whether the parsed output actually helps semantic chunking and retrieval on Korean government documents.",
+      ),
+      { t: "h", text: "Building supervision with a 30B teacher" },
+      p(
+        "Qwen3-VL-30B-Instruct generated structured Markdown for 4,501 pages from 49 documents. A text-only Qwen3.5-122B judge scored the outputs for structure, table quality, completeness, hallucination, and consistency. Pages below the quality threshold were removed before training.",
       ),
       { t: "list", items: [
-        "Student: Qwen3-VL-2B-Instruct · Teacher: Qwen3-VL-30B-Instruct",
-        "LoRA rank=8 fine-tuning, trained in 31 minutes with DeepSpeed ZeRO-2",
-        "#1 overall on KoGovDoc-Bench across 6 parsers — beating models 10–30× larger",
+        "Training set: 2,667 pages after filtering and document-ratio correction",
+        "Validation set: 294 held-out Korean government document pages",
+        "Student: Qwen3-VL-2B-Instruct with LoRA rank 8 and alpha 32",
+        "Training: 3 epochs with ms-swift and DeepSpeed ZeRO-2",
       ] },
-      { t: "quote", text: "Teacher-level accuracy at 1/15th the size, on hardware you already own — that is the whole point." },
-      { t: "h", text: "Open" },
-      p("Model weights, training data, and evaluation code are all released on HuggingFace and GitHub."),
+      { t: "h", text: "What the evaluation showed" },
+      p(
+        "On OmniDocBench, the 2B student matches or exceeds the 30B teacher in four of five reported metric categories. Table TEDS rises from 0.523 to 0.649, while formula CDM F1 remains lower than the teacher. The result is strong, but it is not a blanket claim that the student is better at every document task.",
+      ),
+      { t: "list", items: [
+        "KoGovDoc Hit@1: 0.739, compared with 0.716 for the 30B teacher",
+        "KoGovDoc Hit@5: 0.855, the highest result among the six compared parsers",
+        "KoGovDoc MRR@10: 0.788, also the highest result in the released table",
+        "OmniDocBench Table TEDS: 0.649, 12.6 percentage points above the teacher",
+      ] },
+      { t: "h", text: "What is released" },
+      p(
+        "The model weights and model card are published on Hugging Face. The repository includes the training recipe, evaluation code, benchmark figures, and comparison tables used in this report.",
+      ),
+    ],
+  },
+  {
+    slug: "wigtnocr-radp",
+    kind: "report",
+    tag: "RESEARCH DRAFT · RCPS",
+    title: "RCPS: Selecting document parsers by downstream retrieval",
+    summary:
+      "RCPS selects document parsers by downstream retrieval rather than visual cleanliness — exposing a 35.1-point Hit@1 gap on Korean government documents.",
+    date: "2026.06.07",
+    readTime: "14 min",
+    author: "WIGTN Research",
+    links: [
+      { label: "WigtnOCR code", href: "https://github.com/wigtn/wigtnOCR-v1" },
+      { label: "Model", href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR" },
+    ],
+    body: [
+      { t: "h", text: "Parsing quality is not retrieval quality" },
+      p(
+        "On 6 parsers, 3 retrievers, and 663 question-answer pairs, the parser with the cleanest chunk boundaries produced the weakest retrieval result. Boundary Clarity anti-correlated with retrieval performance at Pearson r = −0.81.",
+      ),
+      { t: "h", text: "Retrieval-Conditional Parsing Score" },
+      p(
+        "RCPS is a no-training selection protocol that averages held-out retrieval performance across multiple embedders and normalizes formatting differences. It asks whether the parser preserves answer-bearing content, not whether its Markdown looks clean.",
+      ),
+      { t: "list", items: [
+        "Parser choice moves Hit@1 from 0.197 to 0.549 — a +35.1 percentage-point change",
+        "20.2% of answers are absent from parser output, while no more than 2.3% are split by chunking",
+        "RADP-Distill improves OHR-Bench Hit@5 by +1.22 points on 2,264 samples",
+      ] },
+      { t: "quote", text: "Choose the parser by what retrieval can recover, not by how clean the output looks." },
     ],
   },
   {
     slug: "wigvo",
     kind: "report",
     tag: "PAPER · ACL 2026 (ACCEPTED)",
-    title: "WIGVO: real-time phone-call translation with zero echo across 148 calls",
+    title: "WIGVO: Real-time bidirectional translation over PSTN calls",
     summary:
-      "Two parallel AI interpreter sessions deliver bidirectional voice translation over standard phone lines — 557ms average latency, zero echo-loop incidents. Accepted to ACL 2026 System Demonstrations.",
+      "Two directional AI sessions deliver bidirectional translation over standard phone lines — 555ms median caller-to-callee latency and zero echo-induced loops.",
     date: "2026.04.27",
     readTime: "10 min",
     author: "WIGTN Research",
     image: "/images/projects/wigvo_logo.png",
     links: [
-      { label: "GitHub", href: "https://github.com/wigtn/wigvo-v2" },
-      { label: "Watch demo", href: "https://youtu.be/_ixVEnHJxjk" },
+      { label: "GitHub", href: "https://github.com/wigtn/wigvo" },
+      { label: "ACL paper", href: "https://aclanthology.org/2026.acl-demo.33/" },
+      { label: "Watch demo", href: "https://www.youtube.com/watch?v=jK1CDOQExLw" },
     ],
     body: [
       { t: "h", text: "Call anyone, in any language" },
@@ -247,9 +299,9 @@ export const ARTICLES: Article[] = [
         "K-Culture brought millions to Korea — but everyday phone calls hit a language wall. WIGVO runs two parallel AI interpreter sessions, one per speaker, for natural bidirectional translation over normal phone lines. The recipient just answers a call; no app required.",
       ),
       { t: "list", items: [
-        "557ms average latency across 169 production calls",
-        "Software-only echo cancellation — zero echo-loop incidents, no dedicated hardware",
-        "$0.27 per minute · OpenAI Realtime API + Twilio Media Streams",
+        "555ms median caller-to-callee latency across 155 PSTN calls",
+        "Zero echo-induced loops across 147 completed calls",
+        "$0.28 per minute · OpenAI Realtime API + Twilio Media Streams",
       ] },
       { t: "quote", text: "Accepted to ACL 2026 — System Demonstrations." },
     ],
@@ -258,9 +310,9 @@ export const ARTICLES: Article[] = [
     slug: "wigss",
     kind: "report",
     tag: "OPEN SOURCE · npm",
-    title: "WIGSS: drag UI in the browser, watch the source rewrite itself",
+    title: "WIGSS: Visual browser edits that rewrite source code",
     summary:
-      "Visual code refactoring with an always-on AI agent — point it at your dev server, rearrange components in the browser, and the source updates itself. Published on npm.",
+      "WIGSS scans a running web page, lets a developer move or resize components, and writes the approved change back to the relevant source file.",
     date: "2026.04.10",
     readTime: "5 min",
     author: "WIGTN",
@@ -269,9 +321,34 @@ export const ARTICLES: Article[] = [
       { label: "GitHub", href: "https://github.com/wigtn/wigss" },
       { label: "npm", href: "https://npmjs.com/package/wigss" },
     ],
+    sourceNote:
+      "This engineering note is based on the public WIGSS README and npm package documentation. No controlled speed or code-quality benchmark has been published.",
     body: [
+      { t: "h", text: "The gap after AI generates a page" },
       p(
-        "WIGSS connects to your running dev server, lets you visually drag and rearrange UI components in the browser, and rewrites the underlying source with an always-on AI agent. Drag UI, code rewrites itself.",
+        "Coding agents are good at producing a first layout. Fine adjustments are still awkward because visual intent has to be translated into prose, then into CSS, then checked again in the browser. WIGSS keeps the browser as the editing surface and uses source code as the final artifact.",
+      ),
+      { t: "h", text: "Scan, edit, save" },
+      { t: "list", items: [
+        "Scan: inspect the live DOM and label navigation, cards, footers, and repeated component groups",
+        "Select: choose a component from the overlay or component tag bar",
+        "Edit: drag or resize while the browser renders the change immediately",
+        "Save: generate a targeted source diff, apply it, and reload the iframe",
+      ] },
+      { t: "h", text: "How a visual change reaches source code" },
+      p(
+        "The editor runs around the target development server in an iframe. DOM scan results are mapped to source files, while an overlay tracks component bounds at animation-frame speed. Edit events travel over WebSocket. On save, WIGSS converts the visual change into a StyleIntent and dispatches it to the matching source rewriter.",
+      ),
+      { t: "list", items: [
+        "Tailwind utility classes",
+        "CSS Modules through a PostCSS syntax tree",
+        "Plain CSS or SCSS rules",
+        "HTML with a linked stylesheet",
+        "Inline React styles as a fallback",
+      ] },
+      { t: "h", text: "Verification and rollback" },
+      p(
+        "Each save produces fidelity expectations and a rollback token. WIGSS compares the post-apply DOM with the edited result using a two-pixel tolerance. A mismatch is shown as a warning instead of being treated as a successful refactor.",
       ),
     ],
   },
@@ -279,16 +356,36 @@ export const ARTICLES: Article[] = [
     slug: "wigtn-coding",
     kind: "report",
     tag: "OPEN SOURCE",
-    title: "WIGTN Coding: a Claude Code plugin ecosystem — idea to deploy, zero friction",
+    title: "WIGTN Coding: Parallel multi-agent workflows for software delivery",
     summary:
-      "12 agents, 3 skills, and 17 design styles working together with team-based parallel execution for a 3–5× speedup.",
+      "WIGTN Coding packages product specification, architecture, implementation, review, and release checks into one Claude Code plugin with 13 specialized agents.",
     date: "2026.03.28",
     readTime: "6 min",
     author: "WIGTN",
-    links: [{ label: "GitHub", href: "https://github.com/wigtn/wigtn-plugins-with-claude-code" }],
+    links: [{ label: "GitHub", href: "https://github.com/wigtn/wigtn-plugins" }],
+    sourceNote:
+      "This page describes version 0.1.14 of the public plugin repository. Agent, skill, and style counts are configuration counts, not productivity or quality benchmarks.",
     body: [
+      { t: "h", text: "Why the workflow is split into roles" },
       p(
-        "A unified Claude Code plugin that takes you from idea to deploy with zero friction — 12 agents, 3 skills, and 17 design styles, coordinated by team-based parallel execution for a 3–5× speedup.",
+        "A single coding prompt tends to mix product decisions, architecture, implementation, and review in one context. WIGTN Coding separates those responsibilities so that each stage has a named output and a quality gate before the next stage begins.",
+      ),
+      { t: "h", text: "The published pipeline" },
+      { t: "list", items: [
+        "Product definition: create a PRD and a phased implementation plan",
+        "PRD review: inspect completeness, feasibility, security, and consistency in parallel",
+        "Design: load the approved requirements, choose architecture, and inspect the current project",
+        "Build: assign backend, frontend, AI, and operations work according to the files in scope",
+        "Review: score readability, performance, testability, best practices, and security",
+        "Release: stop on a failed quality gate, or prepare a deliberate commit and pull request",
+      ] },
+      { t: "h", text: "How the agents share context" },
+      p(
+        "The workflow uses three layers of memory. Repository conventions live in persistent memory. Session-specific contracts are written to a shared context file. Individual work items track short-lived task state. The goal is to keep API contracts and naming decisions visible when several roles work on the same feature.",
+      ),
+      { t: "h", text: "What the counts mean" },
+      p(
+        "The repository currently lists 13 agents, 6 reusable skills, and 20 design references. These numbers describe the package surface. They do not prove that a multi-agent run is faster or produces better software than a single-agent run. A controlled task set with time, cost, correctness, and review outcomes is still needed.",
       ),
     ],
   },
@@ -321,7 +418,7 @@ export const ARTICLES: Article[] = [
     icon: "trophy",
     title: "2nd Place, Tech Track — Snowflake AI & Data Hackathon Korea 2026",
     summary:
-      "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform — five AI experts debate across four datasets.",
+      "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform — five AI experts debate evidence from three actively selected datasets.",
     date: "2026.04.29",
     place: "Seoul, KOR",
     author: "Snowflake",
@@ -332,10 +429,10 @@ export const ARTICLES: Article[] = [
     ],
     body: [
       p(
-        "Pick a goal — open a cafe, place a billboard, invest — and a GPT-4o orchestrator summons five purpose-tuned experts who debate in a Slack-style chat while Cortex Analyst runs text-to-SQL across four Semantic Models (foot traffic, real estate, markets, telecom).",
+        "Pick a goal — open a cafe, place a billboard, invest — and a GPT-4o orchestrator summons five purpose-tuned experts while Cortex Analyst runs text-to-SQL across the SPH, RichGo, and AJD Semantic Models selected by the audited production path.",
       ),
       { t: "list", items: [
-        "11 Snowflake Cortex functions · 5 AI experts × 4 datasets",
+        "7 verified Cortex capabilities · 5 AI experts × 3 active datasets",
         "ANOMALY_DETECTION auto-flags districts to watch; FORECAST projects six months out",
         "Converges into a ranked Top 3 with a concrete action checklist",
       ] },
@@ -402,49 +499,117 @@ export const ARTICLES: Article[] = [
     kind: "insight",
     tag: "VIDEO",
     title: "How WIGVO translates a phone call in real time",
-    summary: "A walkthrough of the dual-session architecture and software-only echo cancellation behind WIGVO.",
+    summary: "A video walkthrough of the dual-session relay, silence injection, and voice-activity gating used to translate ordinary PSTN calls.",
     date: "2026.03.02",
     author: "WIGTN",
     video: true,
-    videoUrl: "https://youtu.be/_ixVEnHJxjk",
-    links: [{ label: "Watch on YouTube", href: "https://youtu.be/_ixVEnHJxjk" }],
+    videoUrl: "https://www.youtube.com/watch?v=jK1CDOQExLw",
+    links: [
+      { label: "Watch on YouTube", href: "https://www.youtube.com/watch?v=jK1CDOQExLw" },
+      { label: "ACL 2026 paper", href: "https://aclanthology.org/2026.acl-demo.33/" },
+    ],
+    sourceNote:
+      "This is a companion page for the WIGTN walkthrough video. Evaluation figures come from the ACL 2026 system-demonstration paper, not from the video alone.",
     body: [
-      p("A 10-minute walkthrough of how WIGVO runs two parallel AI interpreter sessions over a normal phone line, and how the software-only echo-cancellation pipeline keeps the conversation natural."),
+      { t: "h", text: "Why a normal phone call is difficult" },
+      p(
+        "PSTN calls use narrowband G.711 audio and do not provide the client-side echo cancellation available in a mobile or web calling app. Synthesized speech can return through the phone network, enter speech recognition again, and create a repeating translation loop.",
+      ),
+      { t: "h", text: "Two sessions, one call" },
+      p(
+        "WIGVO keeps the two directions separate. Session A handles the browser speaker and delivers translated audio to the phone. Session B receives the phone speaker, filters the PSTN audio, and returns translated speech to the browser. Independent prompts and context prevent one direction from contaminating the other.",
+      ),
+      { t: "h", text: "The audio path shown in the video" },
+      { t: "list", items: [
+        "Echo gate: replace returning synthesized audio with valid G.711 silence frames",
+        "Energy gate: reject weak PSTN noise before it reaches speech recognition",
+        "Voice activity detection: use a local detector with PSTN-specific onset and offset timing",
+        "Hallucination filter: block broadcast-style phrases produced from line noise",
+        "Translation: separate transcription from deterministic text translation before speech output",
+      ] },
+      { t: "h", text: "Published evaluation" },
+      p(
+        "The ACL paper reports 155 Korean-English PSTN calls, including 148 instrumented calls and 147 completed calls. Median caller-to-callee latency was 555 ms. The reported field evaluation observed no echo-induced translation loops and an average cost of USD 0.28 per minute.",
+      ),
     ],
   },
   {
     slug: "wigtn-flake-cortex-debate-video",
     kind: "insight",
     tag: "VIDEO",
-    title: "WIGTN Flake: five AI experts debate where to open your cafe",
-    summary: "Watch Cortex-powered experts cross-query four datasets and converge on a ranked Top 3 of Seoul districts.",
+    title: "WIGTN Flake: Multi-agent location analysis with Snowflake Cortex",
+    summary: "A demo of five purpose-specific agents using Snowflake Cortex to compare three actively selected datasets and produce a ranked location recommendation.",
     date: "2026.04.15",
     author: "WIGTN",
     video: true,
     videoUrl: "https://www.youtube.com/watch?v=1YzSp3SdzTk",
-    links: [{ label: "Watch on YouTube", href: "https://www.youtube.com/watch?v=1YzSp3SdzTk" }],
+    links: [
+      { label: "Watch on YouTube", href: "https://www.youtube.com/watch?v=1YzSp3SdzTk" },
+      { label: "Award announcement", href: "https://www.newswire.co.kr/newsRead.php?no=1033575" },
+    ],
+    sourceNote:
+      "This page is a guided companion to WIGTN's hackathon demo. The system description comes from the project documentation; the Tech Track second-place result is verified by Snowflake's event announcement.",
     body: [
-      p("The Snowflake hackathon demo: pick a purpose, five purpose-tuned experts debate over Cortex Analyst, and the conversation converges into a data-backed Top 3 with an action checklist."),
+      { t: "h", text: "Start with a decision, not a dashboard" },
+      p(
+        "The user chooses a concrete goal such as opening a cafe, placing a billboard, targeting rental-appliance customers, investing in real estate, or detecting an unusual trade area. That goal changes which evidence matters and how each district is scored.",
+      ),
+      { t: "h", text: "Five agents examine the same question" },
+      p(
+        "A facilitator coordinates a data analyst, forecast analyst, insight analyst, and sentiment analyst. The agents can disagree because they inspect different signals. Their job is to expose trade-offs before the system produces a final ranking.",
+      ),
+      { t: "h", text: "What runs underneath the debate" },
+      { t: "list", items: [
+        "Cortex Analyst queries three actively selected semantic models for foot traffic, real estate, and telecom data",
+        "FORECAST and ANOMALY_DETECTION run in parallel for candidate districts",
+        "The orchestrator merges the results into a shared evidence set",
+        "The final report returns a Top 3, anomaly badges, a six-month view, and an action checklist",
+      ] },
+      { t: "h", text: "What the demo proves" },
+      p(
+        "The demo proves that the multi-agent flow and three actively selected data sources were integrated into a working hackathon system. It does not establish that five agents make better location decisions than one agent or a human analyst. The published external result is the Tech Track second-place award.",
+      ),
     ],
   },
   {
     slug: "why-we-distill-30b-into-2b",
     kind: "insight",
-    tag: "INSIGHT",
-    title: "Why we distill 30B into 2B instead of serving the big model",
-    summary: "Cost, latency, and where the data lives — the case for small, on-device models from our WigtnOCR work.",
+    tag: "ENGINEERING NOTE · WIGTNOCR",
+    title: "Why we distilled a 30B document parser into a 2B model",
+    summary:
+      "This engineering note explains one decision from the WigtnOCR release: use a large model to create filtered supervision, then serve the task with a smaller domain model.",
     date: "2026.05.22",
     readTime: "5 min",
     author: "WIGTN Research",
+    links: [
+      { label: "WigtnOCR repository", href: "https://github.com/wigtn/wigtnOCR-v1" },
+      { label: "Model card", href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR" },
+    ],
+    sourceNote:
+      "This is a WIGTN editorial note derived from the WigtnOCR v1 repository and model card. It is not a separate paper, benchmark, or third-party article.",
     body: [
-      { t: "h", text: "Right-sized beats biggest" },
-      p("For most enterprise problems, the right-sized model that runs where the data lives beats the biggest model behind an API. WigtnOCR is our proof: a 2B student matched its 30B teacher on the benchmark that mattered."),
+      { t: "h", text: "Where this note comes from" },
+      p(
+        "WigtnOCR began with a specific engineering question: can a small parser learn the useful document behavior of a much larger vision-language model? This page interprets the released training and evaluation results. It should be read as commentary on the WigtnOCR release, not as an independent study.",
+      ),
+      { t: "h", text: "Use the large model where it adds leverage" },
+      p(
+        "The 30B model was used offline to convert 4,501 document pages into structured Markdown. A separate text-only judge filtered weak supervision before training. The large model therefore paid a one-time data-generation cost instead of sitting in the production path for every document.",
+      ),
       { t: "list", items: [
-        "Cost — predictable, no per-token surprises at scale",
-        "Latency — single consumer GPU, no network round-trip",
-        "Privacy — sensitive government documents never leave the building",
+        "Teacher: Qwen3-VL-30B-Instruct for pseudo-ground-truth generation",
+        "Judge: Qwen3.5-122B for five-dimension text-only quality scoring",
+        "Student: Qwen3-VL-2B-Instruct with LoRA fine-tuning",
+        "Final training set: 2,667 pages with 294 pages held out for validation",
       ] },
-      { t: "quote", text: "The question is rarely “is this model smart enough?” It is “is this the smallest model that is smart enough?”" },
+      { t: "h", text: "The student is narrower, not universally smarter" },
+      p(
+        "The 2B student is specialized for structure-preserving parsing. It matches or exceeds the teacher in four of five reported OmniDocBench metric categories and performs better in the released KoGovDoc retrieval table. The teacher still leads formula CDM F1, and the student retains a 5.8 percent skip rate.",
+      ),
+      { t: "h", text: "Why the deployment decision follows" },
+      p(
+        "The model card supports single-GPU serving through vLLM. That changes the serving footprint from a large general model to a compact task model. The released artifacts do not include a controlled cost or throughput study, so this note does not claim a specific saving. The defensible conclusion is narrower: distillation preserved the evaluated document behavior while reducing the parameter count from 30B to 2B.",
+      ),
     ],
   },
 ];
@@ -464,6 +629,198 @@ export const EVENTS = byKind("event");
 export const COMMUNITY = byKind("community");
 export const INSIGHTS = byKind("insight");
 export const getArticle = (slug: string) => ARTICLES.find((a) => a.slug === slug);
+
+/* ── Tech report hub ────────────────────────────────────────────────────────
+ *
+ * `channel: "report"` mirrors the external content-feed shape we intend to
+ * expose later. `externalUrl` gives every entry a canonical source even when
+ * the editorial note itself lives on wigtn.com.
+ */
+export type TechReportTrack =
+  | "Model & benchmark"
+  | "AI systems"
+  | "Agentic engineering";
+
+export type TechReportEntry = {
+  channel: "report";
+  article: Article;
+  track: TechReportTrack;
+  format: "Research report" | "Engineering note" | "Open source" | "Video";
+  status: "Published" | "Public release" | "Research draft" | "Preliminary";
+  scope: string;
+  externalUrl: string;
+  externalLabel: string;
+  metrics?: string[];
+  featured?: boolean;
+  listed?: boolean;
+};
+
+export const TECH_REPORTS: TechReportEntry[] = [
+  {
+    channel: "report",
+    article: getArticle("wigtnocr")!,
+    track: "Model & benchmark",
+    format: "Research report",
+    status: "Public release",
+    scope: "OmniDocBench · KoGovDoc · 6 parsers",
+    externalUrl: "https://github.com/wigtn/wigtnOCR-v1",
+    externalLabel: "Research repository",
+    metrics: ["30B → 2B", "Table TEDS 0.649", "Hit@1 0.739", "4,501 pages"],
+    featured: true,
+  },
+  {
+    channel: "report",
+    article: getArticle("wigtnocr-radp")!,
+    track: "Model & benchmark",
+    format: "Research report",
+    status: "Research draft",
+    scope: "6 parsers · 3 retrievers · 663 Q–A",
+    externalUrl: articleHref("wigtnocr-radp"),
+    externalLabel: "Preview report",
+    listed: false,
+  },
+  {
+    channel: "report",
+    article: getArticle("why-we-distill-30b-into-2b")!,
+    track: "Model & benchmark",
+    format: "Engineering note",
+    status: "Public release",
+    scope: "Deployment decision note",
+    externalUrl: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR",
+    externalLabel: "See the evidence",
+  },
+  {
+    channel: "report",
+    article: getArticle("wigss")!,
+    track: "Agentic engineering",
+    format: "Engineering note",
+    status: "Public release",
+    scope: "Visual code refactoring · npm package",
+    externalUrl: "https://www.npmjs.com/package/wigss",
+    externalLabel: "View on npm",
+  },
+  {
+    channel: "report",
+    article: getArticle("wigtn-coding")!,
+    track: "Agentic engineering",
+    format: "Open source",
+    status: "Public release",
+    scope: "Parallel agent engineering workflow",
+    externalUrl: "https://github.com/wigtn/wigtn-plugins",
+    externalLabel: "View source",
+    metrics: ["13 agents", "6 skills", "20 design styles"],
+  },
+  {
+    channel: "report",
+    article: getArticle("wigvo")!,
+    track: "AI systems",
+    format: "Research report",
+    status: "Published",
+    scope: "ACL 2026 · 155 PSTN calls",
+    externalUrl: "https://aclanthology.org/2026.acl-demo.33/",
+    externalLabel: "ACL paper",
+    metrics: ["555ms P50", "0 / 147 echo loops", "$0.28 / min"],
+    listed: false,
+  },
+  {
+    channel: "report",
+    article: getArticle("wigvo-realtime-translation-video")!,
+    track: "AI systems",
+    format: "Video",
+    status: "Public release",
+    scope: "Dual-session architecture · PSTN echo gating",
+    externalUrl: "https://www.youtube.com/watch?v=jK1CDOQExLw",
+    externalLabel: "Watch video",
+  },
+  {
+    channel: "report",
+    article: getArticle("wigtn-flake-cortex-debate-video")!,
+    track: "AI systems",
+    format: "Video",
+    status: "Public release",
+    scope: "Snowflake Cortex hackathon demo",
+    externalUrl: "https://www.youtube.com/watch?v=1YzSp3SdzTk",
+    externalLabel: "Watch video",
+    metrics: ["5 AI experts", "3 active datasets", "7 verified Cortex capabilities"],
+  },
+];
+
+export type BenchmarkRow = {
+  system: string;
+  status: TechReportEntry["status"];
+  benchmark: string;
+  metric: string;
+  result: string;
+  comparison: string;
+  scope: string;
+  href: string;
+};
+
+export const REPORT_BENCHMARKS: BenchmarkRow[] = [
+  {
+    system: "WigtnOCR-2B",
+    status: "Public release",
+    benchmark: "KoGovDoc",
+    metric: "Hit@1",
+    result: "0.739",
+    comparison: "+2.3pp vs 30B teacher",
+    scope: "6 parsers · BGE-M3 retrieval",
+    href: "https://github.com/wigtn/wigtnOCR-v1",
+  },
+  {
+    system: "WigtnOCR-2B",
+    status: "Public release",
+    benchmark: "OmniDocBench",
+    metric: "Table TEDS",
+    result: "0.649",
+    comparison: "+12.6pp vs 30B teacher",
+    scope: "Text · tables · formulas · reading order",
+    href: "https://github.com/wigtn/wigtnOCR-v1",
+  },
+  {
+    system: "WIGVO",
+    status: "Published",
+    benchmark: "ACL 2026 field eval",
+    metric: "Caller → callee P50",
+    result: "555ms",
+    comparison: "0 echo loops / 147 completed",
+    scope: "155 Korean–English PSTN calls",
+    href: "https://aclanthology.org/2026.acl-demo.33/",
+  },
+];
+
+export const REPORT_REFERENCES = [
+  {
+    venue: "WIGTN · MODEL CARD",
+    title: "WigtnOCR-2B: Pseudo-Label Distillation for Structure-Preserving Document Parsing",
+    note: "Weights, KoGovDoc evaluation, training recipe, and the reported parsing/retrieval results.",
+    href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR",
+  },
+  {
+    venue: "CVPR 2025",
+    title: "OmniDocBench: Benchmarking Diverse PDF Document Parsing",
+    note: "The public document-parsing benchmark used to evaluate text, tables, formulas, and reading order.",
+    href: "https://openaccess.thecvf.com/content/CVPR2025/html/Ouyang_OmniDocBench_Benchmarking_Diverse_PDF_Document_Parsing_with_Comprehensive_Annotations_CVPR_2025_paper.html",
+  },
+  {
+    venue: "ACL 2025",
+    title: "MoC: Mixtures of Text Chunking Learners for Retrieval-Augmented Generation",
+    note: "Introduces Boundary Clarity and Chunk Stickiness, used as chunk-quality signals in the retrieval study.",
+    href: "https://aclanthology.org/2025.acl-long.258/",
+  },
+  {
+    venue: "ICCV 2025",
+    title: "OHR-Bench: OCR Hinders Retrieval-Augmented Generation",
+    note: "A downstream RAG benchmark used to validate how parser-side corruption propagates into retrieval and answer quality.",
+    href: "https://openaccess.thecvf.com/content/ICCV2025/html/Zhang_OCR_Hinders_RAG_Evaluating_the_Cascading_Impact_of_OCR_on_ICCV_2025_paper.html",
+  },
+  {
+    venue: "ACL 2026",
+    title: "WIGVO: Real-Time Bidirectional Speech Translation over Legacy PSTN Calls",
+    note: "Peer-reviewed field evaluation covering latency, semantic adequacy, echo loops, and serving cost.",
+    href: "https://aclanthology.org/2026.acl-demo.33/",
+  },
+];
 
 /* Homepage teasers — a few highlights only; the rest lives on sub-pages. */
 export const SELECTED_WORK = [getArticle("wigtnocr")!, getArticle("wigvo")!];
@@ -513,10 +870,10 @@ export const OPEN_SOURCE = [
   {
     name: "WIGTN Coding",
     platform: "GitHub",
-    desc: "A Claude Code plugin ecosystem — 12 agents, 3 skills, 17 design styles.",
-    href: "https://github.com/wigtn/wigtn-plugins-with-claude-code",
+    desc: "A Claude Code plugin ecosystem with 13 agents, 6 skills, and 20 design styles.",
+    href: "https://github.com/wigtn/wigtn-plugins",
     slug: "wigtn-coding",
-    metrics: ["12 agents", "3 skills", "17 design styles"],
+    metrics: ["13 agents", "6 skills", "20 design styles"],
   },
 ];
 
@@ -524,7 +881,7 @@ export const OPEN_SOURCE = [
 export const DEMOS = [
   { name: "TimeLens", tag: "Live", desc: "AI museum curator via Gemini Live.", href: "https://timelens-852253134165.asia-northeast3.run.app/" },
   { name: "WigtnOCR", tag: "Try on HF", desc: "2B Korean document parser.", href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR" },
-  { name: "WIGVO", tag: "Watch", desc: "Real-time phone-call translation.", href: "https://youtu.be/_ixVEnHJxjk" },
+  { name: "WIGVO", tag: "Watch", desc: "Real-time phone-call translation.", href: "https://www.youtube.com/watch?v=jK1CDOQExLw" },
 ];
 
 /* Milestones — the build-in-public track record, oldest → newest, one per

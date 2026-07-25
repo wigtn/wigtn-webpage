@@ -265,13 +265,13 @@ export const PROJECTS: Project[] = [
     featured: true,
     publication: "ACL 2026 — System Demonstrations (accepted)",
     homepageBadge: "ACL 2026 · ACCEPTED",
-    homepageMetrics: ["148 production calls", "0 echo-loop incidents", "557ms avg latency"],
-    tagline: "Real-time voice translation for phone calls — call anyone, in any language, with zero echo-loop incidents across 148 production calls.",
-    description: "WIGVO runs two parallel AI interpreter sessions — one for each speaker — to deliver natural, bidirectional voice translation over standard phone lines. A software-only echo-cancellation pipeline eliminates feedback loops without dedicated hardware, achieving 557ms average latency and zero echo incidents across 148 real-world calls. The recipient answers a normal phone call; no app download required.",
+    homepageMetrics: ["155 calls evaluated", "0 / 147 completed calls with echo loops", "555ms caller→callee P50"],
+    tagline: "Real-time voice translation for phone calls — evaluated across 155 Korean-English PSTN calls.",
+    description: "WIGVO runs two parallel AI interpreter sessions — one for each speaker — to deliver bidirectional voice translation over standard phone lines. Its software echo gate recorded zero echo-induced translation loops across 147 completed calls in a 155-call field evaluation. Median caller-to-callee latency was 555ms; the reverse direction was ASR-bound at 2,684ms.",
     gradient: "from-violet to-purple-400",
     media: {
       poster: "/images/projects/wigvo_logo.png",
-      heroVideo: "https://youtu.be/_ixVEnHJxjk?si=P257fqme3B0zTzNu",
+      heroVideo: "https://www.youtube.com/watch?v=jK1CDOQExLw",
       heroVideoType: "youtube",
     },
     timeline: {
@@ -279,14 +279,14 @@ export const PROJECTS: Project[] = [
     },
     links: {
       github: "https://github.com/wigtn/wigvo-v2",
-      video: "https://youtu.be/_ixVEnHJxjk?si=P257fqme3B0zTzNu",
+      video: "https://www.youtube.com/watch?v=jK1CDOQExLw",
     },
     detail: {
       translationKey: "wigvo",
       stats: [
-        { value: "557ms", labelKey: "avgLatency" },
-        { value: "169", labelKey: "callsMade" },
-        { value: "$0.27", labelKey: "perMinute" },
+        { value: "555ms", labelKey: "avgLatency" },
+        { value: "155", labelKey: "callsMade" },
+        { value: "$0.28", labelKey: "perMinute" },
         { value: "0", labelKey: "echoLoops" },
       ],
       features: [
@@ -483,15 +483,15 @@ export const PROJECTS: Project[] = [
     phase: "completed",
     featured: true,
     homepageBadge: "SNOWFLAKE 2026 · TECH TRACK · 2ND PLACE",
-    homepageMetrics: ["11 Snowflake Cortex functions", "5 AI experts × 4 datasets", "Tech Track · 2nd Place"],
+    homepageMetrics: ["7 verified Cortex capabilities", "5 AI experts × 3 active datasets", "Tech Track · 2nd Place"],
     tagline: "Multi-agent debate platform on Snowflake Cortex — pick a goal, agents argue tradeoffs, you decide.",
-    description: "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform. The user picks one of five preset goals (or types their own); a GPT-4o orchestrator summons five purpose-tuned experts who debate in a Slack-style chat while Cortex Analyst executes text-to-SQL across four Semantic Models — SPH (foot traffic + card sales), RichGo (real estate), NextTrade (markets), and AJD (telecom). ANOMALY_DETECTION auto-injects \"watch this district\" badges, FORECAST projects six months out, and the conversation converges into a ranked Top 3 with a concrete action checklist. Tech Track 2nd place at Snowflake AI & Data Hackathon Korea 2026.",
+    description: "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform. Five purpose-tuned experts debate evidence from three actively selected datasets — SPH, RichGo, and AJD — before producing a ranked Top 3 and an action checklist. A production-path audit verified seven Cortex capabilities; the originally presented NextTrade and Cortex Agent paths were connected but not actively used. Tech Track 2nd place at Snowflake AI & Data Hackathon Korea 2026.",
     gradient: "from-sky-500 to-blue-600",
     media: {
       // Stage banner used as the homepage Awards-card poster; the
       // project detail page swaps to the embedded YouTube iframe.
       poster: "/images/projects/wigtn-flake-stage.jpg",
-      heroVideo: "https://youtu.be/1YzSp3SdzTk?si=_wQ17FZ_RWQVWq5l",
+      heroVideo: "https://www.youtube.com/watch?v=1YzSp3SdzTk",
       heroVideoType: "youtube",
     },
     timeline: {},
@@ -510,22 +510,22 @@ export const PROJECTS: Project[] = [
     detail: {
       translationKey: "wigtnflake",
       stats: [
-        { value: "11", labelKey: "snowflakeServices" },
+        { value: "7", labelKey: "snowflakeServices" },
         { value: "5", labelKey: "aiExperts" },
         { value: "2nd", labelKey: "hackathonRank" },
-        { value: "4", labelKey: "datasetSize" },
+        { value: "3", labelKey: "datasetSize" },
       ],
       features: [
         { icon: Brain, title: "Purpose-First UX", descriptionKey: "wigtnflake_feature_purpose" },
-        { icon: Database, title: "Cortex Analyst × 4", descriptionKey: "wigtnflake_feature_cortex" },
+        { icon: Database, title: "Cortex Analyst × 3 active models", descriptionKey: "wigtnflake_feature_cortex" },
         { icon: Zap, title: "ANOMALY_DETECTION", descriptionKey: "wigtnflake_feature_anomaly" },
         { icon: Shield, title: "Hybrid AI Strategy", descriptionKey: "wigtnflake_feature_hybrid" },
       ],
       techStack: [
-        { category: "Snowflake Cortex", items: ["Cortex Agent", "Cortex Analyst × 4", "Cortex LLM (claude-4-sonnet)", "FORECAST", "ANOMALY_DETECTION", "AI_SENTIMENT", "AI_CLASSIFY", "data_to_chart", "Dynamic Tables × 2", "Python UDF × 2", "Semantic Model YAML × 4"] },
+        { category: "Snowflake Cortex", items: ["Cortex Analyst × 3 active models", "Cortex LLM (claude-4-sonnet)", "FORECAST", "ANOMALY_DETECTION", "AI_SENTIMENT", "AI_CLASSIFY", "data_to_chart"] },
         { category: "Application", items: ["Next.js 16 (App Router)", "React 19 (Compiler)", "TypeScript 5.9 (strict)", "Tailwind CSS 4", "Framer Motion 12", "Vega-Lite 6", "SSE streaming chat"] },
         { category: "AI & Data", items: ["GPT-4o (debate personas)", "OpenAI SDK 6", "snowflake-sdk 1.15", "Tavily (web search)", "MOLIT public real-estate API"] },
-        { category: "Datasets", items: ["SPH (SKT foot traffic + Shinhan card + KCB income)", "RichGo (apartment AI price index)", "NextTrade (equity orders / fills)", "AJD 아정당 (telecom + GA4 + call center)"] },
+        { category: "Datasets", items: ["SPH (SKT foot traffic + Shinhan card + KCB income)", "RichGo (apartment AI price index)", "AJD 아정당 (telecom + GA4 + call center)", "NextTrade (connected, but not actively selected in the audited path)"] },
       ],
       researchSections: WIGTN_FLAKE_SECTIONS,
     },
