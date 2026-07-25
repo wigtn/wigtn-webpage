@@ -42,6 +42,42 @@ function BlockView({ block }: { block: Block }) {
           ))}
         </ul>
       );
+    case "image":
+      return (
+        <figure className="my-9">
+          <img
+            src={block.src}
+            alt={block.alt ?? ""}
+            className="w-full rounded-lg border border-white/10 object-cover"
+          />
+          {block.caption && (
+            <figcaption className="mt-3 text-sm leading-relaxed text-zinc-500">{block.caption}</figcaption>
+          )}
+        </figure>
+      );
+    case "gallery": {
+      const cols =
+        block.images.length >= 3 ? "sm:grid-cols-3" : block.images.length === 2 ? "sm:grid-cols-2" : "";
+      return (
+        <figure className="my-9">
+          <div className={`grid gap-3 ${cols}`}>
+            {block.images.map((im, i) => (
+              <div key={i}>
+                <img
+                  src={im.src}
+                  alt={im.alt ?? ""}
+                  className="aspect-[4/3] w-full rounded-lg border border-white/10 object-cover"
+                />
+                {im.caption && <p className="mt-2 text-xs leading-relaxed text-zinc-500">{im.caption}</p>}
+              </div>
+            ))}
+          </div>
+          {block.caption && (
+            <figcaption className="mt-3 text-sm leading-relaxed text-zinc-500">{block.caption}</figcaption>
+          )}
+        </figure>
+      );
+    }
     default:
       return <p className="my-5 text-lg leading-relaxed text-zinc-400">{block.text}</p>;
   }

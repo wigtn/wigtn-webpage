@@ -71,6 +71,14 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Journal serif for the News "Dispatch Ledger" — a Palatino-class face
+   * paired with JetBrains Mono metadata. Latin renders serif; Hangul falls
+   * back per-glyph to Pretendard, so mixed KR/EN titles still read cleanly. */
+  .font-journal {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+      "Noto Serif KR", Georgia, "Pretendard Variable", serif;
+  }
 }
 
 /* Carousel infinite scroll — shifts exactly one set width for seamless loop */

@@ -27,8 +27,8 @@ export const articleHref = (slug: string) => `${HOME}${slug}/`;
  * in-page anchors. */
 export const NAV: { label: string; href: string; disabled?: boolean }[] = [
   { label: "About", href: TEAM_PAGE },
+  { label: "Newsroom", href: NEWS },
   { label: "Tech Reports", href: TECH_REPORTS_PAGE },
-  { label: "News", href: NEWS },
   { label: "Projects", href: WORK },
 ];
 
@@ -161,11 +161,22 @@ export const TEAM_BADGES = ["AI Research", "Open Source", "Meetups", "Hackathons
 
 export type Kind = "report" | "event" | "community" | "insight";
 
+/* Channel split: "newsroom" = in-site news feed (awards, releases,
+ * announcements, community — LinkedIn-style short posts); "report" = deep tech
+ * content that lives on the external GitHub Pages blog. Untagged articles are
+ * treated as report/back-catalog and stay out of the newsroom feed. */
+export type Channel = "newsroom" | "report";
+export type NewsTopic = "award" | "release" | "announcement" | "community";
+
+export type GalleryImage = { src: string; caption?: string; alt?: string };
+
 export type Block =
   | { t: "p"; text: string }
   | { t: "h"; text: string }
   | { t: "quote"; text: string }
-  | { t: "list"; items: string[] };
+  | { t: "list"; items: string[] }
+  | { t: "image"; src: string; caption?: string; alt?: string }
+  | { t: "gallery"; images: GalleryImage[]; caption?: string };
 
 export type Link = { label: string; href: string };
 
@@ -187,6 +198,9 @@ export type Article = {
   links?: Link[];
   sourceNote?: string;
   placeholder?: boolean; // not-yet-real content kept as mock
+  channel?: Channel; // undefined = back-catalog/report (excluded from newsroom)
+  newsTopic?: NewsTopic; // newsroom sub-category (drives the /news filter)
+  externalUrl?: string; // report only — GitHub Pages blog post URL
   body: Block[];
 };
 
@@ -285,25 +299,50 @@ export const ARTICLES: Article[] = [
     summary:
       "Two directional AI sessions deliver bidirectional translation over standard phone lines — 555ms median caller-to-callee latency and zero echo-induced loops.",
     date: "2026.04.27",
-    readTime: "10 min",
+    readTime: "5 min",
     author: "WIGTN Research",
-    image: "/images/projects/wigvo_logo.png",
+    image: "/images/projects/wigvo_screenshot_call.png",
+    externalUrl: "https://wigtn.github.io/blog/wigvo/",
     links: [
       { label: "GitHub", href: "https://github.com/wigtn/wigvo" },
       { label: "ACL paper", href: "https://aclanthology.org/2026.acl-demo.33/" },
       { label: "Watch demo", href: "https://www.youtube.com/watch?v=jK1CDOQExLw" },
     ],
     body: [
-      { t: "h", text: "Call anyone, in any language" },
+      { t: "h", text: "An email we read twice" },
       p(
-        "K-Culture brought millions to Korea — but everyday phone calls hit a language wall. WIGVO runs two parallel AI interpreter sessions, one per speaker, for natural bidirectional translation over normal phone lines. The recipient just answers a call; no app required.",
+        "Some emails you read twice. In April, one of ours confirmed that WIGVO — our system for real-time phone-call translation — had been accepted to the ACL 2026 System Demonstrations track. For a team that started with a simple, stubborn question, it was the kind of validation that's hard to put into words.",
       ),
+      {
+        t: "image",
+        src: "/images/projects/wigvo_screenshot_call.png",
+        caption: "WIGVO in a live bidirectional call — the recipient just answers an ordinary phone.",
+      },
+      { t: "h", text: "The question behind WIGVO" },
+      p(
+        "K-Culture brought millions of people to Korea — but everyday phone calls still hit a language wall. And the people who need translation most aren't chatting in an app. They're calling a hospital, a city office, a bank — places that still run on landlines. No smartphone on the other end, no app that can reach that line.",
+      ),
+      p(
+        "WIGVO answers that. It runs two parallel AI interpreter sessions, one per speaker, for natural bidirectional translation over normal phone lines. The recipient just answers a call — no app, no install, nothing to learn.",
+      ),
+      { t: "h", text: "What the paper reports" },
       { t: "list", items: [
         "555ms median caller-to-callee latency across 155 PSTN calls",
         "Zero echo-induced loops across 147 completed calls",
         "$0.28 per minute · OpenAI Realtime API + Twilio Media Streams",
       ] },
+      {
+        t: "gallery",
+        images: [
+          { src: "/images/projects/wigvo_architecture.png", caption: "Two interpreter sessions, one per speaker." },
+          { src: "/images/projects/wigvo_latency_histogram.png", caption: "Latency distribution across production calls." },
+        ],
+      },
       { t: "quote", text: "Accepted to ACL 2026 — System Demonstrations." },
+      { t: "h", text: "Read the full report" },
+      p(
+        "This is the short version. The full technical write-up — architecture, echo-gating, and evaluation — lives on our Tech Report blog.",
+      ),
     ],
   },
   {
@@ -394,6 +433,8 @@ export const ARTICLES: Article[] = [
   {
     slug: "trae-seoul-grand-prize",
     kind: "event",
+    channel: "newsroom",
+    newsTopic: "award",
     tag: "GRAND PRIZE",
     icon: "trophy",
     title: "Grand Prize — Build with TRAE Seoul (ByteDance)",
@@ -402,18 +443,42 @@ export const ARTICLES: Article[] = [
     date: "2026.03.28",
     place: "Seoul, KOR",
     author: "ByteDance",
+    readTime: "4 min",
     image: "/images/projects/trae_hackthon_seoul.png",
+    externalUrl: "https://wigtn.github.io/blog/wigent/",
     links: [{ label: "GitHub", href: "https://github.com/wigtn/wigent" }],
     body: [
+      { t: "h", text: "Grand Prize in 3.5 hours" },
       p(
-        "WIGENT is a multi-agent debate arena where a PM agent orchestrates auto-spawned domain experts in a Slack-style chat. Agents argue, challenge each other, retire when outmatched, and summon new specialists — then the system auto-generates a landing page from the debate conclusions.",
+        "At Build with TRAE Seoul (ByteDance), three of us built WIGENT in three and a half hours — and walked away with the Grand Prize.",
       ),
+      {
+        t: "image",
+        src: "/images/projects/trae_hackthon_seoul.png",
+        caption: "Build with TRAE Seoul — WIGENT takes the Grand Prize.",
+      },
+      { t: "h", text: "What WIGENT is" },
+      p(
+        "WIGENT is a multi-agent debate arena. A PM agent orchestrates auto-spawned domain experts in a Slack-style chat: agents argue, challenge each other, retire when outmatched, and summon new specialists as the discussion needs them. When the debate converges, the system auto-generates a landing page from its conclusions.",
+      ),
+      { t: "list", items: [
+        "PM agent orchestration with auto-spawned experts",
+        "Agents that retire and recruit specialists mid-debate",
+        "An auto-generated landing page from the final consensus",
+      ] },
+      {
+        t: "image",
+        src: "/images/carousel/trae_hackthon_seoul2.jpg",
+        caption: "The team at Build with TRAE Seoul.",
+      },
       { t: "quote", text: "Grand Prize at Build with TRAE Seoul — built by 3 engineers in 3.5 hours." },
     ],
   },
   {
     slug: "snowflake-korea-2026",
     kind: "event",
+    channel: "newsroom",
+    newsTopic: "award",
     tag: "2ND PLACE · TECH TRACK",
     icon: "trophy",
     title: "2nd Place, Tech Track — Snowflake AI & Data Hackathon Korea 2026",
@@ -422,12 +487,24 @@ export const ARTICLES: Article[] = [
     date: "2026.04.29",
     place: "Seoul, KOR",
     author: "Snowflake",
+    readTime: "5 min",
     image: "/images/projects/wigtn-flake-stage.jpg",
+    externalUrl: "https://wigtn.github.io/blog/wigtn-flake/",
     links: [
       { label: "Watch demo", href: "https://www.youtube.com/watch?v=1YzSp3SdzTk" },
       { label: "Press", href: "https://www.newswire.co.kr/newsRead.php?no=1033575" },
     ],
     body: [
+      { t: "h", text: "Second place, Tech Track" },
+      p(
+        "At the Snowflake AI & Data Hackathon Korea 2026, WIGTN Flake took 2nd place in the Tech Track. The brief was open-ended; our answer was a purpose-driven neighborhood-intelligence platform built entirely on Snowflake Cortex.",
+      ),
+      {
+        t: "image",
+        src: "/images/projects/wigtn-flake-stage.jpg",
+        caption: "On stage at the Snowflake AI & Data Hackathon Korea 2026.",
+      },
+      { t: "h", text: "What WIGTN Flake does" },
       p(
         "Pick a goal — open a cafe, place a billboard, invest — and a GPT-4o orchestrator summons five purpose-tuned experts while Cortex Analyst runs text-to-SQL across the SPH, RichGo, and AJD Semantic Models selected by the audited production path.",
       ),
@@ -436,30 +513,217 @@ export const ARTICLES: Article[] = [
         "ANOMALY_DETECTION auto-flags districts to watch; FORECAST projects six months out",
         "Converges into a ranked Top 3 with a concrete action checklist",
       ] },
+      {
+        t: "gallery",
+        images: [
+          { src: "/images/projects/wigtn-flake-architecture.jpg", caption: "The multi-agent debate architecture over Cortex." },
+          { src: "/images/projects/wigtn-flake-datasets.jpg", caption: "The four Semantic Models the experts cross-query." },
+        ],
+      },
+      { t: "h", text: "The best part wasn't the trophy" },
+      p(
+        "The finals floor was full of sharp teams with genuinely different ideas, and we came away with as many notes from the other builders as from our own demo. That's the part we keep coming back for.",
+      ),
       { t: "quote", text: "Tech Track 2nd Place at Snowflake AI & Data Hackathon Korea 2026." },
     ],
   },
   {
-    slug: "gemini-live-challenge",
+    slug: "acl-2026-san-diego",
     kind: "event",
-    tag: "CHALLENGE",
+    channel: "newsroom",
+    newsTopic: "announcement",
+    tag: "ACL 2026",
     icon: "pin",
-    title: "Google Gemini Live Agent Challenge — TimeLens",
+    title: "WIGVO at ACL 2026 in San Diego — a live demo booth, plus an IWSLT invited talk",
     summary:
-      "An AI museum curator that narrates exhibits in real time via Gemini Live, with historical context and restoration visualizations.",
-    date: "2026",
-    place: "Online",
-    author: "Google",
-    image: "/images/carousel/timelens_hero.png",
+      "We brought WIGVO to the ACL 2026 System Demonstrations floor as a live booth, and were invited to present at IWSLT 2026 — an oral talk and a poster.",
+    date: "2026.07.16",
+    place: "San Diego, USA",
+    author: "WIGTN Research",
+    readTime: "6 min",
+    image: "/images/projects/wigvo_screenshot_call.png",
+    externalUrl: "https://wigtn.github.io/blog/wigvo/",
     links: [
-      { label: "Live", href: "https://timelens-852253134165.asia-northeast3.run.app/" },
-      { label: "GitHub", href: "https://github.com/wigtn/wigtn-timelens" },
-      { label: "Watch", href: "https://youtu.be/ITaMtVO5jFg" },
+      { label: "GitHub", href: "https://github.com/wigtn/wigvo-v2" },
+      { label: "Watch demo", href: "https://youtu.be/_ixVEnHJxjk" },
     ],
     body: [
       p(
-        "Point your camera at a museum artifact and an AI curator explains it in real time — historical context, significance, and restoration visualizations — powered by Gemini Live.",
+        "San Diego, July 2026. After the acceptance email back in April, WIGVO finally made it to the ACL 2026 floor — not as a poster tucked in a hallway, but as a live demo booth in the System Demonstrations track. For three days we handed strangers a phone, let them speak their own language, and watched the person on the other end hear it in theirs.",
       ),
+      {
+        t: "image",
+        src: "/images/projects/wigvo_screenshot_call.png",
+        caption:
+          "WIGVO running live at the booth — a real bidirectional call, one AI interpreter session per speaker.",
+      },
+      { t: "h", text: "A demo you could actually pick up and use" },
+      p(
+        "Most demos ask you to watch. Ours asked you to talk. Visitors dialed a number, the recipient answered an ordinary phone — no app, no headset, no setup — and the two of them held a conversation across a language barrier in near real time. That is the whole point of WIGVO: it meets people where they already are. The hospital front desk, the city office, the bank call center — the places that need translation most are still running on landlines.",
+      ),
+      p(
+        "Running it live, all day, in a noisy conference hall was its own stress test. The software-only echo cancellation held. The dual-session design kept each speaker's interpreter from bleeding into the other. And the latency stayed low enough that conversations felt like conversations, not walkie-talkie exchanges.",
+      ),
+      { t: "h", text: "The questions that surprised us" },
+      p(
+        "We expected the academic questions — about the model, the data, the evaluation. We got those. What we didn't expect was how many people came at it from the industry side: How does it handle the PSTN? What's the per-minute cost at scale? Can it drop into an existing call center? Which languages are production-ready today?",
+      ),
+      p(
+        "Those are deployment questions, not paper questions. They came from engineers and product people who weren't asking whether it works in a benchmark — they were asking whether they could ship it next quarter.",
+      ),
+      {
+        t: "quote",
+        text: "That's when it clicked: this isn't just a paper — it's a product people are waiting for.",
+      },
+      { t: "h", text: "A lucky bonus: IWSLT 2026" },
+      p(
+        "Alongside the main-conference demo, WIGVO was invited to IWSLT 2026, the spoken-language-translation workshop. That turned into two more sessions: an invited oral talk and a poster. The oral let us walk through the architecture end to end; the poster turned into a two-hour conversation with the people who care most about real-time speech translation.",
+      ),
+      {
+        t: "gallery",
+        images: [
+          {
+            src: "/images/projects/wigvo_architecture.png",
+            caption: "Dual-session architecture — one interpreter per speaker.",
+          },
+          {
+            src: "/images/projects/wigvo_latency_histogram.png",
+            caption: "Latency distribution — 557 ms average across production calls.",
+          },
+          {
+            src: "/images/projects/wigvo_pipeline.png",
+            caption: "The audio pipeline, with software-only echo cancellation.",
+          },
+        ],
+        caption: "What we walked through at the IWSLT oral and poster.",
+      },
+      { t: "h", text: "What we're taking home" },
+      p(
+        "We flew back with a longer to-do list than we arrived with — languages people asked for, integrations people wanted, edge cases we hadn't hit until a stranger tried them live. San Diego reframed the work for us: WIGVO isn't finished when the paper is published. It's finished when someone calls a hospital in a language they don't share, and it just works.",
+      ),
+      { t: "quote", text: "San Diego, you were great. Now back to shipping." },
+    ],
+  },
+
+  /* ───────── Newsroom · Releases & Updates (real) ───────── */
+  {
+    slug: "wigtnocr-open-source",
+    kind: "report",
+    channel: "newsroom",
+    newsTopic: "release",
+    tag: "RELEASE",
+    title: "WigtnOCR is open source — our 2B Korean doc parser is on HuggingFace",
+    summary:
+      "Weights, training data, and eval code for the 2B parser that ranked #1 on KoGovDoc-Bench are now public. Teacher-level document parsing on a single consumer GPU.",
+    date: "2026.05.21",
+    author: "WIGTN",
+    readTime: "5 min",
+    image: "/images/projects/wigtnocr-huggingface.png",
+    externalUrl: "https://wigtn.github.io/blog/wigtnocr/",
+    links: [
+      { label: "HuggingFace", href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR" },
+      { label: "GitHub", href: "https://github.com/wigtn/wigtnOCR-v1" },
+    ],
+    body: [
+      { t: "h", text: "It's open" },
+      p(
+        "WigtnOCR is now fully open source. Model weights are on HuggingFace; training data and evaluation code are on GitHub. Anyone can run — or retrain — the 2B parser that reads Korean government documents like a model fifteen times its size.",
+      ),
+      {
+        t: "image",
+        src: "/images/projects/wigtnocr-huggingface.png",
+        caption: "WigtnOCR on HuggingFace — weights, data, and eval, all public.",
+      },
+      { t: "h", text: "Why it matters" },
+      p(
+        "Existing OCR and rule-based parsers stumble on Korean government forms — tables, stamps, dense multi-column layouts. State-of-the-art VLM parsers are tuned for English and Chinese, and 30B models are too expensive to deploy in production. WigtnOCR distills a 30B teacher into a 2B student that matches it on the benchmark that mattered, on hardware you already own.",
+      ),
+      { t: "list", items: [
+        "#1 overall on KoGovDoc-Bench across 6 parsers",
+        "2B student distilled from a 30B teacher — teacher-level accuracy",
+        "Runs on a single consumer GPU",
+      ] },
+      {
+        t: "gallery",
+        images: [
+          { src: "/images/projects/wigtnocr-highlights.png", caption: "Parsing real Korean government documents." },
+          { src: "/images/projects/wigtnocr-omnidocbench.png", caption: "OmniDocBench — student vs. teacher." },
+        ],
+      },
+      { t: "quote", text: "Teacher-level accuracy at 1/15th the size — now yours to run." },
+      { t: "h", text: "Go deeper" },
+      p("The full distillation method, ablations, and benchmark breakdown are in the WigtnOCR tech report."),
+    ],
+  },
+  {
+    slug: "wigss-npm-release",
+    kind: "report",
+    channel: "newsroom",
+    newsTopic: "release",
+    tag: "RELEASE",
+    title: "WIGSS is live on npm — drag UI in the browser, watch the source rewrite itself",
+    summary:
+      "Our always-on visual refactoring agent is now installable from npm. Point it at your dev server, rearrange components in the browser, and the source updates itself.",
+    date: "2026.04.11",
+    author: "WIGTN",
+    readTime: "3 min",
+    image: "/images/carousel/wigss-npm.png",
+    externalUrl: "https://wigtn.github.io/blog/wigss/",
+    links: [
+      { label: "npm", href: "https://npmjs.com/package/wigss" },
+      { label: "GitHub", href: "https://github.com/wigtn/wigss" },
+    ],
+    body: [
+      { t: "h", text: "npm install wigss" },
+      p(
+        "WIGSS is live on npm. Our always-on visual refactoring agent is now a single install away: point it at your running dev server, rearrange components in the browser, and watch the source rewrite itself.",
+      ),
+      {
+        t: "image",
+        src: "/images/carousel/wigss-npm.png",
+        caption: "WIGSS is now published on npm.",
+      },
+      { t: "h", text: "Drag UI, code rewrites itself" },
+      p(
+        "WIGSS connects to your dev server and lets you visually drag and rearrange UI components in the browser. An always-on AI agent watches those changes and rewrites the underlying source to match — no hunting through files just to move a button.",
+      ),
+      { t: "list", items: [
+        "Browser-native visual editing on your live dev server",
+        "An always-on agent that rewrites the source to match",
+        "Installable today from npm",
+      ] },
+      { t: "quote", text: "Drag UI, code rewrites itself." },
+    ],
+  },
+  {
+    slug: "wigtn-coding-release",
+    kind: "report",
+    channel: "newsroom",
+    newsTopic: "release",
+    tag: "RELEASE",
+    title: "WIGTN Coding update — 12 agents, 3 skills, and 17 design styles from idea to deploy",
+    summary:
+      "The Claude Code plugin ecosystem levels up with refreshed team-based parallel execution — a 3–5× speedup taking you from idea to deploy with zero friction.",
+    date: "2026.06.10",
+    author: "WIGTN",
+    readTime: "3 min",
+    externalUrl: "https://wigtn.github.io/blog/wigtn-coding/",
+    links: [{ label: "GitHub", href: "https://github.com/wigtn/wigtn-plugins-with-claude-code" }],
+    body: [
+      { t: "h", text: "A bigger toolbelt" },
+      p(
+        "The latest WIGTN Coding release grows the Claude Code plugin ecosystem to 12 agents, 3 skills, and 17 design styles — all coordinated by team-based parallel execution for a 3–5× speedup from idea to deploy.",
+      ),
+      { t: "h", text: "What's inside" },
+      { t: "list", items: [
+        "12 specialized agents, from architecture to code review",
+        "3 skills and 17 distinct design styles to avoid generic output",
+        "Team-based parallel execution for a 3–5× speedup",
+      ] },
+      p(
+        "The goal is the same as it's always been: take a builder from idea to deploy with as little friction as possible, without giving up craft along the way.",
+      ),
+      { t: "quote", text: "Idea to deploy, zero friction." },
     ],
   },
 
@@ -831,7 +1095,7 @@ export const HIGHLIGHTS: { article: Article; short: string }[] = [
   { article: getArticle("wigvo")!, short: "WIGVO" },
   { article: getArticle("snowflake-korea-2026")!, short: "Snowflake ’26" },
   { article: getArticle("trae-seoul-grand-prize")!, short: "TRAE Seoul" },
-  { article: getArticle("gemini-live-challenge")!, short: "Gemini Live" },
+  { article: getArticle("acl-2026-san-diego")!, short: "ACL San Diego" },
 ];
 
 /* Scroll-highlight strengths (SORI "Our strength"). */
@@ -986,3 +1250,10 @@ export const WORK_GROUPS = [
 export const NEWS_FEED = ARTICLES.filter((a) => !a.placeholder).sort((a, b) =>
   a.date < b.date ? 1 : a.date > b.date ? -1 : 0,
 );
+
+/* Newsroom feed — only channel:"newsroom" items (awards, releases,
+ * announcements). Deep tech "report" content lives on the external blog and is
+ * excluded here. Newest first. */
+export const NEWSROOM_FEED = ARTICLES.filter(
+  (a) => !a.placeholder && a.channel === "newsroom",
+).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));

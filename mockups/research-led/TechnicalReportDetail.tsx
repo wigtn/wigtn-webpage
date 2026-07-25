@@ -135,6 +135,38 @@ function ReportBlock({ block }: { block: Block }) {
           ))}
         </ul>
       );
+    case "image":
+      return (
+        <figure className="my-9">
+          <img src={block.src} alt={block.alt ?? ""} className="w-full border border-[#D6D6D1] object-cover" />
+          {block.caption && (
+            <figcaption className="mt-3 font-mono text-[11px] leading-6 text-[#777771]">{block.caption}</figcaption>
+          )}
+        </figure>
+      );
+    case "gallery": {
+      const cols =
+        block.images.length >= 3 ? "sm:grid-cols-3" : block.images.length === 2 ? "sm:grid-cols-2" : "";
+      return (
+        <figure className="my-9">
+          <div className={`grid gap-3 ${cols}`}>
+            {block.images.map((im, i) => (
+              <div key={i}>
+                <img
+                  src={im.src}
+                  alt={im.alt ?? ""}
+                  className="aspect-[4/3] w-full border border-[#D6D6D1] object-cover"
+                />
+                {im.caption && <p className="mt-2 font-mono text-[10px] leading-5 text-[#8B8B85]">{im.caption}</p>}
+              </div>
+            ))}
+          </div>
+          {block.caption && (
+            <figcaption className="mt-3 font-mono text-[11px] leading-6 text-[#777771]">{block.caption}</figcaption>
+          )}
+        </figure>
+      );
+    }
     default:
       return <p className="my-5 text-[1.05rem] leading-8 text-[#4F4F4A]">{block.text}</p>;
   }
