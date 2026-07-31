@@ -47,7 +47,9 @@ function BlockView({ block }: { block: Block }) {
         <figure className="my-9">
           <img
             src={block.src}
-            alt={block.alt ?? ""}
+            alt={block.alt}
+            loading="lazy"
+            decoding="async"
             className="w-full rounded-lg border border-line/[0.08] object-cover"
           />
           {block.caption && (
@@ -65,7 +67,9 @@ function BlockView({ block }: { block: Block }) {
               <div key={i}>
                 <img
                   src={im.src}
-                  alt={im.alt ?? ""}
+                  alt={im.alt}
+                  loading="lazy"
+                  decoding="async"
                   className="aspect-[4/3] w-full rounded-lg border border-line/[0.08] object-cover"
                 />
                 {im.caption && <p className="mt-2 text-xs leading-relaxed text-ink-4">{im.caption}</p>}
@@ -176,7 +180,11 @@ export function ArticleDetail({ slug }: { slug: string }) {
             className="relative mt-8 aspect-[16/8] rounded-lg overflow-hidden border border-line/[0.08] bg-gradient-to-br from-brand/20 via-brand/5 to-transparent flex items-center justify-center"
           >
             {article.image && (
-              <img src={article.image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-90" />
+              <img
+                src={article.image}
+                alt={article.title}
+                className="absolute inset-0 h-full w-full object-cover opacity-90"
+              />
             )}
             {article.video ? (
               <a

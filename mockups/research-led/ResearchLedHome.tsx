@@ -14,13 +14,14 @@
  * MilestoneTimeline is retained but currently unrouted.
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
 import { CAPABILITIES, PARTNERS, MILESTONES, NEWSROOM, NEWS } from "./data";
 import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, rise, VIEWPORT } from "./chrome";
 import { ArticleCard } from "./cards";
+import type { Theme } from "@/lib/theme";
 
 function ViewAll({ href, label }: { href: string; label: string }) {
   return (
@@ -47,27 +48,86 @@ function ViewAll({ href, label }: { href: string; label: string }) {
  * ───────────────────────────────────────────────────────────────────────── */
 const INTRO_HOLD_AT = 4.6;
 
-function IntroVideo({ src, className }: { src: string; className: string }) {
-  // `timeupdate` fires roughly 4x/sec, so it always overshoots a little. Seek
-  // back to the exact mark after pausing, otherwise the resting frame drifts
-  // by up to ~250ms between loads and can land on a caret-blink frame.
-  const holdAtMark = (e: React.SyntheticEvent<HTMLVideoElement>) => {
-    const v = e.currentTarget;
-    if (v.dataset.held || v.currentTime < INTRO_HOLD_AT) return;
-    v.dataset.held = "1";
-    v.pause();
-    v.currentTime = INTRO_HOLD_AT;
-  };
+const INTRO_SRC: Record<Theme, string> = {
+  light: "/WIGTN%20Intro/04_Dynamic-White.mp4",
+  dark: "/WIGTN%20Intro/03_Dynamic-Black.mp4",
+};
+
+type IntroResume = { time: number; shouldPlay: boolean; held: boolean };
+
+function holdIntro(video: HTMLVideoElement) {
+  if (video.dataset.held) return;
+  video.dataset.held = "1";
+  video.pause();
+  video.currentTime = INTRO_HOLD_AT;
+}
+
+function IntroVideo() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const resumeRef = useRef<IntroResume>({ time: 0, shouldPlay: true, held: false });
+  const themeRef = useRef<Theme | null>(null);
+  const [theme, setTheme] = useState<Theme | null>(null);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const syncTheme = () => {
+      const next: Theme = root.classList.contains("dark") ? "dark" : "light";
+      const current = themeRef.current;
+      if (current && current !== next) {
+        const video = videoRef.current;
+        if (video) {
+          const held = Boolean(video.dataset.held) || video.ended || video.currentTime >= INTRO_HOLD_AT;
+          resumeRef.current = {
+            time: held ? INTRO_HOLD_AT : Math.min(video.currentTime, INTRO_HOLD_AT),
+            shouldPlay: !video.paused && !held,
+            held,
+          };
+        }
+      }
+      themeRef.current = next;
+      setTheme(next);
+    };
+
+    syncTheme();
+    const observer = new MutationObserver(syncTheme);
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+
+  const holdAtMark = useCallback((e: React.SyntheticEvent<HTMLVideoElement>) => {
+    const video = e.currentTarget;
+    if (video.currentTime >= INTRO_HOLD_AT || video.ended) holdIntro(video);
+  }, []);
+
+  const restorePlayback = useCallback((e: React.SyntheticEvent<HTMLVideoElement>) => {
+    const video = e.currentTarget;
+    const resume = resumeRef.current;
+    video.currentTime = resume.held ? INTRO_HOLD_AT : Math.min(resume.time, INTRO_HOLD_AT);
+    if (resume.held) {
+      video.dataset.held = "1";
+      video.pause();
+    } else if (resume.shouldPlay) {
+      void video.play().catch(() => {});
+    }
+  }, []);
+
+  // Do not give the browser a media URL until the pre-paint theme class has
+  // been read. This keeps the alternate 1 MB clip out of the request/decode
+  // path and makes the server/client markup deterministic.
+  if (!theme) return null;
 
   return (
     <video
-      src={src}
-      autoPlay
+      key={theme}
+      ref={videoRef}
+      src={INTRO_SRC[theme]}
       muted
       playsInline
       aria-hidden
+      onLoadedMetadata={restorePlayback}
       onTimeUpdate={holdAtMark}
-      className={`pointer-events-none absolute inset-0 h-full w-full object-cover ${className}`}
+      onEnded={holdAtMark}
+      className="pointer-events-none absolute inset-0 h-full w-full object-cover"
     />
   );
 }
@@ -302,19 +362,17 @@ export function ResearchLedHome() {
               finished lockup. Sits ABOVE the content (no overlap), shown crisp
               (no opacity/blend filter).
               The clip is baked onto a solid backdrop, so each theme needs its
-              own cut: White on paper, Black on ink. Both are rendered and
-              swapped by CSS (same pattern as the wordmark in chrome.tsx) so
-              the right one is showing on the very first paint, before React
-              hydrates and long before any theme state exists in JS. */}
+              own cut: White on paper, Black on ink. A single media element is
+              mounted after hydration from the pre-paint theme class; switching
+              theme preserves its position instead of replaying another clip. */}
           <div className="relative h-[44vh] min-h-[300px] w-full overflow-hidden md:h-[56vh]">
-            <IntroVideo
-              src="/WIGTN%20Intro/04_Dynamic-White.mp4"
-              className="dark:hidden"
-            />
-            <IntroVideo
-              src="/WIGTN%20Intro/03_Dynamic-Black.mp4"
-              className="hidden dark:block"
-            />
+            {/* Lightweight first-paint fallback while the single active video
+                hydrates and decodes its first frame. */}
+            <div aria-hidden className="absolute inset-0 grid place-items-center bg-paper">
+              <img src="/images/WIGTN_LOGO_NAVY.png" alt="" className="h-auto w-44 dark:hidden md:w-56" />
+              <img src="/images/WIGTN_LOGO_WHITE.png" alt="" className="hidden h-auto w-44 dark:block md:w-56" />
+            </div>
+            <IntroVideo />
             {/* fade the video's bottom edge into the page */}
             <div
               aria-hidden

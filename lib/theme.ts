@@ -15,15 +15,16 @@ export const THEME_STORAGE_KEY = "wigtn-theme";
  */
 export const themeInitScript = `
 (function () {
+  var stored = null;
   try {
-    var stored = localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)});
-    var theme =
-      stored === "light" || stored === "dark"
-        ? stored
-        : window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light";
-    document.documentElement.classList.toggle("dark", theme === "dark");
+    stored = localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)});
   } catch (e) {}
+  var theme =
+    stored === "light" || stored === "dark"
+      ? stored
+      : window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+  document.documentElement.classList.toggle("dark", theme === "dark");
 })();
 `.trim();

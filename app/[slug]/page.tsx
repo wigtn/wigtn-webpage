@@ -8,7 +8,7 @@ import { ARTICLES, getArticle } from "@/mockups/research-led/data";
  * /projects) take precedence over this dynamic segment.
  */
 export function generateStaticParams() {
-  return ARTICLES.map((a) => ({ slug: a.slug }));
+  return ARTICLES.filter((a) => !a.placeholder).map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({

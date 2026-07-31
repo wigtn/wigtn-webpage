@@ -161,6 +161,7 @@ export function NewsPage() {
                   <img
                     src={heroCover}
                     alt=""
+                    fetchPriority="high"
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.03]"
                   />
                 ) : (
@@ -255,6 +256,8 @@ function StoryCard({ a, i }: { a: Article; i: number }) {
             <img
               src={cover}
               alt=""
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.04]"
             />
           ) : (

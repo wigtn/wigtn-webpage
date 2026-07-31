@@ -178,14 +178,14 @@ export type Kind = "report" | "event" | "community" | "insight";
 export type Channel = "newsroom" | "report";
 export type NewsTopic = "award" | "release" | "announcement" | "community";
 
-export type GalleryImage = { src: string; caption?: string; alt?: string };
+export type GalleryImage = { src: string; alt: string; caption?: string };
 
 export type Block =
   | { t: "p"; text: string }
   | { t: "h"; text: string }
   | { t: "quote"; text: string }
   | { t: "list"; items: string[] }
-  | { t: "image"; src: string; caption?: string; alt?: string }
+  | { t: "image"; src: string; alt: string; caption?: string }
   | { t: "gallery"; images: GalleryImage[]; caption?: string };
 
 export type Link = { label: string; href: string };
@@ -326,6 +326,7 @@ export const ARTICLES: Article[] = [
       {
         t: "image",
         src: "/images/projects/wigvo_screenshot_call.png",
+        alt: "WIGVO interface during a live translated phone call, with the AI chat and relay event log side by side.",
         caption: "WIGVO in a live bidirectional call: the recipient just answers an ordinary phone.",
       },
       { t: "h", text: "The question behind WIGVO" },
@@ -344,8 +345,16 @@ export const ARTICLES: Article[] = [
       {
         t: "gallery",
         images: [
-          { src: "/images/projects/wigvo_architecture.png", caption: "Two interpreter sessions, one per speaker." },
-          { src: "/images/projects/wigvo_latency_histogram.png", caption: "Latency distribution across production calls." },
+          {
+            src: "/images/projects/wigvo_architecture.png",
+            alt: "Architecture diagram of two directional interpreter pipelines between an app user, OpenAI Realtime sessions, Twilio media streams, and a phone user, with echo filtering on the return path.",
+            caption: "Two interpreter sessions, one per speaker.",
+          },
+          {
+            src: "/images/projects/wigvo_latency_histogram.png",
+            alt: "Two latency histograms: user-to-recipient median 555 milliseconds over 739 turns, and recipient-to-user median 2,684 milliseconds over 683 turns.",
+            caption: "Latency distribution across production calls.",
+          },
         ],
       },
       { t: "quote", text: "Accepted to ACL 2026, System Demonstrations." },
@@ -592,6 +601,7 @@ export const ARTICLES: Article[] = [
       {
         t: "image",
         src: "/images/news/acl_sandiego_IWSLT.jpg",
+        alt: "A WIGTN researcher presenting the WIGVO real-time speech translation system at IWSLT 2026 in San Diego.",
         caption: "Presenting WIGVO at the IWSLT 2026 workshop: invited oral talk and poster.",
       },
       { t: "h", text: "What we're taking home" },

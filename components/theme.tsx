@@ -20,6 +20,15 @@ function systemTheme(): Theme {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
+function storedTheme(): Theme | null {
+  try {
+    const value = localStorage.getItem(THEME_STORAGE_KEY);
+    return value === "light" || value === "dark" ? value : null;
+  } catch {
+    return null;
+  }
+}
+
 function applyTheme(theme: Theme) {
   const root = document.documentElement;
   // Enable the cross-fade only for the duration of the swap, so the transition
@@ -37,13 +46,18 @@ export function useTheme() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setTheme(document.documentElement.classList.contains("dark") ? "dark" : "light");
+    // Re-resolve here as a CSP/storage-safe fallback. The pre-paint script is
+    // still the fast path, but the hydrated control must not blindly trust a
+    // missing class if that script or localStorage access was blocked.
+    const initial = storedTheme() ?? systemTheme();
+    document.documentElement.classList.toggle("dark", initial === "dark");
+    setTheme(initial);
     setMounted(true);
 
     // Keep following the OS until the visitor makes an explicit choice.
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => {
-      if (localStorage.getItem(THEME_STORAGE_KEY)) return;
+      if (storedTheme()) return;
       const next = systemTheme();
       applyTheme(next);
       setTheme(next);
