@@ -13,9 +13,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Trophy, MapPin, Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/theme";
-import { HOME, NAV, tx, type Locale, DEFAULT_LOCALE } from "./data";
-import { UI } from "./ui";
-import { LangToggle } from "./LangToggle";
+import { HOME, NAV } from "./data";
 
 export const EVENT_ICON = { trophy: Trophy, pin: MapPin } as const;
 
@@ -64,7 +62,7 @@ export function IndexRule({ n, label }: { n: string; label: string }) {
   );
 }
 
-export function SiteHeader({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+export function SiteHeader() {
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 border-b border-line/[0.07] bg-paper/80 backdrop-blur-md">
@@ -78,29 +76,28 @@ export function SiteHeader({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
           <ul className="hidden items-center gap-2 md:flex">
             {NAV.map((n) =>
               n.disabled ? (
-                <li key={n.key}>
+                <li key={n.label}>
                   <span
                     aria-disabled="true"
                     className="cursor-default rounded-full px-3.5 py-1.5 text-sm text-ink-5 select-none"
                   >
-                    {tx(UI.nav[n.key], locale)}
+                    {n.label}
                   </span>
                 </li>
               ) : (
-                <li key={n.key}>
+                <li key={n.label}>
                   <Link
-                    href={n.href(locale)}
+                    href={n.href}
                     className="rounded-full px-3.5 py-1.5 text-sm text-ink-3 transition-colors hover:bg-line/[0.04] hover:text-ink"
                   >
-                    {tx(UI.nav[n.key], locale)}
+                    {n.label}
                   </Link>
                 </li>
               ),
             )}
           </ul>
 
-          <LangToggle locale={locale} />
-          <ThemeToggle />
+          <ThemeToggle className="ml-1" />
 
           {/* mobile menu toggle */}
           <button
@@ -122,22 +119,22 @@ export function SiteHeader({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
           <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-4">
             {NAV.map((n) =>
               n.disabled ? (
-                <li key={n.key}>
+                <li key={n.label}>
                   <span
                     aria-disabled="true"
                     className="block cursor-default rounded-lg px-3 py-2.5 text-ink-5 select-none"
                   >
-                    {tx(UI.nav[n.key], locale)}
+                    {n.label}
                   </span>
                 </li>
               ) : (
-                <li key={n.key}>
+                <li key={n.label}>
                   <Link
-                    href={n.href(locale)}
+                    href={n.href}
                     onClick={() => setOpen(false)}
                     className="block rounded-lg px-3 py-2.5 text-ink-2 transition-colors hover:bg-line/[0.04] hover:text-ink"
                   >
-                    {tx(UI.nav[n.key], locale)}
+                    {n.label}
                   </Link>
                 </li>
               ),
@@ -149,7 +146,7 @@ export function SiteHeader({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   );
 }
 
-export function SiteFooter({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+export function SiteFooter() {
   return (
     <footer className="relative z-10 border-t border-line/[0.08] bg-paper-sunken text-ink">
       {/* Footer columns */}
@@ -158,24 +155,24 @@ export function SiteFooter({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
           <div>
             <Wordmark className="h-9 md:h-11" />
             <p className="mt-4 max-w-sm text-pretty text-sm text-ink-3">
-              {tx(UI.footerTagline, locale)}
+              An open community of AI builders. Everything we learn, we share.
             </p>
           </div>
           <div className="flex gap-16">
             <div>
               <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-4 mb-4">
-                {tx(UI.footerExplore, locale)}
+                Explore
               </div>
               <ul className="space-y-2.5 text-sm text-ink-3">
                 {NAV.map((n) =>
                   n.disabled ? (
-                    <li key={n.key} className="cursor-default text-ink-5 select-none">
-                      {tx(UI.nav[n.key], locale)}
+                    <li key={n.label} className="cursor-default text-ink-5 select-none">
+                      {n.label}
                     </li>
                   ) : (
-                    <li key={n.key}>
-                      <Link href={n.href(locale)} className="hover:text-ink transition-colors">
-                        {tx(UI.nav[n.key], locale)}
+                    <li key={n.label}>
+                      <Link href={n.href} className="hover:text-ink transition-colors">
+                        {n.label}
                       </Link>
                     </li>
                   ),
@@ -184,7 +181,7 @@ export function SiteFooter({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
             </div>
             <div>
               <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-4 mb-4">
-                {tx(UI.footerConnect, locale)}
+                Connect
               </div>
               <ul className="space-y-2.5 text-sm text-ink-3">
                 <li>
@@ -220,29 +217,14 @@ export function SiteFooter({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   );
 }
 
-/* Sub-page shell: light backdrop + header + footer.
- *
- * `lang` is set here rather than on <html>: with output: "export" the root
- * layout renders one <html lang="en"> for every page, and splitting that per
- * locale would mean duplicate root layouts via route groups. Tagging the
- * subtree is valid HTML, is what a screen reader switches voice on, and pairs
- * with the hreflang alternates declared in the /ko route metadata. */
-export function PageShell({
-  children,
-  locale = DEFAULT_LOCALE,
-}: {
-  children: React.ReactNode;
-  locale?: Locale;
-}) {
+/* Sub-page shell: light backdrop + header + footer. */
+export function PageShell({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      lang={locale}
-      className="relative min-h-screen bg-paper text-ink font-sans antialiased selection:bg-brand/20"
-    >
+    <div className="relative min-h-screen bg-paper text-ink font-sans antialiased selection:bg-brand/20">
       <BackdropDecor />
-      <SiteHeader locale={locale} />
+      <SiteHeader />
       <main className="relative z-10">{children}</main>
-      <SiteFooter locale={locale} />
+      <SiteFooter />
     </div>
   );
 }

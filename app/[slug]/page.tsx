@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ArticleDetail } from "@/mockups/research-led/ArticleDetail";
-import { ARTICLES, getArticle, tx, NEWSROOM_SLUGS, KO_PREFIX } from "@/mockups/research-led/data";
+import { ARTICLES, getArticle } from "@/mockups/research-led/data";
 
 /**
  * Static params for `output: "export"`: one page per article slug, served
@@ -23,31 +23,17 @@ export async function generateMetadata({
     return {};
   }
 
-  const title = tx(article.title, "en");
-  const description = tx(article.summary, "en");
-  // Only newsroom articles have a Korean counterpart, so only they advertise
-  // one. Pointing hreflang at a page that does not exist is worse than
-  // omitting it.
-  const hasKo = NEWSROOM_SLUGS.includes(article.slug);
-
   return {
-    title: `${title} | WIGTN`,
-    description,
+    title: `${article.title} | WIGTN`,
+    description: article.summary,
     alternates: {
       canonical: `/${article.slug}/`,
-      ...(hasKo && {
-        languages: {
-          en: `/${article.slug}/`,
-          ko: `${KO_PREFIX}${article.slug}/`,
-        },
-      }),
     },
     openGraph: {
-      title,
-      description,
+      title: article.title,
+      description: article.summary,
       url: `https://wigtn.com/${article.slug}/`,
       type: "article",
-      locale: "en_US",
     },
   };
 }
