@@ -50,7 +50,7 @@ export function Crew() {
 
   return (
     <section className="relative min-h-screen overflow-hidden flex flex-col items-center justify-center">
-      {/* SVG defs — knockout filter kept for a future logo asset; the
+      {/* SVG defs: knockout filter kept for a future logo asset; the
           hex-dot pattern + LightRays canvas were removed to declutter
           the Hero. */}
       <svg
@@ -86,7 +86,7 @@ export function Crew() {
        *   the large/bold heading declares who we are, and the small/gray
        *   line below carries the working-mode cadence. Copy is rendered
        *   inline (rather than via the t.hero strings) so we can wrap
-       *   `AI-native` and `peer-reviewed` in `whitespace-nowrap` spans —
+       *   `AI-native` and `peer-reviewed` in `whitespace-nowrap` spans:
        *   those hyphenated words otherwise break across lines on narrow
        *   viewports.
        *   The section's outer flexbox (`items-center justify-center` on
@@ -104,7 +104,7 @@ export function Crew() {
         </div>
       </div>
 
-      {/* Loading overlay — white-tone backdrop matches the rest of the page
+      {/* Loading overlay: white-tone backdrop matches the rest of the page
           so the transition into the hero is seamless. A single violet ring
           spinner keeps the screen alive while the entrance prepares. */}
       {phase !== "ready" && (

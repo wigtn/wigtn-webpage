@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { Renderer, Program, Triangle, Mesh } from "ogl";
 
 /**
- * LightRays — WebGL light-rays effect, ported from reactbits.dev/backgrounds/light-rays.
+ * LightRays: WebGL light-rays effect, ported from reactbits.dev/backgrounds/light-rays.
  *
  * A fragment shader emits two layered cones of light from a fixed origin,
  * with optional pulsation, mouse-following bias, noise, and distortion.

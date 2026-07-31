@@ -26,7 +26,7 @@ function parseDescription(raw: string): Record<string, string> {
 
 const PHASE_KEYS = ["before", "during", "after"] as const;
 
-/* Direction-aware horizontal slide variants — paginating forward sends the
+/* Direction-aware horizontal slide variants: paginating forward sends the
  * old slide off to the left and brings the new one in from the right; the
  * scale + rotate at the edges add a touch of motion without making the
  * transition disorienting. */
@@ -154,9 +154,9 @@ export function Products() {
           )}
         </motion.div>
 
-        {/* ──────── Stage — no box, free-floating phone ──────── */}
+        {/* ──────── Stage: no box, free-floating phone ──────── */}
         <div className="relative md:min-h-[640px] flex items-center">
-          {/* Ambient glow blob — colour morphs with each product. Sits
+          {/* Ambient glow blob: colour morphs with each product. Sits
               behind everything so the phone reads as floating in light. */}
           <AnimatePresence custom={direction}>
             <motion.div
@@ -172,7 +172,7 @@ export function Products() {
             />
           </AnimatePresence>
 
-          {/* Slide content — phone + copy. Drag-enabled across both. */}
+          {/* Slide content: phone + copy. Drag-enabled across both. */}
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={product.id}
@@ -193,7 +193,7 @@ export function Products() {
               onDragEnd={handleDragEnd}
               className="relative grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-16 w-full items-center cursor-grab active:cursor-grabbing select-none px-2 md:px-4 py-2 md:py-8"
             >
-              {/* Phone — static, no float animation. */}
+              {/* Phone: static, no float animation. */}
               <div className="relative pointer-events-none flex justify-center md:justify-start drop-shadow-[0_30px_50px_rgba(76,29,149,0.25)]">
                 <PhoneMockup
                   screenshot={product.app?.screenshot}
@@ -218,7 +218,7 @@ export function Products() {
                   </p>
                 </div>
 
-                {/* 3-phase narrative — title only on mobile, full on desktop */}
+                {/* 3-phase narrative: title only on mobile, full on desktop */}
                 <div className="flex-1 flex flex-col gap-2 md:gap-4 mt-1 md:mt-2">
                   {PHASE_KEYS.map((key, i) => (
                     <div
@@ -320,7 +320,7 @@ export function Products() {
           )}
         </div>
 
-        {/* Pagination — labeled product chips with violet underline highlight */}
+        {/* Pagination: labeled product chips with violet underline highlight */}
         {total > 1 && (
           <div className="mt-8 md:mt-10 flex items-center justify-center gap-2 md:gap-3 flex-wrap">
             {products.map((p, i) => {

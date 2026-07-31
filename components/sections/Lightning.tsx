@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { Renderer, Program, Triangle, Mesh } from "ogl";
 
 /**
- * Lightning — WebGL lightning effect, ported from reactbits.dev/backgrounds/lightning.
+ * Lightning: WebGL lightning effect, ported from reactbits.dev/backgrounds/lightning.
  *
  * Renders an animated, flickering vertical lightning channel using fbm
  * noise distortion against a hue-coloured base. Designed to be mounted
@@ -15,7 +15,7 @@ export interface LightningProps {
   hue?: number;
   /** Horizontal offset of the bolt centre, in NDC (-1..1). */
   xOffset?: number;
-  /** Time multiplier — higher = faster flicker. */
+  /** Time multiplier: higher = faster flicker. */
   speed?: number;
   /** Brightness multiplier on the bolt's core. */
   intensity?: number;

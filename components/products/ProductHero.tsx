@@ -45,7 +45,7 @@ export function ProductHero({
   return (
     <section className="pt-32 pb-16 md:pt-40 md:pb-24">
       <div className="max-w-5xl mx-auto px-6">
-        {/* Optional media banner — video takes precedence, else poster */}
+        {/* Optional media banner: video takes precedence, else poster */}
         {(heroVideo || posterImage) && (
           <div
             className={`relative w-full rounded-2xl overflow-hidden mb-10 bg-gradient-to-br ${product.gradient}`}

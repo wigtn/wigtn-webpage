@@ -1,6 +1,12 @@
 import type { Config } from "tailwindcss";
 
+/* Semantic color token. Resolves to `rgb(var(--x) / <alpha>)` so every
+ * token supports Tailwind's `/opacity` suffix (e.g. `border-line/[0.08]`)
+ * while its actual value is swapped by the `.dark` class in globals.css. */
+const token = (name: string) => `rgb(var(--${name}) / <alpha-value>)`;
+
 const config: Config = {
+  darkMode: "class",
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -17,13 +23,38 @@ const config: Config = {
           light: "#A78BFA",
           dark: "#7C3AED",
         },
-        /* Pantone 265 C (standard conversion) — research-led mockup accent.
-         * Swap these three hexes if the exact brand spec differs. */
+        /* Pantone 265 C (standard conversion), the research-led mockup accent.
+         * All three shift per theme so purple keeps the same perceived weight
+         * on paper and on ink. `brand-dark` is the "one step down" fill used
+         * for hover on filled brand buttons. */
         brand: {
-          DEFAULT: "#753BBD",
-          light: "#9D7BE0",
-          dark: "#5A2E97",
+          DEFAULT: token("brand"),
+          light: token("brand-light"),
+          dark: token("brand-dark"),
         },
+
+        /* ── Theme tokens (light ⇄ dark) ────────────────────────────────
+         * paper*  = surfaces, back to front: page → sunken → raised → tint
+         * ink*    = text, 1 (strongest) → 5 (faintest)
+         * rule    = solid hairline; line = alpha hairline / hover wash
+         * accent  = the brand tone that stays legible ON the page surface
+         * Values live in app/globals.css under :root and .dark. */
+        paper: {
+          DEFAULT: token("paper"),
+          raised: token("paper-raised"),
+          sunken: token("paper-sunken"),
+          tint: token("paper-tint"),
+        },
+        ink: {
+          DEFAULT: token("ink"),
+          2: token("ink-2"),
+          3: token("ink-3"),
+          4: token("ink-4"),
+          5: token("ink-5"),
+        },
+        rule: token("rule"),
+        line: token("line"),
+        accent: token("accent"),
       },
       fontFamily: {
         sans: ["Pretendard Variable", "Pretendard", "-apple-system", "BlinkMacSystemFont", "system-ui", "Roboto", "sans-serif"],
@@ -31,7 +62,7 @@ const config: Config = {
          * Hangul falls back per-glyph to Pretendard, so mixed KR/EN titles work. */
         display: ["Space Grotesk", "Pretendard Variable", "Pretendard", "-apple-system", "BlinkMacSystemFont", "system-ui", "sans-serif"],
         /* Real mono so index numbers / dates / labels stop falling back to the
-         * OS default (Menlo vs Consolas) — this is the research-lab texture. */
+         * OS default (Menlo vs Consolas). This is the research-lab texture. */
         mono: ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
       },
     },

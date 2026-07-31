@@ -18,7 +18,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
   },
   {
     id: "technical-challenges",
-    title: "Technical Challenges — Why PSTN Is Hard",
+    title: "Technical Challenges, Why PSTN Is Hard",
     blocks: [
       {
         type: "prose",
@@ -49,7 +49,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
   },
   {
     id: "architecture",
-    title: "Architecture — Dual-Session Echo Gating",
+    title: "Architecture, Dual-Session Echo Gating",
     blocks: [
       {
         type: "prose",
@@ -68,9 +68,9 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       {
         type: "list",
         items: [
-          "<strong>Layer 1 — Transport:</strong> Twilio Media Streams (PSTN ↔ G.711 μ-law 8kHz) + Browser WebSocket (PCM 16kHz)",
-          "<strong>Layer 2 — Pipeline:</strong> AudioRouter delegates events to V2V / T2V / Agent mode via Strategy pattern",
-          "<strong>Layer 3 — Sessions:</strong> Session A (browser→phone) + Session B (phone→browser) maintain independent system prompts and 6-turn sliding context",
+          "<strong>Layer 1: Transport:</strong> Twilio Media Streams (PSTN ↔ G.711 μ-law 8kHz) + Browser WebSocket (PCM 16kHz)",
+          "<strong>Layer 2: Pipeline:</strong> AudioRouter delegates events to V2V / T2V / Agent mode via Strategy pattern",
+          "<strong>Layer 3: Sessions:</strong> Session A (browser→phone) + Session B (phone→browser) maintain independent system prompts and 6-turn sliding context",
         ],
       },
       {
@@ -100,7 +100,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       },
       {
         type: "prose",
-        text: '<strong>The Critical Breakthrough — Drop vs Replace:</strong> "Dropping" audio causes Server VAD to interpret it as a stream interruption and freeze. "Replacing" with μ-law silence (0xFF) maintains stream continuity while VAD correctly recognizes it as silence. This "Drop vs Replace" paradigm is the core principle applied consistently across both Echo Gate and VAD.',
+        text: '<strong>The Critical Breakthrough, Drop vs Replace:</strong> "Dropping" audio causes Server VAD to interpret it as a stream interruption and freeze. "Replacing" with μ-law silence (0xFF) maintains stream continuity while VAD correctly recognizes it as silence. This "Drop vs Replace" paradigm is the core principle applied consistently across both Echo Gate and VAD.',
       },
       {
         type: "list",
@@ -112,7 +112,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       },
       {
         type: "prose",
-        text: "<strong>7-Stage Evolution:</strong> (1) Audio Fingerprint via Pearson correlation — failed completely due to G.711 μ-law nonlinear quantization destroying correlation. (2) Fixed 2.5s Echo Gate — solved echo but disrupted conversation flow. (3) Dynamic Cooldown — proportional to TTS length, but AGC noise spike after gate release. (4) <strong>Final: Silence Injection + RMS + Dynamic Settling + Silero</strong>.",
+        text: "<strong>7-Stage Evolution:</strong> (1) Audio Fingerprint via Pearson correlation, failed completely due to G.711 μ-law nonlinear quantization destroying correlation. (2) Fixed 2.5s Echo Gate, solved echo but disrupted conversation flow. (3) Dynamic Cooldown, proportional to TTS length, but AGC noise spike after gate release. (4) <strong>Final: Silence Injection + RMS + Dynamic Settling + Silero</strong>.",
       },
       {
         type: "prose",
@@ -122,7 +122,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
   },
   {
     id: "pstn-vad",
-    title: "PSTN VAD — Independent Architecture",
+    title: "PSTN VAD, Independent Architecture",
     subtitle: "STAGE 2",
     blocks: [
       {
@@ -132,8 +132,8 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       {
         type: "list",
         items: [
-          "<strong>Stage 1 — RMS Energy Gate:</strong> Echo window RMS ≥ 500, Settling RMS ≥ 200, Normal RMS ≥ 150",
-          "<strong>Stage 2 — Silero VAD:</strong> Neural network judgment on frames passing the energy gate. 8kHz → 16kHz zero-order hold upsampling",
+          "<strong>Stage 1: RMS Energy Gate:</strong> Echo window RMS ≥ 500, Settling RMS ≥ 200, Normal RMS ≥ 150",
+          "<strong>Stage 2: Silero VAD:</strong> Neural network judgment on frames passing the energy gate. 8kHz → 16kHz zero-order hold upsampling",
           "Asymmetric hysteresis: onset 160ms (5 frames) / offset 800ms (25 frames)",
           "Minimum utterance 250ms, minimum peak RMS 300 to reject weak signals as noise",
         ],
@@ -169,7 +169,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
   },
   {
     id: "strategy-pattern",
-    title: "Strategy Pattern — 3 Communication Pipelines",
+    title: "Strategy Pattern, 3 Communication Pipelines",
     blocks: [
       {
         type: "prose",
@@ -189,7 +189,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
   },
   {
     id: "key-metrics",
-    title: "Key Metrics — 155 Evaluated Calls",
+    title: "Key Metrics, 155 Evaluated Calls",
     blocks: [
       {
         type: "prose",
@@ -262,7 +262,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
         caption: "Echo Gate Design Comparison",
         headers: ["Method", "Echo Loop", "Conversation Delay", "Adopted"],
         rows: [
-          { cells: ["Audio Fingerprint (Pearson)", "Unresolved", "—", ""] },
+          { cells: ["Audio Fingerprint (Pearson)", "Unresolved", "-", ""] },
           { cells: ["Fixed Echo Gate (2.5s)", "Resolved", "Disrupted", ""] },
           { cells: ["Dynamic Cooldown", "Resolved", "Improved", ""] },
           { cells: ["Silence Injection + RMS + Dynamic Settling + Silero", "Resolved", "Minimized", "O"], highlight: true },
@@ -270,7 +270,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       },
       {
         type: "prose",
-        text: "<strong>Finding:</strong> In PSTN environments, signal correlation-based echo detection does not work. Only direct control of echo windows with silence frame replacement is stable. The Realtime API's generation characteristics are suitable for STT but not for translation — separating translation to a <code>temperature=0</code> Chat API improves both accuracy and stability.",
+        text: "<strong>Finding:</strong> In PSTN environments, signal correlation-based echo detection does not work. Only direct control of echo windows with silence frame replacement is stable. The Realtime API's generation characteristics are suitable for STT but not for translation, separating translation to a <code>temperature=0</code> Chat API improves both accuracy and stability.",
       },
     ],
   },

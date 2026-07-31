@@ -157,7 +157,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
                         <span>🏆</span>
                         <span>
                           {a.event}
-                          {a.note ? ` — ${a.note}` : ""}
+                          {a.note ? `, ${a.note}` : ""}
                         </span>
                       </div>
                     ))}

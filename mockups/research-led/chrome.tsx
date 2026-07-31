@@ -1,20 +1,23 @@
 "use client";
 
 /**
- * Shared chrome — dark, SORI-inspired. Black base (#0A0A0A), white text,
- * single accent = Pantone 265 (`brand` token in tailwind.config). Sticky
- * always-on header; footer carries a big CTA + a "system status" tech
- * detail. The shared white wordmark is used directly on the dark base.
+ * Shared chrome, theme-aware. Colors come from the semantic tokens defined in
+ * tailwind.config.ts and resolved in app/globals.css: `paper*` surfaces,
+ * `ink*` text, `line`/`rule` hairlines, and a single accent = Pantone 265
+ * (`brand`; `accent` is the brand tone that stays legible on the page
+ * surface in either theme). Sticky always-on header with the theme toggle;
+ * footer carries links. The wordmark swaps navy ⇄ white with the theme.
  */
 
 import { useState } from "react";
 import Link from "next/link";
 import { Trophy, MapPin, Menu, X } from "lucide-react";
+import { ThemeToggle } from "@/components/theme";
 import { HOME, NAV } from "./data";
 
 export const EVENT_ICON = { trophy: Trophy, pin: MapPin } as const;
 
-/* Single custom-indexed motion variant — preserves the easing curve. */
+/* Single custom-indexed motion variant; preserves the easing curve. */
 export const rise = {
   hidden: { opacity: 0, y: 16 },
   show: (i = 0) => ({
@@ -26,24 +29,35 @@ export const rise = {
 
 export const VIEWPORT = { once: true, margin: "-12% 0px" } as const;
 
+/* Both wordmarks ship in the markup and are swapped by CSS rather than state,
+ * the correct one is visible on the very first paint, before React hydrates. */
 function Wordmark({ className = "h-7 md:h-8" }: { className?: string }) {
   return (
-    <img
-      src="/images/WIGTN_LOGO_WHITE.png"
-      alt="WIGTN"
-      className={`${className} w-auto`}
-    />
+    <>
+      <img
+        src="/images/WIGTN_LOGO_NAVY.png"
+        alt="WIGTN"
+        className={`${className} w-auto dark:hidden`}
+      />
+      {/* Exactly one of the two is `display: none` per theme, and hidden
+          images aren't announced, so screen readers still get one "WIGTN". */}
+      <img
+        src="/images/WIGTN_LOGO_WHITE.png"
+        alt="WIGTN"
+        className={`${className} w-auto hidden dark:block`}
+      />
+    </>
   );
 }
 
 export function IndexRule({ n, label }: { n: string; label: string }) {
   return (
     <div className="flex items-center gap-4 mb-10">
-      <span className="font-mono text-xs text-brand-light">{n}</span>
-      <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-zinc-500">
+      <span className="font-mono text-xs text-accent">{n}</span>
+      <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-ink-4">
         {label}
       </span>
-      <span className="h-px flex-1 bg-white/10" />
+      <span className="h-px flex-1 bg-rule" />
     </div>
   );
 }
@@ -51,60 +65,64 @@ export function IndexRule({ n, label }: { n: string; label: string }) {
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-[#0A0A0A]/70 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-line/[0.07] bg-paper/80 backdrop-blur-md">
       <nav className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link href={HOME} aria-label="WIGTN home" className="shrink-0">
           <Wordmark />
         </Link>
 
-        {/* right-aligned nav (desktop) */}
-        <ul className="hidden items-center gap-2 md:flex">
-          {NAV.map((n) =>
-            n.disabled ? (
-              <li key={n.label}>
-                <span
-                  aria-disabled="true"
-                  className="cursor-default rounded-full px-3.5 py-1.5 text-sm text-zinc-600 select-none"
-                >
-                  {n.label}
-                </span>
-              </li>
-            ) : (
-              <li key={n.label}>
-                <Link
-                  href={n.href}
-                  className="rounded-full px-3.5 py-1.5 text-sm text-zinc-400 transition-colors hover:bg-white/[0.06] hover:text-white"
-                >
-                  {n.label}
-                </Link>
-              </li>
-            ),
-          )}
-        </ul>
+        {/* right-aligned nav (desktop) + theme toggle (all breakpoints) */}
+        <div className="flex items-center gap-2">
+          <ul className="hidden items-center gap-2 md:flex">
+            {NAV.map((n) =>
+              n.disabled ? (
+                <li key={n.label}>
+                  <span
+                    aria-disabled="true"
+                    className="cursor-default rounded-full px-3.5 py-1.5 text-sm text-ink-5 select-none"
+                  >
+                    {n.label}
+                  </span>
+                </li>
+              ) : (
+                <li key={n.label}>
+                  <Link
+                    href={n.href}
+                    className="rounded-full px-3.5 py-1.5 text-sm text-ink-3 transition-colors hover:bg-line/[0.04] hover:text-ink"
+                  >
+                    {n.label}
+                  </Link>
+                </li>
+              ),
+            )}
+          </ul>
 
-        {/* mobile menu toggle */}
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          aria-controls="rl-mobile-nav"
-          className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-zinc-300 transition-colors hover:border-white hover:text-white md:hidden"
-        >
-          {open ? <X size={17} /> : <Menu size={17} />}
-        </button>
+          <ThemeToggle className="ml-1" />
+
+          {/* mobile menu toggle */}
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="rl-mobile-nav"
+            className="grid h-9 w-9 place-items-center rounded-full border border-line/15 text-ink-2 transition-colors hover:border-ink hover:text-ink md:hidden"
+          >
+            {open ? <X size={17} /> : <Menu size={17} />}
+          </button>
+        </div>
       </nav>
 
       {/* mobile dropdown */}
       {open && (
-        <div id="rl-mobile-nav" className="border-t border-white/[0.08] bg-[#0A0A0A]/95 backdrop-blur-md md:hidden">
+        <div id="rl-mobile-nav" className="border-t border-line/[0.07] bg-paper/95 backdrop-blur-md md:hidden">
           <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-4">
             {NAV.map((n) =>
               n.disabled ? (
                 <li key={n.label}>
                   <span
                     aria-disabled="true"
-                    className="block cursor-default rounded-lg px-3 py-2.5 text-zinc-600 select-none"
+                    className="block cursor-default rounded-lg px-3 py-2.5 text-ink-5 select-none"
                   >
                     {n.label}
                   </span>
@@ -114,7 +132,7 @@ export function SiteHeader() {
                   <Link
                     href={n.href}
                     onClick={() => setOpen(false)}
-                    className="block rounded-lg px-3 py-2.5 text-zinc-300 transition-colors hover:bg-white/[0.06] hover:text-white"
+                    className="block rounded-lg px-3 py-2.5 text-ink-2 transition-colors hover:bg-line/[0.04] hover:text-ink"
                   >
                     {n.label}
                   </Link>
@@ -130,30 +148,30 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="relative z-10 bg-[#0A0A0A] text-white">
+    <footer className="relative z-10 border-t border-line/[0.08] bg-paper-sunken text-ink">
       {/* Footer columns */}
       <div className="max-w-6xl mx-auto px-6 pb-10 pt-16 md:pt-20">
         <div className="flex flex-col md:flex-row justify-between gap-10">
           <div>
             <Wordmark className="h-9 md:h-11" />
-            <p className="mt-4 max-w-sm text-pretty text-sm text-zinc-500">
-              An open community of AI builders — everything we learn, we share.
+            <p className="mt-4 max-w-sm text-pretty text-sm text-ink-3">
+              An open community of AI builders. Everything we learn, we share.
             </p>
           </div>
           <div className="flex gap-16">
             <div>
-              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-600 mb-4">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-4 mb-4">
                 Explore
               </div>
-              <ul className="space-y-2.5 text-sm text-zinc-400">
+              <ul className="space-y-2.5 text-sm text-ink-3">
                 {NAV.map((n) =>
                   n.disabled ? (
-                    <li key={n.label} className="cursor-default text-zinc-600 select-none">
+                    <li key={n.label} className="cursor-default text-ink-5 select-none">
                       {n.label}
                     </li>
                   ) : (
                     <li key={n.label}>
-                      <Link href={n.href} className="hover:text-white transition-colors">
+                      <Link href={n.href} className="hover:text-ink transition-colors">
                         {n.label}
                       </Link>
                     </li>
@@ -162,27 +180,27 @@ export function SiteFooter() {
               </ul>
             </div>
             <div>
-              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-600 mb-4">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-4 mb-4">
                 Connect
               </div>
-              <ul className="space-y-2.5 text-sm text-zinc-400">
+              <ul className="space-y-2.5 text-sm text-ink-3">
                 <li>
                   <a
                     href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-ink transition-colors"
                   >
                     contact@wigtn.com
                   </a>
                 </li>
                 <li>
-                  <a href="https://github.com/wigtn" className="hover:text-white transition-colors">
+                  <a href="https://github.com/wigtn" className="hover:text-ink transition-colors">
                     GitHub
                   </a>
                 </li>
                 <li>
-                  <a href="https://huggingface.co/Wigtn" className="hover:text-white transition-colors">
+                  <a href="https://huggingface.co/Wigtn" className="hover:text-ink transition-colors">
                     Hugging Face
                   </a>
                 </li>
@@ -191,18 +209,18 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-10 flex items-center justify-end border-t border-white/10 pt-6">
-          <span className="text-[11px] text-zinc-600">© 2026 WIGTN. ALL RIGHTS RESERVED.</span>
+        <div className="mt-10 flex items-center justify-end border-t border-line/10 pt-6">
+          <span className="text-[11px] text-ink-4">© 2026 WIGTN. ALL RIGHTS RESERVED.</span>
         </div>
       </div>
     </footer>
   );
 }
 
-/* Sub-page shell — dark backdrop + header + footer. */
+/* Sub-page shell: light backdrop + header + footer. */
 export function PageShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-screen bg-[#0A0A0A] text-white font-sans antialiased selection:bg-brand/30">
+    <div className="relative min-h-screen bg-paper text-ink font-sans antialiased selection:bg-brand/20">
       <BackdropDecor />
       <SiteHeader />
       <main className="relative z-10">{children}</main>
@@ -211,7 +229,7 @@ export function PageShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* Sub-page hero — display title + lead (no back link / eyebrow). */
+/* Sub-page hero: display title + lead (no back link / eyebrow). */
 export function PageHero({
   title,
   lead,
@@ -231,21 +249,20 @@ export function PageHero({
       >
         {title}
       </h1>
-      {lead && <p className="mt-5 max-w-2xl text-lg md:text-xl text-zinc-400 leading-relaxed">{lead}</p>}
+      {lead && <p className="mt-5 max-w-2xl text-lg md:text-xl text-ink-3 leading-relaxed">{lead}</p>}
     </section>
   );
 }
 
-/* Page-level ambient background — a single soft brand glow on black. */
+/* Page-level ambient background: a single soft brand glow. The gradient
+ * itself lives in `--backdrop-glow` (app/globals.css) so dark can carry a
+ * brighter, more saturated purple than the off-white needs. */
 export function BackdropDecor() {
   return (
     <div
       aria-hidden
       className="pointer-events-none fixed inset-0 z-0"
-      style={{
-        background:
-          "radial-gradient(55% 45% at 50% -5%, rgba(117,59,189,0.18), transparent 70%)",
-      }}
+      style={{ background: "var(--backdrop-glow)" }}
     />
   );
 }

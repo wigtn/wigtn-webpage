@@ -24,7 +24,7 @@ export function ProductDetailNav() {
             <span className="text-gray-300">|</span>
             <Link
               href="/"
-              aria-label="WIGTN — back to home"
+              aria-label="WIGTN, back to home"
               className="inline-flex items-center transition-opacity hover:opacity-80"
             >
               <Image

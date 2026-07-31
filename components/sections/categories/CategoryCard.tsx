@@ -10,19 +10,19 @@ import {
 } from "@/components/ui/icons";
 
 /**
- * CategoryCard — the single card shape used by every tab in the
+ * CategoryCard: the single card shape used by every tab in the
  * <Categories /> section. The four tabs (Research, Awards, Open Source,
  * Products) all render the same card layout so switching tabs feels like
  * filtering a uniform grid, not jumping between unrelated UI paradigms.
  *
  * Card layout, top to bottom:
- *   1. Visual area  — `aspect-[16/10]` tile. Each tab passes its own
+ *   1. Visual area: `aspect-[16/10]` tile. Each tab passes its own
  *                     `visualClassName` (background / padding); the
  *                     `visual` ReactNode is centered inside.
- *   2. Title        — semibold, hover→violet.
- *   3. Description  — one to two lines, gray-600.
- *   4. Meta         — venue / event / platform line, gray-500 small.
- *   5. Links row    — pill-style chips. All chips same height/padding so
+ *   2. Title: semibold, hover→violet.
+ *   3. Description: one to two lines, gray-600.
+ *   4. Meta: venue / event / platform line, gray-500 small.
+ *   5. Links row: pill-style chips. All chips same height/padding so
  *                     the hit target is uniform regardless of label
  *                     length (was a problem with inline text+icon).
  *
@@ -46,17 +46,17 @@ export interface CategoryCardLink {
 }
 
 interface CategoryCardProps {
-  /** Project slug — used to build the detail-page href. */
+  /** Project slug: used to build the detail-page href. */
   slug: string;
-  /** Project name — primary heading on the card. */
+  /** Project name: primary heading on the card. */
   name: string;
   /** One- or two-line description. Clamps to 2 lines so cards align. */
   description: string;
-  /** Venue / event / platform — gray meta line below the description. */
+  /** Venue / event / platform: gray meta line below the description. */
   meta?: string | null;
   /** ReactNode rendered inside the visual area. */
   visual: ReactNode;
-  /** Tailwind classes appended to the visual-area wrapper — each tab
+  /** Tailwind classes appended to the visual-area wrapper: each tab
    *  controls its own background and padding. Defaults to a neutral
    *  gray fill. Examples:
    *    - Research:   "bg-gray-50"           (image full-bleeds inside)
@@ -68,7 +68,7 @@ interface CategoryCardProps {
   /** External links rendered at the bottom of the card. */
   links?: CategoryCardLink[];
   /** Optional pre-rendered badge anchored to the right end of the
-   *  bottom action row — used by the Awards tab to put the medal
+   *  bottom action row: used by the Awards tab to put the medal
    *  badge ("Grand Prize" etc.) at the card foot instead of overlaid
    *  on the visual area. Caller controls styling so each tier can
    *  carry distinct visual weight. */
@@ -90,7 +90,7 @@ const LINK_ICON: Record<
 > = {
   github: { icon: <GitHubIcon className="w-4 h-4" />, label: "GitHub" },
   video: {
-    // YouTube red kept regardless of hover — brand recognition first.
+    // YouTube red kept regardless of hover: brand recognition first.
     icon: <YouTubeIcon className="w-4 h-4 text-red-600" />,
     label: "Video",
   },
@@ -127,7 +127,7 @@ export function CategoryCard({
       href={`/projects/${slug}/`}
       className="group flex flex-col h-full rounded-xl border border-black/[0.07] bg-white overflow-hidden transition-[border,box-shadow,transform] duration-300 hover:-translate-y-[2px] hover:border-violet/40 hover:shadow-[0_18px_40px_-22px_rgba(76,29,149,0.28)]"
     >
-      {/* Visual area — 16:10 aspect, fills the card width. The wrapper
+      {/* Visual area: 16:10 aspect, fills the card width. The wrapper
           background / padding is controlled per-tab via `visualClassName`
           so Research can full-bleed an image while Awards can drop a
           medal-tinted gradient behind a Lucide icon. */}
@@ -148,7 +148,7 @@ export function CategoryCard({
       {/* Content area
           Heights of every block in this column are reserved with min-h
           so the grid keeps the same vertical rhythm across all four
-          tabs — switching tabs no longer shifts the title/desc/meta/
+          tabs, switching tabs no longer shifts the title/desc/meta/
           chip-row baselines. `min-h-[2lh]` reserves exactly two lines
           for the description even when it only fills one, and the
           meta slot always renders (with NBSP fallback) so the chip
@@ -164,7 +164,7 @@ export function CategoryCard({
           {meta ?? " "}
         </p>
 
-        {/* Footer row — link chips on the left, optional award badge
+        {/* Footer row: link chips on the left, optional award badge
             anchored to the right via `ml-auto` so the badge stays at
             the card edge whether or not the chip group renders. Sits
             at the card bottom via mt-auto so cards with shorter
@@ -185,7 +185,7 @@ export function CategoryCard({
                       rel="noopener noreferrer"
                       // `min-w-[96px]` + `justify-center` keeps every chip
                       // the same hit-target width regardless of label length
-                      // — "HF" no longer renders half the size of "GitHub".
+                      //: "HF" no longer renders half the size of "GitHub".
                       className="inline-flex items-center justify-center gap-1.5 min-w-[80px] sm:min-w-[96px] rounded-lg border border-gray-200 bg-white px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 transition-colors duration-150 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet"
                       onClick={(e) => e.stopPropagation()}
                     >
@@ -199,7 +199,7 @@ export function CategoryCard({
             {awardBadge && <div className="ml-auto">{awardBadge}</div>}
           </div>
         ) : (
-          // Empty footer placeholder — keeps cards in tabs without
+          // Empty footer placeholder: keeps cards in tabs without
           // links/badges visually level with the others.
           <div
             aria-hidden

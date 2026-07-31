@@ -10,7 +10,7 @@ import { useLanguage } from "@/lib/i18n";
  * Clicking sets the URL hash, which Categories.tsx's hashchange listener
  * picks up to switch tabs and smooth-scroll the section into view.
  * Native <a href="#..."> handles the hash transition without a JS click
- * handler — fewer moving parts, fewer SSR pitfalls. */
+ * handler: fewer moving parts, fewer SSR pitfalls. */
 const CATEGORY_KEYS = [
   { hash: "#research", translationKey: "research" as const },
   { hash: "#awards", translationKey: "awards" as const },
@@ -52,7 +52,7 @@ export function WhatWeDo() {
         className="relative max-w-6xl mx-auto px-6 w-full"
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
-          {/* ─── Left column — eyebrow + display heading + lead ─── */}
+          {/* ─── Left column: eyebrow + display heading + lead ─── */}
           <div>
             <motion.div
               variants={itemVariants}
@@ -69,7 +69,7 @@ export function WhatWeDo() {
               {t.whatWeDo.heading}
             </motion.h2>
 
-            {/* Lead paragraph — semantic multi-word chunks are wrapped in
+            {/* Lead paragraph: semantic multi-word chunks are wrapped in
                 `whitespace-nowrap` spans so they never break mid-phrase
                 across line boundaries. The container's `max-w-[44ch]`
                 gives the lines enough room that the last line carries
@@ -86,13 +86,13 @@ export function WhatWeDo() {
               <span className="whitespace-nowrap">real-world friction</span>
               {" "}and take ideas all the way to{" "}
               <span className="whitespace-nowrap">production-grade systems</span>
-              {" — across research, "}
+              {", across research, "}
               awards, <span className="whitespace-nowrap">open source</span>,
               and products.
             </motion.p>
           </div>
 
-          {/* ─── Right column — typography-led anchor list ───
+          {/* ─── Right column: typography-led anchor list ───
               Border / background / shadow removed entirely. Each entry
               is a 2x2 grid cell with a header row (title + ↗) over a
               hairline divider, with a tone-down description below.
@@ -110,7 +110,7 @@ export function WhatWeDo() {
                     href={hash}
                     onClick={(e) => {
                       // Native anchor behaviour fails when the URL hash
-                      // already matches — the browser fires no event and
+                      // already matches: the browser fires no event and
                       // doesn't scroll. Manually scroll to the Categories
                       // section so a re-click always brings the user back
                       // to it. When the hash is changing, fall through to
@@ -131,7 +131,7 @@ export function WhatWeDo() {
                     }}
                     className="group block transition-colors duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-violet rounded-sm"
                   >
-                    {/* Header row — title + arrow */}
+                    {/* Header row: title + arrow */}
                     <div className="flex items-baseline justify-between gap-3">
                       <h3 className="text-2xl font-semibold tracking-tight text-foreground group-hover:text-violet transition-colors duration-200 ease-out">
                         {cat.title}
@@ -142,10 +142,10 @@ export function WhatWeDo() {
                       />
                     </div>
 
-                    {/* Hairline divider — switches to violet on hover */}
+                    {/* Hairline divider: switches to violet on hover */}
                     <div className="mt-3 h-px w-full bg-gray-200 group-hover:bg-violet transition-colors duration-200 ease-out" />
 
-                    {/* Description — toned-down gray */}
+                    {/* Description: toned-down gray */}
                     <p className="mt-3 text-[13.5px] md:text-[14px] text-gray-500 leading-relaxed">
                       {cat.description}
                     </p>

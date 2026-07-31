@@ -1,6 +1,6 @@
 "use client";
 
-/** Shared article cards — dark. Reused by the homepage and /work, /news. */
+/** Shared article cards. Reused by the homepage and /work, /news. */
 
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -19,7 +19,7 @@ export function coverSrc(a: Article): string | undefined {
   return undefined;
 }
 
-/* Branded fallback cover — aurora mesh + centered WIGTN mark. Used when an
+/* Branded fallback cover: aurora mesh + centered WIGTN mark. Used when an
  * article has no image and no video thumbnail. */
 export function BrandCover() {
   return (
@@ -51,7 +51,7 @@ function PlayBadge() {
   );
 }
 
-/* Editorial "magazine cover" card — borderless. The visual carries a bold
+/* Editorial "magazine cover" card, borderless. The visual carries a bold
  * title overlaid on a dark scrim; imageless articles get a branded gradient
  * cover instead of an empty placeholder. Meta sits quietly below the frame. */
 export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
@@ -102,7 +102,7 @@ export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
         </div>
 
         {/* Meta below the frame */}
-        <div className="mt-3 flex items-center gap-3 px-1 text-xs text-zinc-500">
+        <div className="mt-3 flex items-center gap-3 px-1 text-xs text-ink-4">
           <span className="inline-flex items-center gap-1">
             <Calendar size={12} /> {a.date}
           </span>
@@ -113,7 +113,7 @@ export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
           )}
           <ArrowUpRight
             size={14}
-            className="ml-auto text-zinc-600 transition-all group-hover:translate-x-0.5 group-hover:text-brand-light"
+            className="ml-auto text-ink-5 transition-all group-hover:translate-x-0.5 group-hover:text-accent"
           />
         </div>
       </Link>
@@ -121,22 +121,22 @@ export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
   );
 }
 
-/* Compact row — used in dense feeds. */
+/* Compact row, used in dense feeds. */
 export function ArticleRow({ a, i = 0 }: { a: Article; i?: number }) {
   return (
     <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
       <Link href={articleHref(a.slug)} className="group flex items-start gap-6 py-5">
-        <span className="w-20 shrink-0 pt-1 font-mono text-xs text-zinc-600">{a.date}</span>
+        <span className="w-20 shrink-0 pt-1 font-mono text-xs text-ink-5">{a.date}</span>
         <div className="flex-1">
-          <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-brand-light">
+          <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-accent">
             {a.tag}
           </span>
-          <h3 className="mt-1 text-lg font-semibold leading-snug text-white group-hover:text-brand-light transition-colors">
+          <h3 className="mt-1 text-lg font-semibold leading-snug text-ink group-hover:text-accent transition-colors">
             {a.title}
           </h3>
-          <p className="mt-1 text-sm text-zinc-400 leading-relaxed">{a.summary}</p>
+          <p className="mt-1 text-sm text-ink-3 leading-relaxed">{a.summary}</p>
         </div>
-        <ArrowUpRight size={18} className="mt-1 shrink-0 text-zinc-600 group-hover:text-brand-light transition-colors" />
+        <ArrowUpRight size={18} className="mt-1 shrink-0 text-ink-5 group-hover:text-accent transition-colors" />
       </Link>
     </motion.div>
   );

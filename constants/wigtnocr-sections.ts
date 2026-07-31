@@ -11,7 +11,7 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
       },
       {
         type: "prose",
-        text: 'Beyond the "bigger is better" paradigm, the central question in AI engineering today is: <strong>how to efficiently transfer LLM intelligence into SLMs</strong>. We applied the knowledge distillation paradigm pioneered by Orca (Microsoft, 2023) — training an SLM to learn from an LLM\'s reasoning process — to the domain of Korean government document parsing.',
+        text: 'Beyond the "bigger is better" paradigm, the central question in AI engineering today is: <strong>how to efficiently transfer LLM intelligence into SLMs</strong>. We applied the knowledge distillation paradigm pioneered by Orca (Microsoft, 2023), training an SLM to learn from an LLM\'s reasoning process, to the domain of Korean government document parsing.',
       },
       {
         type: "prose",
@@ -21,11 +21,11 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
         type: "highlights",
         title: "Key Results",
         items: [
-          "2B model matches or exceeds a 15x larger 30B Teacher — <strong>4/5 categories matched or exceeded</strong>",
-          "OmniDocBench Table TEDS — <strong>#1 (0.649)</strong>",
-          "6-parser retrieval comparison — <strong>Hit@1 and MRR@10 best performance</strong>",
-          "LoRA fine-tuning time — <strong>31 minutes (DeepSpeed ZeRO-2)</strong>",
-          "Fully open-source — <strong>HuggingFace Model + Dataset + GitHub</strong>",
+          "2B model matches or exceeds a 15x larger 30B Teacher: <strong>4/5 categories matched or exceeded</strong>",
+          "OmniDocBench Table TEDS: <strong>#1 (0.649)</strong>",
+          "6-parser retrieval comparison: <strong>Hit@1 and MRR@10 best performance</strong>",
+          "LoRA fine-tuning time: <strong>31 minutes (DeepSpeed ZeRO-2)</strong>",
+          "Fully open-source: <strong>HuggingFace Model + Dataset + GitHub</strong>",
         ],
       },
     ],
@@ -44,7 +44,7 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
           {
             src: "/images/projects/wigtnocr-highlights.png",
             alt: "WigtnOCR key benchmark results",
-            caption: "WigtnOCR key benchmark results — Table TEDS #1, Retrieval Hit@1 #1 across 6 parsers.",
+            caption: "WigtnOCR key benchmark results, Table TEDS #1, Retrieval Hit@1 #1 across 6 parsers.",
           },
         ],
       },
@@ -52,7 +52,7 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
   },
   {
     id: "technical-challenges",
-    title: "Technical Challenges — Why Existing Parsers Fall Short",
+    title: "Technical Challenges, Why Existing Parsers Fall Short",
     blocks: [
       {
         type: "prose",
@@ -79,9 +79,9 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
       {
         type: "list",
         items: [
-          "<strong>Layer 1 — Benchmark:</strong> KoGovDoc-Bench — a Korean government document evaluation set (294 validation pages with pseudo-GT)",
-          "<strong>Layer 2 — Fine-tuned Model:</strong> Wigtn/Qwen3-VL-2B-WigtnOCR — LoRA domain-adaptive fine-tuning weights (released on HuggingFace)",
-          "<strong>Layer 3 — Framework (Next Step):</strong> wigtnocr — a pip-installable OSS library providing a unified parsing → structured markdown → chunking pipeline (under development)",
+          "<strong>Layer 1: Benchmark:</strong> KoGovDoc-Bench, a Korean government document evaluation set (294 validation pages with pseudo-GT)",
+          "<strong>Layer 2: Fine-tuned Model:</strong> Wigtn/Qwen3-VL-2B-WigtnOCR, LoRA domain-adaptive fine-tuning weights (released on HuggingFace)",
+          "<strong>Layer 3: Framework (Next Step):</strong> wigtnocr, a pip-installable OSS library providing a unified parsing → structured markdown → chunking pipeline (under development)",
         ],
       },
     ],
@@ -93,15 +93,15 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
     blocks: [
       {
         type: "prose",
-        text: "<strong>Stage 1 — Pseudo-GT Generation:</strong> PDF page images were fed to Qwen3-VL-30B-Instruct (Teacher) to generate structured markdown. A total of 4,501 pages were processed: 3,637 pages from 10 KoGovDoc documents + 864 pages from 39 arXiv papers. Initially, the 30B-Thinking model was used but produced unstable outputs (think tag contamination, token truncation), leading to a switch to the Instruct model. <strong>Finding: For document transcription, instruction-tuned models are more stable than reasoning models.</strong>",
+        text: "<strong>Stage 1: Pseudo-GT Generation:</strong> PDF page images were fed to Qwen3-VL-30B-Instruct (Teacher) to generate structured markdown. A total of 4,501 pages were processed: 3,637 pages from 10 KoGovDoc documents + 864 pages from 39 arXiv papers. Initially, the 30B-Thinking model was used but produced unstable outputs (think tag contamination, token truncation), leading to a switch to the Instruct model. <strong>Finding: For document transcription, instruction-tuned models are more stable than reasoning models.</strong>",
       },
       {
         type: "prose",
-        text: '<strong>Stage 2 — GT Quality Verification:</strong> Qwen3.5-122B was used as a judge on a 5-point scale. Critically, evaluation was performed <strong>text-only without the original images</strong> — not asking "does this match the original?" but "is this output usable as training data?" This design prevents circular evaluation bias that would occur if a VLM evaluated another VLM\'s visual interpretation. A text-only LLM judge independently assesses structure, tables, completeness, hallucination, and consistency across 5 dimensions. Pass rate: KoGovDoc 75.1%, arXiv 73.8%. Pages scoring below 3 were excluded from training.',
+        text: '<strong>Stage 2: GT Quality Verification:</strong> Qwen3.5-122B was used as a judge on a 5-point scale. Critically, evaluation was performed <strong>text-only without the original images</strong>: not asking "does this match the original?" but "is this output usable as training data?" This design prevents circular evaluation bias that would occur if a VLM evaluated another VLM\'s visual interpretation. A text-only LLM judge independently assesses structure, tables, completeness, hallucination, and consistency across 5 dimensions. Pass rate: KoGovDoc 75.1%, arXiv 73.8%. Pages scoring below 3 were excluded from training.',
       },
       {
         type: "prose",
-        text: "<strong>Stage 3 — Data Refinement:</strong> Document kogov_008 comprised 53% of all data — controlled via <strong>max_doc_ratio=0.25</strong>. Reasoning residue (English thought processes from the 30B-Thinking model) contaminating the GT was discovered — 20 pages deleted, 257 cleaned. Final dataset: <strong>train 2,667 + val 294 pages</strong>.",
+        text: "<strong>Stage 3: Data Refinement:</strong> Document kogov_008 comprised 53% of all data, controlled via <strong>max_doc_ratio=0.25</strong>. Reasoning residue (English thought processes from the 30B-Thinking model) contaminating the GT was discovered, 20 pages deleted, 257 cleaned. Final dataset: <strong>train 2,667 + val 294 pages</strong>.",
       },
     ],
   },
@@ -112,28 +112,28 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
     blocks: [
       {
         type: "prose",
-        text: "Base Model: Qwen3-VL-2B-Instruct. LoRA rank=8, alpha=32, targeting all linear layers in the language model. <strong>Vision Encoder and Aligner were frozen</strong> — a pilot test confirmed the VLM's visual recognition was sufficient (Structure F1 79%) but text generation accuracy was lacking.",
+        text: "Base Model: Qwen3-VL-2B-Instruct. LoRA rank=8, alpha=32, targeting all linear layers in the language model. <strong>Vision Encoder and Aligner were frozen</strong>: a pilot test confirmed the VLM's visual recognition was sufficient (Structure F1 79%) but text generation accuracy was lacking.",
       },
       {
         type: "list",
         items: [
           "Hardware: 2x NVIDIA RTX PRO 6000 Blackwell (96GB each)",
-          "DeepSpeed ZeRO-2, <strong>training time 31 minutes</strong>, final loss 0.075",
+          "DeepSpeed ZeRO-2: <strong>training time 31 minutes</strong>, final loss 0.075",
         ],
       },
       {
         type: "table",
-        caption: "Ablation Study — LoRA Configuration Comparison (OmniDocBench)",
+        caption: "Ablation Study, LoRA Configuration Comparison (OmniDocBench)",
         headers: ["Config", "LoRA r", "Epochs", "Text NED↓", "TEDS↑", "TEDS-S↑", "CDM F1↑", "RO NED↓", "Skip%↓", "Verdict"],
         rows: [
           { cells: ["v1 (Final)", "8", "3", "0.288", "0.649", "0.732", "0.884", "0.211", "5.8%", "Best overall"], highlight: true },
-          { cells: ["v2-best", "32", "3", "0.309", "0.600", "0.697", "—", "0.215", "0.7%", "Table regression"] },
+          { cells: ["v2-best", "32", "3", "0.309", "0.600", "0.697", "-", "0.215", "0.7%", "Table regression"] },
           { cells: ["v2-last", "32", "5", "0.306", "0.610", "0.695", "0.892", "0.214", "0.0%", "Overfitting"] },
         ],
       },
       {
         type: "prose",
-        text: "<strong>Finding:</strong> LoRA rank 8 outperformed rank 32 — increasing rank slightly improved formulas but degraded table performance (-4.9pp) and text (+2.1pp). Epoch 5 showed overfitting via rising val loss. v2 achieved 0% skip rate but at the cost of core parsing quality, so v1 was selected as the final model.",
+        text: "<strong>Finding:</strong> LoRA rank 8 outperformed rank 32, increasing rank slightly improved formulas but degraded table performance (-4.9pp) and text (+2.1pp). Epoch 5 showed overfitting via rising val loss. v2 achieved 0% skip rate but at the cost of core parsing quality, so v1 was selected as the final model.",
       },
     ],
   },
@@ -144,7 +144,7 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
     blocks: [
       {
         type: "prose",
-        text: "Evaluated on OmniDocBench (CVPR 2025) — 1,355 PDF pages with human-annotated ground truth — comparing 4 models.",
+        text: "Evaluated on OmniDocBench (CVPR 2025), 1,355 PDF pages with human-annotated ground truth, comparing 4 models.",
       },
       {
         type: "figure",
@@ -152,13 +152,13 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
           {
             src: "/images/projects/wigtnocr-omnidocbench.png",
             alt: "OmniDocBench evaluation overview",
-            caption: "OmniDocBench evaluation results — WigtnOCR achieves Table TEDS #1 among 4 models (Qwen3-VL-30B, 2B, Marker, WigtnOCR).",
+            caption: "OmniDocBench evaluation results, WigtnOCR achieves Table TEDS #1 among 4 models (Qwen3-VL-30B, 2B, Marker, WigtnOCR).",
           },
         ],
       },
       {
         type: "table",
-        caption: "OmniDocBench (CVPR 2025) — 4 Models Comparison",
+        caption: "OmniDocBench (CVPR 2025), 4 Models Comparison",
         headers: ["Model", "Text NED↓", "Table TEDS↑", "TEDS-S↑", "CDM F1↑", "CDM Exp↑", "RO NED↓", "Skip%↓"],
         rows: [
           { cells: ["Qwen3-VL-30B (Teacher)", "0.289", "0.523", "0.657", "0.939", "0.692", "0.227", "5.5%"] },
@@ -171,10 +171,10 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
         type: "list",
         items: [
           "<strong>Text NED:</strong> Matches 30B Teacher (0.288 vs 0.289)",
-          "<strong>Table TEDS:</strong> Overall #1 — 0.649 (vs Teacher's 0.523, +12.6pp)",
+          "<strong>Table TEDS:</strong> Overall #1, 0.649 (vs Teacher's 0.523, +12.6pp)",
           "<strong>Reading Order:</strong> Exceeds 30B Teacher (0.211 vs 0.227)",
-          "vs Base 2B — Text NED +21%, Table TEDS +16%, Reading Order +30%",
-          "Student <strong>matches or exceeds 30B Teacher in 4/5 categories</strong> — validating pseudo-label distillation",
+          "vs Base 2B, Text NED +21%, Table TEDS +16%, Reading Order +30%",
+          "Student <strong>matches or exceeds 30B Teacher in 4/5 categories</strong>: validating pseudo-label distillation",
         ],
       },
     ],
@@ -190,7 +190,7 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
       },
       {
         type: "table",
-        caption: "KoGovDoc Val — 3 Models Comparison",
+        caption: "KoGovDoc Val, 3 Models Comparison",
         headers: ["Model", "NED↓", "Eval Success", "Errors"],
         rows: [
           { cells: ["WigtnOCR v1", "0.285", "289/294", "5"], highlight: true },
@@ -211,11 +211,11 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
     blocks: [
       {
         type: "prose",
-        text: 'To verify whether "structured parsing actually produces better chunks," we evaluated 6 parsers using the BC/CS metrics from MoC (ACL 2025). Semantic chunking (BGE-M3) was used as the primary comparison strategy — both parsers chunk using the same method, with only the input text\'s structural quality differing, ensuring a fair comparison.',
+        text: 'To verify whether "structured parsing actually produces better chunks," we evaluated 6 parsers using the BC/CS metrics from MoC (ACL 2025). Semantic chunking (BGE-M3) was used as the primary comparison strategy, both parsers chunk using the same method, with only the input text\'s structural quality differing, ensuring a fair comparison.',
       },
       {
         type: "table",
-        caption: "KoGovDoc Semantic Chunking — BC/CS Quality (6 Parsers)",
+        caption: "KoGovDoc Semantic Chunking, BC/CS Quality (6 Parsers)",
         headers: ["Model", "BC↑", "CS↓"],
         rows: [
           { cells: ["MinerU", "0.735", "2.711"] },
@@ -232,7 +232,7 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
           {
             src: "/images/projects/wigtnocr-bc-vs-retrieval.png",
             alt: "BC vs Hit@1 scatter plot",
-            caption: "BC/CS chunk quality vs Retrieval Hit@1 correlation — BC/CS #1 (MinerU) is Retrieval #5, revealing that chunk boundary quality alone doesn't predict retrieval performance.",
+            caption: "BC/CS chunk quality vs Retrieval Hit@1 correlation, BC/CS #1 (MinerU) is Retrieval #5, revealing that chunk boundary quality alone doesn't predict retrieval performance.",
           },
         ],
       },
@@ -246,13 +246,13 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
           {
             src: "/images/projects/wigtnocr-retrieval.png",
             alt: "Retrieval performance comparison",
-            caption: "6-parser retrieval comparison — WigtnOCR achieves #1 in Hit@1, Hit@5, and MRR@10.",
+            caption: "6-parser retrieval comparison, WigtnOCR achieves #1 in Hit@1, Hit@5, and MRR@10.",
           },
         ],
       },
       {
         type: "table",
-        caption: "KoGovDoc Retrieval — 564 Queries",
+        caption: "KoGovDoc Retrieval, 564 Queries",
         headers: ["Model", "Hit@1↑", "Hit@5↑", "MRR@10↑", "nDCG@10↑"],
         rows: [
           { cells: ["WigtnOCR-2B", "0.739", "0.855", "0.788", "0.437"], highlight: true },
@@ -268,7 +268,7 @@ export const WIGTNOCR_SECTIONS: ResearchSection[] = [
         items: [
           "<strong>WigtnOCR ranks #1 in Hit@1 (0.739), Hit@5 (0.855), and MRR@10 (0.788)</strong>",
           "vs PaddleOCR: Hit@1 +22.7pp; vs 30B Teacher: +2.3pp",
-          "<strong>MinerU is BC/CS #1 but Retrieval #5</strong> — chunk boundary quality doesn't predict retrieval; text richness and structural fidelity matter more for end-to-end RAG performance",
+          "<strong>MinerU is BC/CS #1 but Retrieval #5</strong>: chunk boundary quality doesn't predict retrieval; text richness and structural fidelity matter more for end-to-end RAG performance",
         ],
       },
     ],

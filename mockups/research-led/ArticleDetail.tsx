@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Article detail — dark. One layout serves every kind (report / event /
+ * Article detail. One layout serves every kind (report / event /
  * community / insight); kind-specific bits render conditionally. Content
  * comes from data.ts by slug, standing in for a future MDX render.
  */
@@ -10,7 +10,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, Calendar, MapPin, Play, Clock, User } from "lucide-react";
 import { HOME, articleHref, getArticle, ARTICLES, type Block, type Article } from "./data";
-// `import Link from "next/link"` above shadows data's `Link` type — use
+// `import Link from "next/link"` above shadows data's `Link` type, so
 // `article.links` inline instead of importing that type here.
 import { SiteHeader, SiteFooter, BackdropDecor, EVENT_ICON, rise } from "./chrome";
 
@@ -24,10 +24,10 @@ const KIND_LABEL: Record<Article["kind"], string> = {
 function BlockView({ block }: { block: Block }) {
   switch (block.t) {
     case "h":
-      return <h2 className="mt-12 mb-4 text-2xl font-semibold tracking-tight text-white">{block.text}</h2>;
+      return <h2 className="mt-12 mb-4 text-2xl font-semibold tracking-tight text-ink">{block.text}</h2>;
     case "quote":
       return (
-        <blockquote className="my-8 border-l-2 border-brand pl-5 text-xl font-medium leading-snug text-white">
+        <blockquote className="my-8 border-l-2 border-brand pl-5 text-xl font-medium leading-snug text-ink">
           {block.text}
         </blockquote>
       );
@@ -35,8 +35,8 @@ function BlockView({ block }: { block: Block }) {
       return (
         <ul className="my-5 space-y-2.5">
           {block.items.map((it) => (
-            <li key={it} className="flex gap-3 text-zinc-400 leading-relaxed">
-              <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-light" />
+            <li key={it} className="flex gap-3 text-ink-3 leading-relaxed">
+              <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />
               <span>{it}</span>
             </li>
           ))}
@@ -48,10 +48,10 @@ function BlockView({ block }: { block: Block }) {
           <img
             src={block.src}
             alt={block.alt ?? ""}
-            className="w-full rounded-lg border border-white/10 object-cover"
+            className="w-full rounded-lg border border-line/[0.08] object-cover"
           />
           {block.caption && (
-            <figcaption className="mt-3 text-sm leading-relaxed text-zinc-500">{block.caption}</figcaption>
+            <figcaption className="mt-3 text-sm leading-relaxed text-ink-4">{block.caption}</figcaption>
           )}
         </figure>
       );
@@ -66,20 +66,20 @@ function BlockView({ block }: { block: Block }) {
                 <img
                   src={im.src}
                   alt={im.alt ?? ""}
-                  className="aspect-[4/3] w-full rounded-lg border border-white/10 object-cover"
+                  className="aspect-[4/3] w-full rounded-lg border border-line/[0.08] object-cover"
                 />
-                {im.caption && <p className="mt-2 text-xs leading-relaxed text-zinc-500">{im.caption}</p>}
+                {im.caption && <p className="mt-2 text-xs leading-relaxed text-ink-4">{im.caption}</p>}
               </div>
             ))}
           </div>
           {block.caption && (
-            <figcaption className="mt-3 text-sm leading-relaxed text-zinc-500">{block.caption}</figcaption>
+            <figcaption className="mt-3 text-sm leading-relaxed text-ink-4">{block.caption}</figcaption>
           )}
         </figure>
       );
     }
     default:
-      return <p className="my-5 text-lg leading-relaxed text-zinc-400">{block.text}</p>;
+      return <p className="my-5 text-lg leading-relaxed text-ink-3">{block.text}</p>;
   }
 }
 
@@ -88,12 +88,12 @@ export function ArticleDetail({ slug }: { slug: string }) {
 
   if (!article) {
     return (
-      <div className="relative min-h-screen bg-[#0A0A0A] text-white font-sans antialiased">
+      <div className="relative min-h-screen bg-paper text-ink font-sans antialiased">
         <BackdropDecor />
         <SiteHeader />
         <main className="relative z-10 max-w-3xl mx-auto px-6 py-32 text-center">
           <h1 className="text-3xl font-semibold tracking-tight">Article not found</h1>
-          <Link href={HOME} className="mt-6 inline-flex items-center gap-2 text-brand-light hover:text-white">
+          <Link href={HOME} className="mt-6 inline-flex items-center gap-2 text-accent hover:text-ink">
             <ArrowLeft size={16} /> Back to home
           </Link>
         </main>
@@ -106,7 +106,7 @@ export function ArticleDetail({ slug }: { slug: string }) {
   const related = ARTICLES.filter((a) => a.kind === article.kind && a.slug !== article.slug).slice(0, 3);
 
   return (
-    <div className="relative min-h-screen bg-[#0A0A0A] text-white font-sans antialiased selection:bg-brand/30">
+    <div className="relative min-h-screen bg-paper text-ink font-sans antialiased selection:bg-brand/20">
       <BackdropDecor />
       <SiteHeader />
 
@@ -115,11 +115,11 @@ export function ArticleDetail({ slug }: { slug: string }) {
           {/* Header */}
           <motion.header variants={rise} initial="hidden" animate="show">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-brand-light">
+              <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-accent">
                 {article.tag}
               </span>
               {article.placeholder && (
-                <span className="text-[10px] font-semibold tracking-[0.1em] uppercase text-zinc-500 border border-white/15 rounded-full px-2 py-0.5">
+                <span className="text-[10px] font-semibold tracking-[0.1em] uppercase text-ink-4 border border-line/15 rounded-full px-2 py-0.5">
                   Placeholder
                 </span>
               )}
@@ -127,9 +127,9 @@ export function ArticleDetail({ slug }: { slug: string }) {
             <h1 className="mt-3 text-[clamp(1.9rem,4.5vw,3rem)] font-bold tracking-tight leading-[1.1]">
               {article.title}
             </h1>
-            <p className="mt-4 text-lg text-zinc-400 leading-relaxed">{article.summary}</p>
+            <p className="mt-4 text-lg text-ink-3 leading-relaxed">{article.summary}</p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-zinc-500">
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-4">
               <span className="inline-flex items-center gap-1.5">
                 <Calendar size={14} /> {article.date}
               </span>
@@ -158,7 +158,7 @@ export function ArticleDetail({ slug }: { slug: string }) {
                     href={l.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-sm border border-white/20 px-4 py-2 text-sm font-medium text-zinc-300 hover:border-white hover:text-white transition-colors"
+                    className="inline-flex items-center gap-1.5 rounded-sm border border-line/20 px-4 py-2 text-sm font-medium text-ink-2 hover:border-ink hover:text-ink transition-colors"
                   >
                     {l.label} <ArrowUpRight size={14} />
                   </a>
@@ -173,7 +173,7 @@ export function ArticleDetail({ slug }: { slug: string }) {
             custom={1}
             initial="hidden"
             animate="show"
-            className="relative mt-8 aspect-[16/8] rounded-lg overflow-hidden border border-white/10 bg-gradient-to-br from-brand/20 via-brand/5 to-transparent flex items-center justify-center"
+            className="relative mt-8 aspect-[16/8] rounded-lg overflow-hidden border border-line/[0.08] bg-gradient-to-br from-brand/20 via-brand/5 to-transparent flex items-center justify-center"
           >
             {article.image && (
               <img src={article.image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-90" />
@@ -189,7 +189,7 @@ export function ArticleDetail({ slug }: { slug: string }) {
                 <Play className="text-[#0A0A0A] ml-1" size={26} fill="currentColor" />
               </a>
             ) : article.image ? null : EventIcon ? (
-              <EventIcon className="text-brand-light/70" size={56} strokeWidth={1.25} />
+              <EventIcon className="text-accent/70" size={56} strokeWidth={1.25} />
             ) : (
               <span className="font-mono text-7xl font-bold text-brand/30 select-none">w.</span>
             )}
@@ -203,13 +203,13 @@ export function ArticleDetail({ slug }: { slug: string }) {
           </motion.div>
 
           {/* CTA strip */}
-          <div className="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-white/10 bg-white/[0.03] px-6 py-5">
-            <p className="text-sm text-zinc-400">Working on something like this? Let's talk.</p>
+          <div className="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-line/[0.08] bg-paper-raised px-6 py-5">
+            <p className="text-sm text-ink-3">Working on something like this? Let's talk.</p>
             <a
               href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-sm bg-brand text-white px-5 py-2.5 text-sm font-semibold uppercase tracking-wide hover:bg-brand-light hover:text-[#0A0A0A] transition-colors"
+              className="inline-flex items-center gap-2 rounded-sm bg-brand text-white px-5 py-2.5 text-sm font-semibold uppercase tracking-wide hover:bg-brand-dark transition-colors"
             >
               Talk to us <ArrowUpRight size={16} />
             </a>
@@ -220,10 +220,10 @@ export function ArticleDetail({ slug }: { slug: string }) {
         {related.length > 0 && (
           <section className="max-w-6xl mx-auto px-6 py-16 md:py-20">
             <div className="flex items-center gap-4 mb-8">
-              <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-zinc-500">
+              <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-ink-4">
                 More from {KIND_LABEL[article.kind]}
               </span>
-              <span className="h-px flex-1 bg-white/10" />
+              <span className="h-px flex-1 bg-line/[0.08]" />
             </div>
             <div className="grid md:grid-cols-3 gap-6">
               {related.map((r, i) => (
@@ -237,15 +237,15 @@ export function ArticleDetail({ slug }: { slug: string }) {
                 >
                   <Link
                     href={articleHref(r.slug)}
-                    className="group block rounded-lg border border-white/10 bg-white/[0.02] p-6 hover:border-brand/50 hover:bg-white/[0.04] transition-all"
+                    className="group block rounded-lg border border-line/[0.08] bg-paper-raised p-6 hover:border-brand/50 hover:bg-paper-tint transition-all"
                   >
-                    <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-brand-light">
+                    <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-accent">
                       {r.tag}
                     </span>
-                    <h3 className="mt-2 text-lg font-semibold leading-snug text-white group-hover:text-brand-light transition-colors">
+                    <h3 className="mt-2 text-lg font-semibold leading-snug text-ink group-hover:text-accent transition-colors">
                       {r.title}
                     </h3>
-                    <div className="mt-3 font-mono text-xs text-zinc-600">{r.date}</div>
+                    <div className="mt-3 font-mono text-xs text-ink-5">{r.date}</div>
                   </Link>
                 </motion.div>
               ))}

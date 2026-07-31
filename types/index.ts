@@ -20,7 +20,7 @@ export interface TeamMember {
   /** When true, the homepage Team grid renders this card spanning two
    *  columns to mark the founder / lead. Optional; defaults to false. */
   featured?: boolean;
-  /** Current role outside of WIGTN — title + employer + parent-org tag.
+  /** Current role outside of WIGTN: title + employer + parent-org tag.
    *  Rendered as the first credential line on the Team card so a reader
    *  sees what the member does today before the historical background. */
   currentRole?: string;

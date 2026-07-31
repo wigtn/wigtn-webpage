@@ -12,7 +12,7 @@ interface ResearchGridProps {
  *
  * project.media.poster is sometimes a screenshot (e.g. a HuggingFace
  * model card) rather than a clean logo. For the Research tab we prefer
- * the actual logo — fall back to media.poster if no override is given. */
+ * the actual logo: fall back to media.poster if no override is given. */
 const LOGO_OVERRIDES: Record<string, string> = {
   wigtnocr: "/images/carousel/wigtnocr-logo.png",
 };
@@ -20,11 +20,13 @@ const LOGO_OVERRIDES: Record<string, string> = {
 function badgeFor(publication?: string): { label: string; tone: BadgeTone } | null {
   if (!publication) return null;
   const lower = publication.toLowerCase();
-  // Pull the venue prefix ("ACL 2026", "EMNLP 2026") out of "Venue — Track
+  // Pull the venue prefix ("ACL 2026", "EMNLP 2026") out of "Venue, Track
   // (status)" so the badge label leads with the recognised name. The card
   // already uppercases the badge text, so this renders as
   // "ACL 2026 ACCEPTED" / "EMNLP 2026 IN PREP".
-  const venuePrefix = publication.split("—")[0].trim();
+  // The separator must match the one used by `publication` in
+  // constants/projects.ts; these two move together.
+  const venuePrefix = publication.split(",")[0].trim();
 
   if (lower.includes("accepted"))
     return { label: `${venuePrefix} Accepted`, tone: "violet" };
@@ -72,7 +74,7 @@ export function ResearchGrid({ projects }: ResearchGridProps) {
             links={linksFor(project)}
             visualClassName="bg-gray-50"
             visual={
-              // Full-bleed image — fills the 16:10 visual tile via
+              // Full-bleed image: fills the 16:10 visual tile via
               // object-cover. `object-position: center` centers wide
               // diagrams (e.g. the WigtnOCR logo banner) so important
               // detail isn't cropped to a corner.

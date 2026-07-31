@@ -1,7 +1,7 @@
 import type { ResearchSection } from "./projects";
 
 /**
- * WIGTN FLAKE — Snowflake AI & Data Hackathon Korea 2026, Tech Track 2nd Place.
+ * WIGTN FLAKE: Snowflake AI & Data Hackathon Korea 2026, Tech Track 2nd Place.
  *
  * Purpose-driven neighborhood-intelligence platform built on Snowflake Cortex.
  * Source of truth for this content: the wigtn-for-snowflake repository
@@ -15,7 +15,7 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
     blocks: [
       {
         type: "prose",
-        text: "WIGTN Flake is a purpose-driven neighborhood-intelligence platform. Pick what you actually want to do — open a cafe, target rental-appliance ads, choose a billboard site, invest in real estate, or detect anomalies in your existing trade area — and five agents examine evidence from three actively selected datasets before returning a Top 3 ranking and an action checklist.",
+        text: "WIGTN Flake is a purpose-driven neighborhood-intelligence platform. Pick what you actually want to do, open a cafe, target rental-appliance ads, choose a billboard site, invest in real estate, or detect anomalies in your existing trade area, and five agents examine evidence from three actively selected datasets before returning a Top 3 ranking and an action checklist.",
       },
       {
         type: "prose",
@@ -27,8 +27,8 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
         images: [
           {
             src: "/images/projects/wigtn-flake-title.jpg",
-            alt: "Snowflake AI & Data Hackathon 2026 — Tech Track 2nd Place, WIGTN Flake announcement on stage.",
-            caption: "Tech Track 2nd Place announcement — WIGTN Flake : Snowflake Cortex 기반 실시간 데이터 검증을 통한 '목적 중심 에이전트 토론' 플랫폼.",
+            alt: "Snowflake AI & Data Hackathon 2026, Tech Track 2nd Place, WIGTN Flake announcement on stage.",
+            caption: "Tech Track 2nd Place announcement, WIGTN Flake : Snowflake Cortex 기반 실시간 데이터 검증을 통한 '목적 중심 에이전트 토론' 플랫폼.",
           },
         ],
       },
@@ -36,11 +36,11 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
         type: "highlights",
         title: "Key Results",
         items: [
-          "<strong>Snowflake AI &amp; Data Hackathon Korea 2026 — Tech Track 2nd Place</strong>",
+          "<strong>Snowflake AI &amp; Data Hackathon Korea 2026, Tech Track 2nd Place</strong>",
           "<strong>7 verified Cortex capabilities</strong> along the audited production path",
-          "<strong>5 AI experts × 3 active datasets</strong> — purpose-tuned personas debate over SPH, RichGo, and AJD evidence",
-          "<strong>Audited fallback behavior</strong> — TOP_INSIGHTS fails over to dynamic-table SQL; Cortex Agent is not counted as a live capability",
-          "<strong>Anomaly detection promoted to lead role</strong> — ranking results auto-inject \"watch this district\" badges, the demo's climax moment",
+          "<strong>5 AI experts × 3 active datasets</strong>: purpose-tuned personas debate over SPH, RichGo, and AJD evidence",
+          "<strong>Audited fallback behavior</strong>: TOP_INSIGHTS fails over to dynamic-table SQL; Cortex Agent is not counted as a live capability",
+          "<strong>Anomaly detection promoted to lead role</strong>: ranking results auto-inject \"watch this district\" badges, the demo's climax moment",
         ],
       },
     ],
@@ -63,7 +63,7 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
       },
       {
         type: "prose",
-        text: "We wanted the user to <strong>state a purpose, not a query</strong>, and have a team of Cortex-powered experts return a defensible recommendation — with the data trail visible the entire time.",
+        text: "We wanted the user to <strong>state a purpose, not a query</strong>, and have a team of Cortex-powered experts return a defensible recommendation, with the data trail visible the entire time.",
       },
     ],
   },
@@ -78,11 +78,11 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
       {
         type: "list",
         items: [
-          "<strong>Step 1 — Purpose selection.</strong> Six cards: Cafe/restaurant location · Rental-appliance target zones · Billboard placement · Real-estate investment · Trade-area anomaly detection · or free-form input.",
-          "<strong>Step 2 — District context.</strong> AI suggests candidates, or the user names districts directly. Goal + districts together become the analysis brief.",
-          "<strong>Step 3 — Expert orchestration.</strong> A GPT-4o orchestrator summons five purpose-tuned experts: PM facilitator, data analyst (Cortex Analyst), forecast analyst (FORECAST + ANOMALY_DETECTION), insight analyst (DNA + AI_CLASSIFY), and sentiment/news analyst (AI_SENTIMENT + Tavily).",
-          "<strong>Step 4 — Cortex execution.</strong> Cortex Analyst runs text_to_sql over the three Semantic Models selected by the audited path. Supported ANOMALY_DETECTION and FORECAST signals converge with the analyst output before the data analyst speaks the merged finding.",
-          "<strong>Step 5 — Decision report.</strong> Top 3 ranking cards · anomaly signal badges · 6-month FORECAST charts · purpose-specific action checklist (\"secure 500m radius around the Banpo subway exit; peak 12-14h; lead with Instagram\").",
+          "<strong>Step 1: Purpose selection.</strong> Six cards: Cafe/restaurant location · Rental-appliance target zones · Billboard placement · Real-estate investment · Trade-area anomaly detection · or free-form input.",
+          "<strong>Step 2: District context.</strong> AI suggests candidates, or the user names districts directly. Goal + districts together become the analysis brief.",
+          "<strong>Step 3: Expert orchestration.</strong> A GPT-4o orchestrator summons five purpose-tuned experts: PM facilitator, data analyst (Cortex Analyst), forecast analyst (FORECAST + ANOMALY_DETECTION), insight analyst (DNA + AI_CLASSIFY), and sentiment/news analyst (AI_SENTIMENT + Tavily).",
+          "<strong>Step 4: Cortex execution.</strong> Cortex Analyst runs text_to_sql over the three Semantic Models selected by the audited path. Supported ANOMALY_DETECTION and FORECAST signals converge with the analyst output before the data analyst speaks the merged finding.",
+          "<strong>Step 5: Decision report.</strong> Top 3 ranking cards · anomaly signal badges · 6-month FORECAST charts · purpose-specific action checklist (\"secure 500m radius around the Banpo subway exit; peak 12-14h; lead with Instagram\").",
         ],
       },
     ],
@@ -98,7 +98,7 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
       },
       {
         type: "table",
-        caption: "Five preset purposes — who, what data, what decision",
+        caption: "Five preset purposes, who, what data, what decision",
         headers: ["Purpose", "User", "Core data", "Decision"],
         rows: [
           { cells: ["🍰 Cafe / restaurant location", "Small-business owner", "Foot traffic × coffee sales × asset income", "Where to open"] },
@@ -121,7 +121,7 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
     blocks: [
       {
         type: "prose",
-        text: "Each Snowflake feature earns its place by solving a problem in the flow — not by being on a list. Listed in order of how they appear during a single session.",
+        text: "Each Snowflake feature earns its place by solving a problem in the flow, not by being on a list. Listed in order of how they appear during a single session.",
       },
       {
         type: "figure",
@@ -129,7 +129,7 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
         images: [
           {
             src: "/images/projects/wigtn-flake-datasets.jpg",
-            alt: "Dataset assignment chart from the live presentation — four hackathon datasets routed to Snowflake ML.FORECAST, Semantic Model, and AI_SENTIMENT.",
+            alt: "Dataset assignment chart from the live presentation, four hackathon datasets routed to Snowflake ML.FORECAST, Semantic Model, and AI_SENTIMENT.",
             caption: "The presentation listed four connected datasets. The production audit found three were actively selected: SPH, RichGo, and AJD.",
           },
         ],
@@ -163,7 +163,7 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
         images: [
           {
             src: "/images/projects/wigtn-flake-architecture.jpg",
-            alt: "WIGTN Flake 3-Layer Hybrid AI Architecture — Brain Layer (GPT-4o orchestrator) feeds Data Layer (Snowflake Cortex × 11 features over four marketplace datasets), which feeds Render Layer (Cortex LLM markdown) for the report output.",
+            alt: "WIGTN Flake 3-Layer Hybrid AI Architecture, Brain Layer (GPT-4o orchestrator) feeds Data Layer (Snowflake Cortex × 11 features over four marketplace datasets), which feeds Render Layer (Cortex LLM markdown) for the report output.",
             caption: "Brain (GPT-4o orchestrator) → Data (seven verified Cortex capabilities over three actively selected datasets) → Render (Cortex LLM markdown). The architecture image reflects the original presentation; the text reflects the later production audit.",
           },
         ],
@@ -215,7 +215,7 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
   },
   {
     id: "datasets",
-    title: "Datasets — Three Actively Selected",
+    title: "Datasets, Three Actively Selected",
     blocks: [
       {
         type: "table",
@@ -259,7 +259,7 @@ export const WIGTN_FLAKE_SECTIONS: ResearchSection[] = [
         title: "What Drove Every Decision",
         items: [
           "<strong>Purpose-first.</strong> UX and code both start from \"what is this analysis for\". Every component carries a purpose context.",
-          "<strong>Hybrid AI.</strong> Cortex (data / SQL / report) + GPT-4o (debate personas) — pick the best model per layer.",
+          "<strong>Hybrid AI.</strong> Cortex (data / SQL / report) + GPT-4o (debate personas), pick the best model per layer.",
           "<strong>Snowflake = leading role.</strong> Seven Cortex capabilities are verified along the production path.",
           "<strong>Connected ≠ used.</strong> SPH, RichGo, and AJD were actively selected; NextTrade was connected but effectively unused.",
           "<strong>Demo-first.</strong> The 10-minute video is the first round of judging. Demo climax = the anomaly-detection moment.",

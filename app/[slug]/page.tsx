@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { ArticleDetail } from "@/mockups/research-led/ArticleDetail";
-import { TechnicalReportDetail } from "@/mockups/research-led/TechnicalReportDetail";
-import { ARTICLES, TECH_REPORTS, getArticle } from "@/mockups/research-led/data";
+import { ARTICLES, getArticle } from "@/mockups/research-led/data";
 
 /**
- * Static params for `output: "export"` — one page per article slug, served
+ * Static params for `output: "export"`: one page per article slug, served
  * at the site root (e.g. /wigvo/). Static routes (/news, /team, /work,
  * /projects) take precedence over this dynamic segment.
  */
@@ -45,11 +44,5 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = getArticle(slug);
-
-  if (article && TECH_REPORTS.some((entry) => entry.article.slug === slug)) {
-    return <TechnicalReportDetail slug={slug} />;
-  }
-
   return <ArticleDetail slug={slug} />;
 }

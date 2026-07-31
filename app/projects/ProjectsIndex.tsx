@@ -203,7 +203,7 @@ export function ProjectsIndex() {
             Projects
           </h1>
           <p className="text-base text-gray-500">
-            Everything we&apos;ve shipped — {PROJECTS.length} projects and
+            Everything we&apos;ve shipped, {PROJECTS.length} projects and
             counting.
           </p>
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * TabList — pill-style segmented control used in two places:
+ * TabList: pill-style segmented control used in two places:
  *   • the homepage `<Categories />` section (Research / Awards / Open Source / Products)
  *   • the `/projects` index filter
  *
@@ -22,7 +22,7 @@ interface TabListProps<K extends string = string> {
   activeKey: K;
   onChange: (key: K) => void;
   ariaLabel: string;
-  /** Prefix used to build per-tab DOM ids — `${idPrefix}-${tabKey}`.
+  /** Prefix used to build per-tab DOM ids: `${idPrefix}-${tabKey}`.
    *  The matching panel should set `id={`${idPrefix}-panel`}`. */
   idPrefix?: string;
   className?: string;

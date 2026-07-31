@@ -30,7 +30,7 @@ export function useTokenStats(baseUrl: string | undefined): number | null {
           });
           if (r.ok) apply(await r.json());
         } catch {
-          /* swallow — next tick will retry */
+          /* swallow: next tick will retry */
         }
       };
       void tick();
@@ -43,7 +43,7 @@ export function useTokenStats(baseUrl: string | undefined): number | null {
         try {
           apply(JSON.parse((ev as MessageEvent).data));
         } catch {
-          /* malformed event — ignore */
+          /* malformed event: ignore */
         }
       });
       es.onerror = () => {

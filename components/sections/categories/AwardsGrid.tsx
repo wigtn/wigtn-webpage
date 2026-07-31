@@ -17,7 +17,7 @@ interface AwardsGridProps {
  * future hackathon project lands without an entry in this map, it
  * falls to the end. */
 const ORDER: Record<string, number> = {
-  "wigtn-flake": 0, // Snowflake AI & Data Hackathon Korea 2026 — most recent
+  "wigtn-flake": 0, // Snowflake AI & Data Hackathon Korea 2026, most recent
   timelens: 1, // Google Gemini Live Agent Challenge
   wigent: 2, // ByteDance Build with TRAE Seoul (March 2026)
 };
@@ -34,7 +34,7 @@ const RESULT_LABEL: Partial<Record<AchievementResult, string>> = {
   "third-place": "3rd Place",
   finalist: "Finalist",
   accepted: "Accepted",
-  // `participated` intentionally omitted — we don't decorate cards with
+  // `participated` intentionally omitted: we don't decorate cards with
   // a "Participated" medal. The card simply carries no footer badge and
   // matches the layout of the other tabs.
 };
@@ -49,7 +49,7 @@ const RESULT_TONE: Partial<Record<AchievementResult, BadgeTone>> = {
   participated: "gray",
 };
 
-/* Footer-badge tier styles — three visual weights so a glance reads
+/* Footer-badge tier styles: three visual weights so a glance reads
  * the medal level. Solid-amber for the strongest signal, soft-slate
  * for the middle, ghost outline for participation. */
 const FOOTER_BADGE_CLASS: Record<BadgeTone, string> = {
@@ -64,7 +64,7 @@ const FOOTER_BADGE_CLASS: Record<BadgeTone, string> = {
   sky: "bg-sky-100 text-sky-800 border border-sky-200 font-semibold",
 };
 
-/* Tier-tinted gradient — only used as the wrapper fallback when a
+/* Tier-tinted gradient: only used as the wrapper fallback when a
  * project has no poster image. With a poster the image full-bleeds
  * and the gradient is hidden behind it. */
 const TONE_GRADIENT: Record<BadgeTone, string> = {
@@ -86,7 +86,7 @@ const TROPHY_TONE: Record<BadgeTone, string> = {
 };
 
 function linksFor(project: Project): CategoryCardLink[] {
-  // Awards cards intentionally drop the `live` link — competition entries
+  // Awards cards intentionally drop the `live` link: competition entries
   // don't need to advertise a live URL alongside the medal.
   const out: CategoryCardLink[] = [];
   if (project.links.github) out.push({ kind: "github", href: project.links.github });
@@ -104,7 +104,7 @@ export function AwardsGrid({ projects }: AwardsGridProps) {
     );
   }
 
-  // Stable sort — consistent rendering order regardless of array order
+  // Stable sort: consistent rendering order regardless of array order
   // in the underlying data file.
   const ordered = [...projects].sort(
     (a, b) => (ORDER[a.slug] ?? 99) - (ORDER[b.slug] ?? 99),
@@ -139,7 +139,7 @@ export function AwardsGrid({ projects }: AwardsGridProps) {
             name={project.name}
             description={project.tagline}
             meta={meta}
-            // Top-left visual-area badge intentionally null — the medal
+            // Top-left visual-area badge intentionally null: the medal
             // is now a footer badge so it doesn't overlay the image.
             badge={null}
             links={linksFor(project)}

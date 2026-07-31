@@ -12,7 +12,7 @@ import { useBudouX } from "@/lib/hooks/useBudouX";
 import { GitHubIcon, YouTubeIcon, HuggingFaceIcon } from "@/components/ui/icons";
 
 /**
- * Tag text colors — no backgrounds. Used by the Open Source variant for the
+ * Tag text colors: no backgrounds. Used by the Open Source variant for the
  * "Research / Paper / Tool" sub-category label under the title.
  */
 const TAG_COLOR: Record<SectionBadge, string> = {
@@ -144,10 +144,10 @@ function buildBoxLinks(project: Project, order: LinkKey[]): BoxLink[] {
 /**
  * Priority order per list variant. Controls which link sits leftmost in the
  * box row and signals the project's primary artifact.
- *   • models   — HuggingFace weights are the headline; GitHub is secondary.
- *   • papers   — the paper/venue isn't linked directly yet, so Live demo or
+ *   • models: HuggingFace weights are the headline; GitHub is secondary.
+ *   • papers: the paper/venue isn't linked directly yet, so Live demo or
  *                YouTube walkthrough leads; GitHub is last.
- *   • open-source — code-first (GitHub), then Live (npm / deployed site).
+ *   • open-source: code-first (GitHub), then Live (npm / deployed site).
  */
 const LINK_ORDER: Record<"models" | "papers" | "open-source" | "hackathon", LinkKey[]> = {
   models: ["github", "video", "huggingface"],
@@ -178,7 +178,7 @@ const BOX_LINK_VARIANTS = new Set<Variant>(["models", "papers", "open-source", "
 
 interface ProjectRowProps {
   project: Project;
-  /** Zero-based position within its section — rendered as a large "01/02/…" prefix. */
+  /** Zero-based position within its section: rendered as a large "01/02/…" prefix. */
   index: number;
   /** Controls which actions and secondary UI render. */
   variant: Variant;
@@ -191,7 +191,7 @@ interface ProjectRowProps {
  * Editorial project row used by every list-style section (Featured Work on
  * the homepage and the /projects filter page).
  *
- * Layout — 12-col grid on desktop, stacked on mobile:
+ * Layout: 12-col grid on desktop, stacked on mobile:
  *   [1 col]  large light-gray index number (01, 02, …)
  *   [7 col]  title (+ optional award badge), tagline, tag/meta, box actions
  *   [4 col]  4:3 thumbnail with hover scale
@@ -200,17 +200,17 @@ interface ProjectRowProps {
  * so it visually aligns with the bottom edge of the thumbnail.
  *
  * Variant differences:
- *   • "models"      — boxes ordered 🤗 HuggingFace → GitHub → Live → YouTube.
- *   • "papers"      — boxes ordered Live → YouTube → HuggingFace → GitHub.
- *   • "open-source" — boxes ordered GitHub → Live → HuggingFace → YouTube.
- *   • "hackathon"   — only a Details box; no source-code link. An AwardBadge
+ *   • "models": boxes ordered 🤗 HuggingFace → GitHub → Live → YouTube.
+ *   • "papers": boxes ordered Live → YouTube → HuggingFace → GitHub.
+ *   • "open-source": boxes ordered GitHub → Live → HuggingFace → YouTube.
+ *   • "hackathon": only a Details box; no source-code link. An AwardBadge
  *                     (🏆 gold / 🥈 silver / 🥉 bronze / label-only) renders
  *                     next to the title when the project has an awarded
  *                     achievement.
  *
  * If the project's media has a local heroVideo, the thumbnail is a `<video>`
  * that plays on hover and rewinds on leave. YouTube heroVideos are not
- * hover-played (too heavy for a list view) — they surface via the YouTube
+ * hover-played (too heavy for a list view): they surface via the YouTube
  * box link or the Details page.
  */
 export function ProjectRow({
@@ -261,7 +261,7 @@ export function ProjectRow({
       }`}
     >
       <div className="grid grid-cols-12 gap-6 md:gap-10">
-        {/* Index number — editorial prefix */}
+        {/* Index number: editorial prefix */}
         <div className="col-span-12 md:col-span-1 order-1">
           <span className="block text-2xl md:text-3xl font-light text-gray-300 tabular-nums leading-none">
             {indexLabel}
@@ -271,7 +271,7 @@ export function ProjectRow({
         {/* Text block */}
         <div className="col-span-12 md:col-span-8 min-w-0 order-2 flex flex-col">
           <div>
-            {/* Homepage status badge — sits ABOVE the title to give an
+            {/* Homepage status badge: sits ABOVE the title to give an
                 executive scanner the credential before they read the name.
                 Only renders when the project explicitly opts in via
                 `homepageBadge`, so the /projects index pages stay clean. */}
@@ -298,7 +298,7 @@ export function ProjectRow({
               {processText(project.tagline)}
             </p>
 
-            {/* Metric pills — load-bearing numbers split out of the prose so
+            {/* Metric pills: load-bearing numbers split out of the prose so
                 they read at a glance. Only present on featured homepage rows
                 that opt in via `homepageMetrics`. */}
             {project.homepageMetrics && project.homepageMetrics.length > 0 && (
@@ -314,7 +314,7 @@ export function ProjectRow({
               </div>
             )}
 
-            {/* Tag · meta — shown for every list variant except Hackathon,
+            {/* Tag · meta: shown for every list variant except Hackathon,
                 which uses AwardBadge next to the title + meta-only line. */}
             {variant !== "hackathon" && (project.sectionBadge || meta) && (
               <div className="mt-3 flex items-center flex-wrap gap-x-2 text-[13px]">
@@ -334,7 +334,7 @@ export function ProjectRow({
             )}
           </div>
 
-          {/* Box actions — pushed to the bottom so they align with the
+          {/* Box actions: pushed to the bottom so they align with the
               thumbnail's bottom edge on desktop. On mobile they just follow
               the text naturally. */}
           <div className="mt-4 md:mt-auto md:pt-4 flex flex-wrap gap-2">
@@ -347,7 +347,7 @@ export function ProjectRow({
         {/* Thumbnail */}
         <Link
           href={detailHref}
-          aria-label={`${project.name} — learn more`}
+          aria-label={`${project.name}, learn more`}
           className="col-span-12 md:col-span-3 order-3 block w-full overflow-hidden rounded-xl border border-black/[0.06] bg-gray-50 self-start"
           onMouseEnter={hasLocalVideo ? handleMouseEnter : undefined}
           onMouseLeave={hasLocalVideo ? handleMouseLeave : undefined}

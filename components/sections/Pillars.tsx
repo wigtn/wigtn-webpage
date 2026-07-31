@@ -9,7 +9,7 @@ import { PROJECTS_BY_SECTION, type Project } from "@/constants/projects";
 /* ─────────────── Pillar definitions ───────────────
  *
  * Editorial / terminal-style index. Four numbered rows instead of feature
- * cards — closer to a printed table-of-contents (or a `ls` of the repo
+ * cards: closer to a printed table-of-contents (or a `ls` of the repo
  * root) than a SaaS landing-page bento. Each row carries:
  *   • a large mono-font index number (01–04)
  *   • the pillar's label as the row's headline
@@ -54,7 +54,7 @@ const PILLARS: Pillar[] = [
     label: "Research",
     subtitle: "Papers & frontier models",
     pitch:
-      "Two submissions to top-tier NLP venues. A 2B-parameter document parser that ranks #1 on its Korean benchmark — at a fraction of the size of the models it beats.",
+      "Two submissions to top-tier NLP venues. A 2B-parameter document parser that ranks #1 on its Korean benchmark, at a fraction of the size of the models it beats.",
     href: "/projects/?category=research",
     index: "01",
     count: "02",
@@ -69,7 +69,7 @@ const PILLARS: Pillar[] = [
     label: "Services",
     subtitle: "Production mobile apps",
     pitch:
-      "AI-native consumer apps that ship — built on the same models we publish.",
+      "AI-native consumer apps that ship, built on the same models we publish.",
     href: "/projects/?category=products",
     index: "02",
     count: "02",
@@ -131,18 +131,18 @@ function PillarRow({ pillar, index }: { pillar: Pillar; index: number }) {
         href={pillar.href}
         className="group relative grid grid-cols-[auto_minmax(0,1fr)] md:grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-x-4 md:gap-x-10 gap-y-3 md:gap-y-3 py-5 md:py-9 px-3 md:px-5 -mx-3 md:-mx-5 rounded-md"
       >
-        {/* Left violet accent bar — desktop hover only */}
+        {/* Left violet accent bar: desktop hover only */}
         <span
           aria-hidden
           className="pointer-events-none absolute left-0 top-2 bottom-2 w-[2px] rounded-full bg-violet origin-top scale-y-0 md:group-hover:scale-y-100 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
         />
-        {/* Background wash — desktop hover only */}
+        {/* Background wash: desktop hover only */}
         <span
           aria-hidden
           className="pointer-events-none absolute inset-0 rounded-md bg-gradient-to-r from-violet/[0.05] via-violet/[0.025] to-transparent opacity-0 md:group-hover:opacity-100 transition-opacity duration-400"
         />
 
-        {/* Index — mono font, fixed-width */}
+        {/* Index: mono font, fixed-width */}
         <span
           aria-hidden
           className="relative font-mono text-xs md:text-sm tabular-nums tracking-[0.18em] text-gray-300 md:group-hover:text-violet transition-colors duration-300 mt-2 md:mt-3"
@@ -162,7 +162,7 @@ function PillarRow({ pillar, index }: { pillar: Pillar; index: number }) {
                 className="md:hidden inline-block ml-2 -mt-0.5 w-4 h-4 align-middle text-violet/70"
               />
             </h3>
-            {/* Inline count chip — labels the meta clearly next to the
+            {/* Inline count chip: labels the meta clearly next to the
                 headline on every viewport, replacing the giant ambiguous
                 mono numeral that previously sat in the right column. */}
             <span className="inline-flex items-baseline gap-1 px-2 py-0.5 rounded-md bg-violet/10 text-violet font-semibold text-[11.5px] md:text-[12px] tabular-nums whitespace-nowrap">
@@ -179,7 +179,7 @@ function PillarRow({ pillar, index }: { pillar: Pillar; index: number }) {
             {pillar.pitch}
           </p>
 
-          {/* Project list — inline, dot-separated, mono for that
+          {/* Project list: inline, dot-separated, mono for that
               README-style feel. Names link straight through to the row's
               section filter (the parent <Link>). On mobile, kept on one
               line with overflow-x scroll if the list outgrows the row. */}
@@ -199,7 +199,7 @@ function PillarRow({ pillar, index }: { pillar: Pillar; index: number }) {
           </div>
         </div>
 
-        {/* Right column — thumbnail + meta (desktop). Mobile uses a
+        {/* Right column: thumbnail + meta (desktop). Mobile uses a
             separate compact inline block (below) so we don't show the
             confusing big-mono numeral on small screens. */}
         <div className="hidden md:flex col-span-2 md:col-span-1 md:col-start-3 md:text-right md:min-w-[220px] md:mt-2 flex-col items-end gap-4">
@@ -271,7 +271,7 @@ export function Pillars() {
       />
 
       <div className="relative max-w-6xl mx-auto px-6 md:px-6">
-        {/* Editorial header — fully separate mobile/desktop layouts. On
+        {/* Editorial header: fully separate mobile/desktop layouts. On
             mobile: tight vertical stack with the description tucked under
             the headline behind a violet accent rail. On desktop: classic
             8/4 grid with description floated to the right edge. */}
@@ -337,7 +337,7 @@ export function Pillars() {
           </div>
         </motion.div>
 
-        {/* Numbered list of pillar rows — replaces the bento card grid */}
+        {/* Numbered list of pillar rows: replaces the bento card grid */}
         <div>
           {PILLARS.map((p, i) => (
             <PillarRow key={p.key} pillar={p} index={i} />
