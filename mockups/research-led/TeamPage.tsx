@@ -1,22 +1,22 @@
 "use client";
 
-/** /about — organizer profile, community history (연혁), and the members. */
+/** /about: organizer profile, community history (연혁), and the members. */
 
 import { Fragment } from "react";
 import { motion } from "framer-motion";
 import { PageShell, PageHero, rise, VIEWPORT } from "./chrome";
 import { TEAM, MILESTONES } from "./data";
 
-/* Section divider — hairline within the page gutter. */
+/* Section divider: hairline within the page gutter. */
 function Divider() {
   return (
     <div className="max-w-6xl mx-auto px-6">
-      <div className="border-t border-white/10" />
+      <div className="border-t border-line/[0.08]" />
     </div>
   );
 }
 
-/* Organizer's career — current (現) first, former (前) below. */
+/* Organizer's career: current (現) first, former (前) below. */
 const FOUNDER_CAREER = [
   { status: "現", company: "BrainCrew", role: "Engineering Lead" },
   { status: "前", company: "SoundMind", role: "AI Research Engineer" },
@@ -35,15 +35,15 @@ export function TeamPage() {
       <PageHero
         title="Who we are."
         lead="A community of AI builders sharing research, code, and everything we learn."
-        titleClassName="text-brand-light"
+        titleClassName="text-accent"
       />
 
-      {/* ── Organizer — portrait + name + title (left), career history (right) ── */}
+      {/* ── Organizer: portrait + name + title (left), career history (right) ── */}
       <section className="max-w-6xl mx-auto px-6 pt-16 pb-28 md:pt-28 md:pb-36">
         <div className="flex flex-col items-center justify-center gap-10 md:flex-row md:items-center md:gap-16">
           {/* left: portrait, name, title */}
           <div className="flex flex-col items-center text-center">
-            <div className="h-44 w-44 overflow-hidden rounded-full bg-white/[0.04] ring-1 ring-inset ring-white/10 md:h-52 md:w-52">
+            <div className="h-44 w-44 overflow-hidden rounded-full bg-paper-tint ring-1 ring-inset ring-line/[0.08] md:h-52 md:w-52">
               <img
                 src={founder.image}
                 alt={founder.name}
@@ -51,15 +51,15 @@ export function TeamPage() {
                 className="h-full w-full object-cover"
               />
             </div>
-            <h2 className="mt-6 font-display text-2xl md:text-3xl font-bold tracking-tight text-white">
+            <h2 className="mt-6 font-display text-2xl md:text-3xl font-bold tracking-tight text-ink">
               {founder.name}
             </h2>
-            <div className="mt-1.5 font-medium text-brand-light">{founder.role}</div>
+            <div className="mt-1.5 font-medium text-accent">{founder.role}</div>
           </div>
 
           {/* right: career history */}
           <div>
-            <div className="text-[11px] font-semibold tracking-[0.22em] uppercase text-zinc-500">
+            <div className="text-[11px] font-semibold tracking-[0.22em] uppercase text-ink-4">
               Career
             </div>
             <div className="mt-5 grid grid-cols-[auto_auto_1fr] items-baseline gap-x-5 gap-y-2.5 text-base md:text-lg">
@@ -67,13 +67,13 @@ export function TeamPage() {
                 <Fragment key={c.company}>
                   <span
                     className={
-                      c.status === "現" ? "font-medium text-brand-light" : "text-zinc-600"
+                      c.status === "現" ? "font-medium text-accent" : "text-ink-5"
                     }
                   >
                     {c.status}
                   </span>
-                  <span className="font-medium text-white">{c.company}</span>
-                  <span className="text-zinc-400">{c.role}</span>
+                  <span className="font-medium text-ink">{c.company}</span>
+                  <span className="text-ink-3">{c.role}</span>
                 </Fragment>
               ))}
             </div>
@@ -83,7 +83,7 @@ export function TeamPage() {
 
       <Divider />
 
-      {/* ── Members — circular avatars in a row ── */}
+      {/* ── Members: circular avatars in a row ── */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
         <h2 className="font-display text-center text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight">Members</h2>
         <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 md:mt-16">
@@ -97,7 +97,7 @@ export function TeamPage() {
               viewport={VIEWPORT}
               className="flex flex-col items-center text-center"
             >
-              <div className="h-32 w-32 overflow-hidden rounded-full bg-white/[0.04] ring-1 ring-inset ring-white/10 md:h-40 md:w-40">
+              <div className="h-32 w-32 overflow-hidden rounded-full bg-paper-tint ring-1 ring-inset ring-line/[0.08] md:h-40 md:w-40">
                 <img
                   src={m.image}
                   alt={m.name}
@@ -105,10 +105,10 @@ export function TeamPage() {
                   className="h-full w-full object-cover"
                 />
               </div>
-              <h3 className="mt-5 text-base font-semibold tracking-tight text-white md:text-lg">
+              <h3 className="mt-5 text-base font-semibold tracking-tight text-ink md:text-lg">
                 {m.name}
               </h3>
-              <div className="mt-1 text-sm text-brand-light">{m.role}</div>
+              <div className="mt-1 text-sm text-accent">{m.role}</div>
             </motion.div>
           ))}
         </div>
@@ -116,15 +116,15 @@ export function TeamPage() {
 
       <Divider />
 
-      {/* ── History (연혁) — left-aligned header, centered timeline ── */}
+      {/* ── History (연혁): left-aligned header, centered timeline ── */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
-        <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-brand-light">History</h2>
+        <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">History</h2>
 
         <div className="relative mx-auto mt-14 max-w-3xl md:mt-20">
           {/* center pipeline */}
           <span
             aria-hidden
-            className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-brand-light/40"
+            className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-brand/30"
           />
           <ul className="space-y-12 md:space-y-16">
             {history.map((m, i) => {
@@ -142,15 +142,15 @@ export function TeamPage() {
                   {/* node on the center line */}
                   <span
                     aria-hidden
-                    className="absolute left-1/2 top-1.5 h-3.5 w-3.5 -translate-x-1/2 rounded-full bg-brand-light ring-4 ring-[#0A0A0A]"
+                    className="absolute left-1/2 top-1.5 h-3.5 w-3.5 -translate-x-1/2 rounded-full bg-brand ring-4 ring-paper"
                   />
                   <div className={left ? "md:pr-12 md:text-right" : "md:col-start-2 md:pl-12"}>
-                    <div className="font-mono text-sm text-brand-light">{m.date}</div>
-                    <h3 className="mt-1 text-lg font-semibold tracking-tight text-white">
+                    <div className="font-mono text-sm text-accent">{m.date}</div>
+                    <h3 className="mt-1 text-lg font-semibold tracking-tight text-ink">
                       {m.title}
-                      {m.upcoming && <span className="ml-2 text-sm font-normal text-zinc-500">(Upcoming)</span>}
+                      {m.upcoming && <span className="ml-2 text-sm font-normal text-ink-4">(Upcoming)</span>}
                     </h3>
-                    <p className="mt-1 text-pretty text-sm leading-relaxed text-zinc-400">{m.text}</p>
+                    <p className="mt-1 text-pretty text-sm leading-relaxed text-ink-3">{m.text}</p>
                   </div>
                 </motion.li>
               );

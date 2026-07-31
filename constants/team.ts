@@ -1,16 +1,16 @@
 import type { TeamMember } from "@/types";
 
 /**
- * WIGTN crew — five members. Two cross-cutting role dimensions per member:
+ * WIGTN crew: five members. Two cross-cutting role dimensions per member:
  *
- *   1. `role`         — WIGTN-internal role (e.g. "Organizer & Crew Lead").
+ *   1. `role`: WIGTN-internal role (e.g. "Organizer & Crew Lead").
  *                       Rendered as the violet uppercase label on the card.
- *   2. `currentRole`  — Day-job role at the member's parent company. Rendered
+ *   2. `currentRole`: Day-job role at the member's parent company. Rendered
  *                       as a neutral-gray normal-case line below the violet
  *                       label so the two dimensions are visually distinct.
  *
  * `credential` (the "Ex-…" prior-employer line) is currently set on the
- * organizer only — other members have no prior employers worth surfacing.
+ * organizer only: other members have no prior employers worth surfacing.
  */
 export const TEAM_MEMBERS: TeamMember[] = [
   {

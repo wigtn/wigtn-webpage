@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 
 /**
- * Achievement marquee — a thin, monochrome horizontal ticker that runs the
+ * Achievement marquee: a thin, monochrome horizontal ticker that runs the
  * team's load-bearing credentials past the visitor before they've scrolled
  * far. Modeled on a journal byline / paper "submitted to" header rather than
  * a SaaS feature ribbon, so it reads as understated credibility, not as

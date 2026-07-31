@@ -1,12 +1,12 @@
 import type { NavItem } from "@/types";
 
 /**
- * Top-bar menu — homepage sections only. The four work-category entries
+ * Top-bar menu: homepage sections only. The four work-category entries
  * (Research / Awards / Open Source / Products) are deliberately removed
  * from the nav because they live as tabs *inside* the "What we build"
  * section. Surfacing them at both levels duplicated the index.
  *
- * "Contact" is also intentionally omitted — the contact email is the
+ * "Contact" is also intentionally omitted: the contact email is the
  * single visible item in the footer, and a top-nav link to the bottom
  * of the page felt redundant with the footer that's always one scroll
  * away. The Footer's `id="contact"` anchor is preserved so any future

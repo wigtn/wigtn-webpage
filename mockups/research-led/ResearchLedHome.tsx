@@ -1,31 +1,33 @@
 "use client";
 
 /**
- * Research-led homepage (dark, open-community positioning)
+ * Research-led homepage (light, open-community positioning)
  * ------------------------------------------------------------------
  * Card-less, type-led layout. Built on current patterns:
  *   - Display grotesk (Space Grotesk) headlines + mono (JetBrains Mono)
  *     micro-labels; Pretendard body
- *   - Dark base (#0A0A0A), single accent = Pantone 265 (`brand`)
+ *   - Warm off-white base (#F8F8F5), single accent = Pantone 265 (`brand`,
+ *     leaning on `accent` for legibility on light)
  *   - Editorial sections separated by hairlines, not boxes/cards
  *   - "What we do": sticky left header + compact right capability list
- * Sections: 1 Hero · 2 What we do · Friends · 3 Newsroom · 4 Community · 5 CTA.
+ * Sections: 1 Hero · 2 What we do · Friends · 3 Updates · 4 Community · 5 CTA.
  * MilestoneTimeline is retained but currently unrouted.
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
 import { CAPABILITIES, PARTNERS, MILESTONES, NEWSROOM, NEWS } from "./data";
 import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, rise, VIEWPORT } from "./chrome";
 import { ArticleCard } from "./cards";
+import type { Theme } from "@/lib/theme";
 
 function ViewAll({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      className="group inline-flex items-center gap-1.5 text-sm font-medium text-brand-light hover:text-white"
+      className="group inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-ink"
     >
       {label}
       <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
@@ -33,16 +35,113 @@ function ViewAll({ href, label }: { href: string; label: string }) {
   );
 }
 
-/* Keyword labels — scannable metadata, not boxed chips (no card aesthetic). */
+/* ── Hero intro clip ──────────────────────────────────────────────────────
+ * The 7.0s intro is not a loop and its last frame is not its best frame. The
+ * wordmark assembles by ~3.5s, the tagline types out to "Huh, it works!" by
+ * ~4.6s, and the final ~2s fade everything back to an empty backdrop. Letting
+ * it run to the end therefore parks a large banner on blank paper, and letting
+ * it loop turns an opening title into restless wallpaper.
+ *
+ * So: play once, then stop on the completed lockup and hold it. Tune the
+ * resting frame with this one constant; 4.6s is the first frame where the
+ * tagline is fully typed and the caret is not drawn.
+ * ───────────────────────────────────────────────────────────────────────── */
+const INTRO_HOLD_AT = 4.6;
+
+const INTRO_SRC: Record<Theme, string> = {
+  light: "/WIGTN%20Intro/04_Dynamic-White.mp4",
+  dark: "/WIGTN%20Intro/03_Dynamic-Black.mp4",
+};
+
+type IntroResume = { time: number; shouldPlay: boolean; held: boolean };
+
+function holdIntro(video: HTMLVideoElement) {
+  if (video.dataset.held) return;
+  video.dataset.held = "1";
+  video.pause();
+  video.currentTime = INTRO_HOLD_AT;
+}
+
+function IntroVideo() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const resumeRef = useRef<IntroResume>({ time: 0, shouldPlay: true, held: false });
+  const themeRef = useRef<Theme | null>(null);
+  const [theme, setTheme] = useState<Theme | null>(null);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const syncTheme = () => {
+      const next: Theme = root.classList.contains("dark") ? "dark" : "light";
+      const current = themeRef.current;
+      if (current && current !== next) {
+        const video = videoRef.current;
+        if (video) {
+          const held = Boolean(video.dataset.held) || video.ended || video.currentTime >= INTRO_HOLD_AT;
+          resumeRef.current = {
+            time: held ? INTRO_HOLD_AT : Math.min(video.currentTime, INTRO_HOLD_AT),
+            shouldPlay: !video.paused && !held,
+            held,
+          };
+        }
+      }
+      themeRef.current = next;
+      setTheme(next);
+    };
+
+    syncTheme();
+    const observer = new MutationObserver(syncTheme);
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+
+  const holdAtMark = useCallback((e: React.SyntheticEvent<HTMLVideoElement>) => {
+    const video = e.currentTarget;
+    if (video.currentTime >= INTRO_HOLD_AT || video.ended) holdIntro(video);
+  }, []);
+
+  const restorePlayback = useCallback((e: React.SyntheticEvent<HTMLVideoElement>) => {
+    const video = e.currentTarget;
+    const resume = resumeRef.current;
+    video.currentTime = resume.held ? INTRO_HOLD_AT : Math.min(resume.time, INTRO_HOLD_AT);
+    if (resume.held) {
+      video.dataset.held = "1";
+      video.pause();
+    } else if (resume.shouldPlay) {
+      void video.play().catch(() => {});
+    }
+  }, []);
+
+  // Do not give the browser a media URL until the pre-paint theme class has
+  // been read. This keeps the alternate 1 MB clip out of the request/decode
+  // path and makes the server/client markup deterministic.
+  if (!theme) return null;
+
+  return (
+    <video
+      key={theme}
+      ref={videoRef}
+      src={INTRO_SRC[theme]}
+      muted
+      playsInline
+      aria-hidden
+      onLoadedMetadata={restorePlayback}
+      onTimeUpdate={holdAtMark}
+      onEnded={holdAtMark}
+      className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+    />
+  );
+}
+
+/* Keyword labels: scannable metadata, not boxed chips (no card aesthetic). */
 function Tags({ tags, className = "" }: { tags: string[]; className?: string }) {
   return (
     <div className={`flex flex-wrap gap-x-6 gap-y-2 ${className}`}>
       {tags.map((t) => (
         <span
           key={t}
-          className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-zinc-500"
+          className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-ink-4"
         >
-          <span aria-hidden className="h-1 w-1 rounded-full bg-brand-light/70" />
+          <span aria-hidden className="h-1 w-1 rounded-full bg-brand/60" />
           {t}
         </span>
       ))}
@@ -50,16 +149,16 @@ function Tags({ tags, className = "" }: { tags: string[]; className?: string }) 
   );
 }
 
-/* Full-width section divider — hairline within the page gutter. */
+/* Full-width section divider: hairline within the page gutter. */
 function Divider() {
   return (
     <div className="max-w-6xl mx-auto px-6">
-      <div className="border-t border-white/10" />
+      <div className="border-t border-line/[0.08]" />
     </div>
   );
 }
 
-/* ── One milestone column — calm by default, photo blooms at center ── */
+/* ── One milestone column: calm by default, photo blooms at center ── */
 function MilestoneColumn({
   m,
   index,
@@ -85,17 +184,17 @@ function MilestoneColumn({
 
   return (
     <div className="grid h-[360px] w-[260px] shrink-0 grid-rows-[1fr_auto_auto] px-3">
-      {/* bubble — rises in only when this node is centered */}
+      {/* bubble: rises in only when this node is centered */}
       <motion.div
         style={{ opacity: bubbleOpacity, y: bubbleY, scale: bubbleScale }}
         className="flex flex-col justify-end origin-bottom"
       >
-        <div className="rounded-xl border border-white/10 bg-[#141416] p-2.5 shadow-[0_14px_36px_-22px_rgba(0,0,0,0.7)]">
+        <div className="rounded-xl border border-line/[0.08] bg-paper-raised p-2.5 shadow-[0_14px_36px_-22px_rgba(21,21,21,0.28)]">
           {m.image && (
             <button
               type="button"
               onClick={() => onExpand(m.image!)}
-              className="group/photo relative block aspect-[16/10] w-full overflow-hidden rounded-lg border border-white/10"
+              className="group/photo relative block aspect-[16/10] w-full overflow-hidden rounded-lg border border-line/[0.08]"
               aria-label={`Expand ${m.title} photo`}
             >
               <motion.img
@@ -111,19 +210,19 @@ function MilestoneColumn({
           )}
           <div className={`px-1 pb-0.5 ${m.image ? "pt-2.5" : "pt-1"}`}>
             <div className="flex items-center gap-2">
-              <span className="rounded-full border border-white/15 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-brand-light">
+              <span className="rounded-full border border-line/15 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-accent">
                 {m.label}
               </span>
               {m.upcoming && (
-                <span className="rounded-full bg-brand/20 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-brand-light">
+                <span className="rounded-full bg-brand/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-accent">
                   Soon
                 </span>
               )}
             </div>
-            <h3 className="mt-2 line-clamp-1 text-sm font-semibold leading-snug text-white">{m.title}</h3>
+            <h3 className="mt-2 line-clamp-1 text-sm font-semibold leading-snug text-ink">{m.title}</h3>
             <p
               className={`mt-1 line-clamp-2 text-xs leading-relaxed ${
-                m.placeholder ? "italic text-zinc-600" : "text-zinc-500"
+                m.placeholder ? "italic text-ink-5" : "text-ink-4"
               }`}
             >
               {m.text}
@@ -131,29 +230,29 @@ function MilestoneColumn({
           </div>
         </div>
         {/* short connector down to the line */}
-        <span className="mx-auto mt-3 h-5 w-px bg-white/15" />
+        <span className="mx-auto mt-3 h-5 w-px bg-line/15" />
       </motion.div>
 
       {/* node on the dashed line */}
       <div className="relative flex h-3 items-center justify-center">
-        <span className="absolute inset-x-0 top-1/2 -translate-y-1/2 border-t border-dashed border-white/20" />
+        <span className="absolute inset-x-0 top-1/2 -translate-y-1/2 border-t border-dashed border-line/20" />
         <motion.span
           style={{ scale: dotScale }}
-          className="relative h-2.5 w-2.5 rounded-full bg-brand-light ring-4 ring-[#0A0A0A]"
+          className="relative h-2.5 w-2.5 rounded-full bg-brand ring-4 ring-paper"
         />
       </div>
 
       {/* month marker */}
       <motion.div style={{ opacity: monthOpacity }} className="mt-4 text-center">
-        <div className="font-mono text-xl font-bold tracking-tight text-white/90">{m.month}</div>
-        <div className="mt-0.5 font-mono text-[11px] text-zinc-600">{m.date}</div>
+        <div className="font-mono text-xl font-bold tracking-tight text-ink-2">{m.month}</div>
+        <div className="mt-0.5 font-mono text-[11px] text-ink-5">{m.date}</div>
       </motion.div>
     </div>
   );
 }
 
-/* ─────────────── Milestones — scroll-driven center-focus timeline ─────────────── */
-// Column width (px) — must match MilestoneColumn's w-[260px] (box-border).
+/* ─────────────── Milestones: scroll-driven center-focus timeline ─────────────── */
+// Column width (px); must match MilestoneColumn's w-[260px] (box-border).
 const COL = 260;
 
 function MilestoneTimeline() {
@@ -161,7 +260,7 @@ function MilestoneTimeline() {
   const [lightbox, setLightbox] = useState<string | null>(null);
 
   // Symmetric 50vw-COL/2 spacers center the first & last columns at the two
-  // ends, so horizontal travel is exactly (N-1)·COL regardless of viewport —
+  // ends, so horizontal travel is exactly (N-1)·COL regardless of viewport:
   // no DOM measurement needed, and x ↔ center stay perfectly in sync.
   const LAST = MILESTONES.length - 1;
   const dist = LAST * COL;
@@ -170,7 +269,7 @@ function MilestoneTimeline() {
   // Spring-smooth the scroll. Overdamped (no overshoot) so it never snaps past.
   const smooth = useSpring(scrollYProgress, { stiffness: 50, damping: 28, mass: 0.5 });
   // Finish the travel by 85% of the scroll, then DWELL on the last node for the
-  // remaining 15% — guarantees you actually reach Aug (and the spring settles)
+  // remaining 15%. This guarantees you actually reach Aug (and the spring settles)
   // before the section unpins into whatever comes next.
   const END = 0.85;
   const x = useTransform(smooth, [0, END], [0, -dist]);
@@ -198,13 +297,13 @@ function MilestoneTimeline() {
               <h2 className="font-display max-w-2xl text-[clamp(1.6rem,3.6vw,2.4rem)] font-semibold tracking-tight leading-tight">
                 Eight months, founding to first product.
               </h2>
-              <span className="inline-flex items-center gap-2 font-mono text-xs text-zinc-500">
+              <span className="inline-flex items-center gap-2 font-mono text-xs text-ink-4">
                 scroll to follow the timeline <ArrowRight size={13} />
               </span>
             </div>
           </div>
 
-          {/* center-focus track — symmetric spacers center first & last node */}
+          {/* center-focus track: symmetric spacers center first & last node */}
           <motion.div style={{ x }} className="mt-1 flex will-change-transform">
             <div className="shrink-0" style={{ width: `calc(50vw - ${COL / 2}px)` }} />
             {MILESTONES.map((m, i) => (
@@ -252,29 +351,32 @@ function MilestoneTimeline() {
 
 export function ResearchLedHome() {
   return (
-    <div className="relative min-h-screen overflow-x-clip bg-[#0A0A0A] text-white font-sans antialiased selection:bg-brand/30">
+    <div className="relative min-h-screen overflow-x-clip bg-paper text-ink font-sans antialiased selection:bg-brand/20">
       <BackdropDecor />
       <SiteHeader />
 
       <main className="relative z-10">
-        {/* ───── 1. Hero — identity & vision ───── */}
+        {/* ───── 1. Hero: identity & vision ───── */}
         <section className="relative isolate overflow-hidden">
-          {/* Intro video — top banner, muted, loops continuously. Sits ABOVE
-              the content (no overlap), shown crisp (no opacity/blend filter). */}
+          {/* Intro video: top banner, muted, plays once and holds on the
+              finished lockup. Sits ABOVE the content (no overlap), shown crisp
+              (no opacity/blend filter).
+              The clip is baked onto a solid backdrop, so each theme needs its
+              own cut: White on paper, Black on ink. A single media element is
+              mounted after hydration from the pre-paint theme class; switching
+              theme preserves its position instead of replaying another clip. */}
           <div className="relative h-[44vh] min-h-[300px] w-full overflow-hidden md:h-[56vh]">
-            <video
-              src="/WIGTN%20Intro/03_Dynamic-Black.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              aria-hidden
-              className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-            />
+            {/* Lightweight first-paint fallback while the single active video
+                hydrates and decodes its first frame. */}
+            <div aria-hidden className="absolute inset-0 grid place-items-center bg-paper">
+              <img src="/images/WIGTN_LOGO_NAVY.png" alt="" className="h-auto w-44 dark:hidden md:w-56" />
+              <img src="/images/WIGTN_LOGO_WHITE.png" alt="" className="hidden h-auto w-44 dark:block md:w-56" />
+            </div>
+            <IntroVideo />
             {/* fade the video's bottom edge into the page */}
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-b from-transparent to-[#0A0A0A]"
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-b from-transparent to-paper"
             />
           </div>
 
@@ -286,7 +388,7 @@ export function ResearchLedHome() {
             className="font-display max-w-4xl text-balance text-[clamp(2.25rem,6vw,4.5rem)] font-bold tracking-[-0.03em] leading-[1.05]"
           >
             We learn, build, and{" "}
-            <span className="text-brand-light">share AI in the open</span>.
+            <span className="text-accent">share AI in the open</span>.
           </motion.h1>
 
           <motion.p
@@ -294,33 +396,33 @@ export function ResearchLedHome() {
             custom={2}
             initial="hidden"
             animate="show"
-            className="mt-8 max-w-2xl text-pretty text-lg md:text-xl text-zinc-400 leading-relaxed"
+            className="mt-8 max-w-2xl text-pretty text-lg md:text-xl text-ink-3 leading-relaxed"
           >
             WIGTN is a community of AI builders. We publish research, release open-source
-            models and tools, and pass on everything we learn — through meetups, seminars,
+            models and tools, and pass on everything we learn, through meetups, seminars,
             and code anyone can use.
           </motion.p>
           </div>
         </section>
 
-        {/* ───── 2. What we do — sticky left header + compact right list (no cards) ───── */}
+        {/* ───── 2. What we do: sticky left header + compact right list (no cards) ───── */}
         <section id="capabilities" className="max-w-6xl mx-auto px-6 pt-28 md:pt-40 scroll-mt-24">
           <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
-            {/* left — sticky header + eyebrow + CTA, anchors the column while the list scrolls */}
+            {/* left: sticky header + eyebrow + CTA, anchors the column while the list scrolls */}
             <div className="md:sticky md:top-24 md:self-start">
-              <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-zinc-500">
+              <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-4">
                 Activities · 01–04
               </span>
-              <h2 className="mt-4 font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.02] text-brand-light">
+              <h2 className="mt-4 font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.02] text-accent">
                 What we do together
               </h2>
-              <p className="mt-5 max-w-xs text-pretty leading-relaxed text-zinc-500">
-                From open research to open source — and the meetups where we share it all.
+              <p className="mt-5 max-w-xs text-pretty leading-relaxed text-ink-3">
+                From open research to open source, and the meetups where we share it all.
               </p>
             </div>
 
-            {/* right — index + title + lead + labels (body dropped to keep rows short) */}
-            <div className="divide-y divide-white/10 border-t border-white/10">
+            {/* right: index + title + lead + labels (body dropped to keep rows short) */}
+            <div className="divide-y divide-line/[0.08] border-t border-line/[0.08]">
               {CAPABILITIES.map((c, i) => (
                 <motion.div
                   key={c.title}
@@ -331,12 +433,12 @@ export function ResearchLedHome() {
                   viewport={VIEWPORT}
                   className="flex items-start gap-5 py-8 md:py-10"
                 >
-                  <span className="pt-1.5 font-mono text-sm text-brand-light">{`0${i + 1}`}</span>
+                  <span className="pt-1.5 font-mono text-sm text-accent">{`0${i + 1}`}</span>
                   <div>
-                    <h3 className="font-display text-2xl font-semibold tracking-tight text-white md:text-3xl">
+                    <h3 className="font-display text-2xl font-semibold tracking-tight text-ink md:text-3xl">
                       {c.title}
                     </h3>
-                    <p className="mt-3 text-pretty leading-relaxed text-zinc-300">{c.lead}</p>
+                    <p className="mt-3 text-pretty leading-relaxed text-ink-2">{c.lead}</p>
                     <Tags tags={c.tags} className="mt-4" />
                   </div>
                 </motion.div>
@@ -345,7 +447,7 @@ export function ResearchLedHome() {
           </div>
         </section>
 
-        {/* ───── Friends — centered logo wall (text stand-ins until assets land) ───── */}
+        {/* ───── Friends: centered logo wall (text stand-ins until assets land) ───── */}
         <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
           <h2 className="font-display text-center text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight">
             Friends &amp; Collaborators
@@ -361,7 +463,7 @@ export function ResearchLedHome() {
                 className="flex items-center justify-center"
               >
                 {/* TODO: replace with <img> partner logo once assets exist */}
-                <span className="text-xl font-semibold tracking-tight text-zinc-300 md:text-2xl">
+                <span className="text-xl font-semibold tracking-tight text-ink-2 md:text-2xl">
                   {name}
                 </span>
               </motion.div>
@@ -371,13 +473,13 @@ export function ResearchLedHome() {
 
         <Divider />
 
-        {/* ───── 3. Newsroom — featured news as article cards ───── */}
+        {/* ───── 3. Updates: featured items as article cards ───── */}
         <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <h2 className="font-display text-[clamp(2.5rem,7.5vw,6rem)] font-bold tracking-[-0.03em] leading-[0.98] text-brand-light">
-              Newsroom
+            <h2 className="font-display text-[clamp(2.5rem,7.5vw,6rem)] font-bold tracking-[-0.03em] leading-[0.98] text-accent">
+              Updates
             </h2>
-            <ViewAll href={NEWS} label="All news" />
+            <ViewAll href={NEWS} label="All updates" />
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 md:mt-16">
             {NEWSROOM.map((a, i) => (
@@ -388,45 +490,45 @@ export function ResearchLedHome() {
 
         <Divider />
 
-        {/* ───── 4. Community — card-less text band with inline status ───── */}
+        {/* ───── 4. Community: card-less text band with inline status ───── */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light">
+              <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-accent">
                 Community
               </span>
-              <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-white md:text-4xl">
+              <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink md:text-4xl">
                 Meetups and open seminars are on the way.
               </h2>
-              <p className="mt-3 text-pretty text-zinc-500">
-                Talks, study groups, and demos — open to anyone who builds with AI.
+              <p className="mt-3 text-pretty text-ink-3">
+                Talks, study groups, and demos. Open to anyone who builds with AI.
               </p>
             </div>
-            <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-zinc-500">
-              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-brand-light" />
+            <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-ink-4">
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-brand" />
               First meetup in planning
             </span>
           </div>
         </section>
 
-        {/* ───── 5. CTA — text layout; only the contact link is boxed in purple ───── */}
+        {/* ───── 5. CTA: text layout; only the contact link is boxed in purple ───── */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
-          <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-brand-light">
+          <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-accent">
             Join the community
           </span>
           <h3 className="mt-5 font-display max-w-3xl text-pretty text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.15]">
             If you like building AI in the open, come build it with us.
           </h3>
-          <p className="mt-6 max-w-2xl text-pretty text-zinc-400 leading-relaxed">
+          <p className="mt-6 max-w-2xl text-pretty text-ink-3 leading-relaxed">
             Come to a meetup, join a study group, contribute to one of our open-source
-            projects — or just say hi. Whatever you’re building, there’s a seat for you
+            projects, or just say hi. Whatever you’re building, there’s a seat for you
             here.
           </p>
           <a
             href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-9 inline-flex items-center gap-2 rounded-md bg-brand-light px-6 py-3.5 text-base font-semibold text-[#0A0A0A] transition-colors hover:bg-white"
+            className="mt-9 inline-flex items-center gap-2 rounded-md bg-brand px-6 py-3.5 text-base font-semibold text-white transition-colors hover:bg-brand-dark"
           >
             contact@wigtn.com <ArrowUpRight size={18} />
           </a>

@@ -53,7 +53,7 @@ export interface ResearchSection {
  * section and is rendered exactly once on the homepage.
  *
  * `sectionBadge` is a free-text sub-category label shown on each
- * card — e.g. "Research" / "Paper" / "Tool" inside Open Source,
+ * card: e.g. "Research" / "Paper" / "Tool" inside Open Source,
  * "Grand Prize" / "Participated" / "Upcoming" inside Hackathon.
  */
 
@@ -98,7 +98,7 @@ export interface Achievement {
   note?: string;
 }
 
-/** Plain string — i18n removed, English only. */
+/** Plain string: i18n removed, English only. */
 export type I18nText = string;
 
 /**
@@ -133,7 +133,7 @@ export interface ProjectTimeline {
 }
 
 export interface ProjectDetail {
-  /** References a productDetail.* translation blob — see the literal union for the full set. */
+  /** References a productDetail.* translation blob: see the literal union for the full set. */
   translationKey?: "wigvo" | "wigvu" | "wigtnocr" | "wigent" | "wigtnflake";
   liveUrl?: string;
   features?: ProductFeature[];
@@ -178,7 +178,7 @@ export interface Project {
     live?: string;
     video?: string;
     huggingface?: string;
-    /** Press / news article URL — rendered with a newspaper icon. */
+    /** Press / news article URL: rendered with a newspaper icon. */
     news?: string;
   };
   detail?: ProjectDetail;
@@ -213,8 +213,8 @@ export const PROJECTS: Project[] = [
     name: "WIGEX",
     section: "products",
     phase: "in-progress",
-    tagline: "Plan, track, and relive every trip — from budget to boarding pass home.",
-    description: "before_title::Before You Go\nbefore::AI builds your daily budget based on destination, travel style, and length of stay — so you land with a plan, not a guess.\nduring_title::While You're There\nduring::Snap any receipt in any language. WIGEX reads it in seconds, converts to your home currency at the day-of-purchase rate, and tracks spending against your budget in real time. Split bills, check exchange rates, and stay on track — all in one tap.\nafter_title::When You're Back\nafter::Get a full stats dashboard — by category, destination, and day. Share a travel card to Instagram, KakaoTalk, and other social platforms, level up your traveler profile, and relive the trip through your spending story.",
+    tagline: "Plan, track, and relive every trip, from budget to boarding pass home.",
+    description: "before_title::Before You Go\nbefore::AI builds your daily budget based on destination, travel style, and length of stay, so you land with a plan, not a guess.\nduring_title::While You're There\nduring::Snap any receipt in any language. WIGEX reads it in seconds, converts to your home currency at the day-of-purchase rate, and tracks spending against your budget in real time. Split bills, check exchange rates, and stay on track, all in one tap.\nafter_title::When You're Back\nafter::Get a full stats dashboard, by category, destination, and day. Share a travel card to Instagram, KakaoTalk, and other social platforms, level up your traveler profile, and relive the trip through your spending story.",
     gradient: "from-emerald-500 to-teal-400",
     media: {
       poster: "https://opengraph.githubassets.com/1/wigtn/wigex",
@@ -238,8 +238,8 @@ export const PROJECTS: Project[] = [
     name: "WIGVU",
     section: "products",
     phase: "in-progress",
-    tagline: "Learn Korean through the content you love — K-Drama, K-POP, YouTube, and more.",
-    description: "before_title::Discover\nbefore::Browse real Korean content — K-Drama clips, K-POP lyrics, news articles, and YouTube videos — curated by difficulty level and topic.\nduring_title::Learn\nduring::Every sentence is translated with context-aware AI. Key expressions, grammar patterns, and cultural nuances are automatically extracted and explained — all synced with the original content.\nafter_title::Master\nafter::Track your progress with AI-generated quizzes, vocabulary lists, and comprehension scores. Build your Korean skills one episode at a time.",
+    tagline: "Learn Korean through the content you love, K-Drama, K-POP, YouTube, and more.",
+    description: "before_title::Discover\nbefore::Browse real Korean content, K-Drama clips, K-POP lyrics, news articles, and YouTube videos, curated by difficulty level and topic.\nduring_title::Learn\nduring::Every sentence is translated with context-aware AI. Key expressions, grammar patterns, and cultural nuances are automatically extracted and explained, all synced with the original content.\nafter_title::Master\nafter::Track your progress with AI-generated quizzes, vocabulary lists, and comprehension scores. Build your Korean skills one episode at a time.",
     gradient: "from-pink-500 to-rose-400",
     media: {
       poster: "https://opengraph.githubassets.com/1/wigtn/wigvu",
@@ -263,15 +263,15 @@ export const PROJECTS: Project[] = [
     sectionBadge: "Paper",
     phase: "completed",
     featured: true,
-    publication: "ACL 2026 — System Demonstrations (accepted)",
+    publication: "ACL 2026, System Demonstrations (accepted)",
     homepageBadge: "ACL 2026 · ACCEPTED",
-    homepageMetrics: ["148 production calls", "0 echo-loop incidents", "557ms avg latency"],
-    tagline: "Real-time voice translation for phone calls — call anyone, in any language, with zero echo-loop incidents across 148 production calls.",
-    description: "WIGVO runs two parallel AI interpreter sessions — one for each speaker — to deliver natural, bidirectional voice translation over standard phone lines. A software-only echo-cancellation pipeline eliminates feedback loops without dedicated hardware, achieving 557ms average latency and zero echo incidents across 148 real-world calls. The recipient answers a normal phone call; no app download required.",
+    homepageMetrics: ["155 calls evaluated", "0 / 147 completed calls with echo loops", "555ms caller→callee P50"],
+    tagline: "Real-time voice translation for phone calls, evaluated across 155 Korean-English PSTN calls.",
+    description: "WIGVO runs two parallel AI interpreter sessions, one for each speaker, to deliver bidirectional voice translation over standard phone lines. Its software echo gate recorded zero echo-induced translation loops across 147 completed calls in a 155-call field evaluation. Median caller-to-callee latency was 555ms; the reverse direction was ASR-bound at 2,684ms.",
     gradient: "from-violet to-purple-400",
     media: {
       poster: "/images/projects/wigvo_logo.png",
-      heroVideo: "https://youtu.be/_ixVEnHJxjk?si=P257fqme3B0zTzNu",
+      heroVideo: "https://www.youtube.com/watch?v=jK1CDOQExLw",
       heroVideoType: "youtube",
     },
     timeline: {
@@ -279,14 +279,14 @@ export const PROJECTS: Project[] = [
     },
     links: {
       github: "https://github.com/wigtn/wigvo-v2",
-      video: "https://youtu.be/_ixVEnHJxjk?si=P257fqme3B0zTzNu",
+      video: "https://www.youtube.com/watch?v=jK1CDOQExLw",
     },
     detail: {
       translationKey: "wigvo",
       stats: [
-        { value: "557ms", labelKey: "avgLatency" },
-        { value: "169", labelKey: "callsMade" },
-        { value: "$0.27", labelKey: "perMinute" },
+        { value: "555ms", labelKey: "avgLatency" },
+        { value: "155", labelKey: "callsMade" },
+        { value: "$0.28", labelKey: "perMinute" },
         { value: "0", labelKey: "echoLoops" },
       ],
       features: [
@@ -317,11 +317,11 @@ export const PROJECTS: Project[] = [
     sectionBadge: "Research",
     phase: "completed",
     featured: true,
-    publication: "EMNLP 2026 — Industry Track (in preparation)",
+    publication: "EMNLP 2026, Industry Track (in preparation)",
     homepageBadge: "EMNLP 2026 · IN PREP",
     homepageMetrics: ["#1 on KoGovDoc-Bench", "15× smaller, teacher-level accuracy", "Single-GPU"],
-    tagline: "A 2B-parameter document parser that reads Korean government forms as accurately as a model 15x its size — ranked #1 on KoGovDoc.",
-    description: "WigtnOCR distills a 30B teacher model into a 2B student through pseudo-label distillation and LoRA fine-tuning, achieving teacher-level accuracy on OmniDocBench while running on a single consumer GPU. On the KoGovDoc Korean government document retrieval benchmark — a dataset of scanned civil forms, tax filings, and public notices — it ranks #1 overall, outperforming models with 10-30x more parameters.",
+    tagline: "A 2B-parameter document parser that reads Korean government forms as accurately as a model 15x its size, ranked #1 on KoGovDoc.",
+    description: "WigtnOCR distills a 30B teacher model into a 2B student through pseudo-label distillation and LoRA fine-tuning, achieving teacher-level accuracy on OmniDocBench while running on a single consumer GPU. On the KoGovDoc Korean government document retrieval benchmark, a dataset of scanned civil forms, tax filings, and public notices; it ranks #1 overall, outperforming models with 10-30x more parameters.",
     gradient: "from-yellow-500 to-amber-400",
     media: {
       poster: "/images/projects/wigtnocr-huggingface.png",
@@ -382,7 +382,7 @@ export const PROJECTS: Project[] = [
     sectionBadge: "Tool",
     phase: "in-progress",
     tagline: "Claude Code plugin ecosystem.",
-    description: "Unified Claude Code plugin — from idea to deploy, zero friction. 12 agents, 3 skills, and 17 design styles working together with team-based parallel execution for 3-5x speedup.",
+    description: "Unified Claude Code plugin, from idea to deploy, zero friction. 12 agents, 3 skills, and 17 design styles working together with team-based parallel execution for 3-5x speedup.",
     gradient: "from-gray-700 to-gray-900",
     media: {
       poster: "https://opengraph.githubassets.com/1/wigtn/wigtn-plugins-with-claude-code",
@@ -403,8 +403,8 @@ export const PROJECTS: Project[] = [
     sectionBadge: "Grand Prize",
     phase: "completed",
     homepageMetrics: ["Built in 3.5 hours · 3 engineers", "ByteDance · Build with TRAE Seoul"],
-    tagline: "Drop a topic, watch AI agents debate it live — a PM orchestrates experts who spawn and retire.",
-    description: "WIGENT is a multi-agent debate arena where a PM agent orchestrates auto-spawned domain experts in a Slack-style chat UI. Agents argue, challenge each other, retire when outmatched, and summon new specialists on the fly. Once consensus is reached, the system auto-generates a polished landing page from the debate conclusions. Grand Prize winner at Build with TRAE Seoul (ByteDance) — built by 3 engineers in 3.5 hours.",
+    tagline: "Drop a topic, watch AI agents debate it live, a PM orchestrates experts who spawn and retire.",
+    description: "WIGENT is a multi-agent debate arena where a PM agent orchestrates auto-spawned domain experts in a Slack-style chat UI. Agents argue, challenge each other, retire when outmatched, and summon new specialists on the fly. Once consensus is reached, the system auto-generates a polished landing page from the debate conclusions. Grand Prize winner at Build with TRAE Seoul (ByteDance), built by 3 engineers in 3.5 hours.",
     gradient: "from-yellow-400 to-amber-500",
     media: {
       poster: "/images/projects/trae_hackthon_seoul.png",
@@ -483,21 +483,21 @@ export const PROJECTS: Project[] = [
     phase: "completed",
     featured: true,
     homepageBadge: "SNOWFLAKE 2026 · TECH TRACK · 2ND PLACE",
-    homepageMetrics: ["11 Snowflake Cortex functions", "5 AI experts × 4 datasets", "Tech Track · 2nd Place"],
-    tagline: "Multi-agent debate platform on Snowflake Cortex — pick a goal, agents argue tradeoffs, you decide.",
-    description: "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform. The user picks one of five preset goals (or types their own); a GPT-4o orchestrator summons five purpose-tuned experts who debate in a Slack-style chat while Cortex Analyst executes text-to-SQL across four Semantic Models — SPH (foot traffic + card sales), RichGo (real estate), NextTrade (markets), and AJD (telecom). ANOMALY_DETECTION auto-injects \"watch this district\" badges, FORECAST projects six months out, and the conversation converges into a ranked Top 3 with a concrete action checklist. Tech Track 2nd place at Snowflake AI & Data Hackathon Korea 2026.",
+    homepageMetrics: ["7 verified Cortex capabilities", "5 AI experts × 3 active datasets", "Tech Track · 2nd Place"],
+    tagline: "Multi-agent debate platform on Snowflake Cortex, pick a goal, agents argue tradeoffs, you decide.",
+    description: "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform. Five purpose-tuned experts debate evidence from three actively selected datasets, SPH, RichGo, and AJD, before producing a ranked Top 3 and an action checklist. A production-path audit verified seven Cortex capabilities; the originally presented NextTrade and Cortex Agent paths were connected but not actively used. Tech Track 2nd place at Snowflake AI & Data Hackathon Korea 2026.",
     gradient: "from-sky-500 to-blue-600",
     media: {
       // Stage banner used as the homepage Awards-card poster; the
       // project detail page swaps to the embedded YouTube iframe.
       poster: "/images/projects/wigtn-flake-stage.jpg",
-      heroVideo: "https://youtu.be/1YzSp3SdzTk?si=_wQ17FZ_RWQVWq5l",
+      heroVideo: "https://www.youtube.com/watch?v=1YzSp3SdzTk",
       heroVideoType: "youtube",
     },
     timeline: {},
     achievements: [
       {
-        event: "Snowflake AI & Data Hackathon Korea 2026 — Tech Track",
+        event: "Snowflake AI & Data Hackathon Korea 2026, Tech Track",
         organizer: "Snowflake",
         result: "second-place",
         note: "Tech Track 2nd Place",
@@ -510,22 +510,22 @@ export const PROJECTS: Project[] = [
     detail: {
       translationKey: "wigtnflake",
       stats: [
-        { value: "11", labelKey: "snowflakeServices" },
+        { value: "7", labelKey: "snowflakeServices" },
         { value: "5", labelKey: "aiExperts" },
         { value: "2nd", labelKey: "hackathonRank" },
-        { value: "4", labelKey: "datasetSize" },
+        { value: "3", labelKey: "datasetSize" },
       ],
       features: [
         { icon: Brain, title: "Purpose-First UX", descriptionKey: "wigtnflake_feature_purpose" },
-        { icon: Database, title: "Cortex Analyst × 4", descriptionKey: "wigtnflake_feature_cortex" },
+        { icon: Database, title: "Cortex Analyst × 3 active models", descriptionKey: "wigtnflake_feature_cortex" },
         { icon: Zap, title: "ANOMALY_DETECTION", descriptionKey: "wigtnflake_feature_anomaly" },
         { icon: Shield, title: "Hybrid AI Strategy", descriptionKey: "wigtnflake_feature_hybrid" },
       ],
       techStack: [
-        { category: "Snowflake Cortex", items: ["Cortex Agent", "Cortex Analyst × 4", "Cortex LLM (claude-4-sonnet)", "FORECAST", "ANOMALY_DETECTION", "AI_SENTIMENT", "AI_CLASSIFY", "data_to_chart", "Dynamic Tables × 2", "Python UDF × 2", "Semantic Model YAML × 4"] },
+        { category: "Snowflake Cortex", items: ["Cortex Analyst × 3 active models", "Cortex LLM (claude-4-sonnet)", "FORECAST", "ANOMALY_DETECTION", "AI_SENTIMENT", "AI_CLASSIFY", "data_to_chart"] },
         { category: "Application", items: ["Next.js 16 (App Router)", "React 19 (Compiler)", "TypeScript 5.9 (strict)", "Tailwind CSS 4", "Framer Motion 12", "Vega-Lite 6", "SSE streaming chat"] },
         { category: "AI & Data", items: ["GPT-4o (debate personas)", "OpenAI SDK 6", "snowflake-sdk 1.15", "Tavily (web search)", "MOLIT public real-estate API"] },
-        { category: "Datasets", items: ["SPH (SKT foot traffic + Shinhan card + KCB income)", "RichGo (apartment AI price index)", "NextTrade (equity orders / fills)", "AJD 아정당 (telecom + GA4 + call center)"] },
+        { category: "Datasets", items: ["SPH (SKT foot traffic + Shinhan card + KCB income)", "RichGo (apartment AI price index)", "AJD 아정당 (telecom + GA4 + call center)", "NextTrade (connected, but not actively selected in the audited path)"] },
       ],
       researchSections: WIGTN_FLAKE_SECTIONS,
     },
@@ -556,7 +556,7 @@ export const FEATURED_PROJECTS: readonly Project[] = PROJECTS.filter(
 );
 
 /**
- * Human-readable labels for each section — used by the /projects filter UI
+ * Human-readable labels for each section: used by the /projects filter UI
  * and the Featured Work meta chips.
  */
 export const SECTION_LABEL: Record<Section, string> = {

@@ -18,7 +18,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
   },
   {
     id: "technical-challenges",
-    title: "Technical Challenges — Why PSTN Is Hard",
+    title: "Technical Challenges, Why PSTN Is Hard",
     blocks: [
       {
         type: "prose",
@@ -49,7 +49,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
   },
   {
     id: "architecture",
-    title: "Architecture — Dual-Session Echo Gating",
+    title: "Architecture, Dual-Session Echo Gating",
     blocks: [
       {
         type: "prose",
@@ -68,9 +68,9 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       {
         type: "list",
         items: [
-          "<strong>Layer 1 — Transport:</strong> Twilio Media Streams (PSTN ↔ G.711 μ-law 8kHz) + Browser WebSocket (PCM 16kHz)",
-          "<strong>Layer 2 — Pipeline:</strong> AudioRouter delegates events to V2V / T2V / Agent mode via Strategy pattern",
-          "<strong>Layer 3 — Sessions:</strong> Session A (browser→phone) + Session B (phone→browser) maintain independent system prompts and 6-turn sliding context",
+          "<strong>Layer 1: Transport:</strong> Twilio Media Streams (PSTN ↔ G.711 μ-law 8kHz) + Browser WebSocket (PCM 16kHz)",
+          "<strong>Layer 2: Pipeline:</strong> AudioRouter delegates events to V2V / T2V / Agent mode via Strategy pattern",
+          "<strong>Layer 3: Sessions:</strong> Session A (browser→phone) + Session B (phone→browser) maintain independent system prompts and 6-turn sliding context",
         ],
       },
       {
@@ -100,7 +100,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       },
       {
         type: "prose",
-        text: '<strong>The Critical Breakthrough — Drop vs Replace:</strong> "Dropping" audio causes Server VAD to interpret it as a stream interruption and freeze. "Replacing" with μ-law silence (0xFF) maintains stream continuity while VAD correctly recognizes it as silence. This "Drop vs Replace" paradigm is the core principle applied consistently across both Echo Gate and VAD.',
+        text: '<strong>The Critical Breakthrough, Drop vs Replace:</strong> "Dropping" audio causes Server VAD to interpret it as a stream interruption and freeze. "Replacing" with μ-law silence (0xFF) maintains stream continuity while VAD correctly recognizes it as silence. This "Drop vs Replace" paradigm is the core principle applied consistently across both Echo Gate and VAD.',
       },
       {
         type: "list",
@@ -112,17 +112,17 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       },
       {
         type: "prose",
-        text: "<strong>7-Stage Evolution:</strong> (1) Audio Fingerprint via Pearson correlation — failed completely due to G.711 μ-law nonlinear quantization destroying correlation. (2) Fixed 2.5s Echo Gate — solved echo but disrupted conversation flow. (3) Dynamic Cooldown — proportional to TTS length, but AGC noise spike after gate release. (4) <strong>Final: Silence Injection + RMS + Dynamic Settling + Silero</strong>.",
+        text: "<strong>7-Stage Evolution:</strong> (1) Audio Fingerprint via Pearson correlation, failed completely due to G.711 μ-law nonlinear quantization destroying correlation. (2) Fixed 2.5s Echo Gate, solved echo but disrupted conversation flow. (3) Dynamic Cooldown, proportional to TTS length, but AGC noise spike after gate release. (4) <strong>Final: Silence Injection + RMS + Dynamic Settling + Silero</strong>.",
       },
       {
         type: "prose",
-        text: "<strong>Result:</strong> Echo loop rate reduced from <strong>8/10 initial calls → 0/148 production calls</strong>.",
+        text: "<strong>Result:</strong> Echo loop rate reduced from <strong>8/10 initial calls → 0/147 completed evaluation calls</strong>.",
       },
     ],
   },
   {
     id: "pstn-vad",
-    title: "PSTN VAD — Independent Architecture",
+    title: "PSTN VAD, Independent Architecture",
     subtitle: "STAGE 2",
     blocks: [
       {
@@ -132,8 +132,8 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       {
         type: "list",
         items: [
-          "<strong>Stage 1 — RMS Energy Gate:</strong> Echo window RMS ≥ 500, Settling RMS ≥ 200, Normal RMS ≥ 150",
-          "<strong>Stage 2 — Silero VAD:</strong> Neural network judgment on frames passing the energy gate. 8kHz → 16kHz zero-order hold upsampling",
+          "<strong>Stage 1: RMS Energy Gate:</strong> Echo window RMS ≥ 500, Settling RMS ≥ 200, Normal RMS ≥ 150",
+          "<strong>Stage 2: Silero VAD:</strong> Neural network judgment on frames passing the energy gate. 8kHz → 16kHz zero-order hold upsampling",
           "Asymmetric hysteresis: onset 160ms (5 frames) / offset 800ms (25 frames)",
           "Minimum utterance 250ms, minimum peak RMS 300 to reject weak signals as noise",
         ],
@@ -169,7 +169,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
   },
   {
     id: "strategy-pattern",
-    title: "Strategy Pattern — 3 Communication Pipelines",
+    title: "Strategy Pattern, 3 Communication Pipelines",
     blocks: [
       {
         type: "prose",
@@ -189,7 +189,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
   },
   {
     id: "key-metrics",
-    title: "Key Metrics — 148 Production Calls",
+    title: "Key Metrics, 155 Evaluated Calls",
     blocks: [
       {
         type: "prose",
@@ -199,7 +199,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
         type: "list",
         items: [
           "Session A P50: <strong>555ms</strong> / P95: 1,169ms",
-          "Session B P50: <strong>2,868ms</strong> (correlated with utterance length, Pearson r=0.400)",
+          "Session B P50: <strong>2,684ms</strong> (the phone-originating path is ASR-bound)",
           "First message P50: 1,215ms (cold start)",
         ],
       },
@@ -210,7 +210,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       {
         type: "list",
         items: [
-          "Echo loops: <strong>0 / 148 calls</strong> (prototype 80% → 0%)",
+          "Echo loops: <strong>0 / 147 completed calls</strong> (prototype 80% → 0%)",
           "Echo gate activations per call: avg 7.0",
           "VAD false positives per call: avg 1.8",
           "Hallucination blocks per call: avg 0.7",
@@ -224,9 +224,9 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       {
         type: "list",
         items: [
-          "V2V: $0.30/min · T2V: $0.29/min",
-          "After architecture optimization: <strong>$0.18/min (33% reduction)</strong>",
-          "Mode distribution: T2V 116 calls (68.6%) · V2V 52 calls (30.8%) · Agent 1 call (0.6%)",
+          "Average evaluated cost: <strong>$0.28/min</strong>",
+          "Cost reflects the provider stack and pricing period used in the field evaluation",
+          "Evaluation scope: 155 calls, 148 instrumented, 147 completed",
         ],
       },
     ],
@@ -262,7 +262,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
         caption: "Echo Gate Design Comparison",
         headers: ["Method", "Echo Loop", "Conversation Delay", "Adopted"],
         rows: [
-          { cells: ["Audio Fingerprint (Pearson)", "Unresolved", "—", ""] },
+          { cells: ["Audio Fingerprint (Pearson)", "Unresolved", "-", ""] },
           { cells: ["Fixed Echo Gate (2.5s)", "Resolved", "Disrupted", ""] },
           { cells: ["Dynamic Cooldown", "Resolved", "Improved", ""] },
           { cells: ["Silence Injection + RMS + Dynamic Settling + Silero", "Resolved", "Minimized", "O"], highlight: true },
@@ -270,7 +270,7 @@ export const WIGVO_SECTIONS: ResearchSection[] = [
       },
       {
         type: "prose",
-        text: "<strong>Finding:</strong> In PSTN environments, signal correlation-based echo detection does not work. Only direct control of echo windows with silence frame replacement is stable. The Realtime API's generation characteristics are suitable for STT but not for translation — separating translation to a <code>temperature=0</code> Chat API improves both accuracy and stability.",
+        text: "<strong>Finding:</strong> In PSTN environments, signal correlation-based echo detection does not work. Only direct control of echo windows with silence frame replacement is stable. The Realtime API's generation characteristics are suitable for STT but not for translation, separating translation to a <code>temperature=0</code> Chat API improves both accuracy and stability.",
       },
     ],
   },

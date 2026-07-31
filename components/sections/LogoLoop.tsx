@@ -12,7 +12,7 @@ import {
 } from "react";
 
 /**
- * LogoLoop — reactbits-inspired infinite horizontal scroller.
+ * LogoLoop: reactbits-inspired infinite horizontal scroller.
  *
  * Renders a continuous, seamless horizontal scroll of logos / images. Uses
  * requestAnimationFrame against a measured "set width" so the scroll wraps
@@ -21,8 +21,8 @@ import {
  * cycles for content the user isn't looking at).
  *
  * Two ways to feed items:
- *   • Image variant — `{ src, alt?, href? }[]`
- *   • Node variant  — `{ node, title?, href? }[]`
+ *   • Image variant: `{ src, alt?, href? }[]`
+ *   • Node variant: `{ node, title?, href? }[]`
  * Pass either via the `logos` prop. Internally every item is rendered at
  * `logoHeight` px tall; widths fall out from the source's natural ratio.
  */
@@ -115,7 +115,7 @@ export function LogoLoop({
     };
   }, [logos, logoHeight, gap]);
 
-  // Pause when off-screen — IntersectionObserver flips the state and the
+  // Pause when off-screen: IntersectionObserver flips the state and the
   // RAF tick early-returns without advancing the offset. Keeps the device
   // GPU idle for the rest of the page.
   useEffect(() => {
@@ -131,7 +131,7 @@ export function LogoLoop({
     return () => io.disconnect();
   }, []);
 
-  // Animation loop — rAF translates the track by speed*dt every frame and
+  // Animation loop: rAF translates the track by speed*dt every frame and
   // wraps the offset when it crosses one full set.
   useEffect(() => {
     if (setWidth === 0) return;
@@ -177,7 +177,7 @@ export function LogoLoop({
     return {
       maskImage: mask,
       WebkitMaskImage: mask,
-      // fadeOutColor is referenced for non-mask fallback environments — kept
+      // fadeOutColor is referenced for non-mask fallback environments: kept
       // as a CSS custom prop so consumers can use it in surrounding chrome.
       ["--logo-loop-fade-color" as string]: fadeOutColor,
     };

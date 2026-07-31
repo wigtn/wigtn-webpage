@@ -8,11 +8,11 @@ import { useBudouX } from "@/lib/hooks/useBudouX";
 import { GitHubIcon, LinkedInIcon } from "@/components/ui/icons";
 
 /**
- * Team — single-column vertical roster. Every member uses the same
+ * Team: single-column vertical roster. Every member uses the same
  * compact row shape (small thumbnail + name/role + bio + chips + links)
  * so no one card visually outweighs another. The previous tilt /
  * spotlight effects + featured-card-spans-two-columns layout have been
- * dropped intentionally — the user wants a uniform, project-list-style
+ * dropped intentionally: the user wants a uniform, project-list-style
  * read.
  */
 
@@ -79,7 +79,7 @@ function TeamCard({ member, bio }: TeamCardProps) {
           </span>
         </div>
 
-        {/* Current role — present-tense day job at the parent company.
+        {/* Current role: present-tense day job at the parent company.
             Different dimension from the violet WIGTN-internal `role`
             label above, so styled distinctly: dark foreground for clear
             legibility, normal case, normal weight. Case + weight shift
@@ -91,7 +91,7 @@ function TeamCard({ member, bio }: TeamCardProps) {
           </p>
         )}
 
-        {/* Credential — historical background ("Ex-…"), small gray.
+        {/* Credential: historical background ("Ex-…"), small gray.
             Currently only set on the founder. */}
         {member.credential && (
           <p className="mt-1 text-[11.5px] text-gray-400 leading-snug">
@@ -104,7 +104,7 @@ function TeamCard({ member, bio }: TeamCardProps) {
           {processText(bio)}
         </p>
 
-        {/* Social links — expertise chips removed entirely. */}
+        {/* Social links: expertise chips removed entirely. */}
         {member.links && (member.links.github || member.links.linkedin) && (
           <div className="mt-3 flex gap-1">
             {member.links.github && (
@@ -147,7 +147,7 @@ export function Team() {
       {/* Background blobs moved to page-level <BackgroundDecor />. */}
 
       <div className="relative max-w-6xl mx-auto px-6 w-full">
-        {/* Header — eyebrow + one short header line, left-aligned with the
+        {/* Header: eyebrow + one short header line, left-aligned with the
             same gutter as What we do and Categories. */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -165,7 +165,7 @@ export function Team() {
           </h2>
         </motion.div>
 
-        {/* 1-column vertical roster — every member same size. Hairline
+        {/* 1-column vertical roster: every member same size. Hairline
             dividers between rows keep the read tight. */}
         <div className="divide-y divide-black/[0.06] border-y border-black/[0.06]">
           {TEAM_MEMBERS.map((member, index) => (

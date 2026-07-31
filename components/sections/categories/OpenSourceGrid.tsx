@@ -10,7 +10,7 @@ interface OpenSourceGridProps {
 
 function metaFor(project: Project): string | null {
   // Prefer a recognisable `npm:` / `github.com/...` line over an
-  // empty meta slot — keeps the third info line consistent across cards.
+  // empty meta slot: keeps the third info line consistent across cards.
   if (project.links.live?.startsWith("https://npmjs.com/package/")) {
     const pkg = project.links.live.replace("https://npmjs.com/package/", "");
     return `npm · ${pkg}`;
@@ -59,12 +59,12 @@ export function OpenSourceGrid({ projects }: OpenSourceGridProps) {
           meta={metaFor(project)}
           badge={badgeFor(project)}
           links={linksFor(project)}
-          // Open-source cards reuse the WIGTN brand mark — both repos
+          // Open-source cards reuse the WIGTN brand mark: both repos
           // (WIGSS, WIGTN Coding) live in the wigtn org, so the brand
           // is the consistent identifier. `object-contain` so the logo's
           // aspect doesn't get cropped at small card widths. Source is
           // the canonical 1600×800 wordmark PNG (transparent bg, navy
-          // letters + violet dot) — same asset as the nav/footer logo.
+          // letters + violet dot): same asset as the nav/footer logo.
           visualClassName="bg-white"
           visual={
             <Image

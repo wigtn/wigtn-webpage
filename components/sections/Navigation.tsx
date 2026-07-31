@@ -102,7 +102,7 @@ export function Navigation() {
 
     if (item.href) {
       // Hash-only links (e.g. "/#awards") are handled with a plain anchor
-      // so the browser fires `hashchange` reliably — Next.js Link's
+      // so the browser fires `hashchange` reliably: Next.js Link's
       // same-path-different-hash behaviour can swallow that event in
       // App Router. Off-home navigation (e.g. starting on /projects)
       // still works because the browser does a normal navigation when
@@ -160,10 +160,10 @@ export function Navigation() {
             <Link
               href="/"
               onClick={handleLogoClick}
-              aria-label="WIGTN — go to top"
+              aria-label="WIGTN, go to top"
               className="inline-flex items-center transition-opacity hover:opacity-80"
             >
-              {/* Source asset is 1600×800 (2:1) — render at h-[34px]
+              {/* Source asset is 1600×800 (2:1): render at h-[34px]
                   with w-auto so the wordmark scales proportionally.
                   34px is +21% over the previous h-7 (28px); h-9 was too
                   heavy and h-8 too timid for what we wanted. */}
@@ -202,7 +202,7 @@ export function Navigation() {
         <div
           className="fixed inset-0 z-30 bg-white pt-20 md:hidden shadow-[0_24px_60px_-30px_rgba(0,0,0,0.25)]"
         >
-          {/* Thin violet seam at the top of the panel — separates the menu
+          {/* Thin violet seam at the top of the panel: separates the menu
               from the header so the white-on-white doesn't blur. */}
           <div
             aria-hidden

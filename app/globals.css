@@ -2,12 +2,108 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ───────────────────────────────────────────────────────────────────────────
+ * Theme tokens: light (default) and dark. Every value is an unwrapped RGB
+ * triplet so Tailwind can compose it with an alpha suffix (see the `token()`
+ * helper in tailwind.config.ts). The `.dark` class is set on <html> by the
+ * pre-paint script in app/layout.tsx and toggled by components/ThemeToggle.
+ * ─────────────────────────────────────────────────────────────────────────── */
 @layer base {
-  * {
-    border-color: #E5E7EB;
+  :root {
+    /* surfaces: warm off-white paper */
+    --paper: 248 248 245;        /* #F8F8F5 page base */
+    --paper-raised: 255 255 255; /* #FFFFFF cards lifted off the page */
+    --paper-sunken: 241 240 235; /* #F1F0EB footer / recessed bands */
+    --paper-tint: 237 236 230;   /* #EDECE6 avatar wells, hover fills */
+    --rule: 214 214 209;         /* #D6D6D1 solid hairline */
+    --line: 21 21 21;            /* hairlines & hover washes, used with alpha */
+
+    /* text: 1 strongest to 5 faintest */
+    --ink: 21 21 21;             /* #151515 */
+    --ink-2: 63 63 58;           /* #3F3F3A */
+    --ink-3: 94 92 85;           /* #5E5C55 */
+    --ink-4: 104 104 98;         /* #686862, 5.27:1 on paper */
+    --ink-5: 112 112 106;        /* #70706A, 4.68:1 on paper */
+
+    /* brand: Pantone 265 C family */
+    --brand: 117 59 189;         /* #753BBD */
+    --brand-light: 157 123 224;  /* #9D7BE0 */
+    --brand-dark: 90 46 151;     /* #5A2E97, hover fill for brand buttons */
+    --accent: 90 46 151;         /* #5A2E97, legible purple on paper */
+
+    --scrollbar-track: #F1F0EB;
+    --scrollbar-thumb: #D0CFC8;
+    --scrollbar-thumb-hover: #A8A6A0;
+
+    /* ambient page glow behind the content (BackdropDecor) */
+    --backdrop-glow: radial-gradient(
+      55% 45% at 50% -5%,
+      rgba(117, 59, 189, 0.08),
+      transparent 70%
+    );
+
+    color-scheme: light;
   }
 
-  /* Scroll offset for fixed header — ensures section title is visible when snapped */
+  .dark {
+    /* surfaces: near-black with a faint warm cast, mirroring the paper ramp */
+    --paper: 14 14 16;           /* #0E0E10 */
+    --paper-raised: 24 24 27;    /* #18181B */
+    --paper-sunken: 18 18 20;    /* #121214 */
+    --paper-tint: 32 32 36;      /* #202024 */
+    --rule: 56 56 62;            /* #38383E */
+    --line: 255 255 255;
+
+    --ink: 240 239 234;          /* #F0EFEA */
+    --ink-2: 202 200 194;        /* #CAC8C2 */
+    --ink-3: 165 163 156;        /* #A5A39C */
+    --ink-4: 132 130 124;        /* #84827C */
+    --ink-5: 126 124 119;        /* #7E7C77, 4.63:1 on ink */
+
+    --brand: 155 110 240;        /* #9B6EF0, lifted so purple survives on ink */
+    --brand-light: 196 174 252;  /* #C4AEFC */
+    --brand-dark: 122 79 208;    /* #7A4FD0, still reads as "one step down" */
+    --accent: 197 172 250;       /* #C5ACFA */
+
+    --scrollbar-track: #121214;
+    --scrollbar-thumb: #33333A;
+    --scrollbar-thumb-hover: #4C4C55;
+
+    --backdrop-glow: radial-gradient(
+      55% 45% at 50% -5%,
+      rgba(155, 110, 240, 0.16),
+      transparent 70%
+    );
+
+    color-scheme: dark;
+  }
+
+  /* Theme swap should feel like a dissolve, not a hard cut. Scoped to the
+   * elements that actually carry theme color so it never fights a hover
+   * transition or a framer-motion transform. */
+  html.theme-transition,
+  html.theme-transition * {
+    transition:
+      background-color 260ms ease,
+      border-color 260ms ease,
+      color 260ms ease,
+      fill 260ms ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.theme-transition,
+    html.theme-transition * {
+      transition: none;
+    }
+  }
+}
+
+@layer base {
+  * {
+    border-color: rgb(var(--line) / 0.1);
+  }
+
+  /* Scroll offset for fixed header: keeps the section title visible when snapped */
   section[id] {
     scroll-margin-top: 64px;
   }
@@ -18,8 +114,8 @@
    * back to a snap point. */
 
   body {
-    background-color: #FAFAFA;
-    color: #0A0A0A;
+    background-color: rgb(var(--paper));
+    color: rgb(var(--ink));
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -31,16 +127,16 @@
   }
 
   ::-webkit-scrollbar-track {
-    background-color: #F5F5F5;
+    background-color: var(--scrollbar-track);
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: #D1D5DB;
+    background-color: var(--scrollbar-thumb);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background-color: #9CA3AF;
+    background-color: var(--scrollbar-thumb-hover);
   }
 }
 
@@ -71,9 +167,17 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Journal serif for the News "Dispatch Ledger": a Palatino-class face
+   * paired with JetBrains Mono metadata. Latin renders serif; Hangul falls
+   * back per-glyph to Pretendard, so mixed KR/EN titles still read cleanly. */
+  .font-journal {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+      "Noto Serif KR", Georgia, "Pretendard Variable", serif;
+  }
 }
 
-/* Carousel infinite scroll — shifts exactly one set width for seamless loop */
+/* Carousel infinite scroll: shifts exactly one set width for a seamless loop */
 @keyframes carousel {
   0% {
     transform: translateX(0);
@@ -92,7 +196,7 @@
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
- * Legacy landing animations (components/sections/*) — retained but no longer
+ * Legacy landing animations (components/sections/*): retained but no longer
  * routed. Kept only because Crew/About still reference them; safe to drop if
  * those legacy sections are removed. The research-led site does not use these.
  * ─────────────────────────────────────────────────────────────────────────── */
@@ -106,7 +210,7 @@
   animation: hero-tagline-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
 }
 
-/* Stat sheen — single-pass diagonal sweep across a number tile. */
+/* Stat sheen: single-pass diagonal sweep across a number tile. */
 @keyframes stat-sheen {
   0%   { transform: translateX(-130%); opacity: 0; }
   20%  { opacity: 1; }
@@ -117,7 +221,7 @@
   animation: stat-sheen 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Tagline shimmer — sequential left-to-right shine across two tagline lines. */
+/* Tagline shimmer: sequential left-to-right shine across two tagline lines. */
 @keyframes tagline-shimmer {
   0%   { background-position: 100% 50%; }
   45%  { background-position: 0% 50%; }
@@ -136,7 +240,7 @@
   animation-fill-mode: backwards;
 }
 
-/* Line 1 — gray base, light violet sweep band. */
+/* Line 1: gray base, light violet sweep band. */
 .tagline-shimmer {
   background-image: linear-gradient(
     100deg,
@@ -150,7 +254,7 @@
   );
 }
 
-/* Line 2 — deep violet-slate base + brighter violet sweep, delayed 4 s. */
+/* Line 2: deep violet-slate base + brighter violet sweep, delayed 4 s. */
 .tagline-shimmer-strong {
   background-image: linear-gradient(
     100deg,

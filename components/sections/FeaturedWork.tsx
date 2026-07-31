@@ -45,7 +45,7 @@ function metaFor(project: Project): string | null {
 }
 
 /**
- * Featured Work — the homepage's single curated showcase that replaces the
+ * Featured Work: the homepage's single curated showcase that replaces the
  * old Open Source and Hackathon sections. Shows the projects flagged with
  * `featured: true` as editorial rows, with a "See all" link that routes to
  * the full /projects index page.

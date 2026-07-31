@@ -12,7 +12,7 @@ import { ProductsGrid } from "./categories/ProductsGrid";
  *
  * Four categories. The text-based inline nav (no pills, no boxes) sits
  * directly under the section header. Active tab is violet semibold;
- * inactive tabs are neutral gray. Tab counts are deliberately omitted —
+ * inactive tabs are neutral gray. Tab counts are deliberately omitted:
  * "Research · 2" reads as "only 2 papers" instead of "2 strong papers",
  * and the cards themselves carry the volume signal. */
 
@@ -75,7 +75,7 @@ export function Categories() {
       {/* Background blobs moved to page-level <BackgroundDecor />. */}
 
       <div className="relative max-w-6xl mx-auto px-6 w-full">
-        {/* Header — eyebrow + a single short declarative line. No
+        {/* Header: eyebrow + a single short declarative line. No
             "pick a category" command verb; the cards do the work. */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -133,7 +133,7 @@ export function Categories() {
           })}
         </div>
 
-        {/* Tabpanel — single panel, content swaps based on activeTab. */}
+        {/* Tabpanel: single panel, content swaps based on activeTab. */}
         <div
           id="categories-tab-panel"
           role="tabpanel"

@@ -1,5 +1,5 @@
 /**
- * BackgroundDecor — page-level violet ambient gradient.
+ * BackgroundDecor: page-level violet ambient gradient.
  *
  * Replaces the previous per-section blobs that produced visible density
  * jumps at section boundaries. A single absolutely-positioned layer spans
@@ -19,7 +19,7 @@ export function BackgroundDecor() {
       aria-hidden
       className="absolute inset-0 pointer-events-none overflow-hidden"
     >
-      {/* Top-left — opens the page */}
+      {/* Top-left: opens the page */}
       <div className="absolute top-[2%] -left-32 w-[420px] h-[420px] md:w-[520px] md:h-[520px] rounded-full bg-violet/[0.10] blur-3xl" />
 
       {/* Mid-upper right (~Hero/WhatWeDo seam) */}
@@ -31,7 +31,7 @@ export function BackgroundDecor() {
       {/* Mid-lower right (~Categories/Team seam) */}
       <div className="absolute top-[64%] -right-24 w-[400px] h-[400px] md:w-[500px] md:h-[500px] rounded-full bg-violet/[0.08] blur-3xl" />
 
-      {/* Bottom-left — closes the page */}
+      {/* Bottom-left: closes the page */}
       <div className="absolute bottom-[2%] -left-32 w-[420px] h-[420px] md:w-[500px] md:h-[500px] rounded-full bg-violet/[0.09] blur-3xl" />
     </div>
   );

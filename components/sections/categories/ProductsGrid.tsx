@@ -15,7 +15,7 @@ const PHASE_BADGE: Record<Phase, { label: string; tone: BadgeTone }> = {
   archived: { label: "Archived", tone: "gray" },
 };
 
-/* Per-phase gradient backgrounds — the badge tone telegraphs launch
+/* Per-phase gradient backgrounds: the badge tone telegraphs launch
  * status, the gradient reinforces it. Saturation kept low. */
 const PHASE_GRADIENT: Record<Phase, string> = {
   completed: "bg-gradient-to-br from-emerald-50 to-emerald-100",
@@ -32,7 +32,7 @@ const PHASE_ICON_TONE: Record<Phase, string> = {
 };
 
 function linksFor(project: Project): CategoryCardLink[] {
-  // Products intentionally drop the GitHub link — these are our shipped
+  // Products intentionally drop the GitHub link: these are our shipped
   // products, so source visibility isn't appropriate.
   const out: CategoryCardLink[] = [];
   if (project.links.live) out.push({ kind: "live", href: project.links.live });

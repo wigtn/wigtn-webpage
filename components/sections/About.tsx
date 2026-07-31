@@ -73,7 +73,7 @@ export function About() {
         variants={containerVariants}
         className="relative max-w-5xl mx-auto px-7 md:px-5 w-full text-left md:text-center"
       >
-        {/* Editorial pull-quote — load-bearing positioning line promoted from
+        {/* Editorial pull-quote: load-bearing positioning line promoted from
             the footer. Sits above the eyebrow as the section's first read so
             the team's stance lands before the explanatory copy. */}
         <motion.blockquote
@@ -83,7 +83,7 @@ export function About() {
           &ldquo;{t.hero.tagline}&rdquo;
         </motion.blockquote>
 
-        {/* Eyebrow — left-aligned on mobile, centred on desktop */}
+        {/* Eyebrow: left-aligned on mobile, centred on desktop */}
         <motion.div
           variants={itemVariants}
           className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-4 md:mb-6 md:justify-center"
@@ -93,7 +93,7 @@ export function About() {
           <span className="hidden md:inline-block w-6 h-px bg-violet/40" />
         </motion.div>
 
-        {/* Headline — left on mobile, centred on desktop */}
+        {/* Headline: left on mobile, centred on desktop */}
         <motion.h2
           variants={itemVariants}
           className="text-balance text-[22px] sm:text-[28px] md:text-[36px] lg:text-[42px] text-foreground font-semibold tracking-tight leading-[1.25] md:leading-[1.2] md:mx-auto md:max-w-4xl"
@@ -101,7 +101,7 @@ export function About() {
           {t.about.heading}
         </motion.h2>
 
-        {/* Paragraphs — left on mobile, centred on desktop */}
+        {/* Paragraphs: left on mobile, centred on desktop */}
         <div className="mt-5 md:mt-8 md:max-w-[72ch] md:mx-auto space-y-4 md:space-y-5">
           {t.about.paragraphs.map((paragraph, index) => (
             <motion.p
@@ -114,7 +114,7 @@ export function About() {
           ))}
         </div>
 
-        {/* ──────── BY THE NUMBERS — emphasised stat panel ────────
+        {/* ──────── BY THE NUMBERS: emphasised stat panel ────────
             Tinted gradient panel + violet ring so the numbers feel like a
             distinct block. Heading is two-tier (eyebrow + big label) so it
             visibly outranks a normal section divider. */}
@@ -130,7 +130,7 @@ export function About() {
               className="absolute inset-0 pointer-events-none opacity-[0.45] [background-image:radial-gradient(rgba(124,58,237,0.12)_1px,transparent_1px)] [background-size:20px_20px] [mask-image:radial-gradient(ellipse_at_top_right,black,transparent_75%)]"
             />
 
-            {/* Header — centred to match the section */}
+            {/* Header: centred to match the section */}
             <div className="relative text-center mb-8 md:mb-10">
               <div className="inline-flex items-center justify-center gap-3 text-[11px] font-semibold tracking-[0.18em] text-violet uppercase mb-2.5">
                 <span className="w-6 h-px bg-violet/40" />
@@ -152,7 +152,7 @@ export function About() {
         </motion.div>
       </motion.div>
 
-      {/* Film ticker — rAF-driven LogoLoop. Pauses on hover and when the
+      {/* Film ticker: rAF-driven LogoLoop. Pauses on hover and when the
           section is off-screen, so the rest of the page scrolls cleanly. */}
       <div className="mt-14 md:mt-20">
         <LogoLoop
@@ -240,7 +240,7 @@ function StatTile({
       }}
       className="group relative md:px-6 first:md:pl-0 last:md:pr-0 flex flex-col items-center text-center"
     >
-      {/* Label first — establishes what's being measured before the number */}
+      {/* Label first: establishes what's being measured before the number */}
       <div className="text-[11px] md:text-[12px] text-gray-500 uppercase tracking-[0.18em] font-semibold mb-3 md:mb-4">
         {stat.label}
       </div>
@@ -261,7 +261,7 @@ function StatTile({
           </motion.span>
         </AnimatePresence>
 
-        {/* Sheen sweep — single-pass shimmer once the count settles. */}
+        {/* Sheen sweep: single-pass shimmer once the count settles. */}
         {settled && (
           <span
             aria-hidden

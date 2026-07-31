@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { LanguageProvider } from "@/lib/i18n";
 import { ScrollRestore } from "@/components/ScrollRestore";
 import { organizationSchema } from "@/lib/schema";
+import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -29,15 +30,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    // suppressHydrationWarning: themeInitScript stamps `dark` on <html> before
+    // React hydrates, so the class list legitimately differs from the SSR HTML.
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
-        {/* Display (Space Grotesk) + mono (JetBrains Mono) — see tailwind fontFamily */}
+        {/* Display (Space Grotesk) + mono (JetBrains Mono), see tailwind fontFamily */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -50,7 +54,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
       </head>
-      <body className="font-sans antialiased bg-[#FAFAFA] text-foreground">
+      <body className="font-sans antialiased bg-paper text-ink">
         <LanguageProvider>
           <ScrollRestore />
           {children}
