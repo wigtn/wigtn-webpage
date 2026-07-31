@@ -5,7 +5,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Calendar, MapPin, Play } from "lucide-react";
-import { articleHref, type Article } from "./data";
+import { articleHref, tx, DEFAULT_LOCALE, type Article, type Locale } from "./data";
 import { rise, VIEWPORT } from "./chrome";
 
 /* Cover source: real image → YouTube thumbnail (for video notes) → none.
@@ -54,11 +54,19 @@ function PlayBadge() {
 /* Editorial "magazine cover" card, borderless. The visual carries a bold
  * title overlaid on a dark scrim; imageless articles get a branded gradient
  * cover instead of an empty placeholder. Meta sits quietly below the frame. */
-export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
+export function ArticleCard({
+  a,
+  i = 0,
+  locale = DEFAULT_LOCALE,
+}: {
+  a: Article;
+  i?: number;
+  locale?: Locale;
+}) {
   const cover = coverSrc(a);
   return (
     <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
-      <Link href={articleHref(a.slug)} className="group block">
+      <Link href={articleHref(a.slug, locale)} className="group block">
         {/* Cover */}
         <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
           {cover ? (
@@ -93,10 +101,10 @@ export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
           {/* Overlaid kicker + title */}
           <div className="absolute inset-x-0 bottom-0 p-5">
             <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-brand-light">
-              {a.tag}
+              {tx(a.tag, locale)}
             </span>
             <h3 className="mt-2 text-xl font-bold leading-[1.15] tracking-tight text-white [text-wrap:balance]">
-              {a.title}
+              {tx(a.title, locale)}
             </h3>
           </div>
         </div>
@@ -108,7 +116,7 @@ export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
           </span>
           {a.place && (
             <span className="inline-flex items-center gap-1">
-              <MapPin size={12} /> {a.place}
+              <MapPin size={12} /> {tx(a.place, locale)}
             </span>
           )}
           <ArrowUpRight
@@ -122,19 +130,27 @@ export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
 }
 
 /* Compact row, used in dense feeds. */
-export function ArticleRow({ a, i = 0 }: { a: Article; i?: number }) {
+export function ArticleRow({
+  a,
+  i = 0,
+  locale = DEFAULT_LOCALE,
+}: {
+  a: Article;
+  i?: number;
+  locale?: Locale;
+}) {
   return (
     <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
-      <Link href={articleHref(a.slug)} className="group flex items-start gap-6 py-5">
+      <Link href={articleHref(a.slug, locale)} className="group flex items-start gap-6 py-5">
         <span className="w-20 shrink-0 pt-1 font-mono text-xs text-ink-5">{a.date}</span>
         <div className="flex-1">
           <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-accent">
-            {a.tag}
+            {tx(a.tag, locale)}
           </span>
           <h3 className="mt-1 text-lg font-semibold leading-snug text-ink group-hover:text-accent transition-colors">
-            {a.title}
+            {tx(a.title, locale)}
           </h3>
-          <p className="mt-1 text-sm text-ink-3 leading-relaxed">{a.summary}</p>
+          <p className="mt-1 text-sm text-ink-3 leading-relaxed">{tx(a.summary, locale)}</p>
         </div>
         <ArrowUpRight size={18} className="mt-1 shrink-0 text-ink-5 group-hover:text-accent transition-colors" />
       </Link>

@@ -15,11 +15,36 @@
  * import it. Stands in for the future MDX-backed content model.
  */
 
+/* ── Locale ───────────────────────────────────────────────────────────────
+ * Only the Updates surface (channel: "newsroom") is bilingual for now. Every
+ * translatable field takes either a plain string or an { en, ko } pair, so
+ * the untranslated back catalogue keeps working untouched and a missing `ko`
+ * degrades to English rather than to an empty slot.
+ * ─────────────────────────────────────────────────────────────────────── */
+export type Locale = "en" | "ko";
+export const LOCALES: readonly Locale[] = ["en", "ko"];
+export const DEFAULT_LOCALE: Locale = "en";
+
+export type I18nText = string | { en: string; ko: string };
+
+/** Resolve a translatable field for `locale`, falling back to English. */
+export const tx = (value: I18nText, locale: Locale): string =>
+  typeof value === "string" ? value : value[locale] || value.en;
+
 export const HOME = "/";
 export const WORK = `${HOME}work/`;
 export const NEWS = `${HOME}news/`;
 export const TEAM_PAGE = `${HOME}team/`;
-export const articleHref = (slug: string) => `${HOME}${slug}/`;
+
+/* Korean lives under its own path prefix rather than a query flag or a
+ * client-side toggle: with output: "export" each locale then gets its own
+ * indexable page, and a shared link keeps the language it was copied in.
+ * Only the Updates surface has a Korean counterpart today. */
+export const KO_PREFIX = "/ko/";
+export const KO_NEWS = `${KO_PREFIX}news/`;
+export const newsHref = (locale: Locale) => (locale === "ko" ? KO_NEWS : NEWS);
+export const articleHref = (slug: string, locale: Locale = DEFAULT_LOCALE) =>
+  locale === "ko" ? `${KO_PREFIX}${slug}/` : `${HOME}${slug}/`;
 
 /* External research / tech-report site: its own GitHub Pages app for now.
  * When the custom domain is ready, change ONLY this constant to
@@ -31,15 +56,20 @@ export const techReportHref = (slug: string) => `${TECH_REPORT_SITE}/${slug}/`;
 /* Reference-led structure (Next Securities / MakinaRocks): the homepage is
  * a short teaser; depth lives on these sub-pages. Nav points to pages, not
  * in-page anchors. */
-export const NAV: { label: string; href: string; disabled?: boolean }[] = [
-  { label: "About", href: TEAM_PAGE },
-  { label: "Updates", href: NEWS },
-  { label: "Tech Reports", href: TECH_REPORT_SITE },
+export type NavKey = "about" | "updates" | "techReports" | "projects";
+
+/* Keyed rather than labelled: the label comes from ui.ts so the header can
+ * render in either locale, and `href` is a function because Updates is the
+ * one destination that has a Korean counterpart. */
+export const NAV: { key: NavKey; href: (locale: Locale) => string; disabled?: boolean }[] = [
+  { key: "about", href: () => TEAM_PAGE },
+  { key: "updates", href: newsHref },
+  { key: "techReports", href: () => TECH_REPORT_SITE },
   /* Projects tab hidden for now. NAV drives the header, the mobile menu and
    * the footer "Explore" column, so this one line removes the link from all
    * three. The /work/ page itself is untouched and still builds, so restoring
    * the tab is just uncommenting this line. */
-  // { label: "Projects", href: WORK },
+  // { key: "projects", href: () => WORK },
 ];
 
 /* What we do TOGETHER: community activity pillars. Everything is framed as
@@ -178,28 +208,28 @@ export type Kind = "report" | "event" | "community" | "insight";
 export type Channel = "newsroom" | "report";
 export type NewsTopic = "award" | "release" | "announcement" | "community";
 
-export type GalleryImage = { src: string; caption?: string; alt?: string };
+export type GalleryImage = { src: string; caption?: I18nText; alt?: I18nText };
 
 export type Block =
-  | { t: "p"; text: string }
-  | { t: "h"; text: string }
-  | { t: "quote"; text: string }
-  | { t: "list"; items: string[] }
-  | { t: "image"; src: string; caption?: string; alt?: string }
-  | { t: "gallery"; images: GalleryImage[]; caption?: string };
+  | { t: "p"; text: I18nText }
+  | { t: "h"; text: I18nText }
+  | { t: "quote"; text: I18nText }
+  | { t: "list"; items: I18nText[] }
+  | { t: "image"; src: string; caption?: I18nText; alt?: I18nText }
+  | { t: "gallery"; images: GalleryImage[]; caption?: I18nText };
 
-export type Link = { label: string; href: string };
+export type Link = { label: I18nText; href: string };
 
 export type Article = {
   slug: string;
   kind: Kind;
-  tag: string;
-  title: string;
-  summary: string;
+  tag: I18nText;
+  title: I18nText;
+  summary: I18nText;
   date: string;
-  readTime?: string;
-  author?: string;
-  place?: string;
+  readTime?: I18nText;
+  author?: string; // organiser / byline, a proper noun in both locales
+  place?: I18nText;
   icon?: "trophy" | "pin";
   featured?: boolean;
   video?: boolean;
@@ -214,7 +244,7 @@ export type Article = {
   body: Block[];
 };
 
-const p = (text: string): Block => ({ t: "p", text });
+const p = (text: I18nText): Block => ({ t: "p", text });
 
 export const ARTICLES: Article[] = [
   /* ───────── Research (real) ───────── */
@@ -445,27 +475,27 @@ export const ARTICLES: Article[] = [
     kind: "event",
     channel: "newsroom",
     newsTopic: "award",
-    tag: "GRAND PRIZE",
+    tag: { en: "GRAND PRIZE", ko: "대상" },
     icon: "trophy",
-    title: "Grand Prize: Build with TRAE Seoul (ByteDance)",
+    title: { en: "Grand Prize: Build with TRAE Seoul (ByteDance)", ko: "대상 수상: Build with TRAE Seoul (ByteDance)" },
     summary:
-      "WIGENT, a multi-agent debate arena, won the Grand Prize, built by 3 engineers in 3.5 hours.",
+      { en: "WIGENT, a multi-agent debate arena, won the Grand Prize, built by 3 engineers in 3.5 hours.", ko: "다중 에이전트 토론 아레나 WIGENT가 대상을 받았습니다. 엔지니어 3명이 3시간 30분 만에 만들었습니다." },
     date: "2026.03.28",
-    place: "Seoul, KOR",
+    place: { en: "Seoul, KOR", ko: "서울" },
     author: "ByteDance",
-    readTime: "4 min",
+    readTime: { en: "4 min", ko: "4분" },
     image: "/images/projects/trae_hackthon_seoul.png",
     externalUrl: "https://wigtn.github.io/blog/wigent/",
-    links: [{ label: "GitHub", href: "https://github.com/wigtn/wigent" }],
+    links: [{ label: { en: "GitHub", ko: "GitHub" }, href: "https://github.com/wigtn/wigent" }],
     body: [
-      { t: "h", text: "Grand Prize in 3.5 hours" },
+      { t: "h", text: { en: "Grand Prize in 3.5 hours", ko: "3시간 30분 만의 대상" } },
       p(
-        "At Build with TRAE Seoul, ByteDance's hackathon, three of us built WIGENT, a multi-agent debate arena where AI experts argue a question out and ship a page from the conclusion, in three and a half hours. It won the Grand Prize.",
+        { en: "At Build with TRAE Seoul, ByteDance's hackathon, three of us built WIGENT, a multi-agent debate arena where AI experts argue a question out and ship a page from the conclusion, in three and a half hours. It won the Grand Prize.", ko: "ByteDance가 연 해커톤 Build with TRAE Seoul에서 세 명이 WIGENT를 만들었습니다. AI 전문가들이 질문 하나를 끝까지 토론한 뒤, 그 결론으로 페이지 한 장을 뽑아내는 다중 에이전트 토론 아레나입니다. 세 시간 반이 걸렸고, 대상을 받았습니다." },
       ),
       p(
-        "Blank repo to a working demo on stage in a single afternoon. It's the kind of build we keep signing up for.",
+        { en: "Blank repo to a working demo on stage in a single afternoon. It's the kind of build we keep signing up for.", ko: "빈 저장소에서 시작해 오후 한나절 만에 무대 위 데모까지. 저희가 이런 자리에 계속 참가 신청을 하는 이유입니다." },
       ),
-      { t: "quote", text: "Grand Prize: Build with TRAE Seoul, built by 3 engineers in 3.5 hours." },
+      { t: "quote", text: { en: "Grand Prize: Build with TRAE Seoul, built by 3 engineers in 3.5 hours.", ko: "대상, Build with TRAE Seoul. 엔지니어 3명이 3시간 30분 만에." } },
     ],
   },
   {
@@ -473,32 +503,32 @@ export const ARTICLES: Article[] = [
     kind: "event",
     channel: "newsroom",
     newsTopic: "award",
-    tag: "2ND PLACE · TECH TRACK",
+    tag: { en: "2ND PLACE · TECH TRACK", ko: "테크 트랙 2위" },
     icon: "trophy",
-    title: "2nd Place, Tech Track: Snowflake AI & Data Hackathon Korea 2026",
+    title: { en: "2nd Place, Tech Track: Snowflake AI & Data Hackathon Korea 2026", ko: "테크 트랙 2위: Snowflake AI & Data Hackathon Korea 2026" },
     summary:
-      "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform where five AI experts debate evidence from three actively selected datasets.",
+      { en: "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform where five AI experts debate evidence from three actively selected datasets.", ko: "WIGTN Flake는 Snowflake Cortex를 목적 중심 동네 분석 플랫폼으로 바꿉니다. AI 전문가 다섯이 실제로 선택된 세 개 데이터셋의 근거를 놓고 토론합니다." },
     date: "2026.04.29",
-    place: "Seoul, KOR",
+    place: { en: "Seoul, KOR", ko: "서울" },
     author: "Snowflake",
-    readTime: "5 min",
+    readTime: { en: "5 min", ko: "5분" },
     image: "/images/news/snowflake.jpeg",
     externalUrl: "https://wigtn.github.io/blog/wigtn-flake/",
     links: [
-      { label: "Watch demo", href: "https://www.youtube.com/watch?v=1YzSp3SdzTk" },
-      { label: "Press", href: "https://www.newswire.co.kr/newsRead.php?no=1033575" },
-      { label: "Tech report", href: techReportHref("wigtn-flake") },
+      { label: { en: "Watch demo", ko: "데모 영상" }, href: "https://www.youtube.com/watch?v=1YzSp3SdzTk" },
+      { label: { en: "Press", ko: "보도자료" }, href: "https://www.newswire.co.kr/newsRead.php?no=1033575" },
+      { label: { en: "Tech report", ko: "테크 리포트" }, href: techReportHref("wigtn-flake") },
     ],
     body: [
-      { t: "h", text: "Second place, Tech Track" },
+      { t: "h", text: { en: "Second place, Tech Track", ko: "테크 트랙 2위" } },
       p(
-        "At the Snowflake AI & Data Hackathon Korea 2026 in Seoul, WIGTN Flake placed 2nd in the Tech Track. From an open-ended brief, we built a neighborhood-intelligence platform on Snowflake Cortex: pick a goal, and five AI experts debate the data before landing on a ranked, actionable answer.",
+        { en: "At the Snowflake AI & Data Hackathon Korea 2026 in Seoul, WIGTN Flake placed 2nd in the Tech Track. From an open-ended brief, we built a neighborhood-intelligence platform on Snowflake Cortex: pick a goal, and five AI experts debate the data before landing on a ranked, actionable answer.", ko: "서울에서 열린 Snowflake AI & Data Hackathon Korea 2026에서 WIGTN Flake가 테크 트랙 2위에 올랐습니다. 열린 주제 하나만 주어진 상태에서 Snowflake Cortex 위에 동네 분석 플랫폼을 만들었습니다. 목적을 고르면 AI 전문가 다섯이 데이터를 놓고 토론한 뒤, 순위가 매겨진 실행 가능한 답을 내놓습니다." },
       ),
-      { t: "h", text: "The best part wasn't the trophy" },
+      { t: "h", text: { en: "The best part wasn't the trophy", ko: "트로피가 가장 좋았던 건 아닙니다" } },
       p(
-        "The finals floor was full of sharp teams solving the same brief in completely different ways. We left with as many ideas from the other builders as from our own demo, which is the part we keep coming back for.",
+        { en: "The finals floor was full of sharp teams solving the same brief in completely different ways. We left with as many ideas from the other builders as from our own demo, which is the part we keep coming back for.", ko: "결선장은 같은 주제를 완전히 다른 방식으로 푸는 날카로운 팀들로 가득했습니다. 우리 데모에서 얻은 것만큼 다른 빌더들에게서 아이디어를 얻어 돌아왔고, 저희가 이런 자리를 계속 찾는 이유가 바로 그 부분입니다." },
       ),
-      { t: "quote", text: "Tech Track 2nd Place: Snowflake AI & Data Hackathon Korea 2026." },
+      { t: "quote", text: { en: "Tech Track 2nd Place: Snowflake AI & Data Hackathon Korea 2026.", ko: "테크 트랙 2위, Snowflake AI & Data Hackathon Korea 2026." } },
     ],
   },
   {
@@ -508,39 +538,39 @@ export const ARTICLES: Article[] = [
     newsTopic: "award",
     tag: "TOP 6",
     icon: "trophy",
-    title: "Top 6 at OBA Weekendthon: MyunZy, an AI interviewer built in a weekend",
+    title: { en: "Top 6 at OBA Weekendthon: MyunZy, an AI interviewer built in a weekend", ko: "OBA 위켄드톤 Top 6: 주말 이틀에 만든 AI 면접관 면지" },
     summary:
-      "MyunZy reads your real resume and a real job posting, then runs the interview before the interview. Built over two days on EXAONE-4.5 inside a deterministic tool-calling harness.",
+      { en: "MyunZy reads your real resume and a real job posting, then runs the interview before the interview. Built over two days on EXAONE-4.5 inside a deterministic tool-calling harness.", ko: "면지는 당신의 실제 이력서와 실제 채용공고를 읽고, 면접 전에 면접을 겪게 합니다. EXAONE-4.5를 결정론 tool-call 하네스 안에서 굴려 이틀 만에 만들었습니다." },
     date: "2026.05.31",
-    place: "Yongin, KOR",
+    place: { en: "Yongin, KOR", ko: "용인" },
     author: "Open Builders Alliance",
-    readTime: "4 min",
+    readTime: { en: "4 min", ko: "4분" },
     image: "/images/news/OBA.jpeg",
     links: [
       { label: "GitHub", href: "https://github.com/wigtn/myunzy-hackathone" },
-      { label: "Event", href: "https://luma.com/y3nz68hw" },
+      { label: { en: "Event", ko: "행사 페이지" }, href: "https://luma.com/y3nz68hw" },
     ],
     body: [
-      { t: "h", text: "Two days, one rule" },
+      { t: "h", text: { en: "Two days, one rule", ko: "이틀, 규칙 하나" } },
       p(
-        "OBA Weekendthon ran over the last weekend of May at the Kakao AI Campus in Yongin, organised by Hashed, Market Fit Lab, and vooy under the Open Builders Alliance. Fifty builders, teams of three, and one rule that shaped every project: whatever you build has to run on the Open APIs the event provides. Judging was split evenly between the official panel and peer review from the other teams.",
+        { en: "OBA Weekendthon ran over the last weekend of May at the Kakao AI Campus in Yongin, organised by Hashed, Market Fit Lab, and vooy under the Open Builders Alliance. Fifty builders, teams of three, and one rule that shaped every project: whatever you build has to run on the Open APIs the event provides. Judging was split evenly between the official panel and peer review from the other teams.", ko: "OBA 위켄드톤은 5월 마지막 주말 용인 카카오 AI 캠퍼스에서 열렸습니다. Hashed, 마켓핏랩, vooy가 Open Builders Alliance 아래 주최했습니다. 빌더 50명, 팀당 세 명, 그리고 모든 프로젝트를 규정한 규칙 하나. 무엇을 만들든 행사가 제공한 Open API 위에서 돌아가야 한다는 것이었습니다. 심사는 공식 심사위원과 다른 팀들의 피어리뷰가 반반이었습니다." },
       ),
       p(
-        "Three of us went, and came out in the Top 6 with MyunZy (면지), an AI interviewer. Give it your actual resume and an actual job posting and it assembles four interviewers, technical, culture fit, executive, and HR, each already knowing where your story is thin. You answer out loud. It follows up on whatever you fumble, and it keeps a weakness profile that sharpens as the session goes.",
+        { en: "Three of us went, and came out in the Top 6 with MyunZy (면지), an AI interviewer. Give it your actual resume and an actual job posting and it assembles four interviewers, technical, culture fit, executive, and HR, each already knowing where your story is thin. You answer out loud. It follows up on whatever you fumble, and it keeps a weakness profile that sharpens as the session goes.", ko: "저희는 세 명이 참가해 AI 면접관 면지로 Top 6에 올랐습니다. 실제 이력서와 실제 채용공고를 넣으면 면접관 넷이 만들어집니다. 기술, 컬처핏, 임원, HR. 각자 당신의 이야기가 어디서 얇은지 이미 알고 있습니다. 소리 내어 답하면 흔들린 지점을 놓치지 않고 파고들고, 세션이 진행될수록 날카로워지는 약점 프로필을 쌓아갑니다." },
       ),
-      { t: "h", text: "The bet: a small Korean model, held in place by the harness" },
+      { t: "h", text: { en: "The bet: a small Korean model, held in place by the harness", ko: "베팅: 작은 한국어 모델, 하네스가 붙잡는다" } },
       p(
-        "The instinct in a hackathon is to reach for the biggest model on offer. We went the other way and ran EXAONE-4.5, LG's open Korean model, on vLLM inside a deterministic tool-calling harness: schema validation on every call, automatic re-prompting when one comes back malformed, and scoring done in pure functions rather than by the model. The interviewer holds character to the last question without needing frontier-scale improvisation.",
+        { en: "The instinct in a hackathon is to reach for the biggest model on offer. We went the other way and ran EXAONE-4.5, LG's open Korean model, on vLLM inside a deterministic tool-calling harness: schema validation on every call, automatic re-prompting when one comes back malformed, and scoring done in pure functions rather than by the model. The interviewer holds character to the last question without needing frontier-scale improvisation.", ko: "해커톤에서는 가장 큰 모델을 집는 게 본능입니다. 저희는 반대로 갔습니다. LG의 한국어 오픈 모델 EXAONE-4.5를 vLLM으로 띄우고 결정론 tool-call 하네스 안에 넣었습니다. 모든 호출에 스키마 검증, 형식이 깨져 돌아오면 자동 리프롬프트, 채점은 모델이 아니라 순수 함수가 담당합니다. 프런티어급 자유연기 없이도 면접관은 마지막 질문까지 캐릭터를 유지합니다." },
       ),
       p(
-        "The build is mock-first, so every feature completes end to end with zero API keys and flipping an environment variable promotes it to the live services without touching code. Word-level timestamps from Qwen3 ASR feed the STAR-based feedback and let you rewind to a single answer and try it a different way.",
+        { en: "The build is mock-first, so every feature completes end to end with zero API keys and flipping an environment variable promotes it to the live services without touching code. Word-level timestamps from Qwen3 ASR feed the STAR-based feedback and let you rewind to a single answer and try it a different way.", ko: "빌드는 mock-first입니다. API 키가 하나도 없어도 모든 기능이 끝까지 동작하고, 환경 변수 하나만 바꾸면 코드를 건드리지 않고 실서비스로 승격됩니다. Qwen3 ASR의 단어 단위 타임스탬프가 STAR 기반 피드백에 들어가고, 답변 하나를 골라 되감아 다르게 시도해 볼 수 있게 합니다." },
       ),
-      { t: "h", text: "The room was the prize" },
+      { t: "h", text: { en: "The room was the prize", ko: "진짜 상은 그 공간이었습니다" } },
       p(
-        "The best part of a weekendthon is not your own build. It is watching the other teams start from the same blank page and the same two days, then walk out with things none of us would have thought of. We went for the trophy and left with a list of ideas to steal.",
+        { en: "The best part of a weekendthon is not your own build. It is watching the other teams start from the same blank page and the same two days, then walk out with things none of us would have thought of. We went for the trophy and left with a list of ideas to steal.", ko: "위켄드톤에서 가장 좋은 건 우리가 만든 결과물이 아닙니다. 다른 팀들이 같은 백지와 같은 이틀에서 출발해, 우리는 떠올리지도 못한 것을 들고 나오는 걸 지켜보는 것입니다. 트로피를 노리고 갔다가 훔쳐 오고 싶은 아이디어 목록을 들고 돌아왔습니다." },
       ),
-      p("Built by Hyeonsang Kim, Jinmo Kim, and Sang-Woo Son."),
-      { t: "quote", text: "Top 6 at OBA Weekendthon, built by 3 engineers in two days." },
+      p({ en: "Built by Hyeonsang Kim, Jinmo Kim, and Sang-Woo Son.", ko: "김현상, 김진모, 손상우가 만들었습니다." }),
+      { t: "quote", text: { en: "Top 6 at OBA Weekendthon, built by 3 engineers in two days.", ko: "OBA 위켄드톤 Top 6. 엔지니어 3명이 이틀 만에." } },
     ],
   },
   {
@@ -550,55 +580,55 @@ export const ARTICLES: Article[] = [
     newsTopic: "announcement",
     tag: "ACL 2026",
     icon: "pin",
-    title: "WIGVO at ACL 2026 in San Diego: a live demo booth, plus an IWSLT invited talk",
+    title: { en: "WIGVO at ACL 2026 in San Diego: a live demo booth, plus an IWSLT invited talk", ko: "ACL 2026 샌디에이고의 WIGVO: 라이브 데모 부스, 그리고 IWSLT 초청 발표" },
     summary:
-      "We brought WIGVO to the ACL 2026 System Demonstrations floor as a live booth, and were invited to present at IWSLT 2026: an oral talk and a poster.",
+      { en: "We brought WIGVO to the ACL 2026 System Demonstrations floor as a live booth, and were invited to present at IWSLT 2026: an oral talk and a poster.", ko: "WIGVO를 ACL 2026 System Demonstrations 현장에 라이브 부스로 가져갔고, IWSLT 2026에도 초청받아 구두 발표와 포스터를 진행했습니다." },
     date: "2026.07.16",
-    place: "San Diego, USA",
+    place: { en: "San Diego, USA", ko: "샌디에이고, 미국" },
     author: "WIGTN Research",
-    readTime: "6 min",
+    readTime: { en: "6 min", ko: "6분" },
     image: "/images/news/acl_sandiego_TEAM.jpg",
     externalUrl: "https://wigtn.github.io/blog/wigvo/",
     links: [
       { label: "GitHub", href: "https://github.com/wigtn/wigvo-v2" },
-      { label: "Watch demo", href: "https://youtu.be/_ixVEnHJxjk" },
+      { label: { en: "Watch demo", ko: "데모 영상" }, href: "https://youtu.be/_ixVEnHJxjk" },
     ],
     body: [
       p(
-        "San Diego, July 2026. After the acceptance email back in April, WIGVO finally made it to the ACL 2026 floor, not as a poster tucked in a hallway, but as a live demo booth in the System Demonstrations track. For three days we handed strangers a phone, let them speak their own language, and watched the person on the other end hear it in theirs.",
+        { en: "San Diego, July 2026. After the acceptance email back in April, WIGVO finally made it to the ACL 2026 floor, not as a poster tucked in a hallway, but as a live demo booth in the System Demonstrations track. For three days we handed strangers a phone, let them speak their own language, and watched the person on the other end hear it in theirs.", ko: "2026년 7월 샌디에이고. 4월의 억셉 메일 이후 WIGVO는 마침내 ACL 2026 현장에 섰습니다. 복도 한켠의 포스터가 아니라 System Demonstrations 트랙의 라이브 데모 부스로였습니다. 사흘 동안 처음 만난 사람들에게 전화기를 건네고, 각자의 언어로 말하게 하고, 상대방이 자기 언어로 그것을 듣는 장면을 지켜봤습니다." },
       ),
-      { t: "h", text: "A demo you could actually pick up and use" },
+      { t: "h", text: { en: "A demo you could actually pick up and use", ko: "직접 들고 써볼 수 있는 데모" } },
       p(
-        "Most demos ask you to watch. Ours asked you to talk. Visitors dialed a number, the recipient answered an ordinary phone (no app, no headset, no setup) and the two of them held a conversation across a language barrier in near real time. That is the whole point of WIGVO: it meets people where they already are. The hospital front desk, the city office, the bank call center: the places that need translation most are still running on landlines.",
-      ),
-      p(
-        "Running it live, all day, in a noisy conference hall was its own stress test. The software-only echo cancellation held. The dual-session design kept each speaker's interpreter from bleeding into the other. And the latency stayed low enough that conversations felt like conversations, not walkie-talkie exchanges.",
-      ),
-      { t: "h", text: "The questions that surprised us" },
-      p(
-        "We expected the academic questions about the model, the data, the evaluation. We got those. What we didn't expect was how many people came at it from the industry side: How does it handle the PSTN? What's the per-minute cost at scale? Can it drop into an existing call center? Which languages are production-ready today?",
+        { en: "Most demos ask you to watch. Ours asked you to talk. Visitors dialed a number, the recipient answered an ordinary phone (no app, no headset, no setup) and the two of them held a conversation across a language barrier in near real time. That is the whole point of WIGVO: it meets people where they already are. The hospital front desk, the city office, the bank call center: the places that need translation most are still running on landlines.", ko: "대부분의 데모는 보라고 합니다. 저희 데모는 말하라고 했습니다. 방문자가 번호를 누르면 상대는 평범한 전화기로 받았고, 앱도 헤드셋도 설정도 없이 두 사람이 언어 장벽을 사이에 두고 거의 실시간으로 대화했습니다. WIGVO의 요점이 바로 그것입니다. 사람들이 이미 있는 자리로 찾아가는 것. 병원 접수대, 시청 민원실, 은행 콜센터처럼 번역이 가장 필요한 곳은 아직 유선 전화 위에서 돌아갑니다." },
       ),
       p(
-        "Those are deployment questions, not paper questions. They came from engineers and product people who weren't asking whether it works in a benchmark. They were asking whether they could ship it next quarter.",
+        { en: "Running it live, all day, in a noisy conference hall was its own stress test. The software-only echo cancellation held. The dual-session design kept each speaker's interpreter from bleeding into the other. And the latency stayed low enough that conversations felt like conversations, not walkie-talkie exchanges.", ko: "시끄러운 컨퍼런스 홀에서 하루 종일 라이브로 돌리는 것 자체가 스트레스 테스트였습니다. 소프트웨어만으로 구현한 에코 제거가 버텼습니다. 듀얼 세션 설계 덕분에 두 화자의 통역이 서로 섞이지 않았습니다. 지연 시간도 충분히 낮아서, 무전기를 주고받는 느낌이 아니라 대화처럼 느껴졌습니다." },
+      ),
+      { t: "h", text: { en: "The questions that surprised us", ko: "예상 밖의 질문들" } },
+      p(
+        { en: "We expected the academic questions about the model, the data, the evaluation. We got those. What we didn't expect was how many people came at it from the industry side: How does it handle the PSTN? What's the per-minute cost at scale? Can it drop into an existing call center? Which languages are production-ready today?", ko: "모델과 데이터, 평가에 관한 학술적인 질문은 예상했고 실제로 받았습니다. 예상하지 못한 건 산업 쪽에서 온 질문이 얼마나 많았는가였습니다. PSTN은 어떻게 처리하나? 규모가 커지면 분당 비용은? 기존 콜센터에 그대로 넣을 수 있나? 지금 프로덕션에 쓸 수 있는 언어는 어디까지인가?" },
+      ),
+      p(
+        { en: "Those are deployment questions, not paper questions. They came from engineers and product people who weren't asking whether it works in a benchmark. They were asking whether they could ship it next quarter.", ko: "논문의 질문이 아니라 배포의 질문이었습니다. 벤치마크에서 동작하는지가 아니라 다음 분기에 출시할 수 있는지를 묻는, 엔지니어와 프로덕트 담당자들의 질문이었습니다." },
       ),
       {
         t: "quote",
-        text: "That's when it clicked: this isn't just a paper, it's a product people are waiting for.",
+        text: { en: "That's when it clicked: this isn't just a paper, it's a product people are waiting for.", ko: "그때 확신했습니다. 이건 그냥 논문이 아니라, 사람들이 기다리고 있는 프로덕트라는 것." },
       },
-      { t: "h", text: "A lucky bonus: IWSLT 2026" },
+      { t: "h", text: { en: "A lucky bonus: IWSLT 2026", ko: "운 좋은 보너스: IWSLT 2026" } },
       p(
-        "Alongside the main-conference demo, WIGVO was invited to IWSLT 2026, the spoken-language-translation workshop. That turned into two more sessions: an invited oral talk and a poster. The oral let us walk through the architecture end to end; the poster turned into a two-hour conversation with the people who care most about real-time speech translation.",
+        { en: "Alongside the main-conference demo, WIGVO was invited to IWSLT 2026, the spoken-language-translation workshop. That turned into two more sessions: an invited oral talk and a poster. The oral let us walk through the architecture end to end; the poster turned into a two-hour conversation with the people who care most about real-time speech translation.", ko: "메인 컨퍼런스 데모와 별개로, WIGVO는 음성 언어 번역 워크숍인 IWSLT 2026에도 초청받았습니다. 덕분에 두 세션이 더 생겼습니다. 초청 구두 발표와 포스터입니다. 구두 발표에서는 아키텍처를 처음부터 끝까지 짚었고, 포스터는 실시간 음성 번역에 가장 진심인 사람들과의 두 시간짜리 대화가 됐습니다." },
       ),
       {
         t: "image",
         src: "/images/news/acl_sandiego_IWSLT.jpg",
-        caption: "Presenting WIGVO at the IWSLT 2026 workshop: invited oral talk and poster.",
+        caption: { en: "Presenting WIGVO at the IWSLT 2026 workshop: invited oral talk and poster.", ko: "IWSLT 2026 워크숍에서 WIGVO를 발표하는 모습. 초청 구두 발표와 포스터." },
       },
-      { t: "h", text: "What we're taking home" },
+      { t: "h", text: { en: "What we're taking home", ko: "돌아오며 챙긴 것" } },
       p(
-        "We flew back with a longer to-do list than we arrived with: languages people asked for, integrations people wanted, edge cases we hadn't hit until a stranger tried them live. San Diego reframed the work for us: WIGVO isn't finished when the paper is published. It's finished when someone calls a hospital in a language they don't share, and it just works.",
+        { en: "We flew back with a longer to-do list than we arrived with: languages people asked for, integrations people wanted, edge cases we hadn't hit until a stranger tried them live. San Diego reframed the work for us: WIGVO isn't finished when the paper is published. It's finished when someone calls a hospital in a language they don't share, and it just works.", ko: "돌아오는 비행기에서는 갈 때보다 할 일 목록이 길어져 있었습니다. 사람들이 요청한 언어들, 원한 연동들, 낯선 사람이 직접 해보기 전까지는 마주치지 못한 예외들. 샌디에이고는 이 일을 다시 정의해 줬습니다. WIGVO는 논문이 게재되면 끝나는 게 아닙니다. 누군가 자기가 모르는 언어를 쓰는 병원에 전화를 걸었을 때 그냥 되는 순간에 끝납니다." },
       ),
-      { t: "quote", text: "San Diego, you were great. Now back to shipping." },
+      { t: "quote", text: { en: "San Diego, you were great. Now back to shipping.", ko: "샌디에이고, 좋았습니다. 이제 다시 만들러 갑니다." } },
     ],
   },
 
@@ -608,28 +638,28 @@ export const ARTICLES: Article[] = [
     kind: "report",
     channel: "newsroom",
     newsTopic: "release",
-    tag: "RELEASE",
-    title: "WigtnOCR is open source: our 2B Korean doc parser is on HuggingFace",
+    tag: { en: "RELEASE", ko: "릴리스" },
+    title: { en: "WigtnOCR is open source: our 2B Korean doc parser is on HuggingFace", ko: "WigtnOCR 오픈소스 공개: 2B 한국어 문서 파서가 HuggingFace에 올라갔습니다" },
     summary:
-      "Weights, training data, and eval code for the 2B parser that ranked #1 on KoGovDoc-Bench are now public. Teacher-level document parsing on a single consumer GPU.",
+      { en: "Weights, training data, and eval code for the 2B parser that ranked #1 on KoGovDoc-Bench are now public. Teacher-level document parsing on a single consumer GPU.", ko: "KoGovDoc-Bench 1위를 기록한 2B 파서의 가중치, 학습 데이터, 평가 코드를 모두 공개했습니다. 소비자용 GPU 한 장으로 교사 모델 수준의 문서 파싱을 돌릴 수 있습니다." },
     date: "2026.05.21",
     author: "WIGTN",
-    readTime: "5 min",
+    readTime: { en: "5 min", ko: "5분" },
     image: "/images/projects/wigtnocr-huggingface.png",
     externalUrl: "https://wigtn.github.io/blog/wigtnocr/",
     links: [
       { label: "HuggingFace", href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR" },
       { label: "GitHub", href: "https://github.com/wigtn/wigtnOCR-v1" },
-      { label: "Tech report", href: techReportHref("wigtnocr") },
+      { label: { en: "Tech report", ko: "테크 리포트" }, href: techReportHref("wigtnocr") },
     ],
     body: [
-      { t: "h", text: "It's open" },
+      { t: "h", text: { en: "It's open", ko: "공개했습니다" } },
       p(
-        "WigtnOCR is now fully open source: model weights on HuggingFace, training data and evaluation code on GitHub. The 2B parser that ranked #1 on KoGovDoc-Bench, reading Korean government documents like a model fifteen times its size, is now yours to run or retrain.",
+        { en: "WigtnOCR is now fully open source: model weights on HuggingFace, training data and evaluation code on GitHub. The 2B parser that ranked #1 on KoGovDoc-Bench, reading Korean government documents like a model fifteen times its size, is now yours to run or retrain.", ko: "WigtnOCR을 완전히 공개했습니다. 모델 가중치는 HuggingFace에, 학습 데이터와 평가 코드는 GitHub에 있습니다. KoGovDoc-Bench에서 1위를 기록하며 15배 큰 모델처럼 한국어 공문서를 읽어내는 2B 파서를, 이제 직접 돌리거나 재학습시킬 수 있습니다." },
       ),
-      { t: "quote", text: "Teacher-level accuracy at 1/15th the size, now yours to run." },
-      { t: "h", text: "Go deeper" },
-      p("How we distilled a 30B teacher into a 2B student (the method, ablations, and full benchmark breakdown) is in the WigtnOCR tech report."),
+      { t: "quote", text: { en: "Teacher-level accuracy at 1/15th the size, now yours to run.", ko: "15분의 1 크기로 교사 모델 수준의 정확도. 이제 직접 돌려보실 수 있습니다." } },
+      { t: "h", text: { en: "Go deeper", ko: "더 자세히" } },
+      p({ en: "How we distilled a 30B teacher into a 2B student (the method, ablations, and full benchmark breakdown) is in the WigtnOCR tech report.", ko: "30B 교사 모델을 2B 학생 모델로 증류한 방법과 어블레이션, 전체 벤치마크 분석은 WigtnOCR 테크 리포트에 있습니다." }),
     ],
   },
   {
@@ -637,28 +667,28 @@ export const ARTICLES: Article[] = [
     kind: "report",
     channel: "newsroom",
     newsTopic: "release",
-    tag: "RELEASE",
-    title: "WIGSS v0.1.4 is on npm: drag UI in the browser, watch the source rewrite itself",
+    tag: { en: "RELEASE", ko: "릴리스" },
+    title: { en: "WIGSS v0.1.4 is on npm: drag UI in the browser, watch the source rewrite itself", ko: "WIGSS v0.1.4 npm 배포: 브라우저에서 UI를 끌면 소스가 알아서 바뀝니다" },
     summary:
-      "Our always-on visual refactoring agent is on npm, now at v0.1.4. Point it at your dev server, drag components around in the browser, and the source rewrites itself.",
+      { en: "Our always-on visual refactoring agent is on npm, now at v0.1.4. Point it at your dev server, drag components around in the browser, and the source rewrites itself.", ko: "상시 동작하는 시각 리팩터링 에이전트를 npm에 올렸습니다. 현재 v0.1.4입니다. 개발 서버를 가리키고 브라우저에서 컴포넌트를 끌면 소스가 스스로 다시 쓰입니다." },
     date: "2026.04.03",
     author: "WIGTN",
-    readTime: "3 min",
+    readTime: { en: "3 min", ko: "3분" },
     image: "/images/carousel/wigss-npm.png",
     externalUrl: "https://wigtn.github.io/blog/wigss/",
     links: [
       { label: "npm", href: "https://npmjs.com/package/wigss" },
       { label: "GitHub", href: "https://github.com/wigtn/wigss" },
-      { label: "Tech report", href: techReportHref("wigss") },
+      { label: { en: "Tech report", ko: "테크 리포트" }, href: techReportHref("wigss") },
     ],
     body: [
       { t: "h", text: "npm install wigss@0.1.4" },
       p(
-        "WIGSS is on npm, now at v0.1.4 (published April 3). The always-on visual refactoring agent installs in one command: point it at your running dev server, drag UI components around in the browser, and it rewrites the underlying source to match.",
+        { en: "WIGSS is on npm, now at v0.1.4 (published April 3). The always-on visual refactoring agent installs in one command: point it at your running dev server, drag UI components around in the browser, and it rewrites the underlying source to match.", ko: "WIGSS가 npm에 올라갔습니다. 4월 3일 배포된 v0.1.4입니다. 상시 동작하는 시각 리팩터링 에이전트로, 명령 한 줄이면 설치됩니다. 실행 중인 개발 서버를 가리킨 뒤 브라우저에서 UI 컴포넌트를 끌면, 그에 맞게 소스 코드가 다시 쓰입니다." },
       ),
-      { t: "quote", text: "Drag UI, code rewrites itself." },
-      { t: "h", text: "Go deeper" },
-      p("How WIGSS keeps the browser canvas and your source in sync is in the WIGSS tech report."),
+      { t: "quote", text: { en: "Drag UI, code rewrites itself.", ko: "UI를 끌면 코드가 스스로 바뀝니다." } },
+      { t: "h", text: { en: "Go deeper", ko: "더 자세히" } },
+      p({ en: "How WIGSS keeps the browser canvas and your source in sync is in the WIGSS tech report.", ko: "WIGSS가 브라우저 캔버스와 소스를 어떻게 동기화하는지는 WIGSS 테크 리포트에 있습니다." }),
     ],
   },
   {
@@ -666,29 +696,29 @@ export const ARTICLES: Article[] = [
     kind: "report",
     channel: "newsroom",
     newsTopic: "release",
-    tag: "RELEASE",
-    title: "WIGTN Coding v0.1.14: the PRD analyzer now fact-checks its premises against the live web",
+    tag: { en: "RELEASE", ko: "릴리스" },
+    title: { en: "WIGTN Coding v0.1.14: the PRD analyzer now fact-checks its premises against the live web", ko: "WIGTN Coding v0.1.14: PRD 분석기가 전제를 실시간 웹으로 사실 확인합니다" },
     summary:
-      "The newest release of our Claude Code plugin ecosystem adds PRD external-grounding: before it analyzes a spec, it verifies the assumptions against real web evidence so false premises don't slip through.",
+      { en: "The newest release of our Claude Code plugin ecosystem adds PRD external-grounding: before it analyzes a spec, it verifies the assumptions against real web evidence so false premises don't slip through.", ko: "Claude Code 플러그인 생태계의 최신 릴리스에 PRD 외부 근거 확인이 추가됐습니다. 명세를 분석하기 전에 전제를 실제 웹 근거와 대조해, 틀린 전제가 그대로 넘어가지 않게 합니다." },
     date: "2026.07.14",
     author: "WIGTN",
-    readTime: "3 min",
+    readTime: { en: "3 min", ko: "3분" },
     externalUrl: "https://wigtn.github.io/blog/wigtn-coding/",
     links: [
       { label: "GitHub", href: "https://github.com/wigtn/wigtn-plugins-with-claude-code" },
-      { label: "Tech report", href: techReportHref("wigtn-coding") },
+      { label: { en: "Tech report", ko: "테크 리포트" }, href: techReportHref("wigtn-coding") },
     ],
     body: [
-      { t: "h", text: "What's new in v0.1.14" },
+      { t: "h", text: { en: "What's new in v0.1.14", ko: "v0.1.14의 변경점" } },
       p(
-        "The latest WIGTN Coding release adds PRD external-grounding. When the plugin reviews a product spec, it now checks the spec's assumptions against live web evidence, catching false premises before they turn into wrong code.",
+        { en: "The latest WIGTN Coding release adds PRD external-grounding. When the plugin reviews a product spec, it now checks the spec's assumptions against live web evidence, catching false premises before they turn into wrong code.", ko: "이번 WIGTN Coding 릴리스에 PRD 외부 근거 확인이 들어갔습니다. 플러그인이 제품 명세를 검토할 때, 명세가 깔고 있는 전제를 실시간 웹 근거와 대조합니다. 틀린 전제가 잘못된 코드로 바뀌기 전에 잡아냅니다." },
       ),
       p(
-        "It caps a busy week of shipping: five releases, v0.1.10 through v0.1.14, between July 9 and 14.",
+        { en: "It caps a busy week of shipping: five releases, v0.1.10 through v0.1.14, between July 9 and 14.", ko: "7월 9일부터 14일까지 v0.1.10에서 v0.1.14까지 다섯 번 배포한 한 주의 마무리이기도 합니다." },
       ),
-      { t: "quote", text: "Idea to deploy, zero friction." },
-      { t: "h", text: "Go deeper" },
-      p("The full agent lineup (12 agents, 3 skills, 17 design styles) and how the parallel execution works are in the WIGTN Coding tech report."),
+      { t: "quote", text: { en: "Idea to deploy, zero friction.", ko: "아이디어에서 배포까지, 마찰 없이." } },
+      { t: "h", text: { en: "Go deeper", ko: "더 자세히" } },
+      p({ en: "The full agent lineup (12 agents, 3 skills, 17 design styles) and how the parallel execution works are in the WIGTN Coding tech report.", ko: "에이전트 12개, 스킬 3개, 디자인 스타일 17종의 전체 구성과 병렬 실행 방식은 WIGTN Coding 테크 리포트에 있습니다." }),
     ],
   },
 
@@ -1016,8 +1046,16 @@ export const LATEST_NEWS = [
 
 /* Sub-page groupings */
 export const WORK_GROUPS = [
-  { label: "Papers & Models", items: ARTICLES.filter((a) => a.kind === "report" && /PAPER|MODEL/.test(a.tag)) },
-  { label: "Open Source", items: ARTICLES.filter((a) => a.kind === "report" && a.tag.includes("OPEN SOURCE")) },
+  /* Grouping keys off the English tag on purpose: these buckets are a build-
+   * time classification, not display copy, so they must not shift with locale. */
+  {
+    label: "Papers & Models",
+    items: ARTICLES.filter((a) => a.kind === "report" && /PAPER|MODEL/.test(tx(a.tag, "en"))),
+  },
+  {
+    label: "Open Source",
+    items: ARTICLES.filter((a) => a.kind === "report" && tx(a.tag, "en").includes("OPEN SOURCE")),
+  },
   { label: "Awards", items: EVENTS },
 ];
 /* News feed: every real article (papers, awards, talks, releases), newest
@@ -1033,3 +1071,8 @@ export const NEWS_FEED = ARTICLES.filter((a) => !a.placeholder).sort((a, b) =>
 export const NEWSROOM_FEED = ARTICLES.filter(
   (a) => !a.placeholder && a.channel === "newsroom",
 ).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+
+/* The set that has a Korean counterpart. Drives both /ko/[slug] static params
+ * and the language toggle's "is there a page to switch to" check, so the two
+ * can never disagree. */
+export const NEWSROOM_SLUGS: string[] = NEWSROOM_FEED.map((a) => a.slug);

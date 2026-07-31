@@ -103,6 +103,15 @@
     border-color: rgb(var(--line) / 0.1);
   }
 
+  /* Korean wraps at any character by default, which chops 어절 mid-word in
+   * headlines ("샌디에이고 / 의"). `keep-all` restricts breaks to spaces, which
+   * is the convention for Korean typography. Scoped by :lang so English text
+   * keeps its normal breaking, and it applies to the whole Korean subtree
+   * because PageShell tags itself with lang={locale}. */
+  :lang(ko) {
+    word-break: keep-all;
+  }
+
   /* Scroll offset for fixed header: keeps the section title visible when snapped */
   section[id] {
     scroll-margin-top: 64px;
