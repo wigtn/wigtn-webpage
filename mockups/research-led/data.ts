@@ -96,9 +96,14 @@ export const ABOUT = {
   ],
 };
 
+/* The /team roster renders one row per person: portrait + name on the left,
+ * `position` / `role` / `bio` on the right. `position` is the WIGTN title and
+ * is intentionally set on the organizer only; everyone else shows `role`
+ * (their discipline) alone. `bio` is a single career-shaped sentence. */
 export type TeamMember = {
   name: string;
-  role: string;
+  position?: string; // WIGTN title; organizer only
+  role: string; // discipline
   currentRole: string;
   credential?: string;
   bio: string;
@@ -112,11 +117,13 @@ export type TeamMember = {
 export const TEAM: TeamMember[] = [
   {
     name: "Harrison Kim 김형섭",
-    role: "Organizer & Crew Lead",
+    position: "Organizer & Crew Lead",
+    role: "AI Research Engineer",
     currentRole: "AI Research Engineer & Engineering Part Lead, BrainCrew",
     credential: "Ex-Hyundai E&C",
-    bio: "Former construction PM with a decade of large-scale project experience. Leads WIGTN: AI modeling, product development, and GPU-accelerated computing research.",
+    bio: "Engineering Part Lead at BrainCrew, working on AI modeling and GPU-accelerated computing after a decade of large-scale project management at Hyundai E&C.",
     image: "/images/team/hyeongseob_kim.jpg",
+    imagePosition: "center 15%",
     github: "https://github.com/Hyeongseob91",
     linkedin: "https://linkedin.com/in/harrison-hyeongseob-kim",
     expertise: ["AI Modeling", "GPU Computing", "Applied Research"],
@@ -125,7 +132,7 @@ export const TEAM: TeamMember[] = [
     name: "Diego Son 손상우",
     role: "AI Engineer",
     currentRole: "AI Engineer & AX Team Lead",
-    bio: "Builds LLM-powered applications and autonomous agent systems. Focuses on multi-agent orchestration and workflow automation.",
+    bio: "AX Team Lead building LLM-powered applications and autonomous agent systems, focused on multi-agent orchestration and workflow automation.",
     image: "/images/team/sangwoo_son.png",
     imagePosition: "left top",
     github: "https://github.com/wigtn",
@@ -136,7 +143,7 @@ export const TEAM: TeamMember[] = [
     name: "Eric Kim 김진모",
     role: "MLOps Engineer",
     currentRole: "DevOps Engineer",
-    bio: "Manages full MLOps pipelines with Docker, Kubernetes, and CI/CD. Team DBA and UI/UX direction lead.",
+    bio: "DevOps engineer running full MLOps pipelines on Docker, Kubernetes and CI/CD, and the crew's DBA and UI/UX direction lead.",
     image: "/images/team/jinmo_kim.png",
     imagePosition: "center 30%",
     github: "https://github.com/moriroKim",
@@ -147,7 +154,7 @@ export const TEAM: TeamMember[] = [
     name: "Maximus Kim 김현상",
     role: "AI Product Engineer",
     currentRole: "Full-Stack Developer & MX Team Lead",
-    bio: "Mobile-first full-stack engineer covering the entire 3-tier stack with React Native. Focused on software engineering craft.",
+    bio: "MX Team Lead and mobile-first full-stack developer, covering the entire 3-tier stack with React Native.",
     image: "/images/team/hyeonsang_kim.jpeg",
     imagePosition: "center 35%",
     github: "https://github.com/HyeonsangKim",
@@ -158,7 +165,7 @@ export const TEAM: TeamMember[] = [
     name: "David Cho 조현우",
     role: "AI Product Engineer",
     currentRole: "Full-Stack Developer",
-    bio: "Web-focused full-stack engineer who builds across the 3-tier architecture, with React Native experience and AI-native tooling for rapid delivery.",
+    bio: "Full-stack developer working across web and React Native, using AI-native tooling to ship quickly.",
     image: "/images/team/hyunwoo_cho.png",
     imagePosition: "center 20%",
     github: "https://github.com/starz-woo",
@@ -935,14 +942,19 @@ export const DEMOS = [
 /* Milestones: the build-in-public track record, oldest → newest, one per
  * month since founding. Horizontal swipe rail on the homepage; each card's
  * photo rises into view on scroll. Items without a real photo yet leave the
- * frame blank (placeholder: true). The remaining data-less entries (IWSLT,
- * Qualcomm, Meetup) carry editable placeholder copy until real text lands. */
+ * frame blank; entries whose copy is not final carry placeholder: true, which
+ * also keeps them out of the /team History timeline. */
 export type Milestone = {
   month: string; // short month label, e.g. "Jan"
   date: string; // "2026.01"
   label: string; // chip
   title: string; // short headline
   text: string; // one-liner
+  /* The homepage rail card is only 208px of text and clamps the title to one
+   * line and the body to two. Entries whose full copy overflows that supply a
+   * teaser here; /team History always renders the full `title`/`text`. */
+  railTitle?: string;
+  railText?: string;
   image?: string; // optional photo; blank frame when absent
   slug?: string; // optional link to the full article
   upcoming?: boolean; // future / roadmap entry
@@ -1003,19 +1015,23 @@ export const MILESTONES: Milestone[] = [
   {
     month: "Jul",
     date: "2026.07",
-    label: "IWSLT 2026",
-    title: "IWSLT 2026",
-    text: "Invited Talk.",
-    upcoming: true,
+    label: "ACL · IWSLT",
+    title: "ACL 2026 Poster & IWSLT 2026 Invited talk",
+    text: "WIGVO ran a live demo booth at ACL System Demonstrations, followed by an invited oral talk and poster at IWSLT 2026.",
+    railTitle: "ACL 2026 & IWSLT 2026",
+    railText: "A live demo booth at ACL, then an invited talk at IWSLT.",
+    image: "/images/news/acl_sandiego_IWSLT.jpg",
+    slug: "acl-2026-san-diego",
   },
   {
     month: "Aug",
     date: "2026.08",
-    label: "Meetup",
-    title: "First community meetup",
-    text: "Our first open meetup, details to be announced.",
+    label: "Research PoC",
+    title: "KineticFlow: e-sports 경기분석 PoC",
+    text: "A study of what actually moves a pro player's win rate, measured from in-game behavior data.",
+    railTitle: "KineticFlow PoC",
+    railText: "What actually moves a pro player's win rate.",
     upcoming: true,
-    placeholder: true,
   },
 ];
 export const LATEST_NEWS = [

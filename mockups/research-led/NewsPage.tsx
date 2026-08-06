@@ -117,9 +117,15 @@ export function NewsPage() {
       <div className="mx-auto max-w-5xl px-6">
         {/* Masthead */}
         <div className="pt-28 md:pt-32">
-          <p className="text-center text-[11px] font-semibold uppercase tracking-[0.28em] text-ink-4">
+          {/* Masthead scale: ~3× the old 11px eyebrow. Tracking eases back as
+              the type grows so the wordmark still fits a phone width, and the
+              text-indent offsets the trailing letter-space so the centred
+              wordmark sits on the true optical centre. Now the page's largest
+              text on every filter, so it carries the h1 (article headlines
+              below step down to h2) — category tabs render no hero. */}
+          <h1 className="text-center text-[1.5rem] font-semibold uppercase leading-tight tracking-[0.22em] text-ink-4 [text-indent:0.22em] md:text-[2rem]">
             WIGTN Updates
-          </p>
+          </h1>
         </div>
 
         {/* ── Category nav: sits directly under the masthead so the page's
@@ -171,9 +177,9 @@ export function NewsPage() {
               </div>
               <div>
                 <Kicker>{CAT_LABEL[catOf(hero)]}</Kicker>
-                <h1 className="font-display mt-3 text-3xl font-bold leading-[1.1] tracking-tight text-ink text-balance transition-colors group-hover:text-accent md:text-4xl">
+                <h2 className="font-display mt-3 text-3xl font-bold leading-[1.1] tracking-tight text-ink text-balance transition-colors group-hover:text-accent md:text-4xl">
                   {hero.title}
-                </h1>
+                </h2>
                 <p className="mt-4 leading-relaxed text-ink-3 md:text-lg">{hero.summary}</p>
                 <div className="mt-5 text-sm text-ink-4">
                   {hero.date}
