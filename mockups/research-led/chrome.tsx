@@ -234,6 +234,7 @@ export function PageHero({
   title,
   lead,
   titleClassName = "",
+  leadClassName = "max-w-2xl",
 }: {
   eyebrow?: string;
   title: string;
@@ -241,6 +242,9 @@ export function PageHero({
   backHref?: string;
   backLabel?: string;
   titleClassName?: string;
+  /* Overrides the lead's width cap — pass a wider max-w when a one-sentence
+   * lead should stay on a single line at desktop widths. */
+  leadClassName?: string;
 }) {
   return (
     <section className="max-w-6xl mx-auto px-6 pt-28 pb-10 md:pt-36 md:pb-14">
@@ -249,7 +253,11 @@ export function PageHero({
       >
         {title}
       </h1>
-      {lead && <p className="mt-5 max-w-2xl text-lg md:text-xl text-ink-3 leading-relaxed">{lead}</p>}
+      {lead && (
+        <p className={`mt-5 text-lg md:text-xl text-ink-3 leading-relaxed ${leadClassName}`}>
+          {lead}
+        </p>
+      )}
     </section>
   );
 }

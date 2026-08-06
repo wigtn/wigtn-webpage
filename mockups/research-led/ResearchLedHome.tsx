@@ -219,13 +219,17 @@ function MilestoneColumn({
                 </span>
               )}
             </div>
-            <h3 className="mt-2 line-clamp-1 text-sm font-semibold leading-snug text-ink">{m.title}</h3>
+            {/* Clamped to 1/2 lines, so entries with long History copy supply
+                a rail-sized teaser rather than getting silently truncated. */}
+            <h3 className="mt-2 line-clamp-1 text-sm font-semibold leading-snug text-ink">
+              {m.railTitle ?? m.title}
+            </h3>
             <p
               className={`mt-1 line-clamp-2 text-xs leading-relaxed ${
                 m.placeholder ? "italic text-ink-5" : "text-ink-4"
               }`}
             >
-              {m.text}
+              {m.railText ?? m.text}
             </p>
           </div>
         </div>
