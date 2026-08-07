@@ -36,7 +36,10 @@ export const acl2026SanDiego: Article = {
   newsTopic: "announcement",
   tag: "ACL 2026",
   icon: "pin",
-  title: "WIGVO at ACL 2026 in San Diego: a live demo booth, plus an IWSLT invited talk",
+  /* Titled as a trip report, not a product headline: the subject is the team
+   * and the two venues, and "trip report" tells the reader what kind of piece
+   * this is before they commit to it. */
+  title: "Team WIGTN at ACL 2026 San Diego and IWSLT 2026: a trip report",
   summary:
     "Three days of handing strangers a phone at booth D3, an invited oral talk and poster at IWSLT, and the deployment questions that changed what we build next.",
   date: "2026.07.16",

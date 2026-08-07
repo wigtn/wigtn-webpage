@@ -22,6 +22,21 @@ import {
 // `article.links` inline instead of importing that type here.
 import { SiteHeader, SiteFooter, BackdropDecor, EVENT_ICON, rise } from "./chrome";
 
+/* Media breaks out of the reading column.
+ *
+ * The article column is max-w-3xl because that lands the body near the 45-75
+ * characters-per-line range that long-form reading wants; widening the text
+ * to fill the window would push it past 100 and make the eye lose the next
+ * line. But an image has no such limit, and pictures trapped at text width
+ * are what makes a page read as narrow. So text keeps its measure and figures
+ * are centred on the viewport instead of the column.
+ *
+ * left-1/2 + -translate-x-1/2 re-centres against the viewport; the width is
+ * capped so it never runs edge to edge, and the vw fallback keeps a gutter on
+ * screens narrower than the cap. */
+const MEDIA_BREAKOUT =
+  "relative left-1/2 w-[min(1080px,calc(100vw-4rem))] -translate-x-1/2";
+
 const KIND_LABEL: Record<Article["kind"], string> = {
   report: "Research",
   event: "Events",
@@ -52,7 +67,7 @@ function BlockView({ block }: { block: Block }) {
       );
     case "image":
       return (
-        <figure className="my-9">
+        <figure className={`my-12 ${MEDIA_BREAKOUT}`}>
           <img
             src={block.src}
             alt={block.alt}
@@ -81,9 +96,20 @@ function BlockView({ block }: { block: Block }) {
         "1/1": "aspect-square",
         "16/9": "aspect-video",
       };
+      /* A lone image gets capped rather than stretched to the full breakout.
+       * A single portrait photo at 1080px wide is 1440px tall, which pushes
+       * everything after it off the screen; landscape can take more room. */
+      const solo =
+        n === 1
+          ? block.images[0].aspect === "3/4"
+            ? "max-w-[460px]"
+            : block.images[0].aspect === "1/1"
+              ? "max-w-[620px]"
+              : ""
+          : "";
       return (
-        <figure className="my-9">
-          <div className={`grid gap-3 ${cols}`}>
+        <figure className={`my-12 ${MEDIA_BREAKOUT}`}>
+          <div className={`mx-auto grid gap-3 ${cols} ${solo}`}>
             {block.images.map((im, i) => (
               <div key={i}>
                 <img
@@ -195,36 +221,42 @@ export function ArticleDetail({ slug }: { slug: string }) {
           </motion.header>
 
           {/* Hero visual */}
-          <motion.div
-            variants={rise}
-            custom={1}
-            initial="hidden"
-            animate="show"
-            className="relative mt-8 aspect-[16/8] rounded-lg overflow-hidden border border-line/[0.08] bg-gradient-to-br from-brand/20 via-brand/5 to-transparent flex items-center justify-center"
-          >
-            {article.image && (
-              <img
-                src={article.image}
-                alt={article.title}
-                className="absolute inset-0 h-full w-full object-cover opacity-90"
-              />
-            )}
-            {article.video ? (
-              <a
-                href={article.videoUrl}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Play video"
-                className="relative h-16 w-16 rounded-full bg-white flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-lg"
-              >
-                <Play className="text-[#0A0A0A] ml-1" size={26} fill="currentColor" />
-              </a>
-            ) : article.image ? null : EventIcon ? (
-              <EventIcon className="text-accent/70" size={56} strokeWidth={1.25} />
-            ) : (
-              <span className="font-mono text-7xl font-bold text-brand/30 select-none">w.</span>
-            )}
-          </motion.div>
+          {/* Breakout lives on a plain wrapper, not on the motion element:
+              framer-motion writes `transform` inline to animate, which would
+              overwrite the -translate-x-1/2 half of the centring trick and
+              shove the cover off the right edge of the page. */}
+          <div className={`mt-8 ${MEDIA_BREAKOUT}`}>
+            <motion.div
+              variants={rise}
+              custom={1}
+              initial="hidden"
+              animate="show"
+              className="relative aspect-[16/8] rounded-lg overflow-hidden border border-line/[0.08] bg-gradient-to-br from-brand/20 via-brand/5 to-transparent flex items-center justify-center"
+            >
+              {article.image && (
+                <img
+                  src={article.image}
+                  alt={article.title}
+                  className="absolute inset-0 h-full w-full object-cover opacity-90"
+                />
+              )}
+              {article.video ? (
+                <a
+                  href={article.videoUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Play video"
+                  className="relative h-16 w-16 rounded-full bg-white flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-lg"
+                >
+                  <Play className="text-[#0A0A0A] ml-1" size={26} fill="currentColor" />
+                </a>
+              ) : article.image ? null : EventIcon ? (
+                <EventIcon className="text-accent/70" size={56} strokeWidth={1.25} />
+              ) : (
+                <span className="font-mono text-7xl font-bold text-brand/30 select-none">w.</span>
+              )}
+            </motion.div>
+          </div>
 
           {/* Body */}
           <motion.div variants={rise} custom={2} initial="hidden" animate="show" className="mt-4">
