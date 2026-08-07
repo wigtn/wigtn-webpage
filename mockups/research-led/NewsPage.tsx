@@ -25,7 +25,16 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { PageShell, rise, VIEWPORT } from "./chrome";
 import { coverSrc, BrandCover } from "./cards";
-import { NEWSROOM_FEED, articleHref, type Article, type NewsTopic } from "./data";
+import {
+  NEWSROOM_FEED,
+  articleHref,
+  koNewsroomFeed,
+  tx,
+  type Article,
+  type Locale,
+  type NewsTopic,
+} from "./data";
+import { UI } from "./ui";
 
 type Cat = NewsTopic; // award | release | announcement | community
 type Filter = "all" | Cat;
@@ -53,13 +62,17 @@ const FILTERS: { key: Filter; label: string }[] = [
 
 /* Per-tab counts, computed once at module scope. NEWSROOM_FEED is a static
  * constant, so there is nothing to recompute per render. */
-const COUNTS: Record<Filter, number> = NEWSROOM_FEED.reduce(
-  (acc, a) => {
-    acc[catOf(a)] += 1;
-    return acc;
-  },
-  { all: NEWSROOM_FEED.length, award: 0, release: 0, announcement: 0, community: 0 },
-);
+const countsFor = (feed: Article[]): Record<Filter, number> =>
+  feed.reduce(
+    (acc, a) => {
+      acc[catOf(a)] += 1;
+      return acc;
+    },
+    { all: feed.length, award: 0, release: 0, announcement: 0, community: 0 } as Record<
+      Filter,
+      number
+    >,
+  );
 
 /* Load-more: show the first three grid rows, then reveal two rows per click.
  * The button only appears once the grid actually overflows this count, so a
@@ -83,22 +96,28 @@ function Kicker({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function NewsPage() {
+export function NewsPage({ locale = "en" }: { locale?: Locale } = {}) {
   const [filter, setFilter] = useState<Filter>("all");
   const [shown, setShown] = useState(INITIAL_GRID);
 
   const isAll = filter === "all";
 
+  /* The Korean feed shows only posts that carry Korean copy. Rendering the
+   * rest would put English cards under a Korean URL, linking to /ko/ pages
+   * that were never exported — a 404 per untranslated card. */
+  const FEED = locale === "ko" ? koNewsroomFeed() : NEWSROOM_FEED;
+  const COUNTS = countsFor(FEED);
+
   // The hero is an "All" affordance only. Prefer the newest story that
   // actually has a cover (a hero-sized BrandCover placeholder carries the page
   // poorly), and fall back to the newest story outright.
-  const hero = isAll ? NEWSROOM_FEED.find((a) => coverSrc(a)) ?? NEWSROOM_FEED[0] : undefined;
+  const hero = isAll ? FEED.find((a) => coverSrc(a)) ?? FEED[0] : undefined;
   const heroCover = hero ? coverSrc(hero) : undefined;
 
   // Filtered views draw from the entire feed; only "All" carves out the hero.
   const pool = isAll
-    ? NEWSROOM_FEED.filter((a) => a.slug !== hero?.slug)
-    : NEWSROOM_FEED.filter((a) => catOf(a) === filter);
+    ? FEED.filter((a) => a.slug !== hero?.slug)
+    : FEED.filter((a) => catOf(a) === filter);
 
   const grid = pool.slice(0, shown);
   const hidden = pool.length - grid.length;
@@ -113,7 +132,7 @@ export function NewsPage() {
   }
 
   return (
-    <PageShell>
+    <PageShell locale={locale}>
       <div className="mx-auto max-w-5xl px-6">
         {/* Masthead */}
         <div className="pt-28 md:pt-32">
@@ -124,7 +143,7 @@ export function NewsPage() {
               text on every filter, so it carries the h1 (article headlines
               below step down to h2) — category tabs render no hero. */}
           <h1 className="text-center text-[1.5rem] font-semibold uppercase leading-tight tracking-[0.22em] text-ink-4 [text-indent:0.22em] md:text-[2rem]">
-            WIGTN Updates
+            {tx(UI.masthead, locale)}
           </h1>
         </div>
 
@@ -148,7 +167,7 @@ export function NewsPage() {
                     : "border-transparent text-ink-4 hover:text-ink-2"
                 }`}
               >
-                {f.label}
+                {tx(UI.filter[f.key], locale)}
                 <span className="ml-1.5 font-mono text-[11px] text-ink-5">{count}</span>
               </button>
             );
@@ -159,7 +178,7 @@ export function NewsPage() {
         {hero && (
           <section className="mt-12 md:mt-14">
             <Link
-              href={articleHref(hero.slug)}
+              href={articleHref(hero.slug, locale)}
               className="group grid items-center gap-8 md:grid-cols-2 md:gap-12"
             >
               <div className="relative aspect-[16/10] overflow-hidden rounded-[24px]">
@@ -176,14 +195,14 @@ export function NewsPage() {
                 {hero.video && <VideoDot />}
               </div>
               <div>
-                <Kicker>{CAT_LABEL[catOf(hero)]}</Kicker>
+                <Kicker>{tx(UI.topic[catOf(hero)], locale)}</Kicker>
                 <h2 className="font-display mt-3 text-3xl font-bold leading-[1.1] tracking-tight text-ink text-balance transition-colors group-hover:text-accent md:text-4xl">
-                  {hero.title}
+                  {tx(hero.title, locale)}
                 </h2>
-                <p className="mt-4 leading-relaxed text-ink-3 md:text-lg">{hero.summary}</p>
+                <p className="mt-4 leading-relaxed text-ink-3 md:text-lg">{tx(hero.summary, locale)}</p>
                 <div className="mt-5 text-sm text-ink-4">
                   {hero.date}
-                  {hero.place ? ` · ${hero.place}` : ""}
+                  {hero.place ? ` · ${tx(hero.place, locale)}` : ""}
                 </div>
               </div>
             </Link>
@@ -195,7 +214,7 @@ export function NewsPage() {
           {grid.length > 0 && (
             <div className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
               {grid.map((a, i) => (
-                <StoryCard key={a.slug} a={a} i={i} />
+                <StoryCard key={a.slug} a={a} i={i} locale={locale} />
               ))}
             </div>
           )}
@@ -207,13 +226,13 @@ export function NewsPage() {
                 onClick={() => setShown((s) => s + LOAD_STEP)}
                 className="rounded-full border border-line/15 px-6 py-2.5 text-sm font-medium text-ink-2 transition-colors hover:border-brand hover:bg-brand/10"
               >
-                More stories <span className="text-ink-4">({hidden})</span>
+                {tx(UI.moreStories, locale)} <span className="text-ink-4">({hidden})</span>
               </button>
             </div>
           )}
 
           {pool.length === 0 && !showSoon && (
-            <p className="py-10 text-center text-sm text-ink-5">No stories in this category yet.</p>
+            <p className="py-10 text-center text-sm text-ink-5">{tx(UI.emptyCategory, locale)}</p>
           )}
 
           {/* Community: coming soon */}
@@ -225,13 +244,12 @@ export function NewsPage() {
               viewport={VIEWPORT}
               className="rounded-[26px] border border-dashed border-line/15 bg-paper-raised px-8 py-14 text-center"
             >
-              <Kicker>Community · Coming soon</Kicker>
+              <Kicker>{tx(UI.soonKicker, locale)}</Kicker>
               <h3 className="font-display mx-auto mt-3 max-w-xl text-2xl font-bold tracking-tight text-ink md:text-3xl">
-                Meetups &amp; open seminars
+                {tx(UI.soonTitle, locale)}
               </h3>
               <p className="mx-auto mt-3 max-w-md text-ink-3 leading-relaxed">
-                Our first open meetups are being scheduled: builders swapping real production
-                lessons, in the open. Recaps and recordings will land here.
+                {tx(UI.soonBody, locale)}
               </p>
               <a
                 href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"
@@ -239,7 +257,7 @@ export function NewsPage() {
                 rel="noopener noreferrer"
                 className="group mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-accent transition-colors hover:text-ink"
               >
-                Get notified <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                {tx(UI.getNotified, locale)} <span className="transition-transform group-hover:translate-x-0.5">→</span>
               </a>
             </motion.div>
           )}
@@ -252,11 +270,11 @@ export function NewsPage() {
 /* Story card, one size everywhere. The hero is the only scale break on the
  * page; a third card size for six stories was more hierarchy than the volume
  * could carry. */
-function StoryCard({ a, i }: { a: Article; i: number }) {
+function StoryCard({ a, i, locale }: { a: Article; i: number; locale: Locale }) {
   const cover = coverSrc(a);
   return (
     <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
-      <Link href={articleHref(a.slug)} className="group block">
+      <Link href={articleHref(a.slug, locale)} className="group block">
         <div className="relative aspect-[4/3] overflow-hidden rounded-[20px]">
           {cover ? (
             <img
@@ -272,13 +290,13 @@ function StoryCard({ a, i }: { a: Article; i: number }) {
           {a.video && <VideoDot />}
         </div>
         <div className="mt-5">
-          <Kicker>{CAT_LABEL[catOf(a)]}</Kicker>
+          <Kicker>{tx(UI.topic[catOf(a)], locale)}</Kicker>
           <h3 className="font-display mt-2 text-lg font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent">
-            {a.title}
+            {tx(a.title, locale)}
           </h3>
           <div className="mt-3 text-sm text-ink-4">
             {a.date}
-            {a.place ? ` · ${a.place}` : ""}
+            {a.place ? ` · ${tx(a.place, locale)}` : ""}
           </div>
         </div>
       </Link>

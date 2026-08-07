@@ -20,12 +20,26 @@
  * path. New posts go there; the inline entries below move over as they are
  * next edited. See updates/_template/README.md. */
 import { acl2026SanDiego, ACL_2026_COVER } from "./updates/acl-2026-san-diego";
+import { isPair, tx, type I18nText, type Locale } from "./i18n";
+
+/* Locale primitives live in their own leaf module so colocated posts can
+ * import `t` without forming a cycle through this file. Re-exported here so
+ * `from "./data"` keeps working for everything else. */
+export * from "./i18n";
 
 export const HOME = "/";
 export const WORK = `${HOME}work/`;
 export const NEWS = `${HOME}news/`;
 export const TEAM_PAGE = `${HOME}team/`;
-export const articleHref = (slug: string) => `${HOME}${slug}/`;
+
+/* Korean lives under a /ko prefix rather than a [locale] segment: this is a
+ * static export with a single root layout, and only Updates is translated. */
+export const KO_PREFIX = `${HOME}ko/`;
+export const KO_NEWS = `${KO_PREFIX}news/`;
+
+export const newsHref = (locale: Locale = "en") => (locale === "ko" ? KO_NEWS : NEWS);
+export const articleHref = (slug: string, locale: Locale = "en") =>
+  locale === "ko" ? `${KO_PREFIX}${slug}/` : `${HOME}${slug}/`;
 
 /* External research / tech-report site: its own GitHub Pages app for now.
  * When the custom domain is ready, change ONLY this constant to
@@ -37,15 +51,23 @@ export const techReportHref = (slug: string) => `${TECH_REPORT_SITE}/${slug}/`;
 /* Reference-led structure (Next Securities / MakinaRocks): the homepage is
  * a short teaser; depth lives on these sub-pages. Nav points to pages, not
  * in-page anchors. */
-export const NAV: { label: string; href: string; disabled?: boolean }[] = [
-  { label: "About", href: TEAM_PAGE },
-  { label: "Updates", href: NEWS },
-  { label: "Tech Reports", href: TECH_REPORT_SITE },
+/* `href` is a function of locale so the Updates tab keeps the reader in the
+ * language they are already in; labels come from ui.ts by key. */
+export type NavKey = "about" | "updates" | "techReports" | "projects";
+
+export const NAV: {
+  key: NavKey;
+  href: (locale: Locale) => string;
+  disabled?: boolean;
+}[] = [
+  { key: "about", href: () => TEAM_PAGE },
+  { key: "updates", href: (locale) => newsHref(locale) },
+  { key: "techReports", href: () => `${TECH_REPORT_SITE}/` },
   /* Projects tab hidden for now. NAV drives the header, the mobile menu and
    * the footer "Explore" column, so this one line removes the link from all
    * three. The /work/ page itself is untouched and still builds, so restoring
    * the tab is just uncommenting this line. */
-  // { label: "Projects", href: WORK },
+  // { key: "projects", href: () => WORK },
 ];
 
 /* What we do TOGETHER: community activity pillars. Everything is framed as
@@ -196,33 +218,34 @@ export type NewsTopic = "award" | "release" | "announcement" | "community";
  * when forced into a landscape box, so they should pass "3/4". */
 export type GalleryAspect = "4/3" | "3/4" | "1/1" | "16/9";
 
+/* `src` is never translated; everything a reader sees is I18nText. */
 export type GalleryImage = {
   src: string;
-  alt: string;
-  caption?: string;
+  alt: I18nText;
+  caption?: I18nText;
   aspect?: GalleryAspect;
 };
 
 export type Block =
-  | { t: "p"; text: string }
-  | { t: "h"; text: string }
-  | { t: "quote"; text: string }
-  | { t: "list"; items: string[] }
-  | { t: "image"; src: string; alt: string; caption?: string }
-  | { t: "gallery"; images: GalleryImage[]; caption?: string };
+  | { t: "p"; text: I18nText }
+  | { t: "h"; text: I18nText }
+  | { t: "quote"; text: I18nText }
+  | { t: "list"; items: I18nText[] }
+  | { t: "image"; src: string; alt: I18nText; caption?: I18nText }
+  | { t: "gallery"; images: GalleryImage[]; caption?: I18nText };
 
-export type Link = { label: string; href: string };
+export type Link = { label: I18nText; href: string };
 
 export type Article = {
   slug: string;
   kind: Kind;
-  tag: string;
-  title: string;
-  summary: string;
+  tag: I18nText;
+  title: I18nText;
+  summary: I18nText;
   date: string;
-  readTime?: string;
+  readTime?: I18nText;
   author?: string;
-  place?: string;
+  place?: I18nText;
   icon?: "trophy" | "pin";
   featured?: boolean;
   video?: boolean;
@@ -237,7 +260,7 @@ export type Article = {
   body: Block[];
 };
 
-const p = (text: string): Block => ({ t: "p", text });
+const p = (text: I18nText): Block => ({ t: "p", text });
 
 export const ARTICLES: Article[] = [
   /* ───────── Research (real) ───────── */
@@ -998,10 +1021,22 @@ export const LATEST_NEWS = [
   getArticle("wigvo-realtime-translation-video")!,
 ];
 
-/* Sub-page groupings */
+/* Sub-page groupings.
+ *
+ * These match on the ENGLISH tag deliberately: this is build-time
+ * classification, not display copy. Matching the localized tag would move
+ * articles between groups depending on which language the reader picked. */
 export const WORK_GROUPS = [
-  { label: "Papers & Models", items: ARTICLES.filter((a) => a.kind === "report" && /PAPER|MODEL/.test(a.tag)) },
-  { label: "Open Source", items: ARTICLES.filter((a) => a.kind === "report" && a.tag.includes("OPEN SOURCE")) },
+  {
+    label: "Papers & Models",
+    items: ARTICLES.filter((a) => a.kind === "report" && /PAPER|MODEL/.test(tx(a.tag, "en"))),
+  },
+  {
+    label: "Open Source",
+    items: ARTICLES.filter(
+      (a) => a.kind === "report" && tx(a.tag, "en").includes("OPEN SOURCE"),
+    ),
+  },
   { label: "Awards", items: EVENTS },
 ];
 /* News feed: every real article (papers, awards, talks, releases), newest
@@ -1017,3 +1052,23 @@ export const NEWS_FEED = ARTICLES.filter((a) => !a.placeholder).sort((a, b) =>
 export const NEWSROOM_FEED = ARTICLES.filter(
   (a) => !a.placeholder && a.channel === "newsroom",
 ).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+
+/**
+ * A post counts as translated when its two card-facing fields carry Korean.
+ * Not "every field": `tag` and body blocks legitimately hold brand tokens
+ * that are identical in both languages, so demanding full coverage would
+ * reject correctly-authored posts. `title` and `summary` are what the Korean
+ * card and the Korean <title>/description render — if either is English the
+ * page is visibly wrong. Everything else degrades quietly through `tx`.
+ */
+export const hasKorean = (a: Article) => isPair(a.title) && isPair(a.summary);
+
+/**
+ * Single source of truth for: /ko/[slug] static params, the Korean feed, the
+ * language toggle's "is there a counterpart" test, the English route's
+ * hreflang, and the sitemap. If these five ever disagree, the toggle points
+ * at a page that was never exported.
+ */
+export const KO_SLUGS: string[] = NEWSROOM_FEED.filter(hasKorean).map((a) => a.slug);
+
+export const koNewsroomFeed = () => NEWSROOM_FEED.filter(hasKorean);

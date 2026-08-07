@@ -93,3 +93,42 @@ does.
 
 Cite only figures that already exist in a published paper or tech report, and
 say where they came from. Do not round, restate, or infer new ones.
+
+## Korean
+
+Updates is bilingual. English is the base; a post gets a `/ko/` page only
+once it carries Korean, so a half-translated post is never published.
+
+Import the helper from the **i18n leaf module**, never from `data.ts`:
+
+```ts
+import { t, type I18nText } from "../../i18n";
+
+const p = (text: I18nText): Block => ({ t: "p", text });
+
+title: t(
+  "Team WIGTN at ACL 2026 San Diego",
+  "팀 윅튼, ACL 2026 샌디에이고 출장",
+),
+```
+
+`data.ts` value-imports this file. Pulling a value back out of `data.ts`
+would close the loop, and the build dies with "Cannot access 't' before
+initialization" — a TDZ error, not a missing export. Types are fine either
+way (`import type` is erased); only values form the cycle.
+
+Three rules:
+
+1. **Always `t(en, ko)`, never a raw `{ en: …, ko: … }` literal.** The
+   helper keeps one language per line. An inline object collapses a
+   paragraph pair into an 800-character row that neither language can be
+   read in and no reviewer can diff.
+2. **Leave brand tokens as plain strings** — `"GitHub"`, `"npm"`,
+   `"ACL 2026"`, commands. The union type accepts both, and `tx` falls back
+   to English, so an untranslated field renders in English rather than blank.
+3. **Never translate `src`.** Only `alt`, `caption` and text.
+
+A post appears under `/ko/` when **both** `title` and `summary` are pairs —
+see `hasKorean` in `data.ts`. Everything else can lag behind and will simply
+render in English. Chrome strings (nav, buttons, empty states) live in
+`../../ui.ts`, not here.

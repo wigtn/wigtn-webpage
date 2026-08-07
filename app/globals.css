@@ -268,3 +268,10 @@
   );
   animation-delay: 4s;
 }
+
+/* Korean wraps at spaces, not mid-어절. Without this the browser breaks
+ * Korean lines between any two syllables, which chops words in half.
+ * Scoped to :lang(ko), which PageShell sets on the subtree. */
+:lang(ko) {
+  word-break: keep-all;
+}

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { ARTICLES, articleHref } from "@/mockups/research-led/data";
+import { ARTICLES, KO_SLUGS, articleHref, getArticle } from "@/mockups/research-led/data";
 
 const SITE = "https://wigtn.com";
 
@@ -27,5 +27,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }),
   );
 
-  return [...staticRoutes, ...articles];
+  /* Korean pages exist only for posts that carry Korean copy, so this maps
+   * KO_SLUGS rather than the whole feed — the same list generateStaticParams
+   * uses. Priorities sit just under their English counterparts to signal
+   * English as primary. */
+  const korean: MetadataRoute.Sitemap = [
+    { url: `${SITE}/ko/news/`, changeFrequency: "weekly", priority: 0.85 },
+    ...KO_SLUGS.map((slug) => ({
+      url: `${SITE}${articleHref(slug, "ko")}`,
+      lastModified: articleDate(getArticle(slug)!.date),
+      changeFrequency: "monthly" as const,
+      priority: 0.65,
+    })),
+  ];
+
+  return [...staticRoutes, ...articles, ...korean];
 }

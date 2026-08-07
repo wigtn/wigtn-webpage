@@ -13,7 +13,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { Trophy, MapPin, Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/theme";
-import { HOME, NAV } from "./data";
+import { HOME, NAV, tx, type Locale } from "./data";
+import { LangToggle } from "./LangToggle";
+import { UI } from "./ui";
 
 export const EVENT_ICON = { trophy: Trophy, pin: MapPin } as const;
 
@@ -62,7 +64,7 @@ export function IndexRule({ n, label }: { n: string; label: string }) {
   );
 }
 
-export function SiteHeader() {
+export function SiteHeader({ locale = "en" }: { locale?: Locale } = {}) {
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 border-b border-line/[0.07] bg-paper/80 backdrop-blur-md">
@@ -76,27 +78,28 @@ export function SiteHeader() {
           <ul className="hidden items-center gap-2 md:flex">
             {NAV.map((n) =>
               n.disabled ? (
-                <li key={n.label}>
+                <li key={n.key}>
                   <span
                     aria-disabled="true"
                     className="cursor-default rounded-full px-3.5 py-1.5 text-sm text-ink-5 select-none"
                   >
-                    {n.label}
+                    {tx(UI.nav[n.key], locale)}
                   </span>
                 </li>
               ) : (
-                <li key={n.label}>
+                <li key={n.key}>
                   <Link
-                    href={n.href}
+                    href={n.href(locale)}
                     className="rounded-full px-3.5 py-1.5 text-sm text-ink-3 transition-colors hover:bg-line/[0.04] hover:text-ink"
                   >
-                    {n.label}
+                    {tx(UI.nav[n.key], locale)}
                   </Link>
                 </li>
               ),
             )}
           </ul>
 
+          <LangToggle locale={locale} />
           <ThemeToggle className="ml-1" />
 
           {/* mobile menu toggle */}
@@ -119,22 +122,22 @@ export function SiteHeader() {
           <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-4">
             {NAV.map((n) =>
               n.disabled ? (
-                <li key={n.label}>
+                <li key={n.key}>
                   <span
                     aria-disabled="true"
                     className="block cursor-default rounded-lg px-3 py-2.5 text-ink-5 select-none"
                   >
-                    {n.label}
+                    {tx(UI.nav[n.key], locale)}
                   </span>
                 </li>
               ) : (
-                <li key={n.label}>
+                <li key={n.key}>
                   <Link
-                    href={n.href}
+                    href={n.href(locale)}
                     onClick={() => setOpen(false)}
                     className="block rounded-lg px-3 py-2.5 text-ink-2 transition-colors hover:bg-line/[0.04] hover:text-ink"
                   >
-                    {n.label}
+                    {tx(UI.nav[n.key], locale)}
                   </Link>
                 </li>
               ),
@@ -146,7 +149,7 @@ export function SiteHeader() {
   );
 }
 
-export function SiteFooter() {
+export function SiteFooter({ locale = "en" }: { locale?: Locale } = {}) {
   return (
     <footer className="relative z-10 border-t border-line/[0.08] bg-paper-sunken text-ink">
       {/* Footer columns */}
@@ -155,24 +158,24 @@ export function SiteFooter() {
           <div>
             <Wordmark className="h-9 md:h-11" />
             <p className="mt-4 max-w-sm text-pretty text-sm text-ink-3">
-              An open community of AI builders. Everything we learn, we share.
+              {tx(UI.footerTagline, locale)}
             </p>
           </div>
           <div className="flex gap-16">
             <div>
               <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-4 mb-4">
-                Explore
+                {tx(UI.footerExplore, locale)}
               </div>
               <ul className="space-y-2.5 text-sm text-ink-3">
                 {NAV.map((n) =>
                   n.disabled ? (
-                    <li key={n.label} className="cursor-default text-ink-5 select-none">
-                      {n.label}
+                    <li key={n.key} className="cursor-default text-ink-5 select-none">
+                      {tx(UI.nav[n.key], locale)}
                     </li>
                   ) : (
-                    <li key={n.label}>
-                      <Link href={n.href} className="hover:text-ink transition-colors">
-                        {n.label}
+                    <li key={n.key}>
+                      <Link href={n.href(locale)} className="hover:text-ink transition-colors">
+                        {tx(UI.nav[n.key], locale)}
                       </Link>
                     </li>
                   ),
@@ -181,7 +184,7 @@ export function SiteFooter() {
             </div>
             <div>
               <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-4 mb-4">
-                Connect
+                {tx(UI.footerConnect, locale)}
               </div>
               <ul className="space-y-2.5 text-sm text-ink-3">
                 <li>
@@ -218,13 +221,26 @@ export function SiteFooter() {
 }
 
 /* Sub-page shell: light backdrop + header + footer. */
-export function PageShell({ children }: { children: React.ReactNode }) {
+/* `lang` lives here rather than on <html>: `output: "export"` renders one
+ * root layout for every page, so splitting it per locale would mean route
+ * groups and duplicate layouts. A subtree lang is what screen readers switch
+ * voice on and what the :lang(ko) rule in globals.css selects. */
+export function PageShell({
+  children,
+  locale = "en",
+}: {
+  children: React.ReactNode;
+  locale?: Locale;
+}) {
   return (
-    <div className="relative min-h-screen bg-paper text-ink font-sans antialiased selection:bg-brand/20">
+    <div
+      lang={locale}
+      className="relative min-h-screen bg-paper text-ink font-sans antialiased selection:bg-brand/20"
+    >
       <BackdropDecor />
-      <SiteHeader />
+      <SiteHeader locale={locale} />
       <main className="relative z-10">{children}</main>
-      <SiteFooter />
+      <SiteFooter locale={locale} />
     </div>
   );
 }
