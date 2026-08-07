@@ -15,6 +15,12 @@
  * import it. Stands in for the future MDX-backed content model.
  */
 
+/* Posts are migrating to `updates/<slug>/`, where the text sits next to its
+ * own images and the images are imported rather than referenced by a public
+ * path. New posts go there; the inline entries below move over as they are
+ * next edited. See updates/_template/README.md. */
+import { acl2026SanDiego, ACL_2026_COVER } from "./updates/acl-2026-san-diego";
+
 /* No trailing slashes: the Pages build exports flat files (`team.html`), so
  * `/team` is the URL that resolves and `/team/` 404s. See next.config.ts. */
 export const HOME = "/";
@@ -189,7 +195,17 @@ export type Kind = "report" | "event" | "community" | "insight";
 export type Channel = "newsroom" | "report";
 export type NewsTopic = "award" | "release" | "announcement" | "community";
 
-export type GalleryImage = { src: string; alt: string; caption?: string };
+/* `aspect` overrides the gallery's default 4/3 crop for a single image.
+ * Portrait shots (a poster, a person standing) lose their subject entirely
+ * when forced into a landscape box, so they should pass "3/4". */
+export type GalleryAspect = "4/3" | "3/4" | "1/1" | "16/9";
+
+export type GalleryImage = {
+  src: string;
+  alt: string;
+  caption?: string;
+  aspect?: GalleryAspect;
+};
 
 export type Block =
   | { t: "p"; text: string }
@@ -563,65 +579,7 @@ export const ARTICLES: Article[] = [
       { t: "quote", text: "Top 6 at OBA Weekendthon, built by 3 engineers in two days." },
     ],
   },
-  {
-    slug: "acl-2026-san-diego",
-    kind: "event",
-    channel: "newsroom",
-    newsTopic: "announcement",
-    tag: "ACL 2026",
-    icon: "pin",
-    title: "WIGVO at ACL 2026 in San Diego: a live demo booth, plus an IWSLT invited talk",
-    summary:
-      "We brought WIGVO to the ACL 2026 System Demonstrations floor as a live booth, and were invited to present at IWSLT 2026: an oral talk and a poster.",
-    date: "2026.07.16",
-    place: "San Diego, USA",
-    author: "WIGTN Research",
-    readTime: "6 min",
-    image: "/images/news/acl_sandiego_TEAM.jpg",
-    externalUrl: "https://wigtn.github.io/blog/wigvo/",
-    links: [
-      { label: "GitHub", href: "https://github.com/wigtn/wigvo-v2" },
-      { label: "Watch demo", href: "https://youtu.be/_ixVEnHJxjk" },
-    ],
-    body: [
-      p(
-        "San Diego, July 2026. After the acceptance email back in April, WIGVO finally made it to the ACL 2026 floor, not as a poster tucked in a hallway, but as a live demo booth in the System Demonstrations track. For three days we handed strangers a phone, let them speak their own language, and watched the person on the other end hear it in theirs.",
-      ),
-      { t: "h", text: "A demo you could actually pick up and use" },
-      p(
-        "Most demos ask you to watch. Ours asked you to talk. Visitors dialed a number, the recipient answered an ordinary phone (no app, no headset, no setup) and the two of them held a conversation across a language barrier in near real time. That is the whole point of WIGVO: it meets people where they already are. The hospital front desk, the city office, the bank call center: the places that need translation most are still running on landlines.",
-      ),
-      p(
-        "Running it live, all day, in a noisy conference hall was its own stress test. The software-only echo cancellation held. The dual-session design kept each speaker's interpreter from bleeding into the other. And the latency stayed low enough that conversations felt like conversations, not walkie-talkie exchanges.",
-      ),
-      { t: "h", text: "The questions that surprised us" },
-      p(
-        "We expected the academic questions about the model, the data, the evaluation. We got those. What we didn't expect was how many people came at it from the industry side: How does it handle the PSTN? What's the per-minute cost at scale? Can it drop into an existing call center? Which languages are production-ready today?",
-      ),
-      p(
-        "Those are deployment questions, not paper questions. They came from engineers and product people who weren't asking whether it works in a benchmark. They were asking whether they could ship it next quarter.",
-      ),
-      {
-        t: "quote",
-        text: "That's when it clicked: this isn't just a paper, it's a product people are waiting for.",
-      },
-      { t: "h", text: "A lucky bonus: IWSLT 2026" },
-      p(
-        "Alongside the main-conference demo, WIGVO was invited to IWSLT 2026, the spoken-language-translation workshop. That turned into two more sessions: an invited oral talk and a poster. The oral let us walk through the architecture end to end; the poster turned into a two-hour conversation with the people who care most about real-time speech translation.",
-      ),
-      {
-        t: "image",
-        src: "/images/news/acl_sandiego_IWSLT.jpg",
-        alt: "A WIGTN researcher presenting the WIGVO real-time speech translation system at IWSLT 2026 in San Diego.",
-        caption: "Presenting WIGVO at the IWSLT 2026 workshop: invited oral talk and poster.",
-      },
-      { t: "h", text: "What we're taking home" },
-      p(
-        "We flew back with a longer to-do list than we arrived with: languages people asked for, integrations people wanted, edge cases we hadn't hit until a stranger tried them live. San Diego reframed the work for us: WIGVO isn't finished when the paper is published. It's finished when someone calls a hospital in a language they don't share, and it just works.",
-      ),
-      { t: "quote", text: "San Diego, you were great. Now back to shipping." },
-    ],
-  },
+  acl2026SanDiego,
 
   /* ───────── Newsroom · Releases & Updates (real) ───────── */
   {
@@ -1024,7 +982,7 @@ export const MILESTONES: Milestone[] = [
     text: "WIGVO ran a live demo booth at ACL System Demonstrations, followed by an invited oral talk and poster at IWSLT 2026.",
     railTitle: "ACL 2026 & IWSLT 2026",
     railText: "A live demo booth at ACL, then an invited talk at IWSLT.",
-    image: "/images/news/acl_sandiego_IWSLT.jpg",
+    image: ACL_2026_COVER,
     slug: "acl-2026-san-diego",
   },
   {
