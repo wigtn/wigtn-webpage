@@ -26,6 +26,7 @@
  */
 
 import type { Article, Block } from "../../data";
+import arriving from "./arriving.jpg";
 import boothD3 from "./booth-d3.jpg";
 import coffeeBreak from "./coffee-break.jpg";
 import conferencePortrait from "./conference-portrait.jpg";
@@ -36,6 +37,7 @@ import iwsltOrganizer from "./iwslt-organizer.jpg";
 import iwsltPosterPrep from "./iwslt-poster-prep.jpg";
 import iwsltPosterSession from "./iwslt-poster-session.jpg";
 import iwsltTalk from "./iwslt-talk.jpg";
+import iwsltTalk2 from "./iwslt-talk-2.jpg";
 /* The recipient's phone number is masked in this screenshot. If it is ever
  * re-exported from the app, mask it again before committing. */
 import liveCall from "./live-call.png";
@@ -44,14 +46,16 @@ import midwayReception from "./midway-reception.jpg";
 import posterVisitAmazon from "./poster-visit-amazon.jpg";
 import posterVisitApple from "./poster-visit-apple.jpg";
 import posterVisitNvidia from "./poster-visit-nvidia.jpg";
-import teamBanner from "./team-banner.jpg";
+/* Cropped from the full-length team shot to the hero's 2:1 band — top
+ * trimmed to the banner, bottom to the knee, faces intact. */
+import teamCover from "./team-cover.jpg";
 import venueEntrance from "./venue-entrance.jpg";
 import workshopTalk from "./workshop-talk.jpg";
 
 const p = (text: string): Block => ({ t: "p", text });
 
 /* Exported so the hero/cover can reuse the same file the body does. */
-export const ACL_2026_COVER = boothD3.src;
+export const ACL_2026_COVER = teamCover.src;
 
 export const acl2026SanDiego: Article = {
   slug: "acl-2026-san-diego",
@@ -70,7 +74,7 @@ export const acl2026SanDiego: Article = {
   place: "San Diego, USA",
   author: "WIGTN Research",
   readTime: "11 min",
-  image: boothD3.src,
+  image: teamCover.src,
   externalUrl: "https://wigtn.github.io/blog/wigvo/",
   links: [
     { label: "ACL paper", href: "https://aclanthology.org/2026.acl-demo.33/" },
@@ -97,6 +101,12 @@ export const acl2026SanDiego: Article = {
           src: venueEntrance.src,
           alt: "The ACL 2026 San Diego banner across the glass frontage of the convention centre, with attendees queueing at registration inside.",
           caption: "July 2. Through the front door and into the queue.",
+          aspect: "3/4",
+        },
+        {
+          src: arriving.src,
+          alt: "A screen inside the venue reading \"ACL 2026 San Diego, July 2-7 — Welcome to San Diego\", beside the registration desk.",
+          caption: "The first thing the building says to you.",
           aspect: "3/4",
         },
       ],
@@ -164,6 +174,11 @@ export const acl2026SanDiego: Article = {
           src: demoBoothWide.src,
           alt: "Wide view of the WIGTN booth showing the poster, the monitors and the demo table.",
           caption: "Booth D3, set up and running.",
+        },
+        {
+          src: boothD3.src,
+          alt: "The WIGTN booth at ACL 2026: the WIGVO poster on the right, three screens showing a live call in progress, and visitors talking with the team.",
+          caption: "The three screens show one call from both ends at once.",
         },
       ],
     },
@@ -246,11 +261,23 @@ export const acl2026SanDiego: Article = {
       "The invited oral let us walk the architecture end to end, including the part papers usually leave out: the idea that failed. We first tried a Pearson-correlation detector comparing outgoing synthesized audio against incoming line audio. It was the cleaner idea and it did not survive the phone network, because codec quantization and variable delay destroyed the stable signal relationship it needed. It cut looping from eight calls in ten to three, then introduced false positives. We threw it away.",
     ),
     {
-      t: "image",
-      src: iwsltTalk.src,
-      alt: "A WIGTN researcher presenting WIGVO at the IWSLT 2026 invited oral session in San Diego.",
+      t: "gallery",
+      images: [
+        {
+          src: iwsltTalk.src,
+          alt: "A WIGTN researcher presenting WIGVO at the IWSLT 2026 invited oral session in San Diego.",
+          caption: "IWSLT 2026, invited oral.",
+          aspect: "16/9",
+        },
+        {
+          src: iwsltTalk2.src,
+          alt: "The dual-session gated relay architecture on screen during the IWSLT 2026 talk, showing the two pipelines and the three-stage echo filter between them.",
+          caption: "The slide the questions were really about: two sessions, one gate between them.",
+          aspect: "16/9",
+        },
+      ],
       caption:
-        "IWSLT 2026, invited oral. The room asked better questions about the failed detector than about the one that shipped.",
+        "The room asked better questions about the detector we threw away than about the one that shipped.",
     },
     p(
       "The poster afterwards turned into a two-hour conversation with exactly the people who care most about real-time speech translation. Several had hit the same echo problem from different directions, which is the kind of exchange you cannot get from a paper alone.",
@@ -328,19 +355,8 @@ export const acl2026SanDiego: Article = {
     p(
       "And everyone who picked up the phone at booth D3 and tried to break it. The list above is mostly your doing.",
     ),
+    /* No closing team photo: the same shot now runs as the cover, and showing
+     * it twice in one scroll reads as a mistake. */
     { t: "quote", text: "San Diego, you were great. Now back to shipping." },
-
-    {
-      t: "gallery",
-      images: [
-        {
-          src: teamBanner.src,
-          alt: "The WIGTN team of four in front of the ACL 2026 San Diego banner.",
-          caption: "The crew at the ACL 2026 banner.",
-          aspect: "3/4",
-        },
-      ],
-      caption: "From the week.",
-    },
   ],
 };

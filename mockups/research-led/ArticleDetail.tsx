@@ -47,7 +47,11 @@ const KIND_LABEL: Record<Article["kind"], string> = {
 function BlockView({ block }: { block: Block }) {
   switch (block.t) {
     case "h":
-      return <h2 className="mt-12 mb-4 text-2xl font-semibold tracking-tight text-ink">{block.text}</h2>;
+      return (
+        <h2 className="mt-14 mb-4 text-[1.75rem] font-semibold tracking-tight text-ink">
+          {block.text}
+        </h2>
+      );
     case "quote":
       return (
         <blockquote className="my-8 border-l-2 border-brand pl-5 text-xl font-medium leading-snug text-ink">
@@ -58,7 +62,7 @@ function BlockView({ block }: { block: Block }) {
       return (
         <ul className="my-5 space-y-2.5">
           {block.items.map((it) => (
-            <li key={it} className="flex gap-3 text-ink-3 leading-relaxed">
+            <li key={it} className="flex gap-3 text-[1.125rem] leading-[1.7] text-ink-3">
               <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />
               <span>{it}</span>
             </li>
@@ -132,7 +136,11 @@ function BlockView({ block }: { block: Block }) {
       );
     }
     default:
-      return <p className="my-5 text-lg leading-relaxed text-ink-3">{block.text}</p>;
+      /* 20px, not 18. Line length is what limits a reading column, not pixel
+       * width: at 18px the old 720px column ran ~89 characters, past the
+       * 45-75 that long-form reading wants. Growing the type as the column
+       * grows keeps the measure near 75 while the page reads wider. */
+      return <p className="my-6 text-[1.25rem] leading-[1.75] text-ink-3">{block.text}</p>;
   }
 }
 
@@ -164,7 +172,9 @@ export function ArticleDetail({ slug }: { slug: string }) {
       <SiteHeader />
 
       <main className="relative z-10">
-        <article className="max-w-3xl mx-auto px-6 pt-24 pb-8 md:pt-28">
+        {/* 52rem, not max-w-3xl. Paired with the 20px body this lands the
+            measure near 75 characters — wider page, same readability. */}
+        <article className="max-w-[52rem] mx-auto px-6 pt-24 pb-8 md:pt-28">
           {/* Header */}
           <motion.header variants={rise} initial="hidden" animate="show">
             <div className="flex flex-wrap items-center gap-2">
@@ -180,7 +190,9 @@ export function ArticleDetail({ slug }: { slug: string }) {
             <h1 className="mt-3 text-[clamp(1.9rem,4.5vw,3rem)] font-bold tracking-tight leading-[1.1]">
               {article.title}
             </h1>
-            <p className="mt-4 text-lg text-ink-3 leading-relaxed">{article.summary}</p>
+            {/* Standfirst sits above the body, so it has to be at least as
+                large as it — 18px under a 20px body read as a mistake. */}
+            <p className="mt-4 text-[1.375rem] leading-[1.6] text-ink-2">{article.summary}</p>
 
             <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-4">
               <span className="inline-flex items-center gap-1.5">
