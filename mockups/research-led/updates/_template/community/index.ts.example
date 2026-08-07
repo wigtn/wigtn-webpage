@@ -21,6 +21,9 @@ import cover from "./cover.jpg";
 
 const p = (text: string): Block => ({ t: "p", text });
 
+/* Export a `*_COVER` constant ONLY if something outside this post reuses the
+ * image — a MILESTONES entry on the homepage rail, a card. Otherwise delete
+ * this line and keep `cover` module-local. See ../README.md. */
 export const MY_NEW_POST_COVER = cover.src;
 
 export const myNewPost: Article = {
@@ -36,6 +39,11 @@ export const myNewPost: Article = {
   author: "WIGTN",
   readTime: "4 min",
   image: cover.src,
+  /* One placeholder on purpose. `ArticleDetail` keys links by `href`, so two
+   * entries left empty are two identical React keys, and an empty `href` with
+   * target="_blank" renders a live button that reopens the current page. Fill
+   * this one, then add the others. Tech-report links go through
+   * `techReportHref` from "../../links" — never a value import from data. */
   links: [{ label: "Slides", href: "" }],
   body: [
     p("Lede: the session, who ran it, where, when, and how many were there."),

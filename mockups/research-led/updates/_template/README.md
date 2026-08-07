@@ -11,8 +11,10 @@ updates/
     └── whatever-else.jpg
 ```
 
-The cover is `cover.jpg` by convention, matching the `*_COVER` constant the post
-exports. Everything else is named for what it shows.
+The template skeletons import `./cover.jpg` as a placeholder so they compile.
+Rename it — the cover follows the same rule as every other image and is named
+for what it shows (`winners-on-stage.jpg`, `grand-prize-certificate.jpg`), not
+for the slot it fills.
 
 Register the export in `../../data.ts`:
 
@@ -102,11 +104,22 @@ out entirely is the failure.)
 **`-profile` is not optional either**, and this one fails silently. iPhones
 capture in Display P3. `-strip` drops the profile without converting the
 pixels, so the browser reads P3 values as sRGB and every saturated colour comes
-out too hot — measured at 29% peak error on one of the hackathon photos, and
-unrecoverable once committed. Convert to sRGB first, then strip.
+out too hot. Measured across the five P3 photos in the hackathon posts, the
+worst pixel lands between 33% and 53% off (`magick compare -metric PAE`): the
+TRAE stage shot 40%, the OBA sponsor board 53%. The *mean* shift is under 1%,
+so it never looks broken — it concentrates in the saturated content, which on
+a stage photo or a neon board is the subject. Unrecoverable once committed.
+Convert to sRGB first, then strip.
 
 `-colorspace sRGB` is **not** a substitute: ImageMagick already labels a P3 file
 as sRGB internally, so that flag is a no-op on exactly the files that need it.
+
+**Screenshots are not photos.** The command above is for camera output. A UI
+screenshot or a chart is flat colour and crisp text: leave it PNG, do not
+re-encode it to JPEG (q82 rings around text), and do not palette-quantize
+anything with a gradient in it. If it is already under the 2000px cap with no
+EXIF and no profile, copy it byte for byte and say so in the header — that is
+what `wigss-npm-release` does.
 
 Name files for what they show (`booth-d3.jpg`), never for their position
 (`photo-3.jpg`) — the order changes and the name stops being true.
@@ -153,6 +166,16 @@ gallery, where `aspect: "3/4"` caps a lone portrait at 460px.
 
 Galleries can sit inside any section, so a section can carry one photo and the
 next can carry four.
+
+## Two fields the templates set for you, and one you may need to unset
+
+`channel: "newsroom"` is what puts a post in the `/news` feed — `data.ts`
+filters `NEWSROOM_FEED` on it. Every template hardcodes it because every
+template describes a newsroom post. **Writing a back-catalogue report? Delete
+the field.** Leaving it in silently publishes the post to the feed.
+
+`icon` takes `"pin"` or `"trophy"` and is optional. `trophy` for a placing,
+`pin` for a place we went. Anything else, omit it.
 
 ## Exporting the cover
 

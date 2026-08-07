@@ -18,10 +18,13 @@
 
 import type { Article, Block } from "../../../data";
 import cover from "./cover.png";
+import bodyImage from "./body-image.png";
 
 const p = (text: string): Block => ({ t: "p", text });
 
-/* Exported so a card or milestone elsewhere can reuse the same file. */
+/* Export a `*_COVER` constant ONLY if something outside this post reuses the
+ * image — a MILESTONES entry on the homepage rail, a card. Otherwise delete
+ * this line and keep `cover` module-local. See ../README.md. */
 export const MY_NEW_POST_COVER = cover.src;
 
 export const myNewPost: Article = {
@@ -50,7 +53,10 @@ export const myNewPost: Article = {
 
     { t: "h", text: "Get it" },
     p("The install line, verbatim, in the first screen of the post."),
-    { t: "image", src: cover.src, alt: "TODO: describe what is in the frame, in a sentence", caption: "" },
+    /* Import your own image for this — do NOT reuse `cover`. The cover already
+     * runs at the top of the page, and the same frame twice in one scroll
+     * reads as a mistake (see STRUCTURE.md). */
+    { t: "image", src: bodyImage.src, alt: "TODO: describe what is in the frame, in a sentence", caption: "" },
 
     { t: "h", text: "What is in the release" },
     {

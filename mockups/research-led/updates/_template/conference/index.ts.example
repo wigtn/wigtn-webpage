@@ -17,11 +17,17 @@
  */
 
 import type { Article, Block } from "../../../data";
+/* One import per photo, each named for what it shows. These two are
+ * placeholders; a real conference post carries a dozen or more. */
 import cover from "./cover.jpg";
+import arriving from "./arriving.jpg";
+import whatWeBrought from "./what-we-brought.jpg";
 
 const p = (text: string): Block => ({ t: "p", text });
 
-/* Exported so a milestone or card elsewhere can reuse the same file. */
+/* Export a `*_COVER` constant ONLY if something outside this post reuses the
+ * image — a MILESTONES entry on the homepage rail, a card. Otherwise delete
+ * this line and keep `cover` module-local. See ../README.md. */
 export const MY_NEW_POST_COVER = cover.src;
 
 export const myNewPost: Article = {
@@ -38,6 +44,11 @@ export const myNewPost: Article = {
   author: "WIGTN Research",
   readTime: "8 min",
   image: cover.src,
+  /* One placeholder on purpose. `ArticleDetail` keys links by `href`, so two
+   * entries left empty are two identical React keys, and an empty `href` with
+   * target="_blank" renders a live button that reopens the current page. Fill
+   * this one, then add the others. Tech-report links go through
+   * `techReportHref` from "../../links" — never a value import from data. */
   links: [{ label: "Paper", href: "" }],
   body: [
     p("Lede: the venue, the track, the dates, and what we were there to do."),
@@ -46,12 +57,15 @@ export const myNewPost: Article = {
     p("The scale of it, before you were part of it."),
     {
       t: "gallery",
-      images: [{ src: cover.src, alt: "TODO: describe what is in the frame, in a sentence", caption: "", aspect: "3/4" }],
+      images: [{ src: arriving.src, alt: "TODO: describe what is in the frame, in a sentence", caption: "", aspect: "3/4" }],
     },
 
     { t: "h", text: "What we brought" },
     p("The work itself, with the numbers that are already published."),
-    { t: "image", src: cover.src, alt: "TODO: describe what is in the frame, in a sentence", caption: "" },
+    /* Import your own image for this — do NOT reuse `cover`. The cover already
+     * runs at the top of the page, and the same frame twice in one scroll
+     * reads as a mistake (see STRUCTURE.md). */
+    { t: "image", src: whatWeBrought.src, alt: "TODO: describe what is in the frame, in a sentence", caption: "" },
 
     { t: "h", text: "What happened" },
     p("The floor, the booth, the session. Photos belong here."),

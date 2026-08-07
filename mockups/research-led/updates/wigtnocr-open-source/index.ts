@@ -64,8 +64,12 @@
 
 import type { Article, Block } from "../../data";
 import { techReportHref } from "../../links";
-/* Copied, not moved, from public/images/projects/: constants/projects.ts and
- * constants/wigtnocr-sections.ts still read the originals from public/. */
+/* From public/images/projects/, copied rather than moved: constants/projects.ts
+ * and constants/wigtnocr-sections.ts still read the originals. Both are
+ * screenshots, so they stay PNG at full colour — no JPEG re-encode (q82 rings
+ * around text) and no palette reduction (the logo carries a gradient that
+ * bands at 256 colours). The chart is resized to the 2000px cap; the model
+ * card is already under it and only loses its metadata. */
 import huggingfaceModelCard from "./huggingface-model-card.png";
 import kogovdocRetrieval from "./kogovdoc-retrieval.png";
 
@@ -101,10 +105,11 @@ export const wigtnocrOpenSource: Article = {
 
     { t: "h", text: "Get it" },
     p("The model id is Wigtn/Qwen3-VL-2B-WigtnOCR. To serve it:"),
-    /* A command goes in a `quote`, not a single-item `list`: the Block union
-     * has no code block, and a list renders each line behind a bullet dot,
-     * which reads badly for a shell invocation. Same treatment in the other
-     * two release notes. */
+    /* A single command goes in a `quote`, not a one-item `list`: the Block
+     * union has no code block, and a list renders it behind a bullet dot,
+     * which reads badly for a shell invocation. A *sequence* of commands goes
+     * in a list instead — see `wigtn-coding-release`, where `quote` collapsed
+     * two lines into one. */
     {
       t: "quote",
       text: "vllm serve Wigtn/Qwen3-VL-2B-WigtnOCR --max-model-len 16384 --trust-remote-code",

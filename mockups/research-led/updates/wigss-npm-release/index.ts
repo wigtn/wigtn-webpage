@@ -33,16 +33,20 @@
  *    quietly renumber this one.
  *
  * 3. No download or adoption figures, although the cover screenshot happens to
- *    show npm's counter. A live counter is not a published figure, the
- *    screenshot post-dates the release by a few days, and download counts are
- *    not evidence that the thing works.
+ *    show npm's counter. A live counter is not a published figure, and download
+ *    counts are not evidence that the thing works. Note the screenshot was
+ *    taken a few days after publishing — its header reads "3 days ago" — so it
+ *    is a picture of the package page, not of launch day. It runs as the cover
+ *    only; there is no second copy of it in the body.
  *
  * 4. The install line is `npx`, not `npm install`. WIGSS is a CLI you run
  *    against a dev server, and the README's quick start is npx. npm's page
  *    shows its usual `npm i wigss` box, which is not how the tool is used.
  *
  * 5. The command runs in a `quote` block because the Block union has no code
- *    block. If one is ever added, move it there.
+ *    block. If one is ever added, move it there. One command belongs in a
+ *    quote; a sequence belongs in a list, because a quote is a single
+ *    paragraph and the browser collapses whatever you use to fake a break.
  *
  * 6. The tech-report URL comes from `techReportHref` in ../../links, a leaf
  *    module, not from ../../data: data.ts imports this module, so pulling a
@@ -107,13 +111,10 @@ export const wigssNpmRelease: Article = {
     p(
       "That starts the editor on port 4000 with your page loaded inside it. The --wigss-port flag moves the editor if 4000 is taken, and npx wigss@latest --demo runs the whole thing against a built-in demo page if you have no project handy. WIGSS reads OPENAI_API_KEY, takes --key, or asks for a key on first run. If you installed wigss globally at some point, uninstall it first, or npx will keep serving the old copy. The npm page shows its usual npm i wigss install box; ignore it, this is a CLI you run, not a dependency you add.",
     ),
-    {
-      t: "image",
-      src: npmPackagePage.src,
-      alt: "The npm package page for wigss at version 0.1.4, showing the readme with the WIGTN logo and the Quick Start commands, and a sidebar listing the GitHub repository, the version, the Apache-2.0 licence, unpacked size, file count and weekly downloads.",
-      caption:
-        "wigss on npm: v0.1.4, Apache-2.0, 222 kB unpacked across 40 files. Captured a few days after publishing, which is why the header says three days ago.",
-    },
+    /* No image block here. The npm page screenshot is already the cover, one
+     * screen up, and the same frame twice in one scroll reads as a mistake.
+     * The facts its caption carried — 222 kB, 40 files — are in the list
+     * below, which is where a reader looking for them would go anyway. */
 
     { t: "h", text: "What is in the release" },
     {

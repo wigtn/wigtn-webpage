@@ -33,12 +33,14 @@
  * "3 commands" as "3 skills". This post carries the v0.1.14 numbers and names
  * the version they belong to. Do not restore the 12/3/17 line.
  *
- * The two links on the old entry pointed at different repositories.
- * wigtn-plugins-with-claude-code was renamed to wigtn-plugins on 2 June 2026
- * (commit a05f651, a BREAKING CHANGE that also moved the plugin id from
- * `wigtn-coding` to `wigtn-plugins`). GitHub still redirects the old slug, so
- * both links land in the same place. `links` is preserved exactly as it was;
- * the body gives the current install id so nobody types the retired one.
+ * The GitHub link was changed, and deliberately. The old inline entry pointed
+ * at wigtn-plugins-with-claude-code, which was renamed to wigtn-plugins on
+ * 2 June 2026 (commit a05f651, a BREAKING CHANGE that also moved the plugin id
+ * from `wigtn-coding` to `wigtn-plugins`). GitHub redirects the old slug, so
+ * the stale link worked — but the body two sections down tells the reader to
+ * update a cloned remote, and a button that hands them the retired address
+ * back argues with its own page. Every other field on this article is
+ * preserved from the inline entry verbatim; this one is not.
  *
  * The tech-report link is built with `techReportHref()` from ../../links, a
  * leaf module. Importing a value from ../../data would be circular — data.ts
@@ -96,13 +98,14 @@ export const wigtnCodingRelease: Article = {
 
     { t: "h", text: "Get it" },
     p("It is a Claude Code plugin. Two lines, verbatim from the v0.1.14 README:"),
-    /* A command goes in a `quote`, not a `list`: the Block union has no code
-     * block, and a list renders each line behind a bullet dot, which reads
-     * badly for something you are meant to type. Same treatment in the other
-     * two release notes. */
+    /* A single command goes in a `quote` (see the other two release notes); a
+     * *sequence* goes in a `list`, because `quote` renders as one paragraph
+     * and the browser collapses any padding used to fake a line break. Joining
+     * them with a separator was worse than the bullet it was avoiding: it read
+     * as one line, it was no longer verbatim, and pasting it ran nothing. */
     {
-      t: "quote",
-      text: "/plugin marketplace add wigtn/wigtn-plugins   ·   /install wigtn-plugins",
+      t: "list",
+      items: ["/plugin marketplace add wigtn/wigtn-plugins", "/install wigtn-plugins"],
     },
     p(
       "The install id is wigtn-plugins, not wigtn-coding. The plugin was renamed on 2 June 2026 and the old id stopped working then; namespaced subagent calls became wigtn-plugins:<agent> in the same change. The repository moved with it, from wigtn-plugins-with-claude-code to wigtn-plugins. GitHub still redirects the old address, so an old link lands fine, but a cloned remote is worth updating.",

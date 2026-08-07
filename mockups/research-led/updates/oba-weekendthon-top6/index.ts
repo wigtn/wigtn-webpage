@@ -16,8 +16,12 @@
  *   - the repo's own commit log via the GitHub API — eight commits, all on
  *     31 May, and the two merged pull requests;
  *   - the photo in this folder, which is a picture of the event's sponsor
- *     board and is therefore also a source: the dates, the venue and the API
- *     sponsor row are all legible on it.
+ *     board and is therefore also a source. At native resolution it gives the
+ *     dates, the venue, and the sponsor tiers by name — 주최 (Hashed, Market
+ *     Fit Lab, vooy), Main (OpenAI), Premium (Nexon, LG U+, GS Neotek), and
+ *     the ten-company API Sponsor row. The tiers are distinct and the post
+ *     keeps them distinct; an earlier draft called Nexon and LG U+ API
+ *     sponsors, which the board contradicts.
  *
  * Two editorial decisions a future editor would otherwise undo:
  *
@@ -37,13 +41,19 @@
  * from another project. A one-image post is fine; an invented one is not.
  *
  * That one photo does two jobs, and they want different framings. In the body
- * it runs in a gallery at `aspect: "3/4"`, full frame, because the caption
- * points at the API Sponsor row and the reader has to be able to read it. As
- * the cover it is cropped 2:1 by the hero and 4:3 by the news card, which
- * keeps the title art — the event name, the dates, the venue — and drops the
- * board. That is the right trade for a cover: it says what this was and when,
- * and the board is two paragraphs down at full size. Do not swap the cover for
- * a board crop to "fix" the hero; the body already carries the board.
+ * it runs in a gallery at `aspect: "3/4"`, uncropped, so the shape of the
+ * board survives. As the cover it is cropped 2:1 by the hero and 4:3 by the
+ * news card, which keeps the title art — the event name, the dates, the venue
+ * — and drops the board. That is the right trade for a cover: it says what
+ * this was and when, and the board is two paragraphs down. Do not swap the
+ * cover for a board crop to "fix" the hero; the body already carries it.
+ *
+ * What the body does NOT do is let you read the individual logos. A solo 3/4
+ * gallery is capped at 460px by ArticleDetail, so the sponsor rows are legible
+ * as rows and the logos inside them are about 30px wide. The caption therefore
+ * describes what the row *is* rather than inviting the reader to read it off
+ * the picture, and every company named in the prose is named there because a
+ * source says so, not because it can be made out in the photo.
  */
 
 import type { Article, Block } from "../../data";
@@ -56,8 +66,9 @@ import titleScreen from "./title-screen.jpg";
 
 const p = (text: string): Block => ({ t: "p", text });
 
-/* Exported so the milestone rail and the highlights carousel can reuse the
- * same file the body does. */
+/* Exported because MILESTONES in ../../data.ts renders this post's card on the
+ * homepage rail and reuses the same file the body does. That is the only
+ * consumer; do not add the export to a post without one. */
 export const OBA_WEEKENDTHON_COVER = titleScreen.src;
 
 export const obaWeekendthonTop6: Article = {
@@ -89,7 +100,7 @@ export const obaWeekendthonTop6: Article = {
       "The room was capped at fifty people, entering alone or in teams of up to three. Participation and lodging were free. The weekend was cut into four build sessions with three networking blocks wedged between them, and on the first evening every team stood up and pitched for about a minute, which is not long enough to explain an architecture and is exactly long enough to find out whether you have a product.",
     ),
     p(
-      "One rule shaped every project: whatever you build has to run on the Open APIs the event provides. More than ten companies put something on the table, Nexon, LG U+ and MyRealTrip among them, and the sponsor board in the hall was in effect the spec sheet. You did not pick a stack and then go looking for an API. You read the board and worked backwards from it.",
+      "One rule shaped every project: whatever you build has to run on the Open APIs the event provides. The board in the hall was in effect the spec sheet — OpenAI at the top as main sponsor, Nexon and LG U+ among the premium tier, and then the API sponsor row itself, ten companies deep: 강남언니, maroo, Rocketpunch, MyRealTrip, MOAT AI, SWING, Apifuse, GenRank, CryptoQuant, tobl.ai. You did not pick a stack and then go looking for an API. You read the board and worked backwards from it.",
     ),
     {
       t: "gallery",
@@ -120,7 +131,7 @@ export const obaWeekendthonTop6: Article = {
 
     { t: "h", text: "The bet: a small Korean model, held in place by the harness" },
     p(
-      "The instinct in a hackathon is to reach for the largest model on the sponsor board and let it improvise. OpenAI's name was at the top of that board. We went the other way and ran EXAONE-4.5, the open Korean model LG U+ brought to the API list, on vLLM behind an OpenAI-compatible endpoint with Hermes-style tool calls.",
+      "The instinct in a hackathon is to reach for the largest model on the sponsor board and let it improvise. OpenAI's name was at the top of that board. We went the other way and ran EXAONE-4.5, LG AI Research's open Korean model, on vLLM behind an OpenAI-compatible endpoint with Hermes-style tool calls.",
     ),
     p(
       "A small model improvises badly, so we arranged not to ask it to. Everything that could be made deterministic was moved out of the model: schema validation on every tool call, automatic re-prompting when one comes back malformed, DeepAgents' wrap_tool_call middleware wrapped around the lot, and the verdict and the scoring computed in pure functions with no randomness in them at all. The model's job is to stay in character and ask the next question. The harness does the rest.",

@@ -71,10 +71,21 @@
  *   original is deleted in the same change. There is no `public/` copy of it
  *   to fall back on.
  *
- *   All except `three-layer-architecture.jpg` came from Display P3 originals
- *   and are converted to sRGB before the strip. Dropping the profile without
- *   converting leaves P3 values that the browser reads as sRGB, and the stage
- *   lighting in these shots is exactly the saturated content that shows it.
+ *   Three of the five came from Display P3 originals and are converted to
+ *   sRGB before the strip: `final-round-stage`, `tech-track-top3` and
+ *   `datasets-slide`. Dropping the profile without converting leaves P3 values
+ *   that the browser reads as sRGB, and the stage lighting in these shots is
+ *   exactly the saturated content that shows it — the dataset slide measures
+ *   52% off at its worst pixel. `three-layer-architecture.jpg` and
+ *   `winners-on-stage.jpg` carried no profile at all; there was nothing to
+ *   convert, and both reproduce bit-exact under a plain strip.
+ *
+ *   Five images is more than the hackathon template's "two or three", and
+ *   deliberately: they do five different jobs — the winners, the room, the
+ *   placing slide, the architecture, and the dataset slide the audit section
+ *   argues against. Drop one and a section loses its evidence. If a sixth
+ *   stage shot ever gets added, that one is a third crowd shot and the budget
+ *   should win.
  *
  *   Two full-width `image` blocks, for two different reasons, both deliberate:
  *   the architecture diagram is 1028px wide natively, so the breakout renders
@@ -98,8 +109,9 @@ import winnersOnStage from "./winners-on-stage.jpg";
 
 const p = (text: string): Block => ({ t: "p", text });
 
-/* Exported so the milestone rail and the highlights carousel can reuse the
- * same file the body does. */
+/* Exported because MILESTONES in ../../data.ts renders this post's card on the
+ * homepage rail and reuses the same file the body does. That is the only
+ * consumer; do not add the export to a post without one. */
 export const SNOWFLAKE_2026_COVER = winnersOnStage.src;
 
 export const snowflakeKorea2026: Article = {

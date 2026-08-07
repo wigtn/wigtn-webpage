@@ -55,8 +55,9 @@ import stageDemo from "./stage-demo.jpg";
 
 const p = (text: string): Block => ({ t: "p", text });
 
-/* Exported so the milestone rail and the highlights carousel can reuse the
- * same file the body does. */
+/* Exported because MILESTONES in ../../data.ts renders this post's card on the
+ * homepage rail and reuses the same file the body does. That is the only
+ * consumer; do not add the export to a post without one. */
 export const TRAE_SEOUL_COVER = certificate.src;
 
 export const traeSeoulGrandPrize: Article = {
