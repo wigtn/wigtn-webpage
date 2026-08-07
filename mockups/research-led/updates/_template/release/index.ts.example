@@ -1,0 +1,86 @@
+/**
+ * Update: <package or model> — release note.
+ *
+ * Copy this file to `updates/<slug>/index.ts` and drop the images in beside it.
+ *
+ * Every path below is written from the *destination*, so the whole block stays
+ * true once copied — which is the only place it lives permanently:
+ *   - register the export in `../../data.ts`;
+ *   - the outline for this kind of post is `../_template/release/STRUCTURE.md`;
+ *   - the rules every template shares are in `../_template/README.md`.
+ *
+ * Two things therefore look wrong while the file still sits in `_template/`:
+ * those doc paths, and the data import, which reads `../../../data` here and
+ * becomes `../../data` one level shallower in a real post folder. Fix the
+ * import when you copy. Kept as `.example` rather than `.ts` so the template
+ * does not fail the typecheck on its placeholder imports.
+ */
+
+import type { Article, Block } from "../../../data";
+import cover from "./cover.png";
+
+const p = (text: string): Block => ({ t: "p", text });
+
+/* Exported so a card or milestone elsewhere can reuse the same file. */
+export const MY_NEW_POST_COVER = cover.src;
+
+export const myNewPost: Article = {
+  slug: "my-new-post", // must match the folder name
+  kind: "report",
+  channel: "newsroom",
+  newsTopic: "release",
+  tag: "RELEASE",
+  title: "", // what shipped, at which version, doing what
+  summary: "", // one or two sentences; used on cards
+  date: "2026.01.01",
+  author: "WIGTN",
+  readTime: "4 min",
+  image: cover.src,
+  /* The deep write-up lives on the report blog; the note links it, never
+   * duplicates it. */
+  externalUrl: "",
+  /* One placeholder on purpose. `ArticleDetail` keys these by `href`, so two
+   * entries left empty are two identical React keys, and an empty `href` with
+   * target="_blank" renders a live button that reopens the current page. Fill
+   * this one, then add the others. Tech-report links go through
+   * `techReportHref` from "../../links" — never a value import from data. */
+  links: [{ label: "npm", href: "" }],
+  body: [
+    p("Lede: what is public now, where it lives, and what it does."),
+
+    { t: "h", text: "Get it" },
+    p("The install line, verbatim, in the first screen of the post."),
+    { t: "image", src: cover.src, alt: "TODO: describe what is in the frame, in a sentence", caption: "" },
+
+    { t: "h", text: "What is in the release" },
+    {
+      t: "list",
+      items: [
+        "The artifacts: weights, data, eval code, license.",
+        "The version and its date.",
+        "What is deliberately not included.",
+      ],
+    },
+
+    { t: "h", text: "Why it exists" },
+    p("The problem it was built against. Two paragraphs at most."),
+
+    { t: "h", text: "The numbers" },
+    p(
+      "Published benchmarks only, each with its source named. If there is no " +
+        "benchmark, say so in one line rather than leaving a silence.",
+    ),
+
+    { t: "h", text: "What it does not do yet" },
+    {
+      t: "list",
+      items: [
+        "A known limit.",
+        "An untested platform, or the version that changes it.",
+      ],
+    },
+
+    { t: "h", text: "Go deeper" },
+    p("The method, the ablations, and the full breakdown are in the report."),
+  ],
+};

@@ -1,0 +1,78 @@
+/**
+ * Update: <venue, city> — conference report.
+ *
+ * Copy this file to `updates/<slug>/index.ts` and drop the images in beside it.
+ *
+ * Every path below is written from the *destination*, so the whole block stays
+ * true once copied — which is the only place it lives permanently:
+ *   - register the export in `../../data.ts`;
+ *   - the outline for this kind of post is `../_template/conference/STRUCTURE.md`;
+ *   - the rules every template shares are in `../_template/README.md`.
+ *
+ * Two things therefore look wrong while the file still sits in `_template/`:
+ * those doc paths, and the data import, which reads `../../../data` here and
+ * becomes `../../data` one level shallower in a real post folder. Fix the
+ * import when you copy. Kept as `.example` rather than `.ts` so the template
+ * does not fail the typecheck on its placeholder imports.
+ */
+
+import type { Article, Block } from "../../../data";
+import cover from "./cover.jpg";
+
+const p = (text: string): Block => ({ t: "p", text });
+
+/* Exported so a milestone or card elsewhere can reuse the same file. */
+export const MY_NEW_POST_COVER = cover.src;
+
+export const myNewPost: Article = {
+  slug: "my-new-post", // must match the folder name
+  kind: "event",
+  channel: "newsroom",
+  newsTopic: "announcement",
+  tag: "Venue 2026",
+  icon: "pin",
+  title: "", // name the team, the venue and the kind of piece it is
+  summary: "", // one or two sentences; used on cards
+  date: "2026.01.01",
+  place: "City, Country",
+  author: "WIGTN Research",
+  readTime: "8 min",
+  image: cover.src,
+  links: [{ label: "Paper", href: "" }],
+  body: [
+    p("Lede: the venue, the track, the dates, and what we were there to do."),
+
+    { t: "h", text: "Arriving" },
+    p("The scale of it, before you were part of it."),
+    {
+      t: "gallery",
+      images: [{ src: cover.src, alt: "TODO: describe what is in the frame, in a sentence", caption: "", aspect: "3/4" }],
+    },
+
+    { t: "h", text: "What we brought" },
+    p("The work itself, with the numbers that are already published."),
+    { t: "image", src: cover.src, alt: "TODO: describe what is in the frame, in a sentence", caption: "" },
+
+    { t: "h", text: "What happened" },
+    p("The floor, the booth, the session. Photos belong here."),
+
+    { t: "h", text: "What people asked" },
+    p("The questions you prepared for, then the ones you did not."),
+    { t: "quote", text: "A line worth pulling out." },
+
+    { t: "h", text: "Side sessions" },
+    p("The talks and posters around the main event, including other people's."),
+
+    { t: "h", text: "What changes because of this" },
+    {
+      t: "list",
+      items: [
+        "A decision, with the evidence that forced it.",
+        "Another decision. Three real ones beat six padded ones.",
+      ],
+    },
+
+    { t: "h", text: "Thanks to" },
+    p("Organizers and chairs by their published role, then the repeat visitors."),
+  ],
+};
