@@ -300,7 +300,11 @@ export function ArticleDetail({ slug }: { slug: string }) {
               </span>
               <span className="h-px flex-1 bg-line/[0.08]" />
             </div>
-            <div className="grid md:grid-cols-3 gap-6">
+            {/* Equal-height cards: the grid row already stretches its items,
+                but the motion wrapper and the Link have to pass that height
+                down, and the date is pinned with mt-auto. Otherwise a
+                two-line title makes its card taller than its neighbours. */}
+            <div className="grid items-stretch gap-6 md:grid-cols-3">
               {related.map((r, i) => (
                 <motion.div
                   key={r.slug}
@@ -309,10 +313,11 @@ export function ArticleDetail({ slug }: { slug: string }) {
                   initial="hidden"
                   whileInView="show"
                   viewport={{ once: true, margin: "-10% 0px" }}
+                  className="h-full"
                 >
                   <Link
                     href={articleHref(r.slug)}
-                    className="group block rounded-lg border border-line/[0.08] bg-paper-raised p-6 hover:border-brand/50 hover:bg-paper-tint transition-all"
+                    className="group flex h-full flex-col rounded-lg border border-line/[0.08] bg-paper-raised p-6 transition-all hover:border-brand/50 hover:bg-paper-tint"
                   >
                     <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-accent">
                       {r.tag}
@@ -320,7 +325,7 @@ export function ArticleDetail({ slug }: { slug: string }) {
                     <h3 className="mt-2 text-lg font-semibold leading-snug text-ink group-hover:text-accent transition-colors">
                       {r.title}
                     </h3>
-                    <div className="mt-3 font-mono text-xs text-ink-5">{r.date}</div>
+                    <div className="mt-auto pt-3 font-mono text-xs text-ink-5">{r.date}</div>
                   </Link>
                 </motion.div>
               ))}

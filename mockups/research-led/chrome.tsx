@@ -155,7 +155,12 @@ export function SiteFooter() {
           <div>
             <Wordmark className="h-9 md:h-11" />
             <p className="mt-4 max-w-sm text-pretty text-sm text-ink-3">
-              An open community of AI builders. Everything we learn, we share.
+              {/* Break after the first sentence rather than wherever the
+                  column happens to run out, so the two claims read as two
+                  lines instead of one ragged paragraph. */}
+              An open community of AI builders.
+              <br />
+              Everything we learn, we share.
             </p>
           </div>
           <div className="flex gap-16">
