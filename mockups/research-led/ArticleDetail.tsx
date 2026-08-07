@@ -14,15 +14,10 @@ import {
   articleHref,
   getArticle,
   ARTICLES,
-  newsHref,
-  tx,
   type Block,
   type Article,
   type GalleryImage,
-  type Locale,
 } from "./data";
-import { LangToggle } from "./LangToggle";
-import { UI } from "./ui";
 // `import Link from "next/link"` above shadows data's `Link` type, so
 // `article.links` inline instead of importing that type here.
 import { SiteHeader, SiteFooter, BackdropDecor, EVENT_ICON, rise } from "./chrome";
@@ -42,27 +37,34 @@ import { SiteHeader, SiteFooter, BackdropDecor, EVENT_ICON, rise } from "./chrom
 const MEDIA_BREAKOUT =
   "relative left-1/2 w-[min(1080px,calc(100vw-4rem))] -translate-x-1/2";
 
-function BlockView({ block, locale }: { block: Block; locale: Locale }) {
+const KIND_LABEL: Record<Article["kind"], string> = {
+  report: "Research",
+  event: "Events",
+  community: "Community",
+  insight: "Tech Insights",
+};
+
+function BlockView({ block }: { block: Block }) {
   switch (block.t) {
     case "h":
       return (
         <h2 className="mt-14 mb-4 text-[1.75rem] font-semibold tracking-tight text-ink">
-          {tx(block.text, locale)}
+          {block.text}
         </h2>
       );
     case "quote":
       return (
         <blockquote className="my-8 border-l-2 border-brand pl-5 text-xl font-medium leading-snug text-ink">
-          {tx(block.text, locale)}
+          {block.text}
         </blockquote>
       );
     case "list":
       return (
         <ul className="my-5 space-y-2.5">
-          {block.items.map((it, i) => (
-            <li key={i} className="flex gap-3 text-[1.125rem] leading-[1.7] text-ink-3">
+          {block.items.map((it) => (
+            <li key={it} className="flex gap-3 text-[1.125rem] leading-[1.7] text-ink-3">
               <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />
-              <span>{tx(it, locale)}</span>
+              <span>{it}</span>
             </li>
           ))}
         </ul>
@@ -72,13 +74,13 @@ function BlockView({ block, locale }: { block: Block; locale: Locale }) {
         <figure className={`my-12 ${MEDIA_BREAKOUT}`}>
           <img
             src={block.src}
-            alt={tx(block.alt, locale)}
+            alt={block.alt}
             loading="lazy"
             decoding="async"
             className="w-full rounded-lg border border-line/[0.08] object-cover"
           />
           {block.caption && (
-            <figcaption className="mt-3 text-sm leading-relaxed text-ink-4">{tx(block.caption, locale)}</figcaption>
+            <figcaption className="mt-3 text-sm leading-relaxed text-ink-4">{block.caption}</figcaption>
           )}
         </figure>
       );
@@ -116,19 +118,19 @@ function BlockView({ block, locale }: { block: Block; locale: Locale }) {
               <div key={i}>
                 <img
                   src={im.src}
-                  alt={tx(im.alt, locale)}
+                  alt={im.alt}
                   loading="lazy"
                   decoding="async"
                   className={`w-full rounded-lg border border-line/[0.08] object-cover ${
                     ASPECT[im.aspect ?? "4/3"]
                   }`}
                 />
-                {im.caption && <p className="mt-2 text-xs leading-relaxed text-ink-4">{tx(im.caption, locale)}</p>}
+                {im.caption && <p className="mt-2 text-xs leading-relaxed text-ink-4">{im.caption}</p>}
               </div>
             ))}
           </div>
           {block.caption && (
-            <figcaption className="mt-3 text-sm leading-relaxed text-ink-4">{tx(block.caption, locale)}</figcaption>
+            <figcaption className="mt-3 text-sm leading-relaxed text-ink-4">{block.caption}</figcaption>
           )}
         </figure>
       );
@@ -138,25 +140,25 @@ function BlockView({ block, locale }: { block: Block; locale: Locale }) {
        * width: at 18px the old 720px column ran ~89 characters, past the
        * 45-75 that long-form reading wants. Growing the type as the column
        * grows keeps the measure near 75 while the page reads wider. */
-      return <p className="my-6 text-[1.25rem] leading-[1.75] text-ink-3">{tx(block.text, locale)}</p>;
+      return <p className="my-6 text-[1.25rem] leading-[1.75] text-ink-3">{block.text}</p>;
   }
 }
 
-export function ArticleDetail({ slug, locale = "en" }: { slug: string; locale?: Locale }) {
+export function ArticleDetail({ slug }: { slug: string }) {
   const article = getArticle(slug);
 
   if (!article) {
     return (
-      <div lang={locale} className="relative min-h-screen bg-paper text-ink font-sans antialiased">
+      <div className="relative min-h-screen bg-paper text-ink font-sans antialiased">
         <BackdropDecor />
-        <SiteHeader locale={locale} />
+        <SiteHeader />
         <main className="relative z-10 max-w-3xl mx-auto px-6 py-32 text-center">
-          <h1 className="text-3xl font-semibold tracking-tight">{tx(UI.notFound, locale)}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">Article not found</h1>
           <Link href={HOME} className="mt-6 inline-flex items-center gap-2 text-accent hover:text-ink">
-            <ArrowLeft size={16} /> {tx(UI.backHome, locale)}
+            <ArrowLeft size={16} /> Back to home
           </Link>
         </main>
-        <SiteFooter locale={locale} />
+        <SiteFooter />
       </div>
     );
   }
@@ -165,12 +167,9 @@ export function ArticleDetail({ slug, locale = "en" }: { slug: string; locale?: 
   const related = ARTICLES.filter((a) => a.kind === article.kind && a.slug !== article.slug).slice(0, 3);
 
   return (
-    <div
-      lang={locale}
-      className="relative min-h-screen bg-paper text-ink font-sans antialiased selection:bg-brand/20"
-    >
+    <div className="relative min-h-screen bg-paper text-ink font-sans antialiased selection:bg-brand/20">
       <BackdropDecor />
-      <SiteHeader locale={locale} />
+      <SiteHeader />
 
       <main className="relative z-10">
         {/* 52rem, not max-w-3xl. Paired with the 20px body this lands the
@@ -180,20 +179,20 @@ export function ArticleDetail({ slug, locale = "en" }: { slug: string; locale?: 
           <motion.header variants={rise} initial="hidden" animate="show">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-accent">
-                {tx(article.tag, locale)}
+                {article.tag}
               </span>
               {article.placeholder && (
                 <span className="text-[10px] font-semibold tracking-[0.1em] uppercase text-ink-4 border border-line/15 rounded-full px-2 py-0.5">
-                  {tx(UI.placeholderBadge, locale)}
+                  Placeholder
                 </span>
               )}
             </div>
             <h1 className="mt-3 text-[clamp(1.9rem,4.5vw,3rem)] font-bold tracking-tight leading-[1.1]">
-              {tx(article.title, locale)}
+              {article.title}
             </h1>
             {/* Standfirst sits above the body, so it has to be at least as
                 large as it — 18px under a 20px body read as a mistake. */}
-            <p className="mt-4 text-[1.375rem] leading-[1.6] text-ink-2">{tx(article.summary, locale)}</p>
+            <p className="mt-4 text-[1.375rem] leading-[1.6] text-ink-2">{article.summary}</p>
 
             <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-4">
               <span className="inline-flex items-center gap-1.5">
@@ -201,12 +200,12 @@ export function ArticleDetail({ slug, locale = "en" }: { slug: string; locale?: 
               </span>
               {article.readTime && (
                 <span className="inline-flex items-center gap-1.5">
-                  <Clock size={14} /> {tx(article.readTime, locale)}{tx(UI.readTimeSuffix, locale)}
+                  <Clock size={14} /> {article.readTime} read
                 </span>
               )}
               {article.place && (
                 <span className="inline-flex items-center gap-1.5">
-                  <MapPin size={14} /> {tx(article.place, locale)}
+                  <MapPin size={14} /> {article.place}
                 </span>
               )}
               {article.author && (
@@ -226,7 +225,7 @@ export function ArticleDetail({ slug, locale = "en" }: { slug: string; locale?: 
                     rel="noreferrer"
                     className="inline-flex items-center gap-1.5 rounded-sm border border-line/20 px-4 py-2 text-sm font-medium text-ink-2 hover:border-ink hover:text-ink transition-colors"
                   >
-                    {tx(l.label, locale)} <ArrowUpRight size={14} />
+                    {l.label} <ArrowUpRight size={14} />
                   </a>
                 ))}
               </div>
@@ -249,7 +248,7 @@ export function ArticleDetail({ slug, locale = "en" }: { slug: string; locale?: 
               {article.image && (
                 <img
                   src={article.image}
-                  alt={tx(article.title, locale)}
+                  alt={article.title}
                   className="absolute inset-0 h-full w-full object-cover opacity-90"
                 />
               )}
@@ -274,20 +273,20 @@ export function ArticleDetail({ slug, locale = "en" }: { slug: string; locale?: 
           {/* Body */}
           <motion.div variants={rise} custom={2} initial="hidden" animate="show" className="mt-4">
             {article.body.map((block, i) => (
-              <BlockView key={i} block={block} locale={locale} />
+              <BlockView key={i} block={block} />
             ))}
           </motion.div>
 
           {/* CTA strip */}
           <div className="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-line/[0.08] bg-paper-raised px-6 py-5">
-            <p className="text-sm text-ink-3">{tx(UI.ctaLine, locale)}</p>
+            <p className="text-sm text-ink-3">Working on something like this? Let's talk.</p>
             <a
               href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-sm bg-brand text-white px-5 py-2.5 text-sm font-semibold uppercase tracking-wide hover:bg-brand-dark transition-colors"
             >
-              {tx(UI.ctaButton, locale)} <ArrowUpRight size={16} />
+              Talk to us <ArrowUpRight size={16} />
             </a>
           </div>
         </article>
@@ -297,7 +296,7 @@ export function ArticleDetail({ slug, locale = "en" }: { slug: string; locale?: 
           <section className="max-w-6xl mx-auto px-6 py-16 md:py-20">
             <div className="flex items-center gap-4 mb-8">
               <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-ink-4">
-                {tx(UI.moreFrom, locale)} {tx(UI.kind[article.kind], locale)}
+                More from {KIND_LABEL[article.kind]}
               </span>
               <span className="h-px flex-1 bg-line/[0.08]" />
             </div>
@@ -312,14 +311,14 @@ export function ArticleDetail({ slug, locale = "en" }: { slug: string; locale?: 
                   viewport={{ once: true, margin: "-10% 0px" }}
                 >
                   <Link
-                    href={articleHref(r.slug, locale)}
+                    href={articleHref(r.slug)}
                     className="group block rounded-lg border border-line/[0.08] bg-paper-raised p-6 hover:border-brand/50 hover:bg-paper-tint transition-all"
                   >
                     <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-accent">
-                      {tx(r.tag, locale)}
+                      {r.tag}
                     </span>
                     <h3 className="mt-2 text-lg font-semibold leading-snug text-ink group-hover:text-accent transition-colors">
-                      {tx(r.title, locale)}
+                      {r.title}
                     </h3>
                     <div className="mt-3 font-mono text-xs text-ink-5">{r.date}</div>
                   </Link>
@@ -330,7 +329,7 @@ export function ArticleDetail({ slug, locale = "en" }: { slug: string; locale?: 
         )}
       </main>
 
-      <SiteFooter locale={locale} />
+      <SiteFooter />
     </div>
   );
 }

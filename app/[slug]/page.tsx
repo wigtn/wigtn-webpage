@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ArticleDetail } from "@/mockups/research-led/ArticleDetail";
-import { ARTICLES, KO_SLUGS, getArticle, tx } from "@/mockups/research-led/data";
+import { ARTICLES, getArticle } from "@/mockups/research-led/data";
 
 /**
  * Static params for `output: "export"`: one page per article slug, served
@@ -24,25 +24,14 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${tx(article.title, "en")} | WIGTN`,
-    description: tx(article.summary, "en"),
+    title: `${article.title} | WIGTN`,
+    description: article.summary,
     alternates: {
       canonical: `/${article.slug}/`,
-      /* Only advertise a Korean alternate for posts that actually have one;
-       * pointing hreflang at a page that was never exported is worse than
-       * having no alternate at all. */
-      ...(KO_SLUGS.includes(article.slug)
-        ? {
-            languages: {
-              en: `/${article.slug}/`,
-              ko: `/ko/${article.slug}/`,
-            },
-          }
-        : {}),
     },
     openGraph: {
-      title: tx(article.title, "en"),
-      description: tx(article.summary, "en"),
+      title: article.title,
+      description: article.summary,
       url: `https://wigtn.com/${article.slug}/`,
       type: "article",
     },

@@ -9,12 +9,9 @@
  */
 
 import type { Article, Block } from "../../data";
-/* `t` comes from the i18n leaf module — importing a value from ../../data
- * here would form a module cycle and break the build. See README.md. */
-import { t, type I18nText } from "../../i18n";
 import hero from "./hero.jpg";
 
-const p = (text: I18nText): Block => ({ t: "p", text });
+const p = (text: string): Block => ({ t: "p", text });
 
 /* Exported so a milestone or card elsewhere can reuse the same file. */
 export const MY_NEW_POST_COVER = hero.src;
@@ -26,9 +23,8 @@ export const myNewPost: Article = {
   newsTopic: "announcement", // award | release | announcement | community
   tag: "Event name",
   icon: "pin", // pin | trophy — optional
-  /* Both of these must be t() pairs for the post to get a /ko/ page. */
-  title: t("", ""),
-  summary: t("", ""), // one or two sentences; used on cards
+  title: "",
+  summary: "", // one or two sentences; used on cards
   date: "2026.01.01",
   place: "City, Country",
   author: "WIGTN Research",

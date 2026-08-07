@@ -98,6 +98,9 @@ export interface Achievement {
   note?: string;
 }
 
+/** Plain string: i18n removed, English only. */
+export type I18nText = string;
+
 /**
  * Media assets consumed by the project detail page (`/projects/[slug]/`).
  */
@@ -147,8 +150,8 @@ export interface Project {
   section: Section;
   sectionBadge?: SectionBadge;
   phase: Phase;
-  tagline: string;
-  description: string;
+  tagline: I18nText;
+  description: I18nText;
   gradient: string;
   media: ProjectMedia;
   app?: ProjectApp;
