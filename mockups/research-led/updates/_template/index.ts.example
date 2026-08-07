@@ -1,0 +1,65 @@
+/**
+ * Update: <one line on what this post covers>.
+ *
+ * Copy this file to `updates/<slug>/index.ts`, drop the images in beside it,
+ * and register the export in `../../data.ts`. See ../_template/README.md.
+ *
+ * Kept as `.example` rather than `.ts` so the template does not fail the
+ * typecheck on its placeholder imports.
+ */
+
+import type { Article, Block } from "../../data";
+import hero from "./hero.jpg";
+
+const p = (text: string): Block => ({ t: "p", text });
+
+/* Exported so a milestone or card elsewhere can reuse the same file. */
+export const MY_NEW_POST_COVER = hero.src;
+
+export const myNewPost: Article = {
+  slug: "my-new-post", // must match the folder name
+  kind: "event", // report | event | community | insight
+  channel: "newsroom", // newsroom = shows in /news; omit for back-catalogue
+  newsTopic: "announcement", // award | release | announcement | community
+  tag: "Event name",
+  icon: "pin", // pin | trophy — optional
+  title: "",
+  summary: "", // one or two sentences; used on cards
+  date: "2026.01.01",
+  place: "City, Country",
+  author: "WIGTN Research",
+  readTime: "5 min",
+  image: hero.src,
+  links: [{ label: "GitHub", href: "https://github.com/wigtn" }],
+  body: [
+    p("Lede: what happened, where, when."),
+
+    { t: "h", text: "What we brought" },
+    p("The work itself, with the numbers that are already published."),
+    { t: "image", src: hero.src, alt: "", caption: "" },
+
+    { t: "h", text: "What happened" },
+    p("The scene. Photos belong here."),
+
+    { t: "h", text: "What people asked" },
+    p("The interactions worth reporting."),
+    { t: "quote", text: "A line worth pulling out." },
+
+    { t: "h", text: "What changes because of this" },
+    {
+      t: "list",
+      items: [
+        "A decision, with the evidence that forced it.",
+        "Another decision.",
+      ],
+    },
+
+    /* 1 full width · 2 side by side · 3 across · 4 as 2x2 · 5+ in threes.
+     * Pass aspect: "3/4" on portrait shots. */
+    {
+      t: "gallery",
+      images: [{ src: hero.src, alt: "", caption: "" }],
+      caption: "From the week.",
+    },
+  ],
+};

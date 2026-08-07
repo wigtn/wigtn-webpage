@@ -9,7 +9,15 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, Calendar, MapPin, Play, Clock, User } from "lucide-react";
-import { HOME, articleHref, getArticle, ARTICLES, type Block, type Article } from "./data";
+import {
+  HOME,
+  articleHref,
+  getArticle,
+  ARTICLES,
+  type Block,
+  type Article,
+  type GalleryImage,
+} from "./data";
 // `import Link from "next/link"` above shadows data's `Link` type, so
 // `article.links` inline instead of importing that type here.
 import { SiteHeader, SiteFooter, BackdropDecor, EVENT_ICON, rise } from "./chrome";
@@ -58,8 +66,21 @@ function BlockView({ block }: { block: Block }) {
         </figure>
       );
     case "gallery": {
+      /* Columns follow the count so a section can carry one photo or four
+       * without a ragged last row: 1 runs full width, 2 sit side by side,
+       * 3 go across, 4 form a 2x2 (a 3+1 row orphans the fourth), and 5 or
+       * more fall back to threes. */
+      const n = block.images.length;
       const cols =
-        block.images.length >= 3 ? "sm:grid-cols-3" : block.images.length === 2 ? "sm:grid-cols-2" : "";
+        n === 1 ? "" : n === 2 || n === 4 ? "sm:grid-cols-2" : "sm:grid-cols-3";
+      /* Tailwind needs whole class names present at build time, so these are
+       * looked up rather than interpolated. */
+      const ASPECT: Record<NonNullable<GalleryImage["aspect"]>, string> = {
+        "4/3": "aspect-[4/3]",
+        "3/4": "aspect-[3/4]",
+        "1/1": "aspect-square",
+        "16/9": "aspect-video",
+      };
       return (
         <figure className="my-9">
           <div className={`grid gap-3 ${cols}`}>
@@ -70,7 +91,9 @@ function BlockView({ block }: { block: Block }) {
                   alt={im.alt}
                   loading="lazy"
                   decoding="async"
-                  className="aspect-[4/3] w-full rounded-lg border border-line/[0.08] object-cover"
+                  className={`w-full rounded-lg border border-line/[0.08] object-cover ${
+                    ASPECT[im.aspect ?? "4/3"]
+                  }`}
                 />
                 {im.caption && <p className="mt-2 text-xs leading-relaxed text-ink-4">{im.caption}</p>}
               </div>
