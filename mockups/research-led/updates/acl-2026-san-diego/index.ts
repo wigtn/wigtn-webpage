@@ -46,6 +46,7 @@ import midwayReception from "./midway-reception.jpg";
 import posterVisitAmazon from "./poster-visit-amazon.jpg";
 import posterVisitApple from "./poster-visit-apple.jpg";
 import posterVisitNvidia from "./poster-visit-nvidia.jpg";
+import sessionHallway from "./session-hallway.jpg";
 /* Cropped from the full-length team shot to the hero's 2:1 band — top
  * trimmed to the banner, bottom to the knee, faces intact. */
 import teamCover from "./team-cover.jpg";
@@ -193,6 +194,12 @@ export const acl2026SanDiego: Article = {
     {
       t: "gallery",
       images: [
+        {
+          src: sessionHallway.src,
+          alt: "Attendees filing through the hallway under the ACL 2026 San Diego banner between sessions.",
+          caption: "The corridor between rooms, every hour, on the hour.",
+          aspect: "3/4",
+        },
         {
           src: coffeeBreak.src,
           alt: "Attendees queueing at the ACL 2026 coffee-break buffet, with sponsor booths visible behind.",
