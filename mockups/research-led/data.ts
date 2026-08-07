@@ -21,11 +21,13 @@
  * next edited. See updates/_template/README.md. */
 import { acl2026SanDiego, ACL_2026_COVER } from "./updates/acl-2026-san-diego";
 
+/* No trailing slashes: the Pages build exports flat files (`team.html`), so
+ * `/team` is the URL that resolves and `/team/` 404s. See next.config.ts. */
 export const HOME = "/";
-export const WORK = `${HOME}work/`;
-export const NEWS = `${HOME}news/`;
-export const TEAM_PAGE = `${HOME}team/`;
-export const articleHref = (slug: string) => `${HOME}${slug}/`;
+export const WORK = `${HOME}work`;
+export const NEWS = `${HOME}news`;
+export const TEAM_PAGE = `${HOME}team`;
+export const articleHref = (slug: string) => `${HOME}${slug}`;
 
 /* External research / tech-report site: its own GitHub Pages app for now.
  * When the custom domain is ready, change ONLY this constant to
@@ -40,7 +42,9 @@ export const techReportHref = (slug: string) => `${TECH_REPORT_SITE}/${slug}/`;
 export const NAV: { label: string; href: string; disabled?: boolean }[] = [
   { label: "About", href: TEAM_PAGE },
   { label: "Updates", href: NEWS },
-  { label: "Tech Reports", href: TECH_REPORT_SITE },
+  /* Trailing slash on purpose: the report site builds with trailingSlash,
+   * so the bare URL 301s. Linking the final URL saves that round trip. */
+  { label: "Tech Reports", href: `${TECH_REPORT_SITE}/` },
   /* Projects tab hidden for now. NAV drives the header, the mobile menu and
    * the footer "Explore" column, so this one line removes the link from all
    * three. The /work/ page itself is untouched and still builds, so restoring
