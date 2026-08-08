@@ -27,9 +27,10 @@
  *   `links` as "Press".
  *
  *   System facts, the streaming benchmark (17.3s / 1,657 chars / 0 garbage
- *   tokens against snowflake-llama-3.3-70b's 38.4s) and the audit come from
- *   `constants/wigtn-flake-sections.ts`, which is itself sourced from the
- *   wigtn-for-snowflake repository README and PRD.
+ *   tokens against snowflake-llama-3.3-70b's 38.4s) and the audit came from
+ *   `constants/wigtn-flake-sections.ts`, itself sourced from the
+ *   wigtn-for-snowflake repository README and PRD. That file was deleted with
+ *   the /projects tree; the WIGTN Flake tech report is the live source now.
  *
  * THE CAPABILITY COUNT IS SEVEN, NOT ELEVEN — DO NOT "CORRECT" IT BACK.
  *
@@ -41,9 +42,9 @@
  *   what the whole post argues for. The eleven and the four still appear in
  *   two places on purpose: printed on the architecture diagram and on the
  *   dataset slide, both of which are photographs of the deck as presented.
- *   Their captions say so. `constants/wigtn-flake-sections.ts` still carries
- *   the pre-audit "11" and "4" in its by-the-numbers table; that table is not
- *   a source for this post.
+ *   Their captions say so. The deleted `constants/wigtn-flake-sections.ts`
+ *   carried the pre-audit "11" and "4" in its by-the-numbers table; if that
+ *   table resurfaces anywhere, it is not a source for this post.
  *
  * NAMING
  *
@@ -60,16 +61,11 @@
  *
  * IMAGES
  *
- *   `final-round-stage.jpg`, `tech-track-top3.jpg`, `datasets-slide.jpg` and
- *   `three-layer-architecture.jpg` are copies of files under
- *   `public/images/projects/`, which `constants/wigtn-flake-sections.ts` and
- *   `constants/projects.ts` still read for the /projects page. Copies, not
- *   moves — deleting the originals breaks that page.
- *
- *   `winners-on-stage.jpg` is the exception: it was **moved** from
- *   `public/images/news/snowflake.jpeg`, which nothing else read, and the
- *   original is deleted in the same change. There is no `public/` copy of it
- *   to fall back on.
+ *   All five were prepped from `public/images/`. Four came from
+ *   `public/images/projects/`, which were kept while the /projects page read
+ *   them, and `winners-on-stage.jpg` from `public/images/news/snowflake.jpeg`,
+ *   which nothing else read. /projects is gone and so is the whole legacy
+ *   image store, so the files in this folder are the only copies.
  *
  *   Three of the five came from Display P3 originals and are converted to
  *   sRGB before the strip: `final-round-stage`, `tech-track-top3` and

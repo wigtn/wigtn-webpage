@@ -36,13 +36,14 @@ Ask nothing the repository can already answer. Before the first question:
 ```bash
 ls mockups/research-led/updates/                    # what exists, and the slugs
 grep -n "slug:" mockups/research-led/data.ts        # what is already published
-ls constants/*-sections.ts                          # in-repo long-form sources
 git log --oneline -15
 ```
 
-Read whichever `constants/*-sections.ts` matches the subject. Those files are the
-richest in-repo source and are usually enough to carry the technical half of a
-post. Skim the three or four most recent posts under `updates/` for voice.
+The technical half of a subject usually already exists as a tech report in the
+`wigtn-tech-report` repo. Read it there rather than restating it: this site links
+to it, and the announcement template exists so a post can be short because the
+report is long. Skim the three or four most recent posts under `updates/` for
+voice.
 
 Then say in one or two lines what you already know, so the interview only covers
 what is genuinely missing. An interview that asks about facts sitting in the repo
@@ -93,7 +94,7 @@ to support.
 
 Sources, in order of preference:
 
-1. `constants/*-sections.ts` in this repo.
+1. The matching report in the `wigtn-tech-report` repo, if the subject has one.
 2. A repository README, model card, or registry (`raw.githubusercontent.com`,
    `registry.npmjs.org`, a HuggingFace model card). Fetch it; do not recall it.
 3. An organizer's announcement or press release.
@@ -115,7 +116,6 @@ Then, before any number goes in:
 Inventory before drafting, because the photos decide which sections can exist.
 
 ```bash
-ls public/images/**/                                 # legacy store, may hold gold
 magick identify -format '%f %wx%h icc=%[profile:icc]\n' <candidates>
 ```
 

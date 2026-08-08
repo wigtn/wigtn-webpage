@@ -30,7 +30,7 @@ the rest.
 
 | Option | Then |
 | --- | --- |
-| 이 레포의 `constants/*-sections.ts` | Read it in full. Usually the strongest source. |
+| `wigtn-tech-report` 레포의 해당 리포트 | Read it there. Usually the strongest source, and the post should link it rather than restate it. |
 | GitHub README / 모델 카드 / npm 레지스트리 | Ask for the URL and fetch it. Never recall it. |
 | 주최측 발표·보도자료 | Ask for the URL. Good for placings, dates, participant counts. |
 | 내가 직접 붙여넣겠다 | Take the paste as a source and cite it as "supplied by the team". |
@@ -40,7 +40,7 @@ the rest.
 
 | Option | Then |
 | --- | --- |
-| 이미 레포 안에 있다 | Inventory `public/images/**` and the other post folders yourself, then propose. |
+| 이미 레포 안에 있다 | Inventory the other post folders yourself, then propose. `public/images/` is no longer a photo store. |
 | 내가 폴더에 넣어두겠다 | Give the exact folder path, wait, then run `magick identify` on what arrives. |
 | 없다 | No `image` field, no `*_COVER`. The card renders `BrandCover`, which is intended. Say so in the header. |
 

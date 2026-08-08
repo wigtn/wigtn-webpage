@@ -9,10 +9,12 @@
  * what survived → built by. Read `../_template/README.md` for the rules every
  * template shares.
  *
- * Every figure here comes from `constants/wigent-sections.ts` — the WIGENT
- * project page, which carries the 12:30–16:00 timeline, the commit log and the
- * "by the numbers" table — or from the award certificate that runs as the
- * cover. Nothing is rounded, restated or inferred.
+ * Every figure here came from the WIGENT project page that used to live in
+ * `constants/wigent-sections.ts`, which carried the 12:30 to 16:00 timeline,
+ * the commit log and the by-the-numbers table, or from the award certificate
+ * that runs as the cover. Nothing is rounded, restated or inferred. That
+ * constants file was deleted with the /projects tree; this post is now the
+ * surviving account of the build, and git history has the rest.
  *
  * One number will look wrong to a future editor: the post says 26 commits,
  * and the repo's main branch shows a higher count today. 26 is the figure the
@@ -47,10 +49,12 @@
  */
 
 import type { Article, Block } from "../../data";
-/* Copied, not moved, from public/images/projects/trae_hackthon_seoul.png: the
- * same file still backs /projects and the retired Pillars section. */
+/* Prepped from public/images/projects/trae_hackthon_seoul.png. That original
+ * was kept while /projects still read it; /projects is gone and so is the
+ * original, so this is the only copy. */
 import certificate from "./grand-prize-certificate.jpg";
-/* Copied from public/images/carousel/trae_hackthon_seoul2.jpg. */
+/* Prepped from public/images/carousel/trae_hackthon_seoul2.jpg, which has
+ * since been deleted with the rest of the legacy image store. */
 import stageDemo from "./stage-demo.jpg";
 
 const p = (text: string): Block => ({ t: "p", text });

@@ -24,7 +24,8 @@
  * WHERE THE REMAINING FACTS COME FROM:
  *   - The HuggingFace model card, Wigtn/Qwen3-VL-2B-WigtnOCR: the model id, the
  *     vllm serve line (verbatim), Apache 2.0, and the adapter-not-merged fact.
- *   - constants/wigtnocr-sections.ts for the artifact list.
+ *   - constants/wigtnocr-sections.ts for the artifact list. That file was
+ *     deleted with the /projects tree; the same content is on the report site.
  *
  * The KoGovDoc retrieval chart went with the numbers section. It is a results
  * figure, and results figures are report figures. The file is deleted rather
@@ -38,8 +39,9 @@
  */
 import type { Article, Block } from "../../data";
 import { techReportHref } from "../../links";
-/* Copied, not moved, from public/images/projects/wigtnocr-huggingface.png:
- * constants/projects.ts still reads the original. It is a screenshot, so it
+/* Prepped from public/images/projects/wigtnocr-huggingface.png, which was kept
+ * while constants/projects.ts read it and has since been deleted with that
+ * file, so this is the only copy. It is a screenshot, so it
  * stays PNG at full colour. No JPEG re-encode, which rings around text, and no
  * palette reduction, which bands the gradient in the logo. It is already under
  * the 2000px cap, so the prep only strips its metadata. */
