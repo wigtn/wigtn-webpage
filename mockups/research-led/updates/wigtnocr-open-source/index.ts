@@ -5,9 +5,15 @@
  * is never referenced by a string path that can rot and each one ships with a
  * content hash.
  *
- * Follows updates/_template/announcement/STRUCTURE.md: lede -> get it -> what
- * shipped -> read the report. Voice follows
+ * Follows updates/_template/announcement/STRUCTURE.md: lede -> what it does ->
+ * get it -> what shipped -> read the report. Voice follows
  * updates/acl-2026-san-diego/index.ts.
+ *
+ * NO COVER, and the folder holds no image. It had one, a screenshot of the
+ * HuggingFace model card, deleted with this change along with its import. A
+ * release page is read to find out what the thing does and how to run it, and a
+ * picture of a model card answers neither; the card itself is one button away
+ * at the top of the page.
  *
  * THIS POST USED TO BE A FULL RELEASE NOTE. It carried the distillation
  * method, the OmniDocBench and KoGovDoc tables, and a long limitations
@@ -39,19 +45,8 @@
  */
 import type { Article, Block } from "../../data";
 import { techReportHref } from "../../links";
-/* Prepped from public/images/projects/wigtnocr-huggingface.png, which was kept
- * while constants/projects.ts read it and has since been deleted with that
- * file, so this is the only copy. It is a screenshot, so it
- * stays PNG at full colour. No JPEG re-encode, which rings around text, and no
- * palette reduction, which bands the gradient in the logo. It is already under
- * the 2000px cap, so the prep only strips its metadata. */
-import huggingfaceModelCard from "./huggingface-model-card.png";
 
 const p = (text: string): Block => ({ t: "p", text });
-
-/* No `*_COVER` export: nothing outside this post reuses the image, and this
- * release has no MILESTONES entry. See _template/README.md. An exported
- * constant nobody imports reads as a wire someone forgot to connect. */
 
 export const wigtnocrOpenSource: Article = {
   slug: "wigtnocr-open-source",
@@ -76,7 +71,6 @@ export const wigtnocrOpenSource: Article = {
   date: "2026.04.03",
   author: "WIGTN",
   readTime: "2 min",
-  image: huggingfaceModelCard.src,
   externalUrl: "https://wigtn.github.io/blog/wigtnocr/",
   links: [
     { label: "HuggingFace", href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR" },
@@ -85,7 +79,12 @@ export const wigtnocrOpenSource: Article = {
   ],
   body: [
     p(
-      "WigtnOCR is public. It is a LoRA adapter over Qwen3-VL-2B-Instruct, trained to turn Korean government PDFs into structured Markdown, with headings, tables, forms and reading order preserved in one pass rather than a bag of recovered characters. The model lives at Wigtn/Qwen3-VL-2B-WigtnOCR on HuggingFace, the 294-page evaluation set beside it as Wigtn/KoGovDoc-Bench, and the training and evaluation code on GitHub. Apache 2.0, all of it.",
+      "WigtnOCR is public, and this is the first release of it. The model lives at Wigtn/Qwen3-VL-2B-WigtnOCR on HuggingFace, the 294-page evaluation set beside it as Wigtn/KoGovDoc-Bench, and the training and evaluation code on GitHub. Apache 2.0, all of it.",
+    ),
+
+    { t: "h", text: "What it does" },
+    p(
+      "It is a LoRA adapter over Qwen3-VL-2B-Instruct, trained to turn Korean government PDFs into structured Markdown, with headings, tables, forms and reading order preserved in one pass rather than a bag of recovered characters. The structure is the point: what a downstream retriever gets is a document it can chunk, not a page of loose characters in reading order it has to guess at.",
     ),
 
     { t: "h", text: "Get it" },

@@ -110,8 +110,22 @@ export const wigtnCodingRelease: Article = {
       "WIGTN Plugin v1 is the Claude Code plugin, and v0.1.16 landed on 4 August 2026. Two releases went out that day. v0.1.15 cut the plugin back to its contracts, and v0.1.16 added knowledge-wiki, a skill that writes down what a session established and puts a gate in front of anything leaving the machine.",
     ),
     p(
-      "The direction is the part worth noticing. Between v0.1.14 and v0.1.16 the package lost two agents and gained one skill, and the diff removes more than it adds: 50 files changed, 3,274 lines in and 3,608 out. This is the second time the plugin has been cut rather than extended, and the report is where that history is measured instead of asserted.",
+      "The direction is the part worth noticing. This is the second time the plugin has been cut rather than extended, and the report is where that history is measured instead of asserted.",
     ),
+
+    { t: "h", text: "What changed since v0.1.14" },
+    p(
+      "v0.1.14 is where this page used to stop, so that is the version worth measuring against. Two releases have landed since, both on 4 August 2026.",
+    ),
+    {
+      t: "list",
+      items: [
+        "v0.1.15 cut the harness back to its contracts. The agent count went from 13 to 11.",
+        "v0.1.16 added knowledge-wiki, the skill that writes down what a session established and gates what leaves the machine. The skill count went from 6 to 7.",
+        "Across both: 50 files changed, 3,274 lines added and 3,608 removed. The release removes more than it adds, which is the point of it.",
+        "Unchanged: the install id, the commands, the 20 design styles, and the licence.",
+      ],
+    },
 
     { t: "h", text: "Get it" },
     p("Two lines, verbatim from the v0.1.16 README:"),

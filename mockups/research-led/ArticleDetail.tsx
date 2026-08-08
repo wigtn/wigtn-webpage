@@ -186,6 +186,13 @@ export function ArticleDetail({ slug }: { slug: string }) {
                   Placeholder
                 </span>
               )}
+              {/* Release only. It sits opposite the tag rather than in the meta
+                  row below, because a reader who came here from the Releases
+                  list arrived with a version in mind and should see it confirmed
+                  in the same glance as the title. */}
+              {article.version && (
+                <span className="ml-auto font-mono text-sm text-ink-4">{article.version}</span>
+              )}
             </div>
             <h1 className="mt-3 text-[clamp(1.9rem,4.5vw,3rem)] font-bold tracking-tight leading-[1.1]">
               {article.title}
@@ -215,28 +222,51 @@ export function ArticleDetail({ slug }: { slug: string }) {
               )}
             </div>
 
+            {/* Where to get the thing, and where the measurements are.
+                The report link is filled rather than outlined: on a release
+                page every other button hands the reader an artifact, and this
+                one hands them the evidence, which is the click worth making
+                obvious. It is matched by label because `links` has no type
+                field, and adding one to thread a boolean through four posts
+                would be more machinery than the string comparison it replaces. */}
             {article.links && article.links.length > 0 && (
               <div className="mt-5 flex flex-wrap gap-2">
-                {article.links.map((l) => (
-                  <a
-                    key={l.href}
-                    href={l.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-sm border border-line/20 px-4 py-2 text-sm font-medium text-ink-2 hover:border-ink hover:text-ink transition-colors"
-                  >
-                    {l.label} <ArrowUpRight size={14} />
-                  </a>
-                ))}
+                {article.links.map((l) => {
+                  const isReport = l.label === "Tech report";
+                  return (
+                    <a
+                      key={l.href}
+                      href={l.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={
+                        isReport
+                          ? "inline-flex items-center gap-1.5 rounded-sm bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+                          : "inline-flex items-center gap-1.5 rounded-sm border border-line/20 px-4 py-2 text-sm font-medium text-ink-2 hover:border-ink hover:text-ink transition-colors"
+                      }
+                    >
+                      {l.label} <ArrowUpRight size={14} />
+                    </a>
+                  );
+                })}
               </div>
             )}
           </motion.header>
 
-          {/* Hero visual */}
-          {/* Breakout lives on a plain wrapper, not on the motion element:
+          {/* Hero visual, for anything but a release.
+              A release page has no picture and does not want a stand-in for
+              one: the gradient panel that renders when `image` is absent is
+              scenery, and it pushed the first real sentence a full screen down
+              on every one of the four. Stories keep it, because a conference
+              or a hackathon post has a photograph and the photograph is half
+              the point. A release that ever earns a picture gets this back by
+              carrying an `image`, so this condition is on the topic and not on
+              whether the field happens to be set. */}
+          {article.newsTopic !== "release" && (
+          /* Breakout lives on a plain wrapper, not on the motion element:
               framer-motion writes `transform` inline to animate, which would
               overwrite the -translate-x-1/2 half of the centring trick and
-              shove the cover off the right edge of the page. */}
+              shove the cover off the right edge of the page. */
           <div className={`mt-8 ${MEDIA_BREAKOUT}`}>
             <motion.div
               variants={rise}
@@ -269,6 +299,7 @@ export function ArticleDetail({ slug }: { slug: string }) {
               )}
             </motion.div>
           </div>
+          )}
 
           {/* Body */}
           <motion.div variants={rise} custom={2} initial="hidden" animate="show" className="mt-4">
