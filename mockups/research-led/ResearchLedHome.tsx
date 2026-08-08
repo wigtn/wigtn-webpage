@@ -509,8 +509,8 @@ export function ResearchLedHome() {
                 The work, with its method and its limits.
               </h2>
               <p className="mt-3 text-pretty text-ink-3">
-                Six reports on what we measured, what failed first, and what each result
-                still does not answer. In English and Korean.
+                What we measured, what failed first, and what each result still does not
+                answer. In English and Korean.
               </p>
             </div>
             <a

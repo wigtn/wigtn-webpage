@@ -21,11 +21,10 @@
  * 404, and each file ships with a content hash so a changed photo can never be
  * served from a stale cache.
  *
- * The inline entries left below are the back-catalogue reports, the video
- * companions and the community placeholders. They move over as they are next
- * edited; nothing new should be written inline here.
+ * There are no inline entries left. Every article in ARTICLES is an imported
+ * post module, and nothing new should be written inline here.
  *
- * Templates live in updates/_template/, one per kind of post — conference,
+ * Templates live in updates/_template/, one per kind of post: conference,
  * hackathon, release, community. Read its README before starting a new one:
  * the outline that suits a hackathon is not the one that suits a release. */
 import { acl2026SanDiego, ACL_2026_COVER } from "./updates/acl-2026-san-diego";
@@ -44,7 +43,7 @@ export const TEAM_PAGE = `${HOME}team`;
 export const articleHref = (slug: string) => `${HOME}${slug}`;
 
 /* These now live in ./links, because posts under `updates/` need them and
- * cannot import a value from this module without closing a cycle — see the
+ * cannot import a value from this module without closing a cycle. See the
  * comment in links.ts. Imported as well as re-exported: NAV below uses
  * TECH_REPORT_SITE locally, and `export ... from` creates no local binding. */
 import { TECH_REPORT_SITE, techReportHref } from "./links";
@@ -73,13 +72,13 @@ export const NAV: { label: string; href: string; disabled?: boolean }[] = [
  * back when a first meeting has actually happened, and not before. */
 export const CAPABILITIES = [
   {
-    title: "Peer-reviewed research",
-    lead: "We publish where the work gets checked by people who can check it.",
+    title: "Published research",
+    lead: "We publish where the work gets read by people who can check it.",
     /* ACL only. There is a second paper, and it is under review, and saying so
      * in public under our own name is the thing the anonymity period forbids.
      * It goes here after a notification, not before. */
     body: "WIGVO was accepted to ACL 2026 System Demonstrations and presented at booth D3, alongside an invited talk at IWSLT 2026.",
-    tags: ["ACL 2026", "IWSLT 2026", "Peer review"],
+    tags: ["ACL 2026", "IWSLT 2026", "Peer reviewed"],
   },
   {
     title: "Open models and code",
@@ -90,7 +89,7 @@ export const CAPABILITIES = [
   {
     title: "Reports with their limits",
     lead: "Every result we publish comes with what it does not show.",
-    body: "Six technical reports, each carrying its method, its measurements and the questions it leaves open.",
+    body: "Every result we publish arrives with its method, its measurements and the questions it leaves open, on a report site of its own.",
     tags: ["Method", "Measurement", "Limitations"],
   },
   {

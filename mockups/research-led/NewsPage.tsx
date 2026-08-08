@@ -208,7 +208,10 @@ export function NewsPage() {
             </div>
           )}
 
-          {pool.length === 0 && (
+          {/* Guarded on !isAll: with a single article, All renders it as the hero
+              and `pool` is empty, which would print "no stories" directly under
+              the story. That is the bug the header comment above describes. */}
+          {!isAll && pool.length === 0 && (
             <p className="py-10 text-center text-sm text-ink-5">No stories in this category yet.</p>
           )}
 
