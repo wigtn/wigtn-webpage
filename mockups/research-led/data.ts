@@ -300,10 +300,19 @@ export const getArticle = (slug: string) => ARTICLES.find((a) => a.slug === slug
  * separate deploy, so nothing here can read its data or notice when it changes.
  * The rules that follow from that are worth stating rather than rediscovering.
  *
- *   - Newest first, which is the order the report hub itself renders. Its dates
- *     are zero-padded "YYYY.MM" or "YYYY.MM.DD" and sort as plain strings.
- *   - When a report ships, add it at the top and drop the last entry. Three is
- *     the number the grid is built for, not a floor.
+ *   - The three are chosen, not computed, and the order is chosen too: Codex,
+ *     Claude Code, then WigtnOCR off the "Models & evaluation" track. Two
+ *     plugins and one model. This used to be "the three newest", which is a
+ *     rule that quietly decides what the site is about; sorted by date it would
+ *     have shown the two harness parts and WIGVO and left every model report
+ *     off the homepage.
+ *   - Codex leads even though it is part 2 of the harness series. On the report
+ *     hub the series order matters, because a reader arriving there is reading
+ *     the series. Here they are three separate things to click, and the newer
+ *     plugin is the one to lead with.
+ *   - So a new report does not belong here by being new. It replaces the entry
+ *     it competes with, or nothing changes. Three is what the grid is built
+ *     for, not a floor.
  *   - `title` is the report's `cardTitle` when it has one and its `title` when
  *     it does not, which is the same choice the report hub card makes. The two
  *     harness reports have no `cardTitle` on purpose: their titles carry the
@@ -312,8 +321,23 @@ export const getArticle = (slug: string) => ARTICLES.find((a) => a.slug === slug
  *     living in a repo that cannot check it is a figure that will go wrong here
  *     while staying right there.
  *
- * Sourced 2026.08.09 from wigtn-tech-report at 245a465,
- * components/technical-reports/data.ts. */
+ * Re-sourced 2026.08.09 from wigtn-tech-report at 791df3d, the head of
+ * feat/report-author-byline, which is open as that repo's PR #6 and not merged.
+ * Anticipating an unmerged branch needs a reason, and this is it: #6 redates the
+ * Claude Code report from 2026.08.04 to 2026.01.12, the day its plugin
+ * repository opened, which drops it from newest to oldest and changes which
+ * three reports are the newest three. The card that used to sit here for it
+ * carried 2026.08.04, a date that stops being true the moment #6 lands.
+ *
+ * The three below are safe in the meantime. Their dates, titles and banners are
+ * byte-identical on main and on #6, so every value this page renders is correct
+ * against the site as deployed today. What anticipates the merge is only which
+ * three were picked. Until #6 lands, the live hub still ranks the Claude Code
+ * report first and this rail does not show it.
+ *
+ * When #6 merges, nothing here needs to change. If it is closed instead, the
+ * Claude Code report goes back to being the newest and belongs at the top of
+ * this list again, with wigtnocr dropping off. */
 export type TechReport = {
   slug: string;
   title: string;
@@ -326,13 +350,6 @@ export type TechReport = {
 
 export const TECH_REPORTS: TechReport[] = [
   {
-    slug: "wigtn-coding",
-    title: "Running a harness on frontier models, part 1: Claude Code",
-    date: "2026.08.04",
-    image: techReportAsset("/images/projects/claudecode_image_v1.jpg"),
-    alt: "Claude Code",
-  },
-  {
     slug: "codex-selective-harness",
     title: "Running a harness on frontier models, part 2: Codex",
     date: "2026.07.28",
@@ -340,11 +357,24 @@ export const TECH_REPORTS: TechReport[] = [
     alt: "Codex",
   },
   {
-    slug: "wigvo",
-    title: "Real-time translation over an ordinary PSTN call",
-    date: "2026.07",
-    image: techReportAsset("/images/projects/wigvo_image_v1.jpg"),
-    alt: "WIGVO, real-time bidirectional speech translation over PSTN calls",
+    slug: "wigtn-coding",
+    title: "Running a harness on frontier models, part 1: Claude Code",
+    /* 2026.01.12, not the 2026.08.04 this card carried before. #6 redates the
+     * report to the day its plugin repository opened (first commit 0593d8d),
+     * because the report is the seven-month history of that plugin and was
+     * dated to its last measurement instead of its start. The live page still
+     * shows 2026.08.04 until #6 lands, so this one value is ahead of the
+     * deployed site; every other value on this rail matches it today. */
+    date: "2026.01.12",
+    image: techReportAsset("/images/projects/claudecode_image_v1.jpg"),
+    alt: "Claude Code",
+  },
+  {
+    slug: "wigtnocr",
+    title: "Distilled from 30B, first of six on Hit@1",
+    date: "2026.05.20",
+    image: techReportAsset("/images/projects/wigtnocr_v1_image.jpg"),
+    alt: "WigtnOCR on Hugging Face",
   },
 ];
 

@@ -544,16 +544,17 @@ export function ResearchLedHome() {
               <span className="transition-transform group-hover:translate-x-0.5">→</span>
             </a>
           </div>
-          <p className="mt-5 max-w-lg text-pretty text-lg leading-relaxed text-ink-2">
-            The work, with its method and its limits.
-          </p>
-          {/* This used to end "In English and Korean." The report site dropped
+          {/* One lead, one paragraph. It was split in two and stacked, which
+              put a paragraph break inside a single thought and left a ragged
+              gap under the title for no reason.
+
+              It used to end "In English and Korean." The report site dropped
               its Korean routes in wigtn-tech-report#5 and now ships English
               only, so the sentence was promising a language the destination no
               longer serves. */}
-          <p className="mt-2 max-w-lg text-pretty text-ink-3">
-            What we measured, what failed first, and what each result still does not
-            answer.
+          <p className="mt-5 max-w-3xl text-pretty text-lg leading-relaxed text-ink-2">
+            The work, with its method and its limits: what we measured, what failed
+            first, and what each result still does not answer.
           </p>
 
           <div className="mt-12 grid items-stretch gap-x-7 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 md:mt-16">

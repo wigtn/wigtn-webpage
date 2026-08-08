@@ -50,22 +50,37 @@ export function BrandCover() {
 /* Centered play affordance for video covers. */
 function PlayBadge() {
   return (
-    <span className="pointer-events-none absolute left-1/2 top-1/2 grid h-12 w-12 -translate-x-1/2 -translate-y-[150%] place-items-center rounded-full bg-black/45 ring-1 ring-inset ring-white/25 backdrop-blur transition-transform duration-300 group-hover:scale-110">
+    <span className="pointer-events-none absolute left-1/2 top-1/2 grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/45 ring-1 ring-inset ring-white/25 backdrop-blur transition-transform duration-300 group-hover:scale-110">
       <Play size={16} className="translate-x-[1px] fill-white text-white" />
     </span>
   );
 }
 
-/* Editorial "magazine cover" card, borderless. The visual carries a bold
- * title overlaid on a dark scrim; imageless articles get a branded gradient
- * cover instead of an empty placeholder. Meta sits quietly below the frame. */
+/* Homepage Updates card.
+ *
+ * This was a 4/5 portrait with the title burned into the bottom of the image
+ * over a black scrim. The frame was taller than it was wide and every cover is
+ * a landscape photograph, so `object-cover` threw away most of each one: the
+ * Snowflake and TRAE covers lost their left and right thirds, and what was left
+ * sat under a scrim dark enough to carry white text.
+ *
+ * So the picture gets a 16/10 frame and keeps its whole width, and the words
+ * move out from on top of it. Nothing is overlaid now except the play badge,
+ * which means the scrim is gone too, because its only job was legibility for
+ * text that is no longer there.
+ *
+ * This is the same frame ReportCard uses, deliberately. The two rails sit on
+ * one page and a reader should not have to work out why one set of pictures is
+ * shaped differently from the other. What still separates them is the meta row:
+ * these carry a date and a place and point inside the site.
+ */
 export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
   const cover = coverSrc(a);
   return (
     <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
-      <Link href={articleHref(a.slug)} className="group block">
+      <Link href={articleHref(a.slug)} className="group flex h-full flex-col">
         {/* Cover */}
-        <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
+        <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-ink/[0.04]">
           {cover ? (
             <img
               src={cover}
@@ -77,37 +92,24 @@ export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
           )}
           {a.video && <PlayBadge />}
 
-          {/* Legibility scrim */}
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"
-          />
-          {/* Brand wash on hover */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-            style={{ background: "radial-gradient(520px circle at 50% 120%, rgba(117,59,189,0.28), transparent 60%)" }}
-          />
-
           {a.placeholder && (
             <span className="absolute right-3 top-3 rounded-full border border-white/15 bg-black/50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-zinc-300 backdrop-blur">
               Placeholder
             </span>
           )}
-
-          {/* Overlaid kicker + title */}
-          <div className="absolute inset-x-0 bottom-0 p-5">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-brand-light">
-              {a.tag}
-            </span>
-            <h3 className="mt-2 text-xl font-bold leading-[1.15] tracking-tight text-white [text-wrap:balance]">
-              {a.title}
-            </h3>
-          </div>
         </div>
 
-        {/* Meta below the frame */}
-        <div className="mt-3 flex items-center gap-3 px-1 text-xs text-ink-4">
+        {/* Kicker and title, under the frame rather than on it */}
+        <span className="mt-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
+          {a.tag}
+        </span>
+        <h3 className="font-display mt-2 text-lg font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent">
+          {a.title}
+        </h3>
+
+        {/* mt-auto pins the meta row: these titles run one to three lines, and
+            without it the dates in a grid row stop lining up. */}
+        <div className="mt-auto flex items-center gap-3 pt-3 text-xs text-ink-4">
           <span className="inline-flex items-center gap-1">
             <Calendar size={12} /> {a.date}
           </span>
