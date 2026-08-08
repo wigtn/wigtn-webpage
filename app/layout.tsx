@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { ScrollRestore } from "@/components/ScrollRestore";
+import { DESCRIPTION, ORG_NAME, SITE_URL } from "@/lib/brand";
 import { organizationSchema } from "@/lib/schema";
 import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
@@ -9,17 +10,22 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+/* Sub-pages override `title`, `description`, `alternates` and `openGraph.url`.
+ * Anything a page leaves unset is inherited from here, which is why /team and
+ * /news used to advertise og:url = https://wigtn.com: they set no metadata at
+ * all, so a shared link to either resolved to the homepage card. */
 export const metadata: Metadata = {
-  metadataBase: new URL("https://wigtn.com"),
-  title: "WIGTN",
-  description:
-    "An independent AI research team. Peer-reviewed work, open models, and reports that state their own limits.",
+  metadataBase: new URL(SITE_URL),
+  title: ORG_NAME,
+  description: DESCRIPTION,
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "WIGTN",
-    description:
-      "An independent AI research team. Peer-reviewed work, open models, and reports that state their own limits.",
-    url: "https://wigtn.com",
-    siteName: "WIGTN",
+    title: ORG_NAME,
+    description: DESCRIPTION,
+    url: SITE_URL,
+    siteName: ORG_NAME,
     type: "website",
     locale: "en_US",
   },

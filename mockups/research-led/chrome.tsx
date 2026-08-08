@@ -13,6 +13,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Trophy, MapPin, Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/theme";
+import { CONTACT_EMAIL, CONTACT_HREF, TAGLINE } from "@/lib/brand";
 import { HOME, NAV } from "./data";
 
 export const EVENT_ICON = { trophy: Trophy, pin: MapPin } as const;
@@ -158,7 +159,7 @@ export function SiteFooter() {
               {/* Break after the first sentence rather than wherever the
                   column happens to run out, so the two claims read as two
                   lines instead of one ragged paragraph. */}
-              An independent AI research team.
+              {TAGLINE}
               <br />
               Everything we learn, we share.
             </p>
@@ -190,13 +191,10 @@ export function SiteFooter() {
               </div>
               <ul className="space-y-2.5 text-sm text-ink-3">
                 <li>
-                  <a
-                    href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-ink transition-colors"
-                  >
-                    contact@wigtn.com
+                  {/* mailto, so no target/rel: a new tab for a mail handler
+                      leaves a blank one behind. See CONTACT_HREF in lib/brand. */}
+                  <a href={CONTACT_HREF} className="hover:text-ink transition-colors">
+                    {CONTACT_EMAIL}
                   </a>
                 </li>
                 <li>

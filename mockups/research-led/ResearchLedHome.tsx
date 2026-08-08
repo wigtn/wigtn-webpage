@@ -33,6 +33,7 @@ import {
 } from "./data";
 import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, rise, VIEWPORT } from "./chrome";
 import { ArticleCard, ReportCard } from "./cards";
+import { CONTACT_EMAIL, CONTACT_HREF } from "@/lib/brand";
 import type { Theme } from "@/lib/theme";
 
 /* The one type scale for a section title on this page.
@@ -580,12 +581,10 @@ export function ResearchLedHome() {
             more useful to us than silence.
           </p>
           <a
-            href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"
-            target="_blank"
-            rel="noopener noreferrer"
+            href={CONTACT_HREF}
             className="mt-9 inline-flex items-center gap-2 rounded-md bg-brand px-6 py-3.5 text-base font-semibold text-white transition-colors hover:bg-brand-dark"
           >
-            contact@wigtn.com <ArrowUpRight size={18} />
+            {CONTACT_EMAIL} <ArrowUpRight size={18} />
           </a>
         </section>
       </main>

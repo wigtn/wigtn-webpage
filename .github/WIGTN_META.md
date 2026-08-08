@@ -1,10 +1,10 @@
 # Repository Metadata for GitHub About Section
 
-description: "Official website for WIGTN Crew, an AI-native open-source research crew based in Korea | Built by WIGTN Crew (wigtn.com)"
+description: "Official website for WIGTN, an independent AI research team based in Korea (wigtn.com)"
 website: "https://wigtn.com"
 topics:
   - wigtn
-  - ai-native
+  - ai-research
   - korea
   - homepage
-  - research-crew
+  - open-source

@@ -1,11 +1,23 @@
+import { DESCRIPTION, ORG_NAME, SITE_URL } from "./brand";
+
+/* Name and description come from ./brand so the structured data cannot say one
+ * thing while the page says another. It used to: "WIGTN Crew" here against
+ * "WIGTN" in the title, and "AI-native open-source research crew" here against
+ * "An independent AI research team" in the meta description, on every page.
+ *
+ * The "Korea-based" the old description carried is not lost, it moved into
+ * `address`, where a crawler can actually read it as a country. */
 export const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "WIGTN Crew",
-  "url": "https://wigtn.com",
-  "logo": "https://wigtn.com/wigtn_logo.png",
-  "description":
-    "AI-native open-source research crew building practical, domain-specialized AI tools. Korea-based.",
+  "name": ORG_NAME,
+  "url": SITE_URL,
+  "logo": `${SITE_URL}/wigtn_logo.png`,
+  "description": DESCRIPTION,
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "KR",
+  },
   "sameAs": [
     "https://github.com/wigtn",
     "https://huggingface.co/Wigtn",
