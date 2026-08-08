@@ -31,8 +31,12 @@ yarn-error.log*
 # vercel
 .vercel
 
-# claude
-.claude
+# claude: personal config stays out, shared project config is tracked.
+# .claude/skills/ carries the repo's authoring routines and has to ship with
+# the repo, or it only exists on the machine that wrote it.
+.claude/*
+!.claude/skills/
+.claude/settings.local.json
 
 # typescript
 *.tsbuildinfo
@@ -44,5 +48,4 @@ docs/prd
 # source assets
 app/wigtn_logo.*
 memory-lake/
-.claude/
 PLANNING/

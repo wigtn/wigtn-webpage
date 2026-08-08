@@ -1,41 +1,45 @@
 /**
- * Update: WIGSS v0.1.4 on npm — release note.
+ * Update: WIGSS v0.1.4 on npm - announcement.
  *
  * Colocated post. The cover sits next to the text and is imported, so a
  * renamed or deleted file becomes a build error rather than a silent 404.
  *
- * Structure follows the release template: lede → get it → what is in the
- * release → why it exists → the numbers → what it does not do yet → go
- * deeper. "What it does not do yet" is the section that carries the post and
- * is deliberately the longest; a release note without it reads as marketing.
+ * Follows updates/_template/announcement/STRUCTURE.md: lede -> get it -> what
+ * shipped -> read the report.
+ *
+ * THIS POST USED TO BE A FULL RELEASE NOTE, with a "why it exists" section, a
+ * "the numbers" section and a long limitations list. Those moved to the
+ * tech-report site under the split described in AGENTS.md: this site says what
+ * the team did, the report site says what the work found. Do not restore them
+ * here. If a fact seems missing, it is one link away, and two copies of one
+ * explanation drift apart in a month.
  *
  * Sources for every fact here, and nothing beyond them:
- *   - the public WIGSS README (github.com/wigtn/wigss) — install and CLI
+ *   - the public WIGSS README (github.com/wigtn/wigss): install and CLI
  *     flags, the five CSS strategies, the requirements, the Apache 2.0
- *     licence, and the verbatim limitations list;
- *   - the npm registry metadata for `wigss` — version 0.1.4 published
- *     2026-04-03, the 0.1.0–0.1.4 version list, Node >=18, Apache-2.0;
- *   - the npm package page in the cover screenshot — 222 kB unpacked, 40
+ *     licence, and the framework and runtime requirements;
+ *   - the npm registry metadata for `wigss`: version 0.1.4 published
+ *     2026-04-03, the 0.1.0 to 0.1.4 version list, Node >=18, Apache-2.0;
+ *   - the npm package page in the cover screenshot: 222 kB unpacked, 40
  *     files, 17 dependencies;
- *   - the `wigss` engineering note in ../../data.ts — the scan/select/edit/
- *     save loop, the StyleIntent dispatch, and the fidelity/rollback story.
+ *   - the `wigss` engineering note that used to sit in ../../data.ts, for the
+ *     fidelity and rollback behaviour quoted in "What shipped".
  *
  * Editorial decisions a future editor would otherwise undo:
  *
- * 1. "The numbers" says there is no benchmark. That is a stated fact, not a
- *    gap waiting to be filled. No controlled speed or code-quality benchmark
- *    for WIGSS has been published, and the section says so on purpose — see
- *    the `sourceNote` on the `wigss` entry in ../../data.ts. Do not
- *    substitute feature counts for it.
+ * 1. There is still no published benchmark for WIGSS, and the summary says so.
+ *    The detail of what has and has not been measured lives in the tech report,
+ *    which is where a reader chasing a number will go. Do not substitute
+ *    feature counts for it in this post.
  *
- * 2. The post is pinned to v0.1.4, published 2026-04-03. It is a release note
+ * 2. The post is pinned to v0.1.4, published 2026-04-03. It is an announcement
  *    for that release. If a later version ships, write a new post; do not
  *    quietly renumber this one.
  *
  * 3. No download or adoption figures, although the cover screenshot happens to
  *    show npm's counter. A live counter is not a published figure, and download
  *    counts are not evidence that the thing works. Note the screenshot was
- *    taken a few days after publishing — its header reads "3 days ago" — so it
+ *    taken a few days after publishing, and its header reads "3 days ago", so it
  *    is a picture of the package page, not of launch day. It runs as the cover
  *    only; there is no second copy of it in the body.
  *
@@ -56,7 +60,7 @@
  * The cover is copied from public/images/carousel/wigss-npm.png rather than
  * moved: components/sections/Pillars.tsx still reads it from public/. It is a
  * 1698x1169 PNG screenshot at 163 KB with no EXIF, so the shared README's
- * prep command is a no-op here — the resize cap is 2000px and re-encoding a
+ * prep command is a no-op here. The resize cap is 2000px and re-encoding a
  * screenshot of text to JPEG q82 would only add artifacts. Copied byte for
  * byte on purpose.
  */
@@ -68,7 +72,7 @@ import npmPackagePage from "./npm-package-page.png";
 const p = (text: string): Block => ({ t: "p", text });
 
 /* No `*_COVER` export: nothing outside this post reuses the image, and this
- * release has no MILESTONES entry. See _template/README.md — an exported
+ * release has no MILESTONES entry. See _template/README.md. An exported
  * constant nobody imports reads as a wire someone forgot to connect. */
 
 export const wigssNpmRelease: Article = {
@@ -85,7 +89,7 @@ export const wigssNpmRelease: Article = {
     "A CLI that wraps your running dev server in an iframe, lets you drag and resize components on the live page, and writes the change back into whichever of five CSS strategies your project actually uses. Apache 2.0, Node 18+, React and Next.js only, and no benchmark yet.",
   date: "2026.04.03",
   author: "WIGTN",
-  readTime: "5 min",
+  readTime: "2 min",
   image: npmPackagePage.src,
   /* The method write-up lives on the report blog; this note links it rather
    * than restating it. Two copies of one explanation drift apart in a month. */
@@ -100,7 +104,7 @@ export const wigssNpmRelease: Article = {
       "WIGSS v0.1.4 went up on npm on April 3, 2026. It is a command-line tool for the part of frontend work that coding agents are worst at, which is not producing the page but nudging it afterwards. You point it at a dev server you already have running, drag a component on the live page, and WIGSS writes the change back into the source file that produced it.",
     ),
     p(
-      "Apache 2.0, Node 18 or newer, React and Next.js only. That last one is the first of several limits, and they are further down rather than buried.",
+      "Apache 2.0, Node 18 or newer, React and Next.js only. That last one is a real limit, and it is one of several the tech report sets out in full.",
     ),
 
     { t: "h", text: "Get it" },
@@ -113,10 +117,10 @@ export const wigssNpmRelease: Article = {
     ),
     /* No image block here. The npm page screenshot is already the cover, one
      * screen up, and the same frame twice in one scroll reads as a mistake.
-     * The facts its caption carried — 222 kB, 40 files — are in the list
+     * The facts its caption carried, 222 kB across 40 files, are in the list
      * below, which is where a reader looking for them would go anyway. */
 
-    { t: "h", text: "What is in the release" },
+    { t: "h", text: "What shipped" },
     {
       t: "list",
       items: [
@@ -130,38 +134,7 @@ export const wigssNpmRelease: Article = {
       "What is not in it, because an omission found later reads as a claim withdrawn. There is no model and no hosted service: the component detection, the design suggestions, the drag feedback and the chat all call GPT-4o with your own OpenAI key, and without a key those four do not run. The refactoring is the half that never calls a model at all. Strategy detection, the Tailwind class mapping, the PostCSS work on CSS files and the Babel work on inline styles are ordinary code, which is the reason a save is reproducible and a suggestion is not.",
     ),
 
-    { t: "h", text: "Why it exists" },
-    p(
-      "Coding agents are good at the first layout and bad at the second pass. \"Make this card a bit wider\" is easy to say and slow to land: you describe a visual intent in prose, a model turns the prose into a class, and you go back to the browser to find out whether it worked. Then you do it again. The loop is short enough to feel fine and long enough to eat an afternoon.",
-    ),
-    p(
-      "WIGSS keeps the browser as the editing surface and the source file as the artifact. The editor runs on its own port with your dev server held in an iframe; a DOM scan labels navigation, cards, footers and repeated component groups and maps them back to files; drag and resize events stream over a WebSocket. On save the visual change becomes a StyleIntent, gets dispatched to whichever rewriter matches your project, and lands as a targeted diff. Adding a language means adding a rewriter and nothing else. The long version of that pipeline is in the tech report.",
-    ),
-
-    { t: "h", text: "The numbers" },
-    p(
-      "There are none. No controlled speed or code-quality benchmark has been published for WIGSS: no time-to-edit comparison against writing the CSS by hand, no diff-quality study, and no measure of how often the two-pixel check passes on a codebase we did not write. The counts in the README, five CSS strategies and five agent actions, describe a package surface rather than a result, and we would rather say that than let a feature list stand in for evidence.",
-    ),
-
-    { t: "h", text: "What it does not do yet" },
-    p(
-      "The README carries these and so does this post, because they are what decides whether WIGSS is worth your afternoon.",
-    ),
-    {
-      t: "list",
-      items: [
-        "React JSX only. Vue, Svelte and Angular are not supported. The one non-React path is a plain .html file with a linked stylesheet, which the strategy detector does handle.",
-        "Selectors are handled simply. Compound selectors like .card.active and pseudo-selectors like :hover have basic support, which means the rules most worth editing are also the ones most likely to need a look afterwards.",
-        "The WebSocket has origin validation and rate limiting, and no token auth. This is a local development tool and it should stay on localhost.",
-        "Single user. There is no shared session and nothing reconciles two people editing the same page.",
-        "An applied diff is validated to touch className and style only, never JavaScript. That is a deliberate safety property rather than a shortcoming, but it does bound what a visual edit can be: WIGSS restyles markup, it does not restructure it.",
-      ],
-    },
-    p(
-      "None of those come with a version number attached. The README says \"not yet supported\" and stops there, and putting a milestone in a release note that the repository has not committed to is the wrong kind of promise.",
-    ),
-
-    { t: "h", text: "Go deeper" },
+    { t: "h", text: "Read the report" },
     p(
       "How a DOM node is mapped back to the source file that produced it, and how one apply path stays honest across five very different CSS strategies, is in the WIGSS tech report. The CLI flags, the architecture and the current limitations are in the README.",
     ),

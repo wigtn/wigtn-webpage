@@ -11,10 +11,12 @@ function articleDate(value: string): Date {
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  /* /work is retired: it grouped the technical articles that moved to the
+   * tech-report site, and its one surviving group is a filter on /news. The URL
+   * still resolves to a redirect page, which is deliberately not listed here. */
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${SITE}/`, changeFrequency: "weekly", priority: 1 },
     { url: `${SITE}/news/`, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${SITE}/work/`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE}/team/`, changeFrequency: "monthly", priority: 0.7 },
   ];
 
