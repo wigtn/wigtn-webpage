@@ -1,9 +1,15 @@
 /**
  * Update: WIGTN Plugin v2 for Codex, v0.3.0 - announcement.
  *
- * Follows updates/_template/announcement/STRUCTURE.md: lede -> get it -> what
- * shipped -> read the report. Voice follows updates/wigtn-coding-release, the
- * sibling post for the Claude Code plugin.
+ * Follows updates/_template/announcement/STRUCTURE.md: lede -> what it does ->
+ * get it -> what shipped -> read the report. Voice follows
+ * updates/wigtn-coding-release, the sibling post for the Claude Code plugin.
+ *
+ * "What it does" rather than "What changed since", because this is the plugin's
+ * first appearance on this site. Its repository has three releases behind it
+ * (v0.1.0, v0.2.0, v0.3.0, all in July 2026), and their dates are in "What
+ * shipped"; a reader meeting the plugin here needs what it is before what moved
+ * in it.
  *
  * Sources, in order of authority:
  *  - The public repository, https://github.com/wigtn/wigtn-plugins-codex, read
@@ -81,8 +87,12 @@ export const wigtnCodexRelease: Article = {
     p(
       "WIGTN Plugin v2 is a Codex plugin, and v0.3.0 landed on 28 July 2026. It is not the Claude Code plugin ported across: that one puts a fixed team of agents in front of the model, and this one hands Codex nine skills and stays out of the way until a request matches one of them.",
     ),
+    { t: "h", text: "What it does" },
     p(
       "The rule that shapes it is which skills are allowed to start themselves. Eight are selected automatically when a request matches what they do. The ninth, verified-delivery, runs only when it is named, because it is the one that opens the whole implement-and-verify loop and an ordinary bug fix should not fall into it.",
+    ),
+    p(
+      "So the day-to-day behaviour is that nothing happens. Ask for a fix and Codex fixes it. The skills open on the work that repeats across products: writing a PRD, turning it into screens, planning the tasks, checking the requirements against executed tests, and getting a branch to the point where it can be pushed.",
     ),
 
     { t: "h", text: "Get it" },

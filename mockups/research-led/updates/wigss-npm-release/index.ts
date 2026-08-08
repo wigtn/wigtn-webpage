@@ -1,11 +1,15 @@
 /**
  * Update: WIGSS v0.1.4 on npm - announcement.
  *
- * Colocated post. The cover sits next to the text and is imported, so a
- * renamed or deleted file becomes a build error rather than a silent 404.
+ * Follows updates/_template/announcement/STRUCTURE.md: lede -> what it does ->
+ * get it -> what shipped -> read the report.
  *
- * Follows updates/_template/announcement/STRUCTURE.md: lede -> get it -> what
- * shipped -> read the report.
+ * NO COVER, and the folder holds no image. It had one, a screenshot of the npm
+ * package page, deleted with this change along with its import. A release page
+ * is read to find out what the thing does and how to run it, and a picture of a
+ * registry listing answers neither. The two facts the screenshot was cited for,
+ * 222 kB unpacked across 40 files, were already in "What shipped" and stay
+ * there, sourced to the npm page itself rather than to a photograph of it.
  *
  * THIS POST USED TO BE A FULL RELEASE NOTE, with a "why it exists" section, a
  * "the numbers" section and a long limitations list. Those moved to the
@@ -20,8 +24,8 @@
  *     licence, and the framework and runtime requirements;
  *   - the npm registry metadata for `wigss`: version 0.1.4 published
  *     2026-04-03, the 0.1.0 to 0.1.4 version list, Node >=18, Apache-2.0;
- *   - the npm package page in the cover screenshot: 222 kB unpacked, 40
- *     files, 17 dependencies;
+ *   - the npm package page itself: 222 kB unpacked, 40 files, 17
+ *     dependencies;
  *   - the `wigss` engineering note that used to sit in ../../data.ts, for the
  *     fidelity and rollback behaviour quoted in "What shipped".
  *
@@ -36,12 +40,9 @@
  *    for that release. If a later version ships, write a new post; do not
  *    quietly renumber this one.
  *
- * 3. No download or adoption figures, although the cover screenshot happens to
- *    show npm's counter. A live counter is not a published figure, and download
- *    counts are not evidence that the thing works. Note the screenshot was
- *    taken a few days after publishing, and its header reads "3 days ago", so it
- *    is a picture of the package page, not of launch day. It runs as the cover
- *    only; there is no second copy of it in the body.
+ * 3. No download or adoption figures, although the npm page shows a counter.
+ *    A live counter is not a published figure, and download counts are not
+ *    evidence that the thing works.
  *
  * 4. The install line is `npx`, not `npm install`. WIGSS is a CLI you run
  *    against a dev server, and the README's quick start is npx. npm's page
@@ -57,24 +58,12 @@
  *    *value* back out of it would close a runtime import cycle. Types are
  *    erased and are safe to import from data.
  *
- * The cover was copied from public/images/carousel/wigss-npm.png, which was
- * kept while the retired Pillars section read it and has since been deleted
- * with that section, so this is the only copy. It is a
- * 1698x1169 PNG screenshot at 163 KB with no EXIF, so the shared README's
- * prep command is a no-op here. The resize cap is 2000px and re-encoding a
- * screenshot of text to JPEG q82 would only add artifacts. Copied byte for
- * byte on purpose.
  */
 
 import type { Article, Block } from "../../data";
 import { techReportHref } from "../../links";
-import npmPackagePage from "./npm-package-page.png";
 
 const p = (text: string): Block => ({ t: "p", text });
-
-/* No `*_COVER` export: nothing outside this post reuses the image, and this
- * release has no MILESTONES entry. See _template/README.md. An exported
- * constant nobody imports reads as a wire someone forgot to connect. */
 
 export const wigssNpmRelease: Article = {
   slug: "wigss-npm-release",
@@ -94,7 +83,6 @@ export const wigssNpmRelease: Article = {
   date: "2026.04.03",
   author: "WIGTN",
   readTime: "2 min",
-  image: npmPackagePage.src,
   /* The method write-up lives on the report blog; this note links it rather
    * than restating it. Two copies of one explanation drift apart in a month. */
   externalUrl: "https://wigtn.github.io/blog/wigss/",
@@ -105,7 +93,12 @@ export const wigssNpmRelease: Article = {
   ],
   body: [
     p(
-      "WIGSS v0.1.4 went up on npm on April 3, 2026. It is a command-line tool for the part of frontend work that coding agents are worst at, which is not producing the page but nudging it afterwards. You point it at a dev server you already have running, drag a component on the live page, and WIGSS writes the change back into the source file that produced it.",
+      "WIGSS v0.1.4 went up on npm on April 3, 2026, the first release of it we have written up. It is a command-line tool for the part of frontend work that coding agents are worst at, which is not producing the page but nudging it afterwards.",
+    ),
+
+    { t: "h", text: "What it does" },
+    p(
+      "You point it at a dev server you already have running, drag a component on the live page, and WIGSS writes the change back into the source file that produced it. It reads which of five CSS strategies your project uses and writes in that one, so the diff looks like something you would have typed.",
     ),
     p(
       "Apache 2.0, Node 18 or newer, React and Next.js only. That last one is a real limit, and it is one of several the tech report sets out in full.",
@@ -119,11 +112,6 @@ export const wigssNpmRelease: Article = {
     p(
       "That starts the editor on port 4000 with your page loaded inside it. The --wigss-port flag moves the editor if 4000 is taken, and npx wigss@latest --demo runs the whole thing against a built-in demo page if you have no project handy. WIGSS reads OPENAI_API_KEY, takes --key, or asks for a key on first run. If you installed wigss globally at some point, uninstall it first, or npx will keep serving the old copy. The npm page shows its usual npm i wigss install box; ignore it, this is a CLI you run, not a dependency you add.",
     ),
-    /* No image block here. The npm page screenshot is already the cover, one
-     * screen up, and the same frame twice in one scroll reads as a mistake.
-     * The facts its caption carried, 222 kB across 40 files, are in the list
-     * below, which is where a reader looking for them would go anyway. */
-
     { t: "h", text: "What shipped" },
     {
       t: "list",
