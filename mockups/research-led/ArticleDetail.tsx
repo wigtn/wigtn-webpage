@@ -21,6 +21,7 @@ import {
 // `import Link from "next/link"` above shadows data's `Link` type, so
 // `article.links` inline instead of importing that type here.
 import { SiteHeader, SiteFooter, BackdropDecor, EVENT_ICON, rise } from "./chrome";
+import { CONTACT_HREF } from "@/lib/brand";
 
 /* Media breaks out of the reading column.
  *
@@ -312,9 +313,7 @@ export function ArticleDetail({ slug }: { slug: string }) {
           <div className="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-line/[0.08] bg-paper-raised px-6 py-5">
             <p className="text-sm text-ink-3">Working on something like this? Let's talk.</p>
             <a
-              href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"
-              target="_blank"
-              rel="noopener noreferrer"
+              href={CONTACT_HREF}
               className="inline-flex items-center gap-2 rounded-sm bg-brand text-white px-5 py-2.5 text-sm font-semibold uppercase tracking-wide hover:bg-brand-dark transition-colors"
             >
               Talk to us <ArrowUpRight size={16} />
