@@ -82,12 +82,15 @@ export const wigssNpmRelease: Article = {
   channel: "newsroom",
   newsTopic: "release",
   tag: "RELEASE",
-  /* Version and date both in the title: `v0.1.4` on its own stops meaning
-   * anything six months from now. */
-  title:
-    "WIGSS v0.1.4, April 2026: drag a component in the browser and the source file rewrites itself",
+  /* The title used to be "WIGSS v0.1.4, April 2026: drag a component in the
+   * browser and the source file rewrites itself", on the rule that a bare
+   * version means nothing six months later. The rule stands and the row still
+   * obeys it: the version moved to `version` and the date is beside it, both
+   * rendered in the left rail. The title is free to be the product name. */
+  title: "WIGSS",
+  version: "v0.1.4",
   summary:
-    "A CLI that wraps your running dev server in an iframe, lets you drag and resize components on the live page, and writes the change back into whichever of five CSS strategies your project actually uses. Apache 2.0, Node 18+, React and Next.js only, and no benchmark yet.",
+    "Drag and resize components on your running dev server, and the source file rewrites itself into whichever of five CSS strategies the project already uses.",
   date: "2026.04.03",
   author: "WIGTN",
   readTime: "2 min",

@@ -59,10 +59,21 @@ export const wigtnocrOpenSource: Article = {
   channel: "newsroom",
   newsTopic: "release",
   tag: "RELEASE",
-  title: "WigtnOCR is on HuggingFace: a 2B adapter that reads Korean government documents",
+  /* Was "WigtnOCR is on HuggingFace: a 2B adapter that reads Korean government
+   * documents". Product name now, so the release rows read as a list. No
+   * `version`: the HuggingFace repo carries no tags, and the "v1" here is the
+   * product line, matching the wigtnOCR-v1 repository name. */
+  title: "WigtnOCR v1",
   summary:
-    "The LoRA adapter, the 294-page KoGovDoc-Bench evaluation set, and the training and evaluation code are public under Apache 2.0. What it scores, and where it loses, is in the tech report.",
-  date: "2026.05.21",
+    "A LoRA adapter over Qwen3-VL-2B-Instruct that reads Korean government documents, with the 294-page KoGovDoc-Bench set and the training and evaluation code, all Apache 2.0.",
+  /* Was 2026.05.21, which no source supports. The HuggingFace API reports the
+   * model repo created 2026-03-16 and last modified 2026-04-03, and the
+   * wigtnOCR-v1 repository was last pushed the same day and has no releases or
+   * tags. 2026.04.03 is the last date on which anything was published to the
+   * artifact this post announces, and it is checkable; the old date was in the
+   * file with no note saying where it came from. If it was the announcement
+   * date, restore it and write down the source this time. */
+  date: "2026.04.03",
   author: "WIGTN",
   readTime: "2 min",
   image: huggingfaceModelCard.src,

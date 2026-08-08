@@ -32,6 +32,7 @@ import { obaWeekendthonTop6, OBA_WEEKENDTHON_COVER } from "./updates/oba-weekend
 import { snowflakeKorea2026, SNOWFLAKE_2026_COVER } from "./updates/snowflake-korea-2026";
 import { traeSeoulGrandPrize, TRAE_SEOUL_COVER } from "./updates/trae-seoul-grand-prize";
 import { wigssNpmRelease } from "./updates/wigss-npm-release";
+import { wigtnCodexRelease } from "./updates/wigtn-codex-release";
 import { wigtnCodingRelease } from "./updates/wigtn-coding-release";
 import { wigtnocrOpenSource } from "./updates/wigtnocr-open-source";
 
@@ -46,7 +47,7 @@ export const articleHref = (slug: string) => `${HOME}${slug}`;
  * cannot import a value from this module without closing a cycle. See the
  * comment in links.ts. Imported as well as re-exported: NAV below uses
  * TECH_REPORT_SITE locally, and `export ... from` creates no local binding. */
-import { TECH_REPORT_SITE, techReportHref } from "./links";
+import { TECH_REPORT_SITE, techReportAsset, techReportHref } from "./links";
 export { TECH_REPORT_SITE, techReportHref };
 
 /* Reference-led structure (Next Securities / MakinaRocks): the homepage is
@@ -104,11 +105,16 @@ export const PARTNERS = ["Mind AI", "MEGA Code", "Tripla", "Arustay"];
 
 /* The /team roster renders one row per person: portrait + name on the left,
  * `position` / `role` / `bio` on the right. `position` is the WIGTN title and
- * is intentionally set on the organizer only; everyone else shows `role`
- * (their discipline) alone. `bio` is a single career-shaped sentence. */
+ * is intentionally set on the team lead only; everyone else shows `role`
+ * (their discipline) alone. `bio` is a single career-shaped sentence.
+ *
+ * `currentRole`, `credential`, `expertise`, `github` and `linkedin` are read by
+ * nothing. They are kept in step with the rendered fields anyway, because a
+ * shadow copy that disagrees with what the page says is worse than one that
+ * does not, and they still ship inside the client bundle. */
 export type TeamMember = {
   name: string;
-  position?: string; // WIGTN title; organizer only
+  position?: string; // WIGTN title; team lead only
   role: string; // discipline
   currentRole: string;
   credential?: string;
@@ -123,11 +129,15 @@ export type TeamMember = {
 export const TEAM: TeamMember[] = [
   {
     name: "Harrison Kim 김형섭",
-    position: "Organizer & Crew Lead",
+    position: "Team Lead",
     role: "AI Research Engineer",
-    currentRole: "AI Research Engineer & Engineering Part Lead, BrainCrew",
+    /* The employer is described, not named. It was named here and in the bio
+     * until now, which put a company that has nothing to do with WIGTN on
+     * WIGTN's own roster page. What the reader needs is the kind of work, and
+     * that is what both fields carry now. */
+    currentRole: "AI Research Engineer, enterprise agent development and consulting",
     credential: "Ex-Hyundai E&C",
-    bio: "Engineering Part Lead at BrainCrew, working on AI modeling and GPU-accelerated computing after a decade of large-scale project management at Hyundai E&C.",
+    bio: "Builds agent systems for enterprise clients at an AX (AI transformation) company, covering development, consulting and solution delivery, after a decade of large-scale project management at Hyundai E&C.",
     image: "/images/team/hyeongseob_kim.jpg",
     imagePosition: "center 15%",
     github: "https://github.com/Hyeongseob91",
@@ -136,8 +146,8 @@ export const TEAM: TeamMember[] = [
   },
   {
     name: "Diego Son 손상우",
-    role: "AI Engineer",
-    currentRole: "AI Engineer & AX Team Lead",
+    role: "AI Research Engineer",
+    currentRole: "AI Research Engineer & AX Team Lead",
     bio: "AX Team Lead building LLM-powered applications and autonomous agent systems, focused on multi-agent orchestration and workflow automation.",
     image: "/images/team/sangwoo_son.png",
     imagePosition: "left top",
@@ -147,14 +157,17 @@ export const TEAM: TeamMember[] = [
   },
   {
     name: "Eric Kim 김진모",
-    role: "MLOps Engineer",
+    /* Was "MLOps Engineer" here while `currentRole` right below said DevOps.
+     * DevOps is the one that was right, and the bio no longer opens by
+     * repeating the line directly above it. */
+    role: "DevOps Engineer",
     currentRole: "DevOps Engineer",
-    bio: "DevOps engineer running full MLOps pipelines on Docker, Kubernetes and CI/CD, and the crew's DBA and UI/UX direction lead.",
+    bio: "Runs the crew's deployment pipelines on Docker, Kubernetes and CI/CD, and leads its DBA and UI/UX direction.",
     image: "/images/team/jinmo_kim.png",
     imagePosition: "center 30%",
     github: "https://github.com/moriroKim",
     linkedin: "https://www.linkedin.com/in/jinmo-kim-62878533b/",
-    expertise: ["MLOps", "Infra (Docker/K8s)", "CI/CD · DBA"],
+    expertise: ["DevOps", "Infra (Docker/K8s)", "CI/CD · DBA"],
   },
   {
     name: "Maximus Kim 김현상",
@@ -231,6 +244,19 @@ export type Article = {
   placeholder?: boolean; // not-yet-real content kept as mock
   channel?: Channel; // undefined = back-catalog/report (excluded from newsroom)
   newsTopic?: NewsTopic; // newsroom sub-category; "release" splits the /news groups
+  /* Release only: the shipped version, rendered under the date on /news.
+   *
+   * It is a separate field rather than part of the title because two of these
+   * products carry two different numbers. "WIGTN Plugin v2: Codex" is the
+   * second plugin we have made; v0.3.0 is the version of it that shipped. Put
+   * both in one heading and the reader has to work out which is which.
+   *
+   * Copy it from the registry that serves the thing, not from a README badge:
+   * npm for WIGSS, the GitHub releases API for the two plugins. Omit it when
+   * the artifact has no version, which is the case for the WigtnOCR adapter:
+   * the HuggingFace repo carries no tags and the "v1" in its name is the
+   * product line, not a release. */
+  version?: string;
   externalUrl?: string; // report only: GitHub Pages blog post URL
   body: Block[];
 };
@@ -244,10 +270,13 @@ export const ARTICLES: Article[] = [
   obaWeekendthonTop6,
   acl2026SanDiego,
 
-  /* ───────── Newsroom · Releases & Updates (real) ───────── */
-  wigtnocrOpenSource,
-  wigssNpmRelease,
-  wigtnCodingRelease,
+  /* ───────── Newsroom · Releases (real), newest first ─────────
+   * One entry per product, not per version. NEWSROOM_FEED sorts by date, so
+   * this order is for a reader of the file; the page does not depend on it. */
+  wigtnCodingRelease, // 2026.08.04, v0.1.16
+  wigtnCodexRelease, // 2026.07.28, v0.3.0
+  wigssNpmRelease, // 2026.04.03, v0.1.4
+  wigtnocrOpenSource, // 2026.04.03, no version
 ];
 
 /* Curated homepage "newsroom": research credibility & wins told as article
@@ -258,6 +287,96 @@ export const NEWSROOM = [
   ARTICLES.find((a) => a.slug === "trae-seoul-grand-prize")!, // 2026.03.28
 ];
 export const getArticle = (slug: string) => ARTICLES.find((a) => a.slug === slug);
+
+/* ── Homepage report rail ────────────────────────────────────────────────────
+ *
+ * The three newest tech reports, as cards that leave this site. The nav already
+ * links the report site, but a reader who has not yet decided to go there is
+ * not reading the nav. Three covers with real titles under them say what is
+ * over there; a single link says only that somewhere else exists.
+ *
+ * This is a hand-kept mirror, and the report site is the source of truth. This
+ * repo has no build-time access to it: separate Next app, separate repository,
+ * separate deploy, so nothing here can read its data or notice when it changes.
+ * The rules that follow from that are worth stating rather than rediscovering.
+ *
+ *   - The three are chosen, not computed, and the order is chosen too: Codex,
+ *     Claude Code, then WigtnOCR off the "Models & evaluation" track. Two
+ *     plugins and one model. This used to be "the three newest", which is a
+ *     rule that quietly decides what the site is about; sorted by date it would
+ *     have shown the two harness parts and WIGVO and left every model report
+ *     off the homepage.
+ *   - Codex leads even though it is part 2 of the harness series. On the report
+ *     hub the series order matters, because a reader arriving there is reading
+ *     the series. Here they are three separate things to click, and the newer
+ *     plugin is the one to lead with.
+ *   - So a new report does not belong here by being new. It replaces the entry
+ *     it competes with, or nothing changes. Three is what the grid is built
+ *     for, not a floor.
+ *   - `title` is the report's `cardTitle` when it has one and its `title` when
+ *     it does not, which is the same choice the report hub card makes. The two
+ *     harness reports have no `cardTitle` on purpose: their titles carry the
+ *     series numbering, which is how a reader gets from part 1 to part 2.
+ *   - Do not copy the `dek` across. It states measured figures, and a figure
+ *     living in a repo that cannot check it is a figure that will go wrong here
+ *     while staying right there.
+ *
+ * Re-sourced 2026.08.09 from wigtn-tech-report at 791df3d, the head of
+ * feat/report-author-byline, which is open as that repo's PR #6 and not merged.
+ * Anticipating an unmerged branch needs a reason, and this is it: #6 redates the
+ * Claude Code report from 2026.08.04 to 2026.01.12, the day its plugin
+ * repository opened, which drops it from newest to oldest and changes which
+ * three reports are the newest three. The card that used to sit here for it
+ * carried 2026.08.04, a date that stops being true the moment #6 lands.
+ *
+ * The three below are safe in the meantime. Their dates, titles and banners are
+ * byte-identical on main and on #6, so every value this page renders is correct
+ * against the site as deployed today. What anticipates the merge is only which
+ * three were picked. Until #6 lands, the live hub still ranks the Claude Code
+ * report first and this rail does not show it.
+ *
+ * When #6 merges, nothing here needs to change. If it is closed instead, the
+ * Claude Code report goes back to being the newest and belongs at the top of
+ * this list again, with wigtnocr dropping off. */
+export type TechReport = {
+  slug: string;
+  title: string;
+  date: string;
+  /* Full path under the report repo's `public/`, resolved across origins by
+   * `techReportAsset`. Nothing in this build verifies it; see ./links. */
+  image: string;
+  alt: string;
+};
+
+export const TECH_REPORTS: TechReport[] = [
+  {
+    slug: "codex-selective-harness",
+    title: "Running a harness on frontier models, part 2: Codex",
+    date: "2026.07.28",
+    image: techReportAsset("/images/projects/codex_image_v1.jpg"),
+    alt: "Codex",
+  },
+  {
+    slug: "wigtn-coding",
+    title: "Running a harness on frontier models, part 1: Claude Code",
+    /* 2026.01.12, not the 2026.08.04 this card carried before. #6 redates the
+     * report to the day its plugin repository opened (first commit 0593d8d),
+     * because the report is the seven-month history of that plugin and was
+     * dated to its last measurement instead of its start. The live page still
+     * shows 2026.08.04 until #6 lands, so this one value is ahead of the
+     * deployed site; every other value on this rail matches it today. */
+    date: "2026.01.12",
+    image: techReportAsset("/images/projects/claudecode_image_v1.jpg"),
+    alt: "Claude Code",
+  },
+  {
+    slug: "wigtnocr",
+    title: "Distilled from 30B, first of six on Hit@1",
+    date: "2026.05.20",
+    image: techReportAsset("/images/projects/wigtnocr_v1_image.jpg"),
+    alt: "WigtnOCR on Hugging Face",
+  },
+];
 
 
 /* ── Research & Tech Assets (homepage centerpiece) ── */

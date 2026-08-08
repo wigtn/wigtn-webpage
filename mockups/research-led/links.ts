@@ -26,3 +26,22 @@ export const TECH_REPORT_SITE = "https://wigtn.github.io/wigtn-tech-report";
 /* The report site builds with trailingSlash, so the bare URL 301s. Linking the
  * final URL saves that round trip. */
 export const techReportHref = (slug: string) => `${TECH_REPORT_SITE}/${slug}/`;
+
+/* An asset served by the report site, addressed across origins.
+ *
+ * The homepage report cards show that site's own banners rather than copies.
+ * The copies were the other option and they were rejected: three JPEGs checked
+ * in here would be a second source for an image whose first source is one
+ * repository away, and nothing would tell us when the two stopped matching.
+ *
+ * The cost of not copying is that this repo's build cannot see these files.
+ * `next build` fails on a missing local import; it says nothing about a URL, so
+ * a rename on the report site reaches production here as a broken frame. Two
+ * things absorb that: `ReportCard` falls back to the house cover on error, and
+ * `path` is a full path under the report site's `public/`, so it can be checked
+ * against that repo by eye.
+ *
+ * The path starts at the site root, which on GitHub Pages is already under
+ * /wigtn-tech-report. That prefix lives in TECH_REPORT_SITE, so pass the path
+ * as it appears in the report repo's `public/` and nothing else. */
+export const techReportAsset = (path: string) => `${TECH_REPORT_SITE}${path}`;

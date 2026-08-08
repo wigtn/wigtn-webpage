@@ -1,11 +1,11 @@
 "use client";
 
-/** /team: the crew roster and the history (연혁). */
+/** /team: the crew roster, the partners wall, and the history (연혁). */
 
 import { Fragment } from "react";
 import { motion } from "framer-motion";
 import { PageShell, PageHero, rise, VIEWPORT } from "./chrome";
-import { TEAM, MILESTONES } from "./data";
+import { TEAM, MILESTONES, PARTNERS } from "./data";
 
 /* Prefer wrapping at commas. Each clause is an inline-block, so the browser
  * takes the break between clauses before it breaks inside one; a clause too
@@ -54,7 +54,7 @@ export function TeamPage() {
       {/* ── Crew: one row per person — portrait + name left, role + bio right ── */}
       <section className="max-w-5xl mx-auto px-6 pt-16 pb-28 md:pt-24 md:pb-36">
         <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
-          Team Member
+          Members
         </h2>
 
         <ul className="mt-10 divide-y divide-line/[0.08] md:mt-14">
@@ -84,7 +84,7 @@ export function TeamPage() {
                 </h3>
               </div>
 
-              {/* right: WIGTN title (organizer only), discipline, one-line bio */}
+              {/* right: WIGTN title (team lead only), discipline, one-line bio */}
               <div className="text-center sm:text-left">
                 {m.position && (
                   <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
@@ -105,6 +105,38 @@ export function TeamPage() {
             </motion.li>
           ))}
         </ul>
+      </section>
+
+      <Divider />
+
+      {/* ── Partners: logo wall (text stand-ins until assets land) ──
+           Moved here from the homepage. This page answers who we are, and who
+           we work with is part of that answer; the homepage is a teaser whose
+           sections all hand off to a page, and this one had nowhere to hand off
+           to. It sits between the people and the record, because it reads as a
+           short list of names like the one above it, and putting it after the
+           timeline made the page end on a footnote. */}
+      <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
+        <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
+          Partners
+        </h2>
+        <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 md:mt-16">
+          {PARTNERS.map((name) => (
+            <motion.div
+              key={name}
+              variants={rise}
+              initial="hidden"
+              whileInView="show"
+              viewport={VIEWPORT}
+              className="flex items-center justify-start"
+            >
+              {/* TODO: replace with <img> partner logo once assets exist */}
+              <span className="text-xl font-semibold tracking-tight text-ink-2 md:text-2xl">
+                {name}
+              </span>
+            </motion.div>
+          ))}
+        </div>
       </section>
 
       <Divider />
@@ -160,6 +192,7 @@ export function TeamPage() {
           </ul>
         </div>
       </section>
+
     </PageShell>
   );
 }
