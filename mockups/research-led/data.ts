@@ -104,11 +104,16 @@ export const PARTNERS = ["Mind AI", "MEGA Code", "Tripla", "Arustay"];
 
 /* The /team roster renders one row per person: portrait + name on the left,
  * `position` / `role` / `bio` on the right. `position` is the WIGTN title and
- * is intentionally set on the organizer only; everyone else shows `role`
- * (their discipline) alone. `bio` is a single career-shaped sentence. */
+ * is intentionally set on the team lead only; everyone else shows `role`
+ * (their discipline) alone. `bio` is a single career-shaped sentence.
+ *
+ * `currentRole`, `credential`, `expertise`, `github` and `linkedin` are read by
+ * nothing. They are kept in step with the rendered fields anyway, because a
+ * shadow copy that disagrees with what the page says is worse than one that
+ * does not, and they still ship inside the client bundle. */
 export type TeamMember = {
   name: string;
-  position?: string; // WIGTN title; organizer only
+  position?: string; // WIGTN title; team lead only
   role: string; // discipline
   currentRole: string;
   credential?: string;
@@ -123,11 +128,15 @@ export type TeamMember = {
 export const TEAM: TeamMember[] = [
   {
     name: "Harrison Kim 김형섭",
-    position: "Organizer & Crew Lead",
+    position: "Team Lead",
     role: "AI Research Engineer",
-    currentRole: "AI Research Engineer & Engineering Part Lead, BrainCrew",
+    /* The employer is described, not named. It was named here and in the bio
+     * until now, which put a company that has nothing to do with WIGTN on
+     * WIGTN's own roster page. What the reader needs is the kind of work, and
+     * that is what both fields carry now. */
+    currentRole: "AI Research Engineer, enterprise agent development and consulting",
     credential: "Ex-Hyundai E&C",
-    bio: "Engineering Part Lead at BrainCrew, working on AI modeling and GPU-accelerated computing after a decade of large-scale project management at Hyundai E&C.",
+    bio: "Builds agent systems for enterprise clients at an AX (AI transformation) company, covering development, consulting and solution delivery, after a decade of large-scale project management at Hyundai E&C.",
     image: "/images/team/hyeongseob_kim.jpg",
     imagePosition: "center 15%",
     github: "https://github.com/Hyeongseob91",
@@ -136,8 +145,8 @@ export const TEAM: TeamMember[] = [
   },
   {
     name: "Diego Son 손상우",
-    role: "AI Engineer",
-    currentRole: "AI Engineer & AX Team Lead",
+    role: "AI Research Engineer",
+    currentRole: "AI Research Engineer & AX Team Lead",
     bio: "AX Team Lead building LLM-powered applications and autonomous agent systems, focused on multi-agent orchestration and workflow automation.",
     image: "/images/team/sangwoo_son.png",
     imagePosition: "left top",
@@ -147,14 +156,17 @@ export const TEAM: TeamMember[] = [
   },
   {
     name: "Eric Kim 김진모",
-    role: "MLOps Engineer",
+    /* Was "MLOps Engineer" here while `currentRole` right below said DevOps.
+     * DevOps is the one that was right, and the bio no longer opens by
+     * repeating the line directly above it. */
+    role: "DevOps Engineer",
     currentRole: "DevOps Engineer",
-    bio: "DevOps engineer running full MLOps pipelines on Docker, Kubernetes and CI/CD, and the crew's DBA and UI/UX direction lead.",
+    bio: "Runs the crew's deployment pipelines on Docker, Kubernetes and CI/CD, and leads its DBA and UI/UX direction.",
     image: "/images/team/jinmo_kim.png",
     imagePosition: "center 30%",
     github: "https://github.com/moriroKim",
     linkedin: "https://www.linkedin.com/in/jinmo-kim-62878533b/",
-    expertise: ["MLOps", "Infra (Docker/K8s)", "CI/CD · DBA"],
+    expertise: ["DevOps", "Infra (Docker/K8s)", "CI/CD · DBA"],
   },
   {
     name: "Maximus Kim 김현상",
