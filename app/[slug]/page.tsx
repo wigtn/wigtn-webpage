@@ -49,13 +49,16 @@ export async function generateMetadata({
   return {
     title: `${article.title} | WIGTN`,
     description: article.summary,
+    /* No trailing slash. The Pages build exports flat files, so `/slug` is the
+     * URL that resolves and `/slug/` 404s. Both of these used to carry one,
+     * which pointed every article's canonical and og:url at a dead URL. */
     alternates: {
-      canonical: `/${article.slug}/`,
+      canonical: `/${article.slug}`,
     },
     openGraph: {
       title: article.title,
       description: article.summary,
-      url: `https://wigtn.com/${article.slug}/`,
+      url: `https://wigtn.com/${article.slug}`,
       type: "article",
     },
   };
@@ -69,7 +72,7 @@ export default async function ArticlePage({
   const { slug } = await params;
   const retired = getRetired(slug);
   if (retired) {
-    return <RetiredPage to={retired.to} title={retired.title} />;
+    return <RetiredPage to={retired.to} title={retired.title} note={retired.note} />;
   }
   return <ArticleDetail slug={slug} />;
 }

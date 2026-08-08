@@ -10,7 +10,7 @@
  *
  * So the page is one hero and two titled groups:
  *
- *   Hero      the newest item, whatever kind it is
+ *   Hero      the newest story
  *   Stories   conferences, hackathons, anything with a scene to describe
  *   Releases  what shipped, as dated rows with no image
  *
@@ -59,13 +59,25 @@ function GroupHeading({ title, note }: { title: string; note: string }) {
 }
 
 export function NewsPage() {
-  /* The hero is whatever is newest. Prefer one with a cover, because a
-   * hero-sized BrandCover carries the top of the page poorly, and fall back to
-   * the newest outright. */
-  const hero = NEWSROOM_FEED.find((a) => coverSrc(a)) ?? NEWSROOM_FEED[0];
-  const rest = NEWSROOM_FEED.filter((a) => a.slug !== hero?.slug);
-  const stories = rest.filter((a) => !isRelease(a));
-  const releases = rest.filter(isRelease);
+  /* The hero is the newest story, not the newest item. Two reasons, both
+   * learned from the version before this one:
+   *
+   * Picking "newest with a cover" let an imageless post be demoted while an
+   * older one sat under a kicker reading "Latest", which is a lie the layout
+   * tells on its own.
+   *
+   * Picking a release meant the Releases list beneath, which is titled and
+   * looks complete, silently omitted its newest entry, and that release ran as
+   * a 16/10 card carrying a package-page screenshot, which is the thing this
+   * page is arranged to stop doing.
+   *
+   * A story always has a cover today. The fallback is here for the day one
+   * does not. */
+  const stories = NEWSROOM_FEED.filter((a) => !isRelease(a));
+  const hero = stories[0] ?? NEWSROOM_FEED[0];
+  const rest = stories.filter((a) => a.slug !== hero?.slug);
+  const releases = NEWSROOM_FEED.filter(isRelease);
+  const heroCover = hero ? coverSrc(hero) : undefined;
 
   return (
     <PageShell>
@@ -79,7 +91,7 @@ export function NewsPage() {
           </h1>
         </div>
 
-        {/* ── Hero: the newest item ─────────────────────────────── */}
+        {/* ── Hero: the newest story ────────────────────────────── */}
         {hero && (
           <section className="mt-12 border-t border-line/[0.08] pt-12 md:mt-14">
             <Link
@@ -87,9 +99,9 @@ export function NewsPage() {
               className="group grid items-center gap-8 md:grid-cols-2 md:gap-12"
             >
               <div className="relative aspect-[16/10] overflow-hidden rounded-[24px]">
-                {coverSrc(hero) ? (
+                {heroCover ? (
                   <img
-                    src={coverSrc(hero)}
+                    src={heroCover}
                     alt=""
                     fetchPriority="high"
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.03]"
@@ -116,11 +128,11 @@ export function NewsPage() {
         )}
 
         {/* ── Stories: the ones with a scene to describe ────────── */}
-        {stories.length > 0 && (
+        {rest.length > 0 && (
           <section className="mt-24 md:mt-32">
             <GroupHeading title="Stories" note="Conferences, hackathons, what changed after" />
             <div className="mt-10 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-              {stories.map((a, i) => (
+              {rest.map((a, i) => (
                 <StoryCard key={a.slug} a={a} i={i} />
               ))}
             </div>
@@ -130,7 +142,7 @@ export function NewsPage() {
         {/* ── Releases: dated rows, no images. A package page screenshot is
              not a photograph and does not earn a card. ─────────────────── */}
         {releases.length > 0 && (
-          <section className="mt-24 md:mt-32">
+          <section className="mt-24 pb-24 md:mt-32">
             <GroupHeading title="Releases" note="What shipped, and where to get it" />
             <ul className="mt-2">
               {releases.map((a, i) => (
@@ -140,7 +152,6 @@ export function NewsPage() {
           </section>
         )}
 
-        <div className="pb-24" />
       </div>
     </PageShell>
   );
@@ -185,18 +196,21 @@ function StoryCard({ a, i }: { a: Article; i: number }) {
 function ReleaseRow({ a, i }: { a: Article; i: number }) {
   return (
     <motion.li variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
-      <Link
-        href={articleHref(a.slug)}
-        className="group grid gap-1 border-b border-line/[0.06] py-6 md:grid-cols-[7.5rem_1fr] md:gap-8"
-      >
+      {/* The link wraps the title only. Wrapping the whole row gave the link a
+          300-to-400 character accessible name, which is a paragraph per item in
+          a screen reader's link list. The row is still fully clickable through
+          the title's stretched hit area. */}
+      <div className="group relative grid gap-1 border-b border-line/[0.06] py-6 md:grid-cols-[7.5rem_1fr] md:gap-8">
         <span className="font-mono text-sm text-ink-5 md:pt-1">{a.date}</span>
         <div>
           <h3 className="font-display text-lg font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent">
-            {a.title}
+            <Link href={articleHref(a.slug)} className="after:absolute after:inset-0">
+              {a.title}
+            </Link>
           </h3>
           <p className="mt-2 max-w-3xl text-sm leading-relaxed text-ink-4">{a.summary}</p>
         </div>
-      </Link>
+      </div>
     </motion.li>
   );
 }

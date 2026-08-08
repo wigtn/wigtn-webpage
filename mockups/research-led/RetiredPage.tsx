@@ -12,12 +12,21 @@ import { PageShell } from "./chrome";
  * should be able to tell that the page moved on purpose rather than rotted, and
  * a crawler renders this text even when it ignores the refresh.
  *
- * Two destinations, two different sentences. Most retired URLs point at the
- * tech-report site, but /work points at /news on this same site. One hardcoded
- * paragraph about "the tech reports" was wrong on that page, which is why the
- * copy is chosen from `to` rather than assumed.
+ * The paragraph comes from the RETIRED entry, not from the shape of `to`. An
+ * earlier version branched on whether the destination was off-site, which was
+ * only ever a proxy for "is this the /work page"; the second on-site entry
+ * inherited /work's copy and told the reader its content had moved to a site it
+ * had just been deleted from. One sentence per entry, written by hand.
  */
-export function RetiredPage({ to, title }: { to: string; title: string }) {
+export function RetiredPage({
+  to,
+  title,
+  note,
+}: {
+  to: string;
+  title: string;
+  note: string;
+}) {
   const offSite = to.startsWith("http");
 
   return (
@@ -28,12 +37,10 @@ export function RetiredPage({ to, title }: { to: string; title: string }) {
           Moved
         </span>
         <h1 className="font-display mt-4 text-3xl font-bold leading-tight tracking-tight text-ink md:text-4xl">
-          {offSite ? `${title} is now in the tech reports` : `This is now ${title}`}
+          {offSite ? `${title} is now in the tech reports` : `This page moved`}
         </h1>
         <p className="mt-5 leading-relaxed text-ink-3">
-          {offSite
-            ? "Technical write-ups moved to the WIGTN tech-report site, where each one carries its method, its measurements and its limitations. This site now covers what the team does: events, releases and news."
-            : "The page that used to be here grouped work that has since moved to the tech-report site. What is left of it, the events and the awards, lives in Updates."}
+          {note}
         </p>
         <a
           href={to}
