@@ -230,7 +230,7 @@ export type Article = {
   sourceNote?: string;
   placeholder?: boolean; // not-yet-real content kept as mock
   channel?: Channel; // undefined = back-catalog/report (excluded from newsroom)
-  newsTopic?: NewsTopic; // newsroom sub-category (drives the /news filter)
+  newsTopic?: NewsTopic; // newsroom sub-category; "release" splits the /news groups
   externalUrl?: string; // report only: GitHub Pages blog post URL
   body: Block[];
 };
@@ -380,29 +380,46 @@ export const NEWSROOM_FEED = ARTICLES.filter(
  * Do not remove an entry to tidy up. The only safe time to drop one is when
  * the old URL has stopped receiving traffic, which is a decision with data
  * behind it rather than a cleanup. */
-export const RETIRED: { slug: string; to: string; title: string }[] = [
-  { slug: "wigtnocr", to: techReportHref("wigtnocr"), title: "WigtnOCR" },
-  { slug: "wigvo", to: techReportHref("wigvo"), title: "WIGVO" },
-  { slug: "wigss", to: techReportHref("wigss"), title: "WIGSS" },
-  { slug: "wigtn-coding", to: techReportHref("wigtn-coding"), title: "WIGTN Coding" },
+export const RETIRED: {
+  slug: string;
+  to: string;
+  title: string;
+  /* What the redirect page says. It used to be derived from whether `to` was
+   * off-site, which worked only while /work was the single on-site exception.
+   * The second on-site entry inherited /work's paragraph and told the reader
+   * its content had moved to the report site, which is where it had just been
+   * deleted from. Write the sentence per entry instead of inferring it. */
+  note: string;
+}[] = [
+  { slug: "wigtnocr", note: "Technical write-ups moved to the WIGTN tech-report site, where each one carries its method, its measurements and its limitations. This site now covers what the team does: events, releases and news.", to: techReportHref("wigtnocr"), title: "WigtnOCR" },
+  { slug: "wigvo", note: "Technical write-ups moved to the WIGTN tech-report site, where each one carries its method, its measurements and its limitations. This site now covers what the team does: events, releases and news.", to: techReportHref("wigvo"), title: "WIGVO" },
+  { slug: "wigss", note: "Technical write-ups moved to the WIGTN tech-report site, where each one carries its method, its measurements and its limitations. This site now covers what the team does: events, releases and news.", to: techReportHref("wigss"), title: "WIGSS" },
+  { slug: "wigtn-coding", note: "Technical write-ups moved to the WIGTN tech-report site, where each one carries its method, its measurements and its limitations. This site now covers what the team does: events, releases and news.", to: techReportHref("wigtn-coding"), title: "WIGTN Coding" },
   {
+    note: "Technical write-ups moved to the WIGTN tech-report site, where each one carries its method, its measurements and its limitations. This site now covers what the team does: events, releases and news.",
     slug: "wigvo-realtime-translation-video",
     to: techReportHref("wigvo"),
     title: "WIGVO",
   },
+  /* The WIGTN Flake report was removed from the tech-report site, so this one
+   * points back into this site rather than off it. The Snowflake hackathon post
+   * is the surviving account of that project. */
   {
+    note: "The WIGTN Flake report was taken down with the rest of the hackathon write-ups. The Snowflake post is the account of that project now, and it carries the code-path audit in full.",
     slug: "wigtn-flake-cortex-debate-video",
-    to: techReportHref("wigtn-flake"),
-    title: "WIGTN Flake",
+    to: `${HOME}snowflake-korea-2026`,
+    title: "the Snowflake hackathon post",
   },
   {
+    note: "Technical write-ups moved to the WIGTN tech-report site, where each one carries its method, its measurements and its limitations. This site now covers what the team does: events, releases and news.",
     slug: "why-we-distill-30b-into-2b",
     to: techReportHref("wigtnocr"),
     title: "WigtnOCR",
   },
-  /* /work is gone with the article groups it listed. Its one surviving group,
-   * awards, is the Awards filter on /news. */
-  { slug: "work", to: NEWS, title: "WIGTN Updates" },
+  /* /work is gone with the article groups it listed. What it had that still
+   * exists, the awards, is the Stories group on /news. */
+  { note: "The page that used to be here grouped work that has since moved to the tech-report site. What is left of it, the events and the awards, lives in Updates.",
+    slug: "work", to: NEWS, title: "WIGTN Updates" },
 ];
 
 /* `wigtnocr-radp` (RCPS) was removed here on 2026.08.08 and is deliberately NOT

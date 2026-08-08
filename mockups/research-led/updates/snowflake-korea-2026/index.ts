@@ -26,6 +26,11 @@
  *   come from Snowflake's Newswire announcement (no. 1033575), linked in
  *   `links` as "Press".
  *
+ *   There is no tech-report link. WIGTN Flake had a report on the report site
+ *   and it was removed, on the grounds that a hackathon build is a thing the
+ *   team did rather than a finding. This post is now the only account of the
+ *   project, which is why the audit section below stays long.
+ *
  *   System facts, the streaming benchmark (17.3s / 1,657 chars / 0 garbage
  *   tokens against snowflake-llama-3.3-70b's 38.4s) and the audit came from
  *   `constants/wigtn-flake-sections.ts`, itself sourced from the
@@ -92,11 +97,6 @@
  */
 
 import type { Article, Block } from "../../data";
-/* The tech-report URL is built from ../../links, a leaf module, rather than
- * from ../../data: data.ts imports this file, so importing a *value* back from
- * it would close a runtime cycle. The type import above is erased and is
- * safe. */
-import { techReportHref } from "../../links";
 import datasetsSlide from "./datasets-slide.jpg";
 import finalRoundStage from "./final-round-stage.jpg";
 import techTrackTop3 from "./tech-track-top3.jpg";
@@ -130,7 +130,6 @@ export const snowflakeKorea2026: Article = {
   links: [
     { label: "Watch demo", href: "https://www.youtube.com/watch?v=1YzSp3SdzTk" },
     { label: "Press", href: "https://www.newswire.co.kr/newsRead.php?no=1033575" },
-    { label: "Tech report", href: techReportHref("wigtn-flake") },
   ],
   body: [
     p(

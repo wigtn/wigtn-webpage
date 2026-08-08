@@ -11,11 +11,13 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://wigtn.com"),
-  title: "WIGTN Crew",
-  description: "We prove ourselves by what we build, not how long we've built.",
+  title: "WIGTN",
+  description:
+    "An independent AI research team. Peer-reviewed work, open models, and reports that state their own limits.",
   openGraph: {
-    title: "WIGTN Crew",
-    description: "AI-native open-source research crew building practical, domain-specialized AI tools.",
+    title: "WIGTN",
+    description:
+      "An independent AI research team. Peer-reviewed work, open models, and reports that state their own limits.",
     url: "https://wigtn.com",
     siteName: "WIGTN",
     type: "website",
