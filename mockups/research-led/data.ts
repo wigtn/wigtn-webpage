@@ -8,8 +8,8 @@
  * intentionally excluded, since this is a research-led site. WigtnOCR / WIGVO
  * appear under Research because they are papers/models, not products.
  *
- * Community (meetups/seminars) has no real data yet, so those entries are
- * left as placeholder mock, flagged with `placeholder: true`.
+ * Community (meetups/seminars) has not happened yet, so there are no entries
+ * for it. The `community` topic stays in the taxonomy for the first real one.
  *
  * Pure, serializable data (no React/icons) so the static-export route can
  * import it. Stands in for the future MDX-backed content model.
@@ -65,38 +65,42 @@ export const NAV: { label: string; href: string; disabled?: boolean }[] = [
    * at first, not uncommenting a line. */
 ];
 
-/* What we do TOGETHER: community activity pillars. Everything is framed as
- * shared, in-the-open work; the research/OSS below are the receipts. */
+/* What we do, in the order the record supports it. Each pillar names something
+ * that has already happened and can be checked: a venue, a registry, a placing.
+ *
+ * There used to be a fourth pillar for meetups and seminars. It was the only
+ * one with nothing behind it, and it sat next to three that were true. It comes
+ * back when a first meeting has actually happened, and not before. */
 export const CAPABILITIES = [
   {
-    title: "Open Research",
-    lead: "We study AI in the open and publish what we find.",
-    body: "Peer-reviewed papers at venues like ACL and EMNLP, written together and shared with everyone.",
-    tags: ["ACL 2026", "EMNLP 2026", "Benchmarks"],
+    title: "Peer-reviewed research",
+    lead: "We publish where the work gets checked by people who can check it.",
+    /* ACL only. There is a second paper, and it is under review, and saying so
+     * in public under our own name is the thing the anonymity period forbids.
+     * It goes here after a notification, not before. */
+    body: "WIGVO was accepted to ACL 2026 System Demonstrations and presented at booth D3, alongside an invited talk at IWSLT 2026.",
+    tags: ["ACL 2026", "IWSLT 2026", "Peer review"],
   },
   {
-    title: "Open Source",
+    title: "Open models and code",
     lead: "Everything we build ships in the open: models, tools, plugins.",
     body: "Weights, training data, and eval code released on HuggingFace, GitHub, and npm for anyone to use.",
     tags: ["HuggingFace", "GitHub", "npm"],
   },
   {
-    title: "Meetups & Seminars",
-    lead: "We share what we learn, face to face.",
-    body: "Tech meetups and open seminars where builders swap real production lessons. Everyone is welcome.",
-    tags: ["Tech meetups", "Open seminars", "Study groups"],
+    title: "Reports with their limits",
+    lead: "Every result we publish comes with what it does not show.",
+    body: "Six technical reports, each carrying its method, its measurements and the questions it leaves open.",
+    tags: ["Method", "Measurement", "Limitations"],
   },
   {
-    title: "Hackathons & Challenges",
-    lead: "We team up, build in public, and put our ideas on stage.",
-    body: "Grand Prize at Build with TRAE Seoul, 2nd at Snowflake Korea, built with and alongside the community.",
-    tags: ["Grand Prize", "Team builds", "Build in public"],
+    title: "Hackathons and challenges",
+    lead: "We build against a clock in public, and we say what survived.",
+    body: "Grand Prize at Build with TRAE Seoul, 2nd in the Tech Track at Snowflake Korea, Top 6 at OBA Weekendthon.",
+    tags: ["Grand Prize", "2nd Place", "Top 6"],
   },
 ];
 
-/* Friends & collaborators: teams and communities we build alongside.
- * TODO: drop real logo assets into /images/partners and swap the text
- * wordmarks in the view for <img> once they exist. */
 export const PARTNERS = ["Mind AI", "MEGA Code", "Tripla", "Arustay"];
 
 /* The /team roster renders one row per person: portrait + name on the left,
@@ -245,36 +249,7 @@ export const ARTICLES: Article[] = [
   wigtnocrOpenSource,
   wigssNpmRelease,
   wigtnCodingRelease,
-
-  /* ───────── Community (placeholder mock, no real data yet) ───────── */
-  {
-    slug: "tech-meetup-07-inference-optimization",
-    kind: "community",
-    tag: "MEETUP",
-    title: "WIGTN Tech Meetup #07: Inference optimization in practice",
-    summary: "Quantization, KV cache, and speculative decoding from a practitioner's view. (Placeholder)",
-    date: "2026.06.05",
-    place: "Seoul, KOR",
-    placeholder: true,
-    body: [
-      { t: "quote", text: "Placeholder: community meetups/seminars have no real data yet. This stands in to show the layout." },
-      p("Quantization, KV cache, and speculative decoding from a practitioner's view. Slides and recording would be linked here."),
-    ],
-  },
-  {
-    slug: "open-seminar-evaluating-agents",
-    kind: "community",
-    tag: "SEMINAR",
-    title: "Open Seminar: How should we evaluate agents?",
-    summary: "Designing evaluation metrics for production agents. (Placeholder)",
-    date: "2026.05.20",
-    place: "Online",
-    placeholder: true,
-    body: [
-      { t: "quote", text: "Placeholder: kept as mock until real seminar content exists." },
-      p("A practical evaluation playbook for production agents: outcome metrics over vibes, trajectory checks, and cost/latency as first-class metrics."),
-    ],
-  },];
+];
 
 /* Curated homepage "newsroom": research credibility & wins told as article
  * cards with imagery (papers, conference reports, awards), not a dry list. */
@@ -316,7 +291,7 @@ export const MILESTONES: Milestone[] = [
     date: "2026.01",
     label: "Founded",
     title: "WIGTN founded",
-    text: "Five AI builders come together as an open community to learn and build in public.",
+    text: "Five engineers start publishing research and shipping open source together, without a lab behind them.",
   },
   {
     month: "Feb",

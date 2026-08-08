@@ -1,7 +1,8 @@
 "use client";
 
 /**
- * Research-led homepage (light, open-community positioning)
+ * Research-led homepage. Positioning is the record: peer-reviewed work,
+ * open models, reports that state their own limits.
  * ------------------------------------------------------------------
  * Card-less, type-led layout. Built on current patterns:
  *   - Display grotesk (Space Grotesk) headlines + mono (JetBrains Mono)
@@ -10,7 +11,7 @@
  *     leaning on `accent` for legibility on light)
  *   - Editorial sections separated by hairlines, not boxes/cards
  *   - "What we do": sticky left header + compact right capability list
- * Sections: 1 Hero · 2 What we do · Friends · 3 Updates · 4 Community · 5 CTA.
+ * Sections: 1 Hero · 2 What we do · Friends · 3 Updates · 4 Tech Reports · 5 CTA.
  * MilestoneTimeline is retained but currently unrouted.
  */
 
@@ -18,7 +19,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
-import { CAPABILITIES, PARTNERS, MILESTONES, NEWSROOM, NEWS } from "./data";
+import { CAPABILITIES, PARTNERS, MILESTONES, NEWSROOM, NEWS, TECH_REPORT_SITE } from "./data";
 import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, rise, VIEWPORT } from "./chrome";
 import { ArticleCard } from "./cards";
 import type { Theme } from "@/lib/theme";
@@ -402,9 +403,9 @@ export function ResearchLedHome() {
             animate="show"
             className="mt-8 max-w-2xl text-pretty text-lg md:text-xl text-ink-3 leading-relaxed"
           >
-            WIGTN is a community of AI builders. We publish research, release open-source
-            models and tools, and pass on everything we learn, through meetups, seminars,
-            and code anyone can use.
+            WIGTN is an independent AI research team. Five engineers with no lab
+            behind them, publishing peer-reviewed work, releasing the models and code
+            it runs on, and writing down what each result does not show.
           </motion.p>
           </div>
         </section>
@@ -418,10 +419,10 @@ export function ResearchLedHome() {
                 Activities · 01–04
               </span>
               <h2 className="mt-4 font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.02] text-accent">
-                What we do together
+                What we do
               </h2>
               <p className="mt-5 max-w-xs text-pretty leading-relaxed text-ink-3">
-                From open research to open source, and the meetups where we share it all.
+                Peer-reviewed papers, open weights, and reports that say what they do not show.
               </p>
             </div>
 
@@ -494,39 +495,46 @@ export function ResearchLedHome() {
 
         <Divider />
 
-        {/* ───── 4. Community: card-less text band with inline status ───── */}
+        {/* ───── 4. Reports: card-less text band pointing off-site ─────
+             This slot used to advertise meetups that had not happened yet, next
+             to three pillars that had. The report site is the thing this site
+             most needs to hand a reader off to, and it exists. ────────────── */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-accent">
-                Community
+                Tech Reports
               </span>
               <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink md:text-4xl">
-                Meetups and open seminars are on the way.
+                The work, with its method and its limits.
               </h2>
               <p className="mt-3 text-pretty text-ink-3">
-                Talks, study groups, and demos. Open to anyone who builds with AI.
+                Six reports on what we measured, what failed first, and what each result
+                still does not answer. In English and Korean.
               </p>
             </div>
-            <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-ink-4">
-              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-brand" />
-              First meetup in planning
-            </span>
+            <a
+              href={`${TECH_REPORT_SITE}/`}
+              className="group inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-medium text-accent transition-colors hover:text-ink"
+            >
+              Read the reports{" "}
+              <span className="transition-transform group-hover:translate-x-0.5">→</span>
+            </a>
           </div>
         </section>
 
         {/* ───── 5. CTA: text layout; only the contact link is boxed in purple ───── */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
           <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-accent">
-            Join the community
+            Work with us
           </span>
           <h3 className="mt-5 font-display max-w-3xl text-pretty text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.15]">
-            If you like building AI in the open, come build it with us.
+            If you build AI in the open, we would rather hear from you than not.
           </h3>
           <p className="mt-6 max-w-2xl text-pretty text-ink-3 leading-relaxed">
-            Come to a meetup, join a study group, contribute to one of our open-source
-            projects, or just say hi. Whatever you’re building, there’s a seat for you
-            here.
+            Read a report and tell us where it is wrong, use one of the models, open an
+            issue, or write to us about work you think we should be doing. All of it is
+            more useful to us than silence.
           </p>
           <a
             href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"

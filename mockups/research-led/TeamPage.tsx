@@ -1,6 +1,6 @@
 "use client";
 
-/** /team: the crew roster and the community history (연혁). */
+/** /team: the crew roster and the history (연혁). */
 
 import { Fragment } from "react";
 import { motion } from "framer-motion";
@@ -46,7 +46,7 @@ export function TeamPage() {
     <PageShell>
       <PageHero
         title="Who we are."
-        lead="A community of AI builders sharing research, code, and everything we learn."
+        lead="Five engineers who publish peer-reviewed research and release everything it runs on, with no lab behind them."
         titleClassName="text-accent"
         leadClassName="max-w-4xl"
       />

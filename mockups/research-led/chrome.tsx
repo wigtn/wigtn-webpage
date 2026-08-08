@@ -158,7 +158,7 @@ export function SiteFooter() {
               {/* Break after the first sentence rather than wherever the
                   column happens to run out, so the two claims read as two
                   lines instead of one ragged paragraph. */}
-              An open community of AI builders.
+              An independent AI research team.
               <br />
               Everything we learn, we share.
             </p>

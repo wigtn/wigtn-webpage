@@ -103,10 +103,6 @@ export function NewsPage() {
   const grid = pool.slice(0, shown);
   const hidden = pool.length - grid.length;
 
-  // Community has no published stories yet, so its tab (and the full feed)
-  // carries a "coming soon" panel instead of an empty grid.
-  const showSoon = isAll || filter === "community";
-
   function pick(key: Filter) {
     setFilter(key);
     setShown(INITIAL_GRID); // reset the load-more window per filter
@@ -212,37 +208,10 @@ export function NewsPage() {
             </div>
           )}
 
-          {pool.length === 0 && !showSoon && (
+          {pool.length === 0 && (
             <p className="py-10 text-center text-sm text-ink-5">No stories in this category yet.</p>
           )}
 
-          {/* Community: coming soon */}
-          {showSoon && (
-            <motion.div
-              variants={rise}
-              initial="hidden"
-              whileInView="show"
-              viewport={VIEWPORT}
-              className="rounded-[26px] border border-dashed border-line/15 bg-paper-raised px-8 py-14 text-center"
-            >
-              <Kicker>Community · Coming soon</Kicker>
-              <h3 className="font-display mx-auto mt-3 max-w-xl text-2xl font-bold tracking-tight text-ink md:text-3xl">
-                Meetups &amp; open seminars
-              </h3>
-              <p className="mx-auto mt-3 max-w-md text-ink-3 leading-relaxed">
-                Our first open meetups are being scheduled: builders swapping real production
-                lessons, in the open. Recaps and recordings will land here.
-              </p>
-              <a
-                href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@wigtn.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-accent transition-colors hover:text-ink"
-              >
-                Get notified <span className="transition-transform group-hover:translate-x-0.5">→</span>
-              </a>
-            </motion.div>
-          )}
         </section>
       </div>
     </PageShell>
