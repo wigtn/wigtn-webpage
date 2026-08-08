@@ -14,7 +14,8 @@
  *     already contradicted and the report grid finished off. Everything that is
  *     not a link out of the page is still separated by a hairline, not boxed.
  *   - "What we do": sticky left header + compact right capability list
- * Sections: 1 Hero · 2 What we do · Friends · 3 Updates · 4 Tech Reports · 5 CTA.
+ * Sections: 1 Hero · 2 What we do · Partners · 3 Updates · 4 Tech Reports · 5
+ * CTA, every pair of them separated by a Divider.
  * MilestoneTimeline is retained but currently unrouted.
  */
 
@@ -445,7 +446,14 @@ export function ResearchLedHome() {
         </section>
 
         {/* ───── 2. What we do: sticky left header + compact right list (no cards) ───── */}
-        <section id="capabilities" className="max-w-6xl mx-auto px-6 pt-28 md:pt-40 scroll-mt-24">
+        {/* pb matches the pt of the section after it, so the Divider below sits
+            centred in the gap the way the other three do. It had none, because
+            until that Divider existed the next section's pt was the whole
+            gap. */}
+        <section
+          id="capabilities"
+          className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40 scroll-mt-24"
+        >
           <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
             {/* left: sticky header + eyebrow + CTA, anchors the column while the list scrolls */}
             <div className="md:sticky md:top-24 md:self-start">
@@ -484,9 +492,21 @@ export function ResearchLedHome() {
           </div>
         </section>
 
-        {/* ───── Friends: centered logo wall (text stand-ins until assets land) ───── */}
+        <Divider />
+
+        {/* ───── Partners: logo wall (text stand-ins until assets land) ─────
+             Titled "Friends & Collaborators" until now, which named a warmth
+             rather than a relationship and was the one section title on the
+             page that did not say what the section holds. These are the
+             companies we work with, which is what PARTNERS in data.ts has
+             always called them.
+
+             Left-aligned with the rest. Centering it made the section read as
+             a pull quote dropped between two left-aligned sections, and it put
+             the title over the middle of a row whose first item starts at the
+             page's left edge. ────────────────────────────────────────────── */}
         <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
-          <SectionTitle className="text-center">Friends &amp; Collaborators</SectionTitle>
+          <SectionTitle>Partners</SectionTitle>
           <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 md:mt-16">
             {PARTNERS.map((name) => (
               <motion.div
@@ -495,7 +515,7 @@ export function ResearchLedHome() {
                 initial="hidden"
                 whileInView="show"
                 viewport={VIEWPORT}
-                className="flex items-center justify-center"
+                className="flex items-center justify-start"
               >
                 {/* TODO: replace with <img> partner logo once assets exist */}
                 <span className="text-xl font-semibold tracking-tight text-ink-2 md:text-2xl">
@@ -572,6 +592,8 @@ export function ResearchLedHome() {
             ))}
           </div>
         </section>
+
+        <Divider />
 
         {/* ───── 5. CTA: text layout; only the contact link is boxed in purple ───── */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
