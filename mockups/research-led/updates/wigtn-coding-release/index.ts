@@ -1,5 +1,5 @@
 /**
- * Update: WIGTN Coding v0.1.14 - announcement.
+ * Update: WIGTN Plugin v1 for Claude Code, v0.1.16 - announcement.
  *
  * Follows updates/_template/announcement/STRUCTURE.md: lede -> get it -> what
  * shipped -> read the report.
@@ -11,43 +11,60 @@
  * here. If a fact seems missing, it is one link away, and two copies of one
  * explanation drift apart in a month.
  *
+ * IT ALSO USED TO BE PINNED TO v0.1.14, and it is worth saying why that
+ * changed, because the sibling post updates/wigss-npm-release states the
+ * opposite rule in its own header: pin the post to its release, and write a new
+ * one when a later version ships. That rule is right for a post whose title is
+ * a sentence about one release, which this was: "WIGTN Coding v0.1.14, 14 July
+ * 2026: the PRD review now checks its premises against the web".
+ *
+ * The Releases list is now four product entries rather than a running log of
+ * every version, so this post became the entry for the Claude Code plugin
+ * itself, at whatever version it currently is. That is a different kind of
+ * post, and pinning does not apply to it. What does apply is that the body has
+ * to be re-sourced at the version in the title, which is what happened here. If
+ * this ever goes back to being a per-release note, the pinning rule comes back
+ * with it.
+ *
  * Sources, in order of authority:
  *  - The public plugin repository, https://github.com/wigtn/wigtn-plugins, read
- *    at commit 3bd447c, the v0.1.14 version bump of 14 July 2026. Every count is
- *    from `.claude-plugin/marketplace.json` at that commit, cross-checked
- *    against the file tree at the same commit: 13 files under agents/, 5 top
- *    level command files, 6 skill directories, 20 files under
- *    skills/design-system-reference/styles/.
- *  - The commit messages for v0.1.10 (04c90dd) through v0.1.14 (3bd447c).
- *  - The WIGTN Coding tech report, which is where the limitations (L01-L03) and
- *    the line that the benchmark "exists as a protocol, not yet as a result"
- *    now live.
- *  - The two existing data.ts entries for this project (`wigtn-coding` and
- *    `wigtn-coding-release`).
+ *    at tag v0.1.16. Every count is from .claude-plugin/marketplace.json at
+ *    that tag, cross-checked against the file tree at the same tag: 11 files
+ *    under agents/, 5 command files at the top of commands/ (the sixth entry
+ *    there is the references/ directory, not a command), 7 skill directories,
+ *    20 files under skills/design-system-reference/styles/.
+ *  - The GitHub releases API for the same repository: v0.1.14 on 2026-07-14,
+ *    v0.1.15 on 2026-08-04, v0.1.16 on 2026-08-04. The last two carry only a
+ *    PR title each, so the tree is what describes them.
+ *  - `git diff --shortstat v0.1.14 v0.1.16`: 50 files changed, 3,274
+ *    insertions, 3,608 deletions.
+ *  - The WIGTN Coding tech report, dated the same day as v0.1.16, which is
+ *    where the instruction-surface history and the limitations live.
  *
- * The conflicting counts, resolved rather than quietly picked. The `wigtn-coding`
- * report entry in data.ts says 13 agents / 6 skills / 20 design references; the
- * `wigtn-coding-release` entry says 12 agents / 3 skills / 17 design styles.
- * The first is correct for v0.1.14 and matches both the manifest and the tree.
- * The second traces to .github/WIGTN_META.md, an SEO description string reading
- * "12 agents, 3 commands, 17 design styles" that has been stale since the June
- * 2026 rename and is still stale on main; the website also transcribed its
- * "3 commands" as "3 skills". This post carries the v0.1.14 numbers and names
- * the version they belong to. Do not restore the 12/3/17 line.
+ * NUMBERS DELIBERATELY NOT COPIED HERE. The v0.1.15 release title claims a 20%
+ * cut in instruction text and a 39-file product surface. Both are commit-message
+ * claims, and the report measures the same thing properly and over the whole
+ * history. The counts in this post are the ones that can be recounted from the
+ * tree in a minute. Do not swap them for the PR numbers.
  *
- * The GitHub link was changed, and deliberately. The old inline entry pointed
- * at wigtn-plugins-with-claude-code, which was renamed to wigtn-plugins on
- * 2 June 2026 (commit a05f651, a BREAKING CHANGE that also moved the plugin id
- * from `wigtn-coding` to `wigtn-plugins`). GitHub redirects the old slug, so
- * the stale link worked, but the body two sections down tells the reader to
- * update a cloned remote, and a button that hands them the retired address
- * back argues with its own page. Two fields differ from the inline entry this
- * replaced: this link, and `readTime`, which fell with the section cuts.
+ * The conflicting counts, resolved rather than quietly picked, and kept here
+ * because the stale source is still live: .github/WIGTN_META.md carries an SEO
+ * string reading "12 agents, 3 commands, 17 design styles", stale since the
+ * June 2026 rename, and this website once transcribed its "3 commands" as
+ * "3 skills". The manifest and the tree agree with each other at every tag we
+ * have checked, and they are what this post follows. Do not restore 12/3/17.
  *
- * The tech-report link is built with `techReportHref()` from ../../links, a
- * leaf module. Importing a value from ../../data would be circular, because data.ts
- * imports this file, so the helper would still be in its temporal dead zone
- * when this module evaluates. Types from data are erased and stay safe.
+ * The GitHub link was changed once, and deliberately. The old inline entry
+ * pointed at wigtn-plugins-with-claude-code, renamed to wigtn-plugins on 2 June
+ * 2026 (commit a05f651, a BREAKING CHANGE that also moved the plugin id from
+ * `wigtn-coding` to `wigtn-plugins`). GitHub redirects the old slug, but the
+ * body tells the reader to update a cloned remote, and a button handing them
+ * the retired address back argues with its own page.
+ *
+ * The tech-report link is built with `techReportHref()` from ../../links, a leaf
+ * module. Importing a value from ../../data would be circular, because data.ts
+ * imports this file, so the helper would still be in its temporal dead zone when
+ * this module evaluates. Types from data are erased and stay safe.
  *
  * No cover image, deliberately. There is no screenshot of this plugin anywhere
  * in the repository, and inventing one or borrowing another project's would be
@@ -72,13 +89,11 @@ export const wigtnCodingRelease: Article = {
   channel: "newsroom",
   newsTopic: "release",
   tag: "RELEASE",
-  /* The version carries a date, per the template: "v0.1.14" on its own is
-   * meaningless six months from now. */
-  title:
-    "WIGTN Coding v0.1.14, 14 July 2026: the PRD review now checks its premises against the web",
+  title: "WIGTN Plugin v1: Claude Code",
+  version: "v0.1.16",
   summary:
-    "Until this release the plugin's four review lenses only asked whether a spec matched your codebase. v0.1.14 adds a conditional pass that pulls out the claims depending on the outside world (a third-party API's behaviour, its price, a library's capabilities, a regulation) and verifies them before the review starts.",
-  date: "2026.07.14",
+    "The first of the two plugins, for Claude Code. It got smaller in the release before this one, then gained a skill that files what a session worked out and gates what leaves the machine.",
+  date: "2026.08.04",
   author: "WIGTN",
   readTime: "2 min",
   externalUrl: "https://wigtn.github.io/blog/wigtn-coding/",
@@ -92,15 +107,15 @@ export const wigtnCodingRelease: Article = {
   ],
   body: [
     p(
-      "WIGTN Coding v0.1.14 landed on 14 July 2026. It changes one thing, in the review stage: before the four reviewers read your product spec, the pipeline now pulls out the claims in it that depend on the outside world, meaning what a third-party API actually does, what it costs, what a library actually supports and what a regulation actually requires, then checks each one against the web.",
+      "WIGTN Plugin v1 is the Claude Code plugin, and v0.1.16 landed on 4 August 2026. Two releases went out that day. v0.1.15 cut the plugin back to its contracts, and v0.1.16 added knowledge-wiki, a skill that writes down what a session established and puts a gate in front of anything leaving the machine.",
     ),
     p(
-      "That is a small feature with an uncomfortable implication, which is that until this version the review had no way of noticing that a spec was built on something untrue. Four reviewers reading the same wrong premise agree with each other.",
+      "The direction is the part worth noticing. Between v0.1.14 and v0.1.16 the package lost two agents and gained one skill, and the diff removes more than it adds: 50 files changed, 3,274 lines in and 3,608 out. This is the second time the plugin has been cut rather than extended, and the report is where that history is measured instead of asserted.",
     ),
 
     { t: "h", text: "Get it" },
-    p("It is a Claude Code plugin. Two lines, verbatim from the v0.1.14 README:"),
-    /* A single command goes in a `quote` (see the other two announcements); a
+    p("Two lines, verbatim from the v0.1.16 README:"),
+    /* A single command goes in a `quote` (see the other announcements); a
      * *sequence* goes in a `list`, because `quote` renders as one paragraph
      * and the browser collapses any padding used to fake a line break. Joining
      * them with a separator was worse than the bullet it was avoiding: it read
@@ -115,22 +130,22 @@ export const wigtnCodingRelease: Article = {
 
     { t: "h", text: "What shipped" },
     p(
-      "v0.1.14 is a prompt-and-contract release. Nothing here compiles: the plugin is Markdown agent definitions, command definitions, skills, one hooks file, and a shell script the quality gate writes into your own repository.",
+      "Nothing here compiles. The plugin is Markdown agent definitions, command definitions, skills, one hooks file, and a shell script the quality gate writes into your own repository.",
     ),
     {
       t: "list",
       items: [
-        "The change itself: Phase 1.5, External Grounding, added to the parallel digging coordinator and referenced from the sequential prd-reviewer path so both routes get it. Nine files, 158 lines added and 17 removed.",
-        "The package surface at v0.1.14, from the manifest and checked against the tree: 13 agents, 5 commands, 6 skills, 20 design styles. That is an inventory of what is in the box, not a claim about what comes out of it. The tech report is where that claim is examined, and declined.",
+        "knowledge-wiki, the v0.1.16 addition: a session's conclusions are written to a wiki, and four checks run before anything is published out of the machine it was written on.",
+        "The package surface at v0.1.16, from the manifest and checked against the tree: 11 agents, 5 commands, 7 skills, 20 design styles. That is an inventory of what is in the box, not a claim about what comes out of it. The tech report is where that claim is examined, and declined.",
         "Apache 2.0, unchanged.",
-        "Not included: any benchmark. No measurement of this plugin against a single-agent baseline has been published, at this version or any other.",
+        "Not included: any benchmark. No measurement of this plugin against a single-agent baseline has been published, at this version or any other. The one controlled result we have is on the Codex side, and it covers two tasks on one model.",
         "Also not included: a standalone runner. It works inside Claude Code and nowhere else.",
       ],
     },
 
     { t: "h", text: "Read the report" },
     p(
-      "The workflow this release sits inside is in the WIGTN Coding tech report: the six stages, the three layers of shared memory, and the evaluation protocol that has not been run yet. The release history, the agent definitions and the commit hook are in the repository. Both are linked at the top of this page.",
+      "The workflow this release sits inside is in the WIGTN Coding tech report: the six stages, the three layers of shared memory, and what happened to the instruction surface over seven months, which is the thing this release is another step in. The release history, the agent definitions and the commit hook are in the repository. Both are linked at the top of this page.",
     ),
   ],
 };

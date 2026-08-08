@@ -32,6 +32,7 @@ import { obaWeekendthonTop6, OBA_WEEKENDTHON_COVER } from "./updates/oba-weekend
 import { snowflakeKorea2026, SNOWFLAKE_2026_COVER } from "./updates/snowflake-korea-2026";
 import { traeSeoulGrandPrize, TRAE_SEOUL_COVER } from "./updates/trae-seoul-grand-prize";
 import { wigssNpmRelease } from "./updates/wigss-npm-release";
+import { wigtnCodexRelease } from "./updates/wigtn-codex-release";
 import { wigtnCodingRelease } from "./updates/wigtn-coding-release";
 import { wigtnocrOpenSource } from "./updates/wigtnocr-open-source";
 
@@ -243,6 +244,19 @@ export type Article = {
   placeholder?: boolean; // not-yet-real content kept as mock
   channel?: Channel; // undefined = back-catalog/report (excluded from newsroom)
   newsTopic?: NewsTopic; // newsroom sub-category; "release" splits the /news groups
+  /* Release only: the shipped version, rendered under the date on /news.
+   *
+   * It is a separate field rather than part of the title because two of these
+   * products carry two different numbers. "WIGTN Plugin v2: Codex" is the
+   * second plugin we have made; v0.3.0 is the version of it that shipped. Put
+   * both in one heading and the reader has to work out which is which.
+   *
+   * Copy it from the registry that serves the thing, not from a README badge:
+   * npm for WIGSS, the GitHub releases API for the two plugins. Omit it when
+   * the artifact has no version, which is the case for the WigtnOCR adapter:
+   * the HuggingFace repo carries no tags and the "v1" in its name is the
+   * product line, not a release. */
+  version?: string;
   externalUrl?: string; // report only: GitHub Pages blog post URL
   body: Block[];
 };
@@ -256,10 +270,13 @@ export const ARTICLES: Article[] = [
   obaWeekendthonTop6,
   acl2026SanDiego,
 
-  /* ───────── Newsroom · Releases & Updates (real) ───────── */
-  wigtnocrOpenSource,
-  wigssNpmRelease,
-  wigtnCodingRelease,
+  /* ───────── Newsroom · Releases (real), newest first ─────────
+   * One entry per product, not per version. NEWSROOM_FEED sorts by date, so
+   * this order is for a reader of the file; the page does not depend on it. */
+  wigtnCodingRelease, // 2026.08.04, v0.1.16
+  wigtnCodexRelease, // 2026.07.28, v0.3.0
+  wigssNpmRelease, // 2026.04.03, v0.1.4
+  wigtnocrOpenSource, // 2026.04.03, no version
 ];
 
 /* Curated homepage "newsroom": research credibility & wins told as article

@@ -191,8 +191,14 @@ function StoryCard({ a, i }: { a: Article; i: number }) {
   );
 }
 
-/* One row per release: date, title, summary. The title already carries the
- * version and the month, so the row needs no kicker repeating "Release". */
+/* One row per release: date and version in the left rail, then title and
+ * summary. No kicker repeating "Release" under a heading that says Releases.
+ *
+ * The version used to live inside the title, back when a title was a sentence
+ * about one release. Titles are product names now, and two of these products
+ * number twice: "WIGTN Plugin v2: Codex" is our second plugin and v0.3.0 is
+ * the version of it that shipped. Separating them puts each number where it
+ * can be read on its own, and stacks the four versions into a column. */
 function ReleaseRow({ a, i }: { a: Article; i: number }) {
   return (
     <motion.li variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
@@ -201,7 +207,12 @@ function ReleaseRow({ a, i }: { a: Article; i: number }) {
           a screen reader's link list. The row is still fully clickable through
           the title's stretched hit area. */}
       <div className="group relative grid gap-1 border-b border-line/[0.06] py-6 md:grid-cols-[7.5rem_1fr] md:gap-8">
-        <span className="font-mono text-sm text-ink-5 md:pt-1">{a.date}</span>
+        <div className="font-mono text-sm text-ink-5 md:pt-1">
+          <span>{a.date}</span>
+          {a.version && (
+            <span className="ml-2 text-ink-5/70 md:ml-0 md:mt-1 md:block">{a.version}</span>
+          )}
+        </div>
         <div>
           <h3 className="font-display text-lg font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent">
             <Link href={articleHref(a.slug)} className="after:absolute after:inset-0">
