@@ -72,15 +72,20 @@ function ViewAll({ href, label }: { href: string; label: string }) {
 }
 
 /* ── Hero intro clip ──────────────────────────────────────────────────────
- * The 7.0s intro is not a loop and its last frame is not its best frame. The
- * wordmark assembles by ~3.5s, the tagline types out to "Huh, it works!" by
- * ~4.6s, and the final ~2s fade everything back to an empty backdrop. Letting
- * it run to the end therefore parks a large banner on blank paper, and letting
- * it loop turns an opening title into restless wallpaper.
+ * The 7.0s intro assembles the wordmark by ~3.5s, types the tagline out to
+ * "Huh, it works!" by ~4.6s, then spends its last ~2s fading everything back
+ * to an empty backdrop. That closing fade is what makes it loopable: the last
+ * frame and the first frame are the same empty backdrop, so a replay reads as
+ * one continuous take instead of a cut. It runs muted on a native loop.
  *
- * So: play once, then stop on the completed lockup and hold it. Tune the
- * resting frame with this one constant; 4.6s is the first frame where the
- * tagline is fully typed and the caret is not drawn.
+ * Except under prefers-reduced-motion. Motion that starts on its own, runs
+ * past five seconds, and offers no way to stop it fails WCAG 2.2.2, and a
+ * decorative banner has no business shipping a pause button. Those visitors
+ * get one still frame instead: 4.6s is the first frame where the tagline is
+ * fully typed and the caret is not drawn.
+ *
+ * Switching theme swaps to the other cut and resumes at the same timestamp,
+ * so the loop does not jump back to the start under the viewer.
  * ───────────────────────────────────────────────────────────────────────── */
 const INTRO_HOLD_AT = 4.6;
 
@@ -89,36 +94,20 @@ const INTRO_SRC: Record<Theme, string> = {
   dark: "/WIGTN%20Intro/03_Dynamic-Black.mp4",
 };
 
-type IntroResume = { time: number; shouldPlay: boolean; held: boolean };
-
-function holdIntro(video: HTMLVideoElement) {
-  if (video.dataset.held) return;
-  video.dataset.held = "1";
-  video.pause();
-  video.currentTime = INTRO_HOLD_AT;
-}
-
 function IntroVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const resumeRef = useRef<IntroResume>({ time: 0, shouldPlay: true, held: false });
+  const resumeAtRef = useRef(0);
   const themeRef = useRef<Theme | null>(null);
   const [theme, setTheme] = useState<Theme | null>(null);
+  const [stillOnly, setStillOnly] = useState(false);
 
   useEffect(() => {
     const root = document.documentElement;
     const syncTheme = () => {
       const next: Theme = root.classList.contains("dark") ? "dark" : "light";
       const current = themeRef.current;
-      if (current && current !== next) {
-        const video = videoRef.current;
-        if (video) {
-          const held = Boolean(video.dataset.held) || video.ended || video.currentTime >= INTRO_HOLD_AT;
-          resumeRef.current = {
-            time: held ? INTRO_HOLD_AT : Math.min(video.currentTime, INTRO_HOLD_AT),
-            shouldPlay: !video.paused && !held,
-            held,
-          };
-        }
+      if (current && current !== next && videoRef.current) {
+        resumeAtRef.current = videoRef.current.currentTime;
       }
       themeRef.current = next;
       setTheme(next);
@@ -130,39 +119,48 @@ function IntroVideo() {
     return () => observer.disconnect();
   }, []);
 
-  const holdAtMark = useCallback((e: React.SyntheticEvent<HTMLVideoElement>) => {
-    const video = e.currentTarget;
-    if (video.currentTime >= INTRO_HOLD_AT || video.ended) holdIntro(video);
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncMotion = () => setStillOnly(query.matches);
+    syncMotion();
+    query.addEventListener("change", syncMotion);
+    return () => query.removeEventListener("change", syncMotion);
   }, []);
 
-  const restorePlayback = useCallback((e: React.SyntheticEvent<HTMLVideoElement>) => {
-    const video = e.currentTarget;
-    const resume = resumeRef.current;
-    video.currentTime = resume.held ? INTRO_HOLD_AT : Math.min(resume.time, INTRO_HOLD_AT);
-    if (resume.held) {
-      video.dataset.held = "1";
-      video.pause();
-    } else if (resume.shouldPlay) {
+  const restorePlayback = useCallback(
+    (e: React.SyntheticEvent<HTMLVideoElement>) => {
+      const video = e.currentTarget;
+      if (stillOnly) {
+        video.currentTime = INTRO_HOLD_AT;
+        return;
+      }
+      video.currentTime = resumeAtRef.current;
       void video.play().catch(() => {});
-    }
-  }, []);
+    },
+    [stillOnly],
+  );
 
   // Do not give the browser a media URL until the pre-paint theme class has
   // been read. This keeps the alternate 1 MB clip out of the request/decode
-  // path and makes the server/client markup deterministic.
+  // path and makes the server/client markup deterministic. Both effects flush
+  // in the same commit, so the motion preference is settled by the time this
+  // guard clears and no one sees a frame of loop they asked not to get.
   if (!theme) return null;
 
   return (
     <video
-      key={theme}
+      // Remount on either axis. `loop` is live, but autoplay is decided once,
+      // when the element first reaches readiness, so flipping the OS
+      // preference has to rebuild the element to be acted on at all.
+      key={`${theme}-${stillOnly}`}
       ref={videoRef}
       src={INTRO_SRC[theme]}
+      autoPlay={!stillOnly}
+      loop={!stillOnly}
       muted
       playsInline
       aria-hidden
       onLoadedMetadata={restorePlayback}
-      onTimeUpdate={holdAtMark}
-      onEnded={holdAtMark}
       className="pointer-events-none absolute inset-0 h-full w-full object-cover"
     />
   );
@@ -398,9 +396,9 @@ export function ResearchLedHome() {
       <main className="relative z-10">
         {/* ───── 1. Hero: identity & vision ───── */}
         <section className="relative isolate overflow-hidden">
-          {/* Intro video: top banner, muted, plays once and holds on the
-              finished lockup. Sits ABOVE the content (no overlap), shown crisp
-              (no opacity/blend filter).
+          {/* Intro video: top banner, muted, looping (one still frame under
+              prefers-reduced-motion). Sits ABOVE the content (no overlap),
+              shown crisp (no opacity/blend filter).
               The clip is baked onto a solid backdrop, so each theme needs its
               own cut: White on paper, Black on ink. A single media element is
               mounted after hydration from the pre-paint theme class; switching
