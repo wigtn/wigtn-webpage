@@ -18,8 +18,7 @@ mockups/research-led/
   ArticleDetail.tsx        renders an Article's Block[]
   updates/<slug>/          one folder per update post: index.ts + its images
   updates/_template/       four post templates + the shared rules
-constants/                 /projects page content (separate from the site above)
-public/images/             legacy image store; new posts do NOT add here
+public/images/             team portraits, logos, one milestone photo. Nothing else.
 ```
 
 ## Which site does this belong on
@@ -60,6 +59,11 @@ still resolve, as redirects. Read the comment there before touching them.
 **Use the `update-post` skill.** Do not hand-write an article into `data.ts`, and
 do not copy an existing post folder and edit over it. The skill runs the
 interview, picks the right template, sources the facts, and verifies the build.
+
+The `/projects` route, the `constants/` content it rendered, and the retired
+`components/sections/*` landing were all deleted once the split made them
+redundant: about 6,300 lines of code no entry point reached, and 42 MB of images
+nothing loaded. If you find a reference to any of them, it is stale.
 
 Read `mockups/research-led/updates/_template/README.md` before touching any post.
 It owns the rules for blocks, images, galleries, numbers, and naming. The four

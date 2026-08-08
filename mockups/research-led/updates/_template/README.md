@@ -88,15 +88,13 @@ silent 404, and each file ships with a content hash in its URL
 (`/_next/static/media/booth-d3.6460e179.jpg`), so a changed photo can never be
 served from a stale cache.
 
-One exception, and it is temporary: a few images are still shared with
-`/projects` and the retired `components/sections/*` landing, which read them
-from `public/`. Those are **copied** into the post folder rather than moved, so
-both consumers keep working. When `/projects` retires, the `public/` copy goes
-and this paragraph goes with it. Where nothing else reads the file, move it and
-delete the original, because two copies of one photo drift.
+There is no exception any more. `/projects` used to read some of these files
+from `public/`, so posts copied rather than moved them; that route is gone and
+`public/images/` now holds only team portraits, the logos and one milestone
+photo. A post folder owns its images outright.
 
-Record which of the two you did, per image, in the file's header comment. That
-note is how the next editor knows whether an original still exists.
+Record where each image came from in the file's header comment anyway. It is how
+the next editor knows whether an original still exists to re-prep from.
 
 ### Preparing a photo before it lands here
 

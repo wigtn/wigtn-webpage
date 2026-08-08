@@ -57,8 +57,9 @@
  *    *value* back out of it would close a runtime import cycle. Types are
  *    erased and are safe to import from data.
  *
- * The cover is copied from public/images/carousel/wigss-npm.png rather than
- * moved: components/sections/Pillars.tsx still reads it from public/. It is a
+ * The cover was copied from public/images/carousel/wigss-npm.png, which was
+ * kept while the retired Pillars section read it and has since been deleted
+ * with that section, so this is the only copy. It is a
  * 1698x1169 PNG screenshot at 163 KB with no EXIF, so the shared README's
  * prep command is a no-op here. The resize cap is 2000px and re-encoding a
  * screenshot of text to JPEG q82 would only add artifacts. Copied byte for
