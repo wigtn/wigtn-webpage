@@ -18,7 +18,7 @@
  * MilestoneTimeline is retained but currently unrouted.
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
@@ -34,6 +34,29 @@ import {
 import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, rise, VIEWPORT } from "./chrome";
 import { ArticleCard, ReportCard } from "./cards";
 import type { Theme } from "@/lib/theme";
+
+/* The one type scale for a section title on this page.
+ *
+ * The four of them had drifted to four different sizes, from 3rem on Friends to
+ * 6rem on Updates, which read as four unrelated pages stacked rather than one
+ * page with four parts. This is the size "What we do" was already using, and it
+ * is the one that survives at the top of a viewport without pushing its own
+ * content off it.
+ *
+ * A title here is the section's name and nothing else. That rule cost Tech
+ * Reports its old h2: the name was in a nine-pixel eyebrow above a sentence
+ * playing the part of the heading, so the sentence moved down to the lead,
+ * where it was always doing a lead's job, and the eyebrow went away rather than
+ * repeat the h2 directly under it. */
+function SectionTitle({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <h2
+      className={`font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.02] text-accent ${className}`}
+    >
+      {children}
+    </h2>
+  );
+}
 
 function ViewAll({ href, label }: { href: string; label: string }) {
   return (
@@ -429,9 +452,7 @@ export function ResearchLedHome() {
               <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-4">
                 Activities · 01–04
               </span>
-              <h2 className="mt-4 font-display text-[clamp(2.25rem,5vw,3.75rem)] font-bold tracking-[-0.03em] leading-[1.02] text-accent">
-                What we do
-              </h2>
+              <SectionTitle className="mt-4">What we do</SectionTitle>
               <p className="mt-5 max-w-xs text-pretty leading-relaxed text-ink-3">
                 Peer-reviewed papers, open weights, and reports that say what they do not show.
               </p>
@@ -465,9 +486,7 @@ export function ResearchLedHome() {
 
         {/* ───── Friends: centered logo wall (text stand-ins until assets land) ───── */}
         <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
-          <h2 className="font-display text-center text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight">
-            Friends &amp; Collaborators
-          </h2>
+          <SectionTitle className="text-center">Friends &amp; Collaborators</SectionTitle>
           <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 md:mt-16">
             {PARTNERS.map((name) => (
               <motion.div
@@ -492,9 +511,7 @@ export function ResearchLedHome() {
         {/* ───── 3. Updates: featured items as article cards ───── */}
         <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <h2 className="font-display text-[clamp(2.5rem,7.5vw,6rem)] font-bold tracking-[-0.03em] leading-[0.98] text-accent">
-              Updates
-            </h2>
+            <SectionTitle>Updates</SectionTitle>
             <ViewAll href={NEWS} label="All updates" />
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 md:mt-16">
@@ -522,23 +539,13 @@ export function ResearchLedHome() {
              before editing: nothing in this build checks it against the report
              site. ────────────────────────────────────────────────────────── */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div>
-              <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-accent">
-                Tech Reports
-              </span>
-              <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink md:text-4xl">
-                The work, with its method and its limits.
-              </h2>
-              {/* This used to end "In English and Korean." The report site
-                  dropped its Korean routes in wigtn-tech-report#5 and now ships
-                  English only, so the sentence was promising a language the
-                  destination no longer serves. */}
-              <p className="mt-3 text-pretty text-ink-3">
-                What we measured, what failed first, and what each result still does not
-                answer.
-              </p>
-            </div>
+          {/* Same title row as Updates, down to the class list: title left, the
+              link to the full index right, both sitting on the baseline. The
+              link used to hang off the bottom of the copy block instead, which
+              put the two sections' "see everything" links at different heights
+              on the same page. */}
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <SectionTitle>Tech Reports</SectionTitle>
             <a
               href={`${TECH_REPORT_SITE}/`}
               className="group inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-medium text-accent transition-colors hover:text-ink"
@@ -547,6 +554,17 @@ export function ResearchLedHome() {
               <span className="transition-transform group-hover:translate-x-0.5">→</span>
             </a>
           </div>
+          <p className="mt-5 max-w-lg text-pretty text-lg leading-relaxed text-ink-2">
+            The work, with its method and its limits.
+          </p>
+          {/* This used to end "In English and Korean." The report site dropped
+              its Korean routes in wigtn-tech-report#5 and now ships English
+              only, so the sentence was promising a language the destination no
+              longer serves. */}
+          <p className="mt-2 max-w-lg text-pretty text-ink-3">
+            What we measured, what failed first, and what each result still does not
+            answer.
+          </p>
 
           <div className="mt-12 grid items-stretch gap-x-7 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 md:mt-16">
             {TECH_REPORTS.map((r, i) => (
