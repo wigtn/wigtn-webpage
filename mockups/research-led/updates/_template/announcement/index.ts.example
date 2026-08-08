@@ -1,12 +1,12 @@
 /**
- * Update: <package or model> — release note.
+ * Update: <package or model> - announcement.
  *
  * Copy this file to `updates/<slug>/index.ts` and drop the images in beside it.
  *
  * Every path below is written from the *destination*, so the whole block stays
- * true once copied — which is the only place it lives permanently:
+ * true once copied, which is the only place it lives permanently:
  *   - register the export in `../../data.ts`;
- *   - the outline for this kind of post is `../_template/release/STRUCTURE.md`;
+ *   - the outline for this kind of post is `../_template/announcement/STRUCTURE.md`;
  *   - the rules every template shares are in `../_template/README.md`.
  *
  * Two things therefore look wrong while the file still sits in `_template/`:
@@ -18,12 +18,11 @@
 
 import type { Article, Block } from "../../../data";
 import cover from "./cover.png";
-import bodyImage from "./body-image.png";
 
 const p = (text: string): Block => ({ t: "p", text });
 
 /* Export a `*_COVER` constant ONLY if something outside this post reuses the
- * image — a MILESTONES entry on the homepage rail, a card. Otherwise delete
+ * image, a MILESTONES entry on the homepage rail, a card. Otherwise delete
  * this line and keep `cover` module-local. See ../README.md. */
 export const MY_NEW_POST_COVER = cover.src;
 
@@ -37,7 +36,7 @@ export const myNewPost: Article = {
   summary: "", // one or two sentences; used on cards
   date: "2026.01.01",
   author: "WIGTN",
-  readTime: "4 min",
+  readTime: "2 min",
   image: cover.src,
   /* The deep write-up lives on the report blog; the note links it, never
    * duplicates it. */
@@ -46,47 +45,35 @@ export const myNewPost: Article = {
    * entries left empty are two identical React keys, and an empty `href` with
    * target="_blank" renders a live button that reopens the current page. Fill
    * this one, then add the others. Tech-report links go through
-   * `techReportHref` from "../../links" — never a value import from data. */
+   * `techReportHref` from "../../links", never a value import from data. */
   links: [{ label: "npm", href: "" }],
   body: [
-    p("Lede: what is public now, where it lives, and what it does."),
+    p("Lede: what is public now, where it lives, what it does, and when."),
 
     { t: "h", text: "Get it" },
-    p("The install line, verbatim, in the first screen of the post."),
-    /* Import your own image for this — do NOT reuse `cover`. The cover already
-     * runs at the top of the page, and the same frame twice in one scroll
-     * reads as a mistake (see STRUCTURE.md). */
-    { t: "image", src: bodyImage.src, alt: "TODO: describe what is in the frame, in a sentence", caption: "" },
+    p("The install line or model id, verbatim, in the first screen of the post."),
+    /* A single command goes in a `quote`. A sequence goes in a `list`: a quote
+     * renders as one paragraph and the browser collapses any padding used to
+     * fake a line break. */
+    { t: "quote", text: "npm install <package>" },
+    /* No image block. An announcement carries one image and it is already the
+     * cover, one screen up. The same frame twice in one scroll reads as a
+     * mistake, which is why STRUCTURE.md says not to. */
 
-    { t: "h", text: "What is in the release" },
+    { t: "h", text: "What shipped" },
     {
       t: "list",
       items: [
-        "The artifacts: weights, data, eval code, license.",
+        "The artifacts, named exactly: weights or an adapter, data, eval code, licence.",
         "The version and its date.",
         "What is deliberately not included.",
       ],
     },
 
-    { t: "h", text: "Why it exists" },
-    p("The problem it was built against. Two paragraphs at most."),
-
-    { t: "h", text: "The numbers" },
+    { t: "h", text: "Read the report" },
     p(
-      "Published benchmarks only, each with its source named. If there is no " +
-        "benchmark, say so in one line rather than leaving a silence.",
+      "One or two lines, then the link. The method, the numbers and the limits " +
+        "live on the tech-report site, not here.",
     ),
-
-    { t: "h", text: "What it does not do yet" },
-    {
-      t: "list",
-      items: [
-        "A known limit.",
-        "An untested platform, or the version that changes it.",
-      ],
-    },
-
-    { t: "h", text: "Go deeper" },
-    p("The method, the ablations, and the full breakdown are in the report."),
   ],
 };

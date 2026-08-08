@@ -3,6 +3,18 @@
 Every post under `updates/` is a folder: the text in `index.ts`, the images
 beside it, nothing referenced by a string path that can rot.
 
+Do not write one by hand. Run the `update-post` skill: it runs the interview,
+picks the template, sources the facts, and verifies the build. This file and the
+four `STRUCTURE.md` files are what that skill follows, and what you read if you
+are editing an existing post.
+
+**House voice lives in [`AGENTS.md`](../../../../AGENTS.md) at the repo root.**
+The rule that catches people out: no em-dashes, anywhere, prose or comments. It
+is not a find-and-replace. An em-dash almost always marks a sentence that wanted
+to be two, a clause that wanted parentheses, or a list that wanted a colon.
+Rewrite the sentence. Posts written before that rule still carry them and are
+grandfathered until the file is next edited.
+
 ```
 updates/
 └── my-new-post/          ← folder name must equal the slug
@@ -11,8 +23,9 @@ updates/
     └── whatever-else.jpg
 ```
 
-The template skeletons import `./cover.jpg` as a placeholder so they compile.
-Rename it — the cover follows the same rule as every other image and is named
+The template skeletons import a `./cover.*` placeholder (`.jpg`, or `.png` for
+the announcement, whose cover is usually a screenshot).
+Rename it. The cover follows the same rule as every other image: it is named
 for what it shows (`winners-on-stage.jpg`, `grand-prize-certificate.jpg`), not
 for the slot it fills.
 
@@ -29,7 +42,12 @@ export const ARTICLES: Article[] = [
 
 ## Pick a template
 
-The recap shape is not one shape. A conference report and a release note want
+First, check it belongs on this site at all. **If it has a method and a
+limitations section, it is a tech report**, and it goes to the `wigtn-tech-report`
+repo instead. See [`AGENTS.md`](../../../../AGENTS.md). Everything below assumes
+the subject is something the team did.
+
+The recap shape is not one shape. A conference report and an announcement want
 different sections, and forcing one into the other's outline is how a post ends
 up with a "what people asked" heading over an empty paragraph.
 
@@ -37,16 +55,16 @@ up with a "what people asked" heading over an empty paragraph.
 | --- | --- | --- | --- |
 | A conference, workshop, or a talk we gave | `event` | `announcement` | [`conference/`](conference/STRUCTURE.md) |
 | A hackathon or competition we entered | `event` | `award` | [`hackathon/`](hackathon/STRUCTURE.md) |
-| Code, weights, or a package going public | `report` | `release` | [`release/`](release/STRUCTURE.md) |
+| Something shipped, was published, or was accepted | `report` | `release` | [`announcement/`](announcement/STRUCTURE.md) |
 | A meetup, seminar, or study group we ran | `community` | `community` | [`community/`](community/STRUCTURE.md) |
 
 Copy the matching `index.ts.example` into your post folder as `index.ts` and
 read that template's `STRUCTURE.md` before writing. Each one names the section
-that carries the post — and the section everyone skips that readers actually
-want.
+that carries the post, which is the section everyone skips and readers
+actually want.
 
 The four share this file's rules, and each tightens or extends them where its
-shape demands it — the hackathon template admits a commit count, the community
+shape demands it. The hackathon template admits a commit count; the community
 template forbids naming attendees at all. **Read both files**, not just this
 one: where they disagree, the template is the stricter and it wins.
 
@@ -75,7 +93,7 @@ One exception, and it is temporary: a few images are still shared with
 from `public/`. Those are **copied** into the post folder rather than moved, so
 both consumers keep working. When `/projects` retires, the `public/` copy goes
 and this paragraph goes with it. Where nothing else reads the file, move it and
-delete the original — two copies of one photo drift.
+delete the original, because two copies of one photo drift.
 
 Record which of the two you did, per image, in the file's header comment. That
 note is how the next editor knows whether an original still exists.
@@ -95,7 +113,7 @@ Both flags before `-strip` are load-bearing, for different reasons.
 
 **`-auto-orient` is not optional.** Four of the ACL photos carried EXIF
 `Orientation=6`. `-strip` removes the tag the browser was relying on, so a
-photo that was never explicitly rotated ships sideways — which is how the old
+photo that was never explicitly rotated ships sideways. That is how the old
 cover spent a week on its side. (Ordering the two is not what saves you:
 ImageMagick 7 keeps the orientation attribute in memory after `-strip`, so
 `-strip -auto-orient` happens to produce the same pixels. Leaving `-auto-orient`
@@ -107,7 +125,7 @@ pixels, so the browser reads P3 values as sRGB and every saturated colour comes
 out too hot. Measured across the five P3 photos in the hackathon posts, the
 worst pixel lands between 33% and 53% off (`magick compare -metric PAE`): the
 TRAE stage shot 40%, the OBA sponsor board 53%. The *mean* shift is under 1%,
-so it never looks broken — it concentrates in the saturated content, which on
+so it never looks broken. It concentrates in the saturated content, which on
 a stage photo or a neon board is the subject. Unrecoverable once committed.
 Convert to sRGB first, then strip.
 
@@ -118,11 +136,11 @@ as sRGB internally, so that flag is a no-op on exactly the files that need it.
 screenshot or a chart is flat colour and crisp text: leave it PNG, do not
 re-encode it to JPEG (q82 rings around text), and do not palette-quantize
 anything with a gradient in it. If it is already under the 2000px cap with no
-EXIF and no profile, copy it byte for byte and say so in the header — that is
+EXIF and no profile, copy it byte for byte and say so in the header, which is
 what `wigss-npm-release` does.
 
 Name files for what they show (`booth-d3.jpg`), never for their position
-(`photo-3.jpg`) — the order changes and the name stops being true.
+(`photo-3.jpg`). The order changes and the name stops being true.
 
 ## Blocks
 
@@ -169,7 +187,7 @@ next can carry four.
 
 ## Two fields the templates set for you, and one you may need to unset
 
-`channel: "newsroom"` is what puts a post in the `/news` feed — `data.ts`
+`channel: "newsroom"` is what puts a post in the `/news` feed: `data.ts`
 filters `NEWSROOM_FEED` on it. Every template hardcodes it because every
 template describes a newsroom post. **Writing a back-catalogue report? Delete
 the field.** Leaving it in silently publishes the post to the feed.
@@ -180,7 +198,7 @@ the field.** Leaving it in silently publishes the post to the feed.
 ## Exporting the cover
 
 Export a `*_COVER` constant **only when something outside the post reuses the
-image** — a `MILESTONES` entry on the homepage rail, a card. Otherwise keep the
+image**, meaning a `MILESTONES` entry on the homepage rail or a card. Otherwise keep the
 import module-local. An exported constant nobody imports reads as a wire that
 was forgotten rather than one that was never needed, and a post with no cover
 at all (`wigtn-coding-release`) has to say so in its header for the same reason.
@@ -198,7 +216,7 @@ import { techReportHref } from "../../links";
 **Never import a value from `../../data`.** `data.ts` imports every post module,
 so a value import closes a runtime cycle and the constant is still in its
 temporal dead zone when your post evaluates. `import type { Article, Block }`
-is fine — types are erased. `links.ts` exists precisely so that the tech-report
+is fine, because types are erased. `links.ts` exists precisely so the tech-report
 host lives in one place and posts can still reach it.
 
 ## Numbers
