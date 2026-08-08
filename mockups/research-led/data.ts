@@ -390,10 +390,13 @@ export const RETIRED: { slug: string; to: string; title: string }[] = [
     to: techReportHref("wigvo"),
     title: "WIGVO",
   },
+  /* The WIGTN Flake report was removed from the tech-report site, so this one
+   * points back into this site rather than off it. The Snowflake hackathon post
+   * is the surviving account of that project. */
   {
     slug: "wigtn-flake-cortex-debate-video",
-    to: techReportHref("wigtn-flake"),
-    title: "WIGTN Flake",
+    to: `${HOME}snowflake-korea-2026`,
+    title: "the Snowflake hackathon post",
   },
   {
     slug: "why-we-distill-30b-into-2b",

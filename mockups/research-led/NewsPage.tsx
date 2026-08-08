@@ -1,71 +1,35 @@
 "use client";
 
 /**
- * /news (labelled "Updates" in the nav): Apple-Newsroom-style layout, with one
- * rule that holds everywhere: **the filter owns the whole page**. The category
- * nav sits at the top, right under the masthead, so it reads as a control over
- * everything below it. On "All" the newest item runs as a large hero and
- * everything else falls into a uniform 3-up grid. Pick a category and the hero
- * drops away entirely, leaving a single uniform grid of every item in that
- * category, including the one that was the hero.
+ * /news, labelled "Updates" in the nav.
  *
- * That last part is the point. The hero used to be excluded from the filtered
- * list, so choosing "Announcements" while the sole announcement *was* the hero
- * rendered an empty state directly beneath the very story it claimed not to
- * have. Filtering the full feed removes that class of bug rather than special-
- * casing it.
+ * The feed carries two kinds of thing and they are not the same size. A
+ * conference trip report runs eleven minutes and earns photographs; "WIGSS is
+ * on npm" runs two and earns a line. A uniform card grid put them side by side
+ * at identical weight, which told the reader they were equivalent. They are not.
  *
- * Filter tabs carry live counts so an empty or thin category is visible before
- * it's clicked. Cards use real images / video thumbnails and link to the detail
- * page (/slug/). Header and footer come from the shared PageShell.
+ * So the page is one hero and two titled groups:
+ *
+ *   Hero      the newest item, whatever kind it is
+ *   Stories   conferences, hackathons, anything with a scene to describe
+ *   Releases  what shipped, as dated rows with no image
+ *
+ * The split is `newsTopic === "release"`, which the data already carries, so
+ * nothing new has to be maintained to keep a post in the right group.
+ *
+ * This replaces a five-tab category filter. With seven items in two natural
+ * groups, one tab read 0 and another read 1, and the filter was doing less work
+ * than two headings do for free. If the feed grows past what one page can hold,
+ * the filter is the thing to bring back, not a "load more" under a list of six.
  */
 
-import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { PageShell, rise, VIEWPORT } from "./chrome";
 import { coverSrc, BrandCover } from "./cards";
-import { NEWSROOM_FEED, articleHref, type Article, type NewsTopic } from "./data";
+import { NEWSROOM_FEED, articleHref, type Article } from "./data";
 
-type Cat = NewsTopic; // award | release | announcement | community
-type Filter = "all" | Cat;
-
-function catOf(a: Article): Cat {
-  return a.newsTopic ?? "announcement";
-}
-
-/* Card labels are unified to the feed category buckets (not per-article
- * tags like VIDEO / PAPER · ACL), matching the filter nav. */
-const CAT_LABEL: Record<Cat, string> = {
-  award: "Award",
-  release: "Release",
-  announcement: "Announcement",
-  community: "Community",
-};
-
-const FILTERS: { key: Filter; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "award", label: "Awards" },
-  { key: "release", label: "Releases" },
-  { key: "announcement", label: "Announcements" },
-  { key: "community", label: "Community" },
-];
-
-/* Per-tab counts, computed once at module scope. NEWSROOM_FEED is a static
- * constant, so there is nothing to recompute per render. */
-const COUNTS: Record<Filter, number> = NEWSROOM_FEED.reduce(
-  (acc, a) => {
-    acc[catOf(a)] += 1;
-    return acc;
-  },
-  { all: NEWSROOM_FEED.length, award: 0, release: 0, announcement: 0, community: 0 },
-);
-
-/* Load-more: show the first three grid rows, then reveal two rows per click.
- * The button only appears once the grid actually overflows this count, so a
- * small feed shows everything and stays button-free. */
-const INITIAL_GRID = 9;
-const LOAD_STEP = 6;
+const isRelease = (a: Article) => a.newsTopic === "release";
 
 function VideoDot() {
   return (
@@ -83,85 +47,49 @@ function Kicker({ children }: { children: React.ReactNode }) {
   );
 }
 
+function GroupHeading({ title, note }: { title: string; note: string }) {
+  return (
+    <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-line/[0.08] pb-4">
+      <h2 className="font-display text-2xl font-bold tracking-tight text-ink md:text-3xl">
+        {title}
+      </h2>
+      <span className="text-sm text-ink-4">{note}</span>
+    </div>
+  );
+}
+
 export function NewsPage() {
-  const [filter, setFilter] = useState<Filter>("all");
-  const [shown, setShown] = useState(INITIAL_GRID);
-
-  const isAll = filter === "all";
-
-  // The hero is an "All" affordance only. Prefer the newest story that
-  // actually has a cover (a hero-sized BrandCover placeholder carries the page
-  // poorly), and fall back to the newest story outright.
-  const hero = isAll ? NEWSROOM_FEED.find((a) => coverSrc(a)) ?? NEWSROOM_FEED[0] : undefined;
-  const heroCover = hero ? coverSrc(hero) : undefined;
-
-  // Filtered views draw from the entire feed; only "All" carves out the hero.
-  const pool = isAll
-    ? NEWSROOM_FEED.filter((a) => a.slug !== hero?.slug)
-    : NEWSROOM_FEED.filter((a) => catOf(a) === filter);
-
-  const grid = pool.slice(0, shown);
-  const hidden = pool.length - grid.length;
-
-  function pick(key: Filter) {
-    setFilter(key);
-    setShown(INITIAL_GRID); // reset the load-more window per filter
-  }
+  /* The hero is whatever is newest. Prefer one with a cover, because a
+   * hero-sized BrandCover carries the top of the page poorly, and fall back to
+   * the newest outright. */
+  const hero = NEWSROOM_FEED.find((a) => coverSrc(a)) ?? NEWSROOM_FEED[0];
+  const rest = NEWSROOM_FEED.filter((a) => a.slug !== hero?.slug);
+  const stories = rest.filter((a) => !isRelease(a));
+  const releases = rest.filter(isRelease);
 
   return (
     <PageShell>
       <div className="mx-auto max-w-5xl px-6">
-        {/* Masthead */}
         <div className="pt-28 md:pt-32">
-          {/* Masthead scale: ~3× the old 11px eyebrow. Tracking eases back as
-              the type grows so the wordmark still fits a phone width, and the
-              text-indent offsets the trailing letter-space so the centred
-              wordmark sits on the true optical centre. Now the page's largest
-              text on every filter, so it carries the h1 (article headlines
-              below step down to h2) — category tabs render no hero. */}
+          {/* Masthead scale: tracking eases back as the type grows so the
+              wordmark still fits a phone width, and the text-indent offsets the
+              trailing letter-space so it sits on the true optical centre. */}
           <h1 className="text-center text-[1.5rem] font-semibold uppercase leading-tight tracking-[0.22em] text-ink-4 [text-indent:0.22em] md:text-[2rem]">
             WIGTN Updates
           </h1>
         </div>
 
-        {/* ── Category nav: sits directly under the masthead so the page's
-             controls are the first thing after the title, not something you
-             discover halfway down. Counts make a thin category visible before
-             it's clicked, so no tab is a surprise dead end. ────────────── */}
-        <nav className="mt-8 flex flex-wrap justify-center gap-x-7 gap-y-3 border-y border-line/[0.08] py-4">
-          {FILTERS.map((f) => {
-            const active = filter === f.key;
-            const count = COUNTS[f.key];
-            return (
-              <button
-                key={f.key}
-                type="button"
-                onClick={() => pick(f.key)}
-                aria-pressed={active}
-                className={`border-b-2 pb-1 text-sm transition-colors ${
-                  active
-                    ? "border-accent font-semibold text-ink"
-                    : "border-transparent text-ink-4 hover:text-ink-2"
-                }`}
-              >
-                {f.label}
-                <span className="ml-1.5 font-mono text-[11px] text-ink-5">{count}</span>
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* ── Hero: newest story, "All" only ───────────── */}
+        {/* ── Hero: the newest item ─────────────────────────────── */}
         {hero && (
-          <section className="mt-12 md:mt-14">
+          <section className="mt-12 border-t border-line/[0.08] pt-12 md:mt-14">
             <Link
               href={articleHref(hero.slug)}
               className="group grid items-center gap-8 md:grid-cols-2 md:gap-12"
             >
               <div className="relative aspect-[16/10] overflow-hidden rounded-[24px]">
-                {heroCover ? (
+                {coverSrc(hero) ? (
                   <img
-                    src={heroCover}
+                    src={coverSrc(hero)}
                     alt=""
                     fetchPriority="high"
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.03]"
@@ -172,7 +100,7 @@ export function NewsPage() {
                 {hero.video && <VideoDot />}
               </div>
               <div>
-                <Kicker>{CAT_LABEL[catOf(hero)]}</Kicker>
+                <Kicker>Latest</Kicker>
                 <h2 className="font-display mt-3 text-3xl font-bold leading-[1.1] tracking-tight text-ink text-balance transition-colors group-hover:text-accent md:text-4xl">
                   {hero.title}
                 </h2>
@@ -180,50 +108,44 @@ export function NewsPage() {
                 <div className="mt-5 text-sm text-ink-4">
                   {hero.date}
                   {hero.place ? ` · ${hero.place}` : ""}
+                  {hero.readTime ? ` · ${hero.readTime}` : ""}
                 </div>
               </div>
             </Link>
           </section>
         )}
 
-        {/* ── Uniform grid ───────────────────────────────────────── */}
-        <section className={`space-y-14 pb-24 ${hero ? "mt-14" : "mt-12"}`}>
-          {grid.length > 0 && (
-            <div className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-              {grid.map((a, i) => (
+        {/* ── Stories: the ones with a scene to describe ────────── */}
+        {stories.length > 0 && (
+          <section className="mt-24 md:mt-32">
+            <GroupHeading title="Stories" note="Conferences, hackathons, what changed after" />
+            <div className="mt-10 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+              {stories.map((a, i) => (
                 <StoryCard key={a.slug} a={a} i={i} />
               ))}
             </div>
-          )}
+          </section>
+        )}
 
-          {hidden > 0 && (
-            <div className="flex justify-center pt-2">
-              <button
-                type="button"
-                onClick={() => setShown((s) => s + LOAD_STEP)}
-                className="rounded-full border border-line/15 px-6 py-2.5 text-sm font-medium text-ink-2 transition-colors hover:border-brand hover:bg-brand/10"
-              >
-                More stories <span className="text-ink-4">({hidden})</span>
-              </button>
-            </div>
-          )}
+        {/* ── Releases: dated rows, no images. A package page screenshot is
+             not a photograph and does not earn a card. ─────────────────── */}
+        {releases.length > 0 && (
+          <section className="mt-24 md:mt-32">
+            <GroupHeading title="Releases" note="What shipped, and where to get it" />
+            <ul className="mt-2">
+              {releases.map((a, i) => (
+                <ReleaseRow key={a.slug} a={a} i={i} />
+              ))}
+            </ul>
+          </section>
+        )}
 
-          {/* Guarded on !isAll: with a single article, All renders it as the hero
-              and `pool` is empty, which would print "no stories" directly under
-              the story. That is the bug the header comment above describes. */}
-          {!isAll && pool.length === 0 && (
-            <p className="py-10 text-center text-sm text-ink-5">No stories in this category yet.</p>
-          )}
-
-        </section>
+        <div className="pb-24" />
       </div>
     </PageShell>
   );
 }
 
-/* Story card, one size everywhere. The hero is the only scale break on the
- * page; a third card size for six stories was more hierarchy than the volume
- * could carry. */
 function StoryCard({ a, i }: { a: Article; i: number }) {
   const cover = coverSrc(a);
   return (
@@ -244,16 +166,37 @@ function StoryCard({ a, i }: { a: Article; i: number }) {
           {a.video && <VideoDot />}
         </div>
         <div className="mt-5">
-          <Kicker>{CAT_LABEL[catOf(a)]}</Kicker>
-          <h3 className="font-display mt-2 text-lg font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent">
+          <h3 className="font-display text-lg font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent">
             {a.title}
           </h3>
           <div className="mt-3 text-sm text-ink-4">
             {a.date}
             {a.place ? ` · ${a.place}` : ""}
+            {a.readTime ? ` · ${a.readTime}` : ""}
           </div>
         </div>
       </Link>
     </motion.div>
+  );
+}
+
+/* One row per release: date, title, summary. The title already carries the
+ * version and the month, so the row needs no kicker repeating "Release". */
+function ReleaseRow({ a, i }: { a: Article; i: number }) {
+  return (
+    <motion.li variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
+      <Link
+        href={articleHref(a.slug)}
+        className="group grid gap-1 border-b border-line/[0.06] py-6 md:grid-cols-[7.5rem_1fr] md:gap-8"
+      >
+        <span className="font-mono text-sm text-ink-5 md:pt-1">{a.date}</span>
+        <div>
+          <h3 className="font-display text-lg font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent">
+            {a.title}
+          </h3>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-ink-4">{a.summary}</p>
+        </div>
+      </Link>
+    </motion.li>
   );
 }

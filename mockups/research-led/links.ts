@@ -17,7 +17,7 @@
  * "https://research.wigtn.com".
  *
  * Slugs match the report site's routes. As of 2026-08: wigvo, wigtnocr, wigss,
- * wigtn-flake, wigtn-coding, codex-selective-harness. That list is a
+ * wigtn-coding, codex-selective-harness. That list is a
  * convenience, not a source of truth; the report site is. Do not derive a
  * count of published reports from it, and do not put such a count in copy that
  * this repo cannot check. */
