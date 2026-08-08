@@ -1,6 +1,6 @@
 "use client";
 
-/** /team: the crew roster, the history (연혁), and the partners wall. */
+/** /team: the crew roster, the partners wall, and the history (연혁). */
 
 import { Fragment } from "react";
 import { motion } from "framer-motion";
@@ -109,6 +109,38 @@ export function TeamPage() {
 
       <Divider />
 
+      {/* ── Partners: logo wall (text stand-ins until assets land) ──
+           Moved here from the homepage. This page answers who we are, and who
+           we work with is part of that answer; the homepage is a teaser whose
+           sections all hand off to a page, and this one had nowhere to hand off
+           to. It sits between the people and the record, because it reads as a
+           short list of names like the one above it, and putting it after the
+           timeline made the page end on a footnote. */}
+      <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
+        <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
+          Partners
+        </h2>
+        <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 md:mt-16">
+          {PARTNERS.map((name) => (
+            <motion.div
+              key={name}
+              variants={rise}
+              initial="hidden"
+              whileInView="show"
+              viewport={VIEWPORT}
+              className="flex items-center justify-start"
+            >
+              {/* TODO: replace with <img> partner logo once assets exist */}
+              <span className="text-xl font-semibold tracking-tight text-ink-2 md:text-2xl">
+                {name}
+              </span>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      <Divider />
+
       {/* ── History (연혁): left-aligned header, centered timeline ── */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
         <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">History</h2>
@@ -161,35 +193,6 @@ export function TeamPage() {
         </div>
       </section>
 
-      <Divider />
-
-      {/* ── Partners: logo wall (text stand-ins until assets land) ──
-           Moved here from the homepage. This page answers who we are, and who
-           we work with is part of that answer; the homepage is a teaser whose
-           sections all hand off to a page, and this one had nowhere to hand off
-           to. Last on the page on purpose: it is the section least about us. */}
-      <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
-        <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
-          Partners
-        </h2>
-        <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 md:mt-16">
-          {PARTNERS.map((name) => (
-            <motion.div
-              key={name}
-              variants={rise}
-              initial="hidden"
-              whileInView="show"
-              viewport={VIEWPORT}
-              className="flex items-center justify-start"
-            >
-              {/* TODO: replace with <img> partner logo once assets exist */}
-              <span className="text-xl font-semibold tracking-tight text-ink-2 md:text-2xl">
-                {name}
-              </span>
-            </motion.div>
-          ))}
-        </div>
-      </section>
     </PageShell>
   );
 }
