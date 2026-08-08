@@ -46,7 +46,7 @@ export const articleHref = (slug: string) => `${HOME}${slug}`;
  * cannot import a value from this module without closing a cycle. See the
  * comment in links.ts. Imported as well as re-exported: NAV below uses
  * TECH_REPORT_SITE locally, and `export ... from` creates no local binding. */
-import { TECH_REPORT_SITE, techReportHref } from "./links";
+import { TECH_REPORT_SITE, techReportAsset, techReportHref } from "./links";
 export { TECH_REPORT_SITE, techReportHref };
 
 /* Reference-led structure (Next Securities / MakinaRocks): the homepage is
@@ -258,6 +258,66 @@ export const NEWSROOM = [
   ARTICLES.find((a) => a.slug === "trae-seoul-grand-prize")!, // 2026.03.28
 ];
 export const getArticle = (slug: string) => ARTICLES.find((a) => a.slug === slug);
+
+/* ── Homepage report rail ────────────────────────────────────────────────────
+ *
+ * The three newest tech reports, as cards that leave this site. The nav already
+ * links the report site, but a reader who has not yet decided to go there is
+ * not reading the nav. Three covers with real titles under them say what is
+ * over there; a single link says only that somewhere else exists.
+ *
+ * This is a hand-kept mirror, and the report site is the source of truth. This
+ * repo has no build-time access to it: separate Next app, separate repository,
+ * separate deploy, so nothing here can read its data or notice when it changes.
+ * The rules that follow from that are worth stating rather than rediscovering.
+ *
+ *   - Newest first, which is the order the report hub itself renders. Its dates
+ *     are zero-padded "YYYY.MM" or "YYYY.MM.DD" and sort as plain strings.
+ *   - When a report ships, add it at the top and drop the last entry. Three is
+ *     the number the grid is built for, not a floor.
+ *   - `title` is the report's `cardTitle` when it has one and its `title` when
+ *     it does not, which is the same choice the report hub card makes. The two
+ *     harness reports have no `cardTitle` on purpose: their titles carry the
+ *     series numbering, which is how a reader gets from part 1 to part 2.
+ *   - Do not copy the `dek` across. It states measured figures, and a figure
+ *     living in a repo that cannot check it is a figure that will go wrong here
+ *     while staying right there.
+ *
+ * Sourced 2026.08.09 from wigtn-tech-report at 245a465,
+ * components/technical-reports/data.ts. */
+export type TechReport = {
+  slug: string;
+  title: string;
+  date: string;
+  /* Full path under the report repo's `public/`, resolved across origins by
+   * `techReportAsset`. Nothing in this build verifies it; see ./links. */
+  image: string;
+  alt: string;
+};
+
+export const TECH_REPORTS: TechReport[] = [
+  {
+    slug: "wigtn-coding",
+    title: "Running a harness on frontier models, part 1: Claude Code",
+    date: "2026.08.04",
+    image: techReportAsset("/images/projects/claudecode_image_v1.jpg"),
+    alt: "Claude Code",
+  },
+  {
+    slug: "codex-selective-harness",
+    title: "Running a harness on frontier models, part 2: Codex",
+    date: "2026.07.28",
+    image: techReportAsset("/images/projects/codex_image_v1.jpg"),
+    alt: "Codex",
+  },
+  {
+    slug: "wigvo",
+    title: "Real-time translation over an ordinary PSTN call",
+    date: "2026.07",
+    image: techReportAsset("/images/projects/wigvo_image_v1.jpg"),
+    alt: "WIGVO, real-time bidirectional speech translation over PSTN calls",
+  },
+];
 
 
 /* ── Research & Tech Assets (homepage centerpiece) ── */

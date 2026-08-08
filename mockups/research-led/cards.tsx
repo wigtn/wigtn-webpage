@@ -2,10 +2,15 @@
 
 /** Shared article cards. Reused by the homepage and /work, /news. */
 
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Calendar, MapPin, Play } from "lucide-react";
-import { articleHref, type Article } from "./data";
+import { articleHref, type Article, type TechReport } from "./data";
+/* Straight from the leaf module, not re-exported through ./data. Both work at
+ * runtime here, but ./links is where the URL is decided and this is one hop
+ * fewer to read. */
+import { techReportHref } from "./links";
 import { rise, VIEWPORT } from "./chrome";
 
 /* Cover source: real image → YouTube thumbnail (for video notes) → none.
@@ -117,6 +122,61 @@ export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
           />
         </div>
       </Link>
+    </motion.div>
+  );
+}
+
+/* Off-site card for a tech report.
+ *
+ * Deliberately not an ArticleCard. That one is a 4/5 poster with the title
+ * burned into the image, which is this site's voice for its own posts; these
+ * three land on another site with another layout, and mirroring the report
+ * hub's own card (16/10 cover, title underneath, date) means the click does not
+ * feel like a page swapped out from under the reader.
+ *
+ * No kicker row and no summary, for the reason the report hub gives in its own
+ * card: a grid of nine-pixel track labels tells a reader nothing, and a clamped
+ * dek under every card turns an index into a wall.
+ *
+ * The cover is served by the report site, so this build never sees it and a
+ * rename there would otherwise ship a broken frame here. `failed` swaps in the
+ * house cover instead. It is one-way on purpose: an <img> that errored will not
+ * recover by being told to try the same URL again on the next render. */
+export function ReportCard({ r, i = 0 }: { r: TechReport; i?: number }) {
+  const [failed, setFailed] = useState(false);
+  return (
+    <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
+      <a
+        href={techReportHref(r.slug)}
+        className="group flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+      >
+        <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-ink/[0.04]">
+          {failed ? (
+            <BrandCover />
+          ) : (
+            <img
+              src={r.image}
+              alt={r.alt}
+              loading="lazy"
+              onError={() => setFailed(true)}
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.03]"
+            />
+          )}
+        </div>
+
+        {/* mt-auto pins the footer: these titles run one to three lines, and
+            without it the dates in a row stop lining up. */}
+        <h3 className="font-display mt-4 text-lg font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent">
+          {r.title}
+        </h3>
+        <div className="mt-auto flex items-center gap-3 pt-3 text-xs text-ink-4">
+          <span className="font-mono">{r.date}</span>
+          <ArrowUpRight
+            size={14}
+            className="ml-auto text-ink-5 transition-all group-hover:translate-x-0.5 group-hover:text-accent"
+          />
+        </div>
+      </a>
     </motion.div>
   );
 }

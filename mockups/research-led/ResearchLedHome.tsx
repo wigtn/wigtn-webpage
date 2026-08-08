@@ -4,12 +4,15 @@
  * Research-led homepage. Positioning is the record: peer-reviewed work,
  * open models, reports that state their own limits.
  * ------------------------------------------------------------------
- * Card-less, type-led layout. Built on current patterns:
+ * Type-led layout. Built on current patterns:
  *   - Display grotesk (Space Grotesk) headlines + mono (JetBrains Mono)
  *     micro-labels; Pretendard body
  *   - Warm off-white base (#F8F8F5), single accent = Pantone 265 (`brand`,
  *     leaning on `accent` for legibility on light)
- *   - Editorial sections separated by hairlines, not boxes/cards
+ *   - Cards only where a card is a destination: Updates and Tech Reports. This
+ *     used to read "card-less, hairlines not boxes", which the Updates grid
+ *     already contradicted and the report grid finished off. Everything that is
+ *     not a link out of the page is still separated by a hairline, not boxed.
  *   - "What we do": sticky left header + compact right capability list
  * Sections: 1 Hero · 2 What we do · Friends · 3 Updates · 4 Tech Reports · 5 CTA.
  * MilestoneTimeline is retained but currently unrouted.
@@ -19,9 +22,17 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
-import { CAPABILITIES, PARTNERS, MILESTONES, NEWSROOM, NEWS, TECH_REPORT_SITE } from "./data";
+import {
+  CAPABILITIES,
+  PARTNERS,
+  MILESTONES,
+  NEWSROOM,
+  NEWS,
+  TECH_REPORTS,
+  TECH_REPORT_SITE,
+} from "./data";
 import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, rise, VIEWPORT } from "./chrome";
-import { ArticleCard } from "./cards";
+import { ArticleCard, ReportCard } from "./cards";
 import type { Theme } from "@/lib/theme";
 
 function ViewAll({ href, label }: { href: string; label: string }) {
@@ -495,10 +506,21 @@ export function ResearchLedHome() {
 
         <Divider />
 
-        {/* ───── 4. Reports: card-less text band pointing off-site ─────
+        {/* ───── 4. Reports: three covers pointing off-site ─────
              This slot used to advertise meetups that had not happened yet, next
              to three pillars that had. The report site is the thing this site
-             most needs to hand a reader off to, and it exists. ────────────── */}
+             most needs to hand a reader off to, and it exists.
+
+             It was a text band until the cards went in. The band stated that
+             the reports exist and asked the reader to take that on faith; the
+             covers name three of them, and the one under Updates had already
+             shown that a reader will click a cover and will not click a line of
+             body copy. The heading and the link survive the change, so the band
+             is still there for anyone who reads rather than looks.
+
+             The list is TECH_REPORTS in data.ts, hand-kept. Read its comment
+             before editing: nothing in this build checks it against the report
+             site. ────────────────────────────────────────────────────────── */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
@@ -508,9 +530,13 @@ export function ResearchLedHome() {
               <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink md:text-4xl">
                 The work, with its method and its limits.
               </h2>
+              {/* This used to end "In English and Korean." The report site
+                  dropped its Korean routes in wigtn-tech-report#5 and now ships
+                  English only, so the sentence was promising a language the
+                  destination no longer serves. */}
               <p className="mt-3 text-pretty text-ink-3">
                 What we measured, what failed first, and what each result still does not
-                answer. In English and Korean.
+                answer.
               </p>
             </div>
             <a
@@ -520,6 +546,12 @@ export function ResearchLedHome() {
               Read the reports{" "}
               <span className="transition-transform group-hover:translate-x-0.5">→</span>
             </a>
+          </div>
+
+          <div className="mt-12 grid items-stretch gap-x-7 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 md:mt-16">
+            {TECH_REPORTS.map((r, i) => (
+              <ReportCard key={r.slug} r={r} i={i} />
+            ))}
           </div>
         </section>
 
