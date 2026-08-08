@@ -1,22 +1,49 @@
-# WIGTN Crew
+# WIGTN
 
-> We are an AI-native open-source research crew building practical, domain-specialized AI tools. Korea-based. Fast prototyping, strong engineering, shipping real things.
+> An independent AI research team. Five engineers with no lab behind them,
+> publishing peer-reviewed work, releasing the models and code it runs on, and
+> writing down what each result does not show. Korea-based.
+
+Every figure below comes from a published paper, a public model card, or a
+technical report at https://wigtn.github.io/wigtn-tech-report/. Nothing here
+describes work that has not been published.
 
 ## Projects
 
-- [WigtnOCR](https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR): VLM-based Korean government document parser. Teacher-Student Pseudo-GT pipeline using Qwen3-VL-30B teacher and 122B judge. LoRA fine-tuned Qwen3-VL-2B achieving OmniDocBench Table TEDS 0.649 (1st place) and KoGovDoc-Bench Retrieval Hit@1 0.739 (1st among 6 parsers). In preparation for EMNLP 2026 Industry Track.
-- [WIGVO](https://wigtn.com): Real-time PSTN voice translation system with Dual-Session Echo Gating architecture. Submitted to ACL 2026 System Demonstrations (first author). Achieved 0/148 production calls with echo loops and 480ms VAD latency after 7-stage evolution.
-- [Claude Code Plugin](https://github.com/wigtn): Multi-agent parallel execution ecosystem achieving approximately 3x speedup.
+- [WIGVO](https://aclanthology.org/2026.acl-demo.33/): real-time bidirectional
+  translation over ordinary phone calls (PSTN), with no app on the recipient's
+  side. Dual-session relay with a deterministic echo gate. Accepted to ACL 2026
+  System Demonstrations and run live at booth D3; an invited talk and poster
+  followed at IWSLT 2026. Reported: 555 ms median caller-to-callee latency,
+  zero echo-induced loops across 147 completed field calls, USD 0.28 per minute.
+- [WigtnOCR](https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR): a LoRA adapter
+  over Qwen3-VL-2B-Instruct that turns Korean government PDFs into structured
+  Markdown. Distilled from a 30B teacher with a text-only judge filtering the
+  supervision. Reported on OmniDocBench: Table TEDS 0.649. On KoGovDoc-Bench:
+  Hit@1 0.739, first of six parsers on three of four retrieval metrics. Apache
+  2.0, weights and evaluation set public.
+- [WIGSS](https://npmjs.com/package/wigss): a CLI that wraps a running dev
+  server, lets you drag components on the live page, and writes the change back
+  into the source file that produced it. Apache 2.0. No controlled speed or
+  code-quality benchmark has been published.
+- [WIGTN plugins](https://github.com/wigtn/wigtn-plugins): a Claude Code plugin
+  ecosystem for multi-agent software workflows. The agent and skill counts are a
+  package surface, not a productivity result: a controlled evaluation on GPT-5.6
+  Sol found the legacy harness increased median wall time by 151.7% without
+  improving task outcomes, and the design was changed because of it.
 
-## Team
+## Track record
 
-- 5-person AI-native external developer crew founded in Korea
-- Active in Korean AI community: Modulabs RAPIDS Lab, BrainCrew Log26
-- Hackathon track record: Ralphthon Seoul #2 (Roguekit), Gemini Live Agent Challenge (Time-Lens)
+- ACL 2026 System Demonstrations: WIGVO accepted and demonstrated.
+- IWSLT 2026: invited oral talk and poster.
+- Build with TRAE Seoul (ByteDance): Grand Prize.
+- Snowflake AI & Data Hackathon Korea 2026: 2nd place, Tech Track.
+- OBA Weekendthon: Top 6.
 
 ## Links
 
 - [Website](https://wigtn.com)
+- [Tech reports](https://wigtn.github.io/wigtn-tech-report/) (English and Korean)
 - [GitHub](https://github.com/wigtn)
 - [HuggingFace](https://huggingface.co/Wigtn)
-- [NPM](https://www.npmjs.com/org/wigtn)
+- [npm](https://www.npmjs.com/org/wigtn)
