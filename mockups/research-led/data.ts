@@ -15,11 +15,26 @@
  * import it. Stands in for the future MDX-backed content model.
  */
 
-/* Posts are migrating to `updates/<slug>/`, where the text sits next to its
- * own images and the images are imported rather than referenced by a public
- * path. New posts go there; the inline entries below move over as they are
- * next edited. See updates/_template/README.md. */
+/* Every newsroom post now lives in `updates/<slug>/`, where the text sits next
+ * to its own images and those images are imported rather than referenced by a
+ * public path. A deleted or renamed photo is a build error instead of a silent
+ * 404, and each file ships with a content hash so a changed photo can never be
+ * served from a stale cache.
+ *
+ * The inline entries left below are the back-catalogue reports, the video
+ * companions and the community placeholders. They move over as they are next
+ * edited; nothing new should be written inline here.
+ *
+ * Templates live in updates/_template/, one per kind of post — conference,
+ * hackathon, release, community. Read its README before starting a new one:
+ * the outline that suits a hackathon is not the one that suits a release. */
 import { acl2026SanDiego, ACL_2026_COVER } from "./updates/acl-2026-san-diego";
+import { obaWeekendthonTop6, OBA_WEEKENDTHON_COVER } from "./updates/oba-weekendthon-top6";
+import { snowflakeKorea2026, SNOWFLAKE_2026_COVER } from "./updates/snowflake-korea-2026";
+import { traeSeoulGrandPrize, TRAE_SEOUL_COVER } from "./updates/trae-seoul-grand-prize";
+import { wigssNpmRelease } from "./updates/wigss-npm-release";
+import { wigtnCodingRelease } from "./updates/wigtn-coding-release";
+import { wigtnocrOpenSource } from "./updates/wigtnocr-open-source";
 
 /* No trailing slashes: the Pages build exports flat files (`team.html`), so
  * `/team` is the URL that resolves and `/team/` 404s. See next.config.ts. */
@@ -29,12 +44,12 @@ export const NEWS = `${HOME}news`;
 export const TEAM_PAGE = `${HOME}team`;
 export const articleHref = (slug: string) => `${HOME}${slug}`;
 
-/* External research / tech-report site: its own GitHub Pages app for now.
- * When the custom domain is ready, change ONLY this constant to
- * "https://research.wigtn.com". Slugs match the report site's routes
- * (wigvo, wigtnocr, wigss, wigtn-flake, wigtn-coding). */
-export const TECH_REPORT_SITE = "https://wigtn.github.io/wigtn-tech-report";
-export const techReportHref = (slug: string) => `${TECH_REPORT_SITE}/${slug}/`;
+/* These now live in ./links, because posts under `updates/` need them and
+ * cannot import a value from this module without closing a cycle — see the
+ * comment in links.ts. Imported as well as re-exported: NAV below uses
+ * TECH_REPORT_SITE locally, and `export ... from` creates no local binding. */
+import { TECH_REPORT_SITE, techReportHref } from "./links";
+export { TECH_REPORT_SITE, techReportHref };
 
 /* Reference-led structure (Next Securities / MakinaRocks): the homepage is
  * a short teaser; depth lives on these sub-pages. Nav points to pages, not
@@ -476,200 +491,15 @@ export const ARTICLES: Article[] = [
   },
 
   /* ───────── Events (real) ───────── */
-  {
-    slug: "trae-seoul-grand-prize",
-    kind: "event",
-    channel: "newsroom",
-    newsTopic: "award",
-    tag: "GRAND PRIZE",
-    icon: "trophy",
-    title: "Grand Prize: Build with TRAE Seoul (ByteDance)",
-    summary:
-      "WIGENT, a multi-agent debate arena, won the Grand Prize, built by 3 engineers in 3.5 hours.",
-    date: "2026.03.28",
-    place: "Seoul, KOR",
-    author: "ByteDance",
-    readTime: "4 min",
-    image: "/images/projects/trae_hackthon_seoul.png",
-    externalUrl: "https://wigtn.github.io/blog/wigent/",
-    links: [{ label: "GitHub", href: "https://github.com/wigtn/wigent" }],
-    body: [
-      { t: "h", text: "Grand Prize in 3.5 hours" },
-      p(
-        "At Build with TRAE Seoul, ByteDance's hackathon, three of us built WIGENT, a multi-agent debate arena where AI experts argue a question out and ship a page from the conclusion, in three and a half hours. It won the Grand Prize.",
-      ),
-      p(
-        "Blank repo to a working demo on stage in a single afternoon. It's the kind of build we keep signing up for.",
-      ),
-      { t: "quote", text: "Grand Prize: Build with TRAE Seoul, built by 3 engineers in 3.5 hours." },
-    ],
-  },
-  {
-    slug: "snowflake-korea-2026",
-    kind: "event",
-    channel: "newsroom",
-    newsTopic: "award",
-    tag: "2ND PLACE · TECH TRACK",
-    icon: "trophy",
-    title: "2nd Place, Tech Track: Snowflake AI & Data Hackathon Korea 2026",
-    summary:
-      "WIGTN Flake turns Snowflake Cortex into a purpose-driven neighborhood-intelligence platform where five AI experts debate evidence from three actively selected datasets.",
-    date: "2026.04.29",
-    place: "Seoul, KOR",
-    author: "Snowflake",
-    readTime: "5 min",
-    image: "/images/news/snowflake.jpeg",
-    externalUrl: "https://wigtn.github.io/blog/wigtn-flake/",
-    links: [
-      { label: "Watch demo", href: "https://www.youtube.com/watch?v=1YzSp3SdzTk" },
-      { label: "Press", href: "https://www.newswire.co.kr/newsRead.php?no=1033575" },
-      { label: "Tech report", href: techReportHref("wigtn-flake") },
-    ],
-    body: [
-      { t: "h", text: "Second place, Tech Track" },
-      p(
-        "At the Snowflake AI & Data Hackathon Korea 2026 in Seoul, WIGTN Flake placed 2nd in the Tech Track. From an open-ended brief, we built a neighborhood-intelligence platform on Snowflake Cortex: pick a goal, and five AI experts debate the data before landing on a ranked, actionable answer.",
-      ),
-      { t: "h", text: "The best part wasn't the trophy" },
-      p(
-        "The finals floor was full of sharp teams solving the same brief in completely different ways. We left with as many ideas from the other builders as from our own demo, which is the part we keep coming back for.",
-      ),
-      { t: "quote", text: "Tech Track 2nd Place: Snowflake AI & Data Hackathon Korea 2026." },
-    ],
-  },
-  {
-    slug: "oba-weekendthon-top6",
-    kind: "event",
-    channel: "newsroom",
-    newsTopic: "award",
-    tag: "TOP 6",
-    icon: "trophy",
-    title: "Top 6 at OBA Weekendthon: MyunZy, an AI interviewer built in a weekend",
-    summary:
-      "MyunZy reads your real resume and a real job posting, then runs the interview before the interview. Built over two days on EXAONE-4.5 inside a deterministic tool-calling harness.",
-    date: "2026.05.31",
-    place: "Yongin, KOR",
-    author: "Open Builders Alliance",
-    readTime: "4 min",
-    image: "/images/news/OBA.jpeg",
-    links: [
-      { label: "GitHub", href: "https://github.com/wigtn/myunzy-hackathone" },
-      { label: "Event", href: "https://luma.com/y3nz68hw" },
-    ],
-    body: [
-      { t: "h", text: "Two days, one rule" },
-      p(
-        "OBA Weekendthon ran over the last weekend of May at the Kakao AI Campus in Yongin, organised by Hashed, Market Fit Lab, and vooy under the Open Builders Alliance. Fifty builders, teams of three, and one rule that shaped every project: whatever you build has to run on the Open APIs the event provides. Judging was split evenly between the official panel and peer review from the other teams.",
-      ),
-      p(
-        "Three of us went, and came out in the Top 6 with MyunZy (면지), an AI interviewer. Give it your actual resume and an actual job posting and it assembles four interviewers, technical, culture fit, executive, and HR, each already knowing where your story is thin. You answer out loud. It follows up on whatever you fumble, and it keeps a weakness profile that sharpens as the session goes.",
-      ),
-      { t: "h", text: "The bet: a small Korean model, held in place by the harness" },
-      p(
-        "The instinct in a hackathon is to reach for the biggest model on offer. We went the other way and ran EXAONE-4.5, LG's open Korean model, on vLLM inside a deterministic tool-calling harness: schema validation on every call, automatic re-prompting when one comes back malformed, and scoring done in pure functions rather than by the model. The interviewer holds character to the last question without needing frontier-scale improvisation.",
-      ),
-      p(
-        "The build is mock-first, so every feature completes end to end with zero API keys and flipping an environment variable promotes it to the live services without touching code. Word-level timestamps from Qwen3 ASR feed the STAR-based feedback and let you rewind to a single answer and try it a different way.",
-      ),
-      { t: "h", text: "The room was the prize" },
-      p(
-        "The best part of a weekendthon is not your own build. It is watching the other teams start from the same blank page and the same two days, then walk out with things none of us would have thought of. We went for the trophy and left with a list of ideas to steal.",
-      ),
-      p("Built by Hyeonsang Kim, Jinmo Kim, and Sang-Woo Son."),
-      { t: "quote", text: "Top 6 at OBA Weekendthon, built by 3 engineers in two days." },
-    ],
-  },
+  traeSeoulGrandPrize,
+  snowflakeKorea2026,
+  obaWeekendthonTop6,
   acl2026SanDiego,
 
   /* ───────── Newsroom · Releases & Updates (real) ───────── */
-  {
-    slug: "wigtnocr-open-source",
-    kind: "report",
-    channel: "newsroom",
-    newsTopic: "release",
-    tag: "RELEASE",
-    title: "WigtnOCR is open source: our 2B Korean doc parser is on HuggingFace",
-    summary:
-      "Weights, training data, and eval code for the 2B parser that ranked #1 on KoGovDoc-Bench are now public. Teacher-level document parsing on a single consumer GPU.",
-    date: "2026.05.21",
-    author: "WIGTN",
-    readTime: "5 min",
-    image: "/images/projects/wigtnocr-huggingface.png",
-    externalUrl: "https://wigtn.github.io/blog/wigtnocr/",
-    links: [
-      { label: "HuggingFace", href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR" },
-      { label: "GitHub", href: "https://github.com/wigtn/wigtnOCR-v1" },
-      { label: "Tech report", href: techReportHref("wigtnocr") },
-    ],
-    body: [
-      { t: "h", text: "It's open" },
-      p(
-        "WigtnOCR is now fully open source: model weights on HuggingFace, training data and evaluation code on GitHub. The 2B parser that ranked #1 on KoGovDoc-Bench, reading Korean government documents like a model fifteen times its size, is now yours to run or retrain.",
-      ),
-      { t: "quote", text: "Teacher-level accuracy at 1/15th the size, now yours to run." },
-      { t: "h", text: "Go deeper" },
-      p("How we distilled a 30B teacher into a 2B student (the method, ablations, and full benchmark breakdown) is in the WigtnOCR tech report."),
-    ],
-  },
-  {
-    slug: "wigss-npm-release",
-    kind: "report",
-    channel: "newsroom",
-    newsTopic: "release",
-    tag: "RELEASE",
-    title: "WIGSS v0.1.4 is on npm: drag UI in the browser, watch the source rewrite itself",
-    summary:
-      "Our always-on visual refactoring agent is on npm, now at v0.1.4. Point it at your dev server, drag components around in the browser, and the source rewrites itself.",
-    date: "2026.04.03",
-    author: "WIGTN",
-    readTime: "3 min",
-    image: "/images/carousel/wigss-npm.png",
-    externalUrl: "https://wigtn.github.io/blog/wigss/",
-    links: [
-      { label: "npm", href: "https://npmjs.com/package/wigss" },
-      { label: "GitHub", href: "https://github.com/wigtn/wigss" },
-      { label: "Tech report", href: techReportHref("wigss") },
-    ],
-    body: [
-      { t: "h", text: "npm install wigss@0.1.4" },
-      p(
-        "WIGSS is on npm, now at v0.1.4 (published April 3). The always-on visual refactoring agent installs in one command: point it at your running dev server, drag UI components around in the browser, and it rewrites the underlying source to match.",
-      ),
-      { t: "quote", text: "Drag UI, code rewrites itself." },
-      { t: "h", text: "Go deeper" },
-      p("How WIGSS keeps the browser canvas and your source in sync is in the WIGSS tech report."),
-    ],
-  },
-  {
-    slug: "wigtn-coding-release",
-    kind: "report",
-    channel: "newsroom",
-    newsTopic: "release",
-    tag: "RELEASE",
-    title: "WIGTN Coding v0.1.14: the PRD analyzer now fact-checks its premises against the live web",
-    summary:
-      "The newest release of our Claude Code plugin ecosystem adds PRD external-grounding: before it analyzes a spec, it verifies the assumptions against real web evidence so false premises don't slip through.",
-    date: "2026.07.14",
-    author: "WIGTN",
-    readTime: "3 min",
-    externalUrl: "https://wigtn.github.io/blog/wigtn-coding/",
-    links: [
-      { label: "GitHub", href: "https://github.com/wigtn/wigtn-plugins-with-claude-code" },
-      { label: "Tech report", href: techReportHref("wigtn-coding") },
-    ],
-    body: [
-      { t: "h", text: "What's new in v0.1.14" },
-      p(
-        "The latest WIGTN Coding release adds PRD external-grounding. When the plugin reviews a product spec, it now checks the spec's assumptions against live web evidence, catching false premises before they turn into wrong code.",
-      ),
-      p(
-        "It caps a busy week of shipping: five releases, v0.1.10 through v0.1.14, between July 9 and 14.",
-      ),
-      { t: "quote", text: "Idea to deploy, zero friction." },
-      { t: "h", text: "Go deeper" },
-      p("The full agent lineup (12 agents, 3 skills, 17 design styles) and how the parallel execution works are in the WIGTN Coding tech report."),
-    ],
-  },
+  wigtnocrOpenSource,
+  wigssNpmRelease,
+  wigtnCodingRelease,
 
   /* ───────── Community (placeholder mock, no real data yet) ───────── */
   {
@@ -946,7 +776,7 @@ export const MILESTONES: Milestone[] = [
     label: "Grand Prize",
     title: "Build with TRAE Seoul",
     text: "WIGENT, a multi-agent debate arena, wins the Grand Prize (ByteDance).",
-    image: "/images/projects/trae_hackthon_seoul.png",
+    image: TRAE_SEOUL_COVER,
     slug: "trae-seoul-grand-prize",
   },
   {
@@ -955,7 +785,7 @@ export const MILESTONES: Milestone[] = [
     label: "2nd Place",
     title: "Snowflake AI & Data Hackathon",
     text: "WIGTN Flake takes 2nd in the Tech Track, built on Snowflake Cortex.",
-    image: "/images/projects/wigtn-flake-stage.jpg",
+    image: SNOWFLAKE_2026_COVER,
     slug: "snowflake-korea-2026",
   },
   {
@@ -964,7 +794,7 @@ export const MILESTONES: Milestone[] = [
     label: "Top 6",
     title: "OBA Weekendthon",
     text: "MyunZy, an AI interviewer built in two days, finishes in the Top 6.",
-    image: "/images/news/OBA.jpeg",
+    image: OBA_WEEKENDTHON_COVER,
     slug: "oba-weekendthon-top6",
   },
   {

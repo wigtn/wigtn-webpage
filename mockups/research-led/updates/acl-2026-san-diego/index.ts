@@ -26,6 +26,10 @@
  */
 
 import type { Article, Block } from "../../data";
+/* From ../../links, not ../../data: data.ts imports this file, so importing a
+ * *value* back would close a runtime cycle and leave the helper in its
+ * temporal dead zone. The type import above is erased and is safe. */
+import { techReportHref } from "../../links";
 import arriving from "./arriving.jpg";
 import boothD3 from "./booth-d3.jpg";
 import coffeeBreak from "./coffee-break.jpg";
@@ -79,7 +83,7 @@ export const acl2026SanDiego: Article = {
   externalUrl: "https://wigtn.github.io/blog/wigvo/",
   links: [
     { label: "ACL paper", href: "https://aclanthology.org/2026.acl-demo.33/" },
-    { label: "Tech report", href: "https://wigtn.github.io/wigtn-tech-report/wigvo/" },
+    { label: "Tech report", href: techReportHref("wigvo") },
     { label: "GitHub", href: "https://github.com/wigtn/wigvo-v2" },
     { label: "Watch demo", href: "https://youtu.be/_ixVEnHJxjk" },
   ],

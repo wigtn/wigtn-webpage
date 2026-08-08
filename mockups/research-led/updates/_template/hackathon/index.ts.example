@@ -1,0 +1,102 @@
+/**
+ * Update: <event name> — hackathon report.
+ *
+ * Copy this file to `updates/<slug>/index.ts` and drop the images in beside it.
+ *
+ * Every path below is written from the *destination*, so the whole block stays
+ * true once copied — which is the only place it lives permanently:
+ *   - register the export in `../../data.ts`;
+ *   - the outline for this kind of post is `../_template/hackathon/STRUCTURE.md`;
+ *   - the rules every template shares are in `../_template/README.md`.
+ *
+ * Two things therefore look wrong while the file still sits in `_template/`:
+ * those doc paths, and the data import, which reads `../../../data` here and
+ * becomes `../../data` one level shallower in a real post folder. Fix the
+ * import when you copy. Kept as `.example` rather than `.ts` so the template
+ * does not fail the typecheck on its placeholder imports.
+ */
+
+import type { Article, Block } from "../../../data";
+import cover from "./cover.jpg";
+import bodyImage from "./body-image.jpg";
+
+const p = (text: string): Block => ({ t: "p", text });
+
+/* Export a `*_COVER` constant ONLY if something outside this post reuses the
+ * image — in practice that means a MILESTONES entry on the homepage rail,
+ * which is the one live consumer. Otherwise delete this line and keep
+ * `cover` module-local. See ../README.md. */
+export const MY_NEW_POST_COVER = cover.src;
+
+export const myNewPost: Article = {
+  slug: "my-new-post", // must match the folder name
+  kind: "event",
+  channel: "newsroom",
+  newsTopic: "award",
+  tag: "GRAND PRIZE", // the placing, in caps; it is the card's kicker
+  icon: "trophy",
+  title: "", // the result and the build, not one without the other
+  summary: "", // one or two sentences; used on cards
+  date: "2026.01.01",
+  place: "City, Country",
+  /* The organizer, not WIGTN — a hackathon post is bylined to the body that
+   * ran the event and awarded the placing. Renders as the article byline, so
+   * it reads "ByteDance" on a WIGTN post; that is the existing convention on
+   * every award entry, not an oversight. */
+  author: "Organizer",
+  readTime: "5 min",
+  image: cover.src,
+  /* One placeholder on purpose. `ArticleDetail` keys links by `href`, so two
+   * entries left empty are two identical React keys, and an empty `href` with
+   * target="_blank" renders a live button that reopens the current page. Fill
+   * this one, then add the others. Tech-report links go through
+   * `techReportHref` from "../../links" — never a value import from data. */
+  links: [{ label: "GitHub", href: "" }],
+  body: [
+    p("Lede: the event, the organizer, the dates, the result. Say the placing."),
+
+    { t: "h", text: "The brief, and what it would not let us do" },
+    p(
+      "The constraints: the clock, the team size, the mandatory platform, the " +
+        "judging split. Everything below is a consequence of this paragraph.",
+    ),
+
+    { t: "h", text: "What we built" },
+    p("The thing as a user meets it: what you type, and what comes back."),
+    /* Import your own image for this — do NOT reuse `cover`. The cover already
+     * runs at the top of the page, and the same frame twice in one scroll
+     * reads as a mistake (see STRUCTURE.md). */
+    { t: "image", src: bodyImage.src, alt: "TODO: describe what is in the frame, in a sentence", caption: "" },
+
+    { t: "h", text: "The bet" },
+    p(
+      "The one decision that could have sunk the build, the alternative we " +
+        "rejected, and why. Name the approach that failed.",
+    ),
+
+    { t: "h", text: "What shipped, and in how long" },
+    {
+      t: "list",
+      items: [
+        "Verifiable numbers only: hours, commits, features complete.",
+        "What was cut, and at what hour.",
+      ],
+    },
+
+    { t: "h", text: "The result" },
+    p("The placing, the track, the criteria, and who announced it."),
+    { t: "quote", text: "The one-line version of the result." },
+
+    { t: "h", text: "What survived" },
+    {
+      t: "list",
+      items: [
+        "The part still running today.",
+        "The part thrown away the following week, and what replaced it.",
+      ],
+    },
+
+    { t: "h", text: "Built by" },
+    p("Built by A, B and C. Then the organizers."),
+  ],
+};
