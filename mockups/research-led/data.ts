@@ -50,6 +50,7 @@ export const HOME = "/";
 /* /news until 2026-08-09. The page is called Notices now and its URL says so;
  * the old one still exports, as a redirect, through RETIRED below. */
 export const NOTICES = `${HOME}notices`;
+export const STORY = `${HOME}story`;
 export const TEAM_PAGE = `${HOME}team`;
 export const articleHref = (slug: string) => `${HOME}${slug}`;
 
@@ -418,6 +419,24 @@ export const BLOG_FEED = ARTICLES.filter(
   (a) => !a.placeholder && a.channel === "blog",
 ).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
+/* The /story rows: each event's short notice paired with its long account.
+ *
+ * A hand-kept table rather than a field on either post, because the pairing
+ * is knowledge about two posts at once, and the thumbnail needs the blog
+ * post's cover, which only this module already imports. The note supplies the
+ * words (title, summary, date were written for exactly this kind of row); the
+ * blog post supplies the picture and the destination.
+ *
+ * Newest first, like every other list on the site. wigvo-acl-2026 pairs with
+ * the trip report: the acceptance is the notice, the trip is the story. */
+export type Story = { article: Article; image: string; blogSlug: string };
+export const STORIES: Story[] = [
+  { article: wigvoAcl2026, image: ACL_2026_COVER, blogSlug: "acl-2026-san-diego" },
+  { article: obaWeekendthon2026Top6, image: OBA_WEEKENDTHON_COVER, blogSlug: "oba-weekendthon-top6" },
+  { article: snowflakeKorea2026TechTrack, image: SNOWFLAKE_2026_COVER, blogSlug: "snowflake-korea-2026" },
+  { article: traeSeoul2026GrandPrize, image: TRAE_SEOUL_COVER, blogSlug: "trae-seoul-grand-prize" },
+];
+
 /* ── Homepage report rail ────────────────────────────────────────────────────
  *
  * The three newest tech reports, as cards that leave this site. The nav already
@@ -670,9 +689,9 @@ export const RETIRED: {
   { note: "The conference and hackathon write-ups live on this site's blog now. This address predates that section, so it forwards.", slug: "snowflake-korea-2026", to: blogHref("snowflake-korea-2026"), title: "the Snowflake Korea post" },
   { note: "The conference and hackathon write-ups live on this site's blog now. This address predates that section, so it forwards.", slug: "trae-seoul-grand-prize", to: blogHref("trae-seoul-grand-prize"), title: "the TRAE Seoul post" },
   /* /work is gone with the article groups it listed. What it had that still
-   * exists, the awards, moved on to the WIG-log feed. */
-  { note: "The page that used to be here grouped work that has since moved to the tech-report site. What is left of it, the events and the awards, is in the WIG-log feed.",
-    slug: "work", to: NOTICES, title: "WIGTN Notices" },
+   * exists, the events and the awards, is on /story now. */
+  { note: "The page that used to be here grouped work that has since moved. What is left of it, the events and the awards, is on the Story page.",
+    slug: "work", to: STORY, title: "WIGTN Story" },
   /* /news was this site's own route until 2026.08.09, when the page took the
    * name the nav had been using for it and became /notices. It is the only
    * entry here that retires a static route rather than an article, which is
