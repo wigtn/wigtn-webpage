@@ -9,8 +9,10 @@
  * erased, which is why posts still do `import type`.
  *
  * Most of what lives here is off-site (the WIG-log halves), but the rule is
- * about the import graph, not about origins: BLOG_INDEX below is a local
- * route, and it is here because posts link each other's blog pages.
+ * about the import graph, not about origins: STORY_INDEX and BLOG_INDEX below
+ * are local routes, and they are here because posts link each other's pages.
+ * BLOG_INDEX has no caller but `hrefFor` while the blog is closed; it stays
+ * so the reopening does not have to reinvent the route constant.
  *
  * Keeping the constants in a leaf module with no imports of its own removes
  * the cycle entirely, so the single-point-of-change promise below survives.

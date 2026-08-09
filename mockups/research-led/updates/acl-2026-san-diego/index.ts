@@ -1,5 +1,5 @@
 /**
- * Update: ACL 2026 / IWSLT 2026, San Diego — trip report.
+ * Update: ACL 2026 / IWSLT 2026, San Diego. Trip report.
  *
  * Colocated post: copy this whole folder to start a new update. Images live
  * next to the text and are imported, so a photo is never referenced by a
@@ -18,7 +18,7 @@
  * Naming people: Jan Niehues, Antonios Anastasopoulos and Marcello Federico
  * are named with their roles as listed in the IWSLT 2026 proceedings. Visitor
  * photos name the company only, never the individual, and the section carries
- * an explicit no-endorsement line — conference interest is not adoption.
+ * an explicit no-endorsement line. Conference interest is not adoption.
  *
  * Portrait photos never run as a full-width `image` block: at the reading
  * column's width a 3:4 shot is taller than a viewport and buries what
@@ -28,8 +28,10 @@
  * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09
  * as a long-form story, rendered at /story/<slug> (briefly /blog, which
  * closed the same day, before launch). The return changed `channel` and
- * dropped the unread `externalUrl`; the prose is as written before the
- * no-em-dash rule and stays grandfathered until the prose itself is edited.
+ * dropped the unread `externalUrl`. The em-dashes the prose carried from
+ * before the rule came out on 2026-08-09: each one was a sentence that wanted
+ * to be two, a clause that wanted parentheses, or a list that wanted a colon,
+ * and it was rewritten as one of those rather than swapped for another mark.
  */
 
 import type { Article, Block } from "../../data";
@@ -58,7 +60,7 @@ import posterVisitAmazon from "./poster-visit-amazon.jpg";
 import posterVisitApple from "./poster-visit-apple.jpg";
 import posterVisitNvidia from "./poster-visit-nvidia.jpg";
 import sessionHallway from "./session-hallway.jpg";
-/* Cropped from the full-length team shot to the hero's 2:1 band — top
+/* Cropped from the full-length team shot to the hero's 2:1 band: top
  * trimmed to the banner, bottom to the knee, faces intact. */
 import teamCover from "./team-cover.jpg";
 import venueEntrance from "./venue-entrance.jpg";
@@ -115,7 +117,7 @@ export const acl2026SanDiego: Article = {
         },
         {
           src: arriving.src,
-          alt: "A screen inside the venue reading \"ACL 2026 San Diego, July 2-7 — Welcome to San Diego\", beside the registration desk.",
+          alt: "A screen inside the venue welcoming visitors to ACL 2026 San Diego, July 2-7, beside the registration desk.",
           caption: "The first thing the building says to you.",
           aspect: "3/4",
         },
@@ -162,7 +164,7 @@ export const acl2026SanDiego: Article = {
 
     { t: "h", text: "Three days at booth D3" },
     p(
-      "The System Demonstrations track is not a poster session with a poster. You get monitors, and you are expected to run the thing. Ours showed one live call from both ends at once — the caller's side, the transcript, and the recipient's phone — while we stood next to it and explained what the gates were doing as they did it.",
+      "The System Demonstrations track is not a poster session with a poster. You get monitors, and you are expected to run the thing. Ours showed one live call from both ends at once: the caller's side, the transcript, and the recipient's phone. We stood next to it and explained what the gates were doing as they did it.",
     ),
     p(
       "Most demos ask you to watch. Ours asked you to talk. Visitors dialed a number, someone answered an ordinary phone, and the two of them held a conversation across a language barrier. Then they usually tried to break it: talking over each other, switching languages mid-sentence, walking away from the handset.",
@@ -198,7 +200,7 @@ export const acl2026SanDiego: Article = {
 
     { t: "h", text: "Between sessions" },
     p(
-      "The coffee breaks are not a break. Twice a day the hall fills, everyone queues for the same buffet, and you end up talking to whoever is next to you in line — which at ACL means the person holding the plate beside you might be the author of a paper you cited last month. More of this trip's useful conversations started in that queue than in any scheduled session.",
+      "The coffee breaks are not a break. Twice a day the hall fills, everyone queues for the same buffet, and you end up talking to whoever is next to you in line. At ACL that means the person holding the plate beside you might be the author of a paper you cited last month. More of this trip's useful conversations started in that queue than in any scheduled session.",
     ),
     {
       t: "gallery",
@@ -260,7 +262,7 @@ export const acl2026SanDiego: Article = {
 
     { t: "h", text: "IWSLT 2026: the oral and the poster" },
     p(
-      "IWSLT ran as a two-day workshop inside ACL — the 23rd International Conference on Spoken Language Translation, organised by ACL/ISCA SIGSLT. We were there twice over: an invited oral talk and a poster.",
+      "IWSLT, the 23rd International Conference on Spoken Language Translation, organised by ACL/ISCA SIGSLT, ran as a two-day workshop inside ACL. We were there twice over: an invited oral talk and a poster.",
     ),
     {
       t: "gallery",
@@ -366,7 +368,7 @@ export const acl2026SanDiego: Article = {
       "Jan Niehues (KIT) and Marcello Federico (Amazon), on the IWSLT 2026 organizing committee and in the chair respectively, for the time and the questions.",
     ),
     p(
-      "The engineers who came back a second and third time rather than nodding politely and moving on — you know who you are, and you made the week.",
+      "To the engineers who came back a second and third time rather than nodding politely and moving on: you know who you are, and you made the week.",
     ),
     p(
       "And everyone who picked up the phone at booth D3 and tried to break it. The list above is mostly your doing.",

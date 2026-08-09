@@ -1,18 +1,20 @@
 /**
  * Notice: WIGVO at ACL 2026 System Demonstrations - announcement.
  *
- * The first entry in the Announcements list on /notices, which was empty
- * until this one. Everything already published on this site was a release;
- * the conference and hackathon stories are long-form and live under /story.
- * This is the other half a notice is: something the team did that is not a
- * thing you can install.
+ * Everything already published on this site was a release; the conference
+ * and hackathon stories are long-form and live under /story. This is the
+ * other half a notice is: something the team did that is not a thing you can
+ * install. It does not appear on /notices, which is the release ledger and
+ * takes only posts with a version. It reaches readers through its STORIES
+ * pairing, which puts its words on the /story feature and links this page
+ * from there.
  *
  * THREE PARAGRAPHS AND NO HEADINGS, which is the third and shortest cut this
  * post has taken. It started at 330 words across four sections, went to 218,
  * and is now around 120. The headings went with the last cut: a heading over a
  * single paragraph names it rather than groups it, and at this length the post
  * is a notice, so it takes `layout: "note"` and matches the three award
- * notices in the same list. The template it started from,
+ * notices it sits beside in ARTICLES. The template it started from,
  * updates/_template/announcement/STRUCTURE.md, is written for a release with
  * an artifact to install and stopped applying some way back.
  *
@@ -35,7 +37,7 @@
  *     "ACL 2026 System Demonstrations, pp. 336-344", the peer-reviewed status,
  *     the ACL Anthology and demo-video URLs, the five-name author list, and
  *     the two latency figures.
- *   - MILESTONES in ../../data.ts: acceptance in 2026.02, and the July entry
+ *   - MILESTONES in ../../data.ts: acceptance in 2026.04, and the July entry
  *     naming the booth (D3) and the IWSLT 2026 invited oral talk and poster.
  *   - The trip report (../acl-2026-san-diego, rendered at /story/
  *     acl-2026-san-diego) for its own date and title. Nothing else is taken
@@ -54,10 +56,16 @@
  * format of the release posts would be inventing a fact. If someone finds it
  * in the proceedings, replace this and write down where it came from.
  *
- * ACCEPTANCE IS 2026.02 AND PRESENTATION IS 2026.07, and this post is one post
- * rather than two. Two notices five months apart, one saying a paper was
+ * ACCEPTANCE IS 2026.04 AND PRESENTATION IS 2026.07, and this post is one post
+ * rather than two. Two notices three months apart, one saying a paper was
  * accepted and one saying it was presented, would put the same subject in the
  * list twice with nothing new in the second. The lede carries both dates.
+ *
+ * The acceptance month was wrong here and in MILESTONES until 2026-08-10:
+ * both said February. April is what the trip report has carried all along
+ * ("The acceptance email arrived back in April", ../acl-2026-san-diego), and
+ * camera-ready was May. The MILESTONES entry moved to April with this fix,
+ * which is why that rail no longer runs one entry per month.
  *
  * NAMING: the author list is quoted as the paper publishes it, which is the
  * published-role rule in AGENTS.md. No individual is described by anything
@@ -84,9 +92,9 @@ export const wigvoAcl2026: Article = {
   date: "2026.07",
   place: "San Diego, USA",
   /* No `author` or `readTime`: a note renders neither. */
-  /* No `version`. An accepted paper has no version, and the Announcements
-   * list carries no version column, which is why it is a separate list from
-   * the release ledger rather than more rows in it. */
+  /* No `version`. An accepted paper has no version, which is also why this
+   * post is not in RELEASE_ROWS: the ledger's no-versions branch would file
+   * it with an empty version cell and no type chip. */
   links: [
     { label: "ACL paper", href: "https://aclanthology.org/2026.acl-demo.33/" },
     { label: "Watch system demo", href: "https://www.youtube.com/watch?v=jK1CDOQExLw" },
@@ -96,7 +104,7 @@ export const wigvoAcl2026: Article = {
   ],
   body: [
     p(
-      "WIGVO was accepted to ACL 2026 System Demonstrations in February and presented in San Diego in July. The paper is in the ACL Anthology at pp. 336 to 344, by Hyeong-seob Kim, Sang-Woo Son, Hyun-woo Cho, Hyeonsang Kim and Jinmo Kim. It is the first peer-reviewed publication this team has under its own name.",
+      "WIGVO was accepted to ACL 2026 System Demonstrations in April and presented in San Diego in July. The paper is in the ACL Anthology at pp. 336 to 344, by Hyeong-seob Kim, Sang-Woo Son, Hyun-woo Cho, Hyeonsang Kim and Jinmo Kim. It is the first peer-reviewed publication this team has under its own name.",
     ),
     p(
       "It translates an ordinary phone call in both directions while the call is running, over PSTN, with nothing installed on the other person's phone. A live demo ran at booth D3 for the length of System Demonstrations, and an invited oral talk and a poster at IWSLT 2026 followed in the same week.",

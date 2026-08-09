@@ -9,19 +9,50 @@
  * rest get the rows, and when the rows outgrow a screen they take the same
  * numbered pager /notices uses rather than a grid.
  *
- * Rows and feature navigate, they do not expand. Each is one Link to the
- * story page at /story/<slug>, and the "Read the full story" line inside a
- * row is a label on that link rather than a second control: a nested anchor
- * would be invalid HTML, and a reader who clicks the picture or the title
- * wants the same place the label names. The label said "Read on Blog" while
- * the pages sat under /blog; the blog closed before launch and the stories
- * are Story's own pages now. */
+ * TWO DESTINATIONS PER ENTRY, and that is why the card is not one anchor.
+ * An entry pairs two posts: the notice (the acceptance, the placing) and the
+ * long-form story. The notice supplies the words on this page, the story
+ * supplies the picture, and both have pages worth reaching. /notices is the
+ * release ledger and carries neither, so this section is the only way in for
+ * both, which is the whole reason the second link is here.
+ *
+ * An earlier shape wrapped the whole card in one Link to the story. Adding
+ * the notice to that would have nested an anchor inside an anchor, which is
+ * invalid HTML, so the card is a `group` div with the picture and the title
+ * as links and the two destinations named in a row underneath. The hover
+ * still lights the title from anywhere on the card, and a reader who clicks
+ * the picture or the title still gets the story, which is the destination
+ * they were promised. */
 
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { STORIES, storyHref } from "./data";
+import { STORIES, articleHref, storyHref, type Story } from "./data";
 import { PageShell, PageHero, rise, VIEWPORT } from "./chrome";
+
+/* The two links under an entry. The story is the primary and keeps the
+ * accent; the notice is secondary and quieter, because it is two paragraphs
+ * and the story is the account with the photographs in it. */
+function Destinations({ story, className = "" }: { story: Story; className?: string }) {
+  return (
+    <div className={`flex flex-wrap items-center gap-x-5 gap-y-2 ${className}`}>
+      <Link
+        href={storyHref(story.storySlug)}
+        className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent underline-offset-4 hover:underline"
+      >
+        Read the full story
+        <ArrowUpRight size={15} />
+      </Link>
+      <Link
+        href={articleHref(story.article.slug)}
+        className="inline-flex items-center gap-1.5 text-sm text-ink-4 underline-offset-4 transition-colors hover:text-ink hover:underline"
+      >
+        The notice
+        <ArrowUpRight size={14} />
+      </Link>
+    </div>
+  );
+}
 
 export function StoryPage() {
   const [latest, ...earlier] = STORIES;
@@ -40,10 +71,7 @@ export function StoryPage() {
             block is the first thing under the hero and should be moving by
             the time the eye lands on it, not waiting to be scrolled to. */}
         <motion.div variants={rise} custom={1} initial="hidden" animate="show">
-          <Link
-            href={storyHref(latest.storySlug)}
-            className="group grid gap-6 md:grid-cols-[1.1fr_1fr] md:items-center md:gap-10"
-          >
+          <div className="group grid gap-6 md:grid-cols-[1.1fr_1fr] md:items-center md:gap-10">
             <div className="order-2 md:order-1">
               <div className="flex items-center gap-3">
                 <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent">
@@ -52,27 +80,26 @@ export function StoryPage() {
                 <span className="font-mono text-xs text-ink-5">{latest.article.date}</span>
               </div>
               <h2 className="font-display mt-3 text-[clamp(1.6rem,3.4vw,2.4rem)] font-semibold leading-tight tracking-tight text-ink text-balance transition-colors group-hover:text-accent">
-                {latest.article.title}
+                <Link href={storyHref(latest.storySlug)}>{latest.article.title}</Link>
               </h2>
               <p className="mt-4 line-clamp-3 text-base leading-relaxed text-ink-3">
                 {latest.article.summary}
               </p>
-              <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-accent">
-                Read the full story
-                <ArrowUpRight
-                  size={15}
-                  className="transition-transform group-hover:translate-x-0.5"
-                />
-              </span>
+              <Destinations story={latest} className="mt-5" />
             </div>
-            <div className="relative order-1 aspect-[16/10] overflow-hidden rounded-xl bg-ink/[0.04] md:order-2">
+            <Link
+              href={storyHref(latest.storySlug)}
+              aria-hidden
+              tabIndex={-1}
+              className="relative order-1 aspect-[16/10] overflow-hidden rounded-xl bg-ink/[0.04] md:order-2"
+            >
               <img
                 src={latest.image}
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.03]"
               />
-            </div>
-          </Link>
+            </Link>
+          </div>
         </motion.div>
 
         {/* Guarded rather than always rendered: with one story `earlier` is
@@ -91,17 +118,23 @@ export function StoryPage() {
                   whileInView="show"
                   viewport={VIEWPORT}
                 >
-                  <Link
-                    href={storyHref(s.storySlug)}
-                    className="group flex flex-col gap-5 py-8 sm:flex-row sm:items-start sm:gap-8"
-                  >
-                    <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl bg-ink/[0.04] sm:w-52 md:w-64">
+                  <div className="group flex flex-col gap-5 py-8 sm:flex-row sm:items-start sm:gap-8">
+                    {/* aria-hidden with tabIndex -1: the picture is decorative
+                        (alt="") and goes to the same place as the title beside
+                        it, so exposing it doubles every row in the tab order
+                        and reads as an unnamed link to a screen reader. */}
+                    <Link
+                      href={storyHref(s.storySlug)}
+                      aria-hidden
+                      tabIndex={-1}
+                      className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl bg-ink/[0.04] sm:w-52 md:w-64"
+                    >
                       <img
                         src={s.image}
                         alt=""
                         className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.04]"
                       />
-                    </div>
+                    </Link>
 
                     <div className="flex min-w-0 flex-1 flex-col">
                       <div className="flex items-center gap-3">
@@ -111,20 +144,14 @@ export function StoryPage() {
                         <span className="font-mono text-xs text-ink-5">{s.article.date}</span>
                       </div>
                       <h2 className="font-display mt-2 text-xl font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent md:text-2xl">
-                        {s.article.title}
+                        <Link href={storyHref(s.storySlug)}>{s.article.title}</Link>
                       </h2>
                       <p className="mt-2 text-sm leading-relaxed text-ink-3 md:text-base">
                         {s.article.summary}
                       </p>
-                      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent">
-                        Read the full story
-                        <ArrowUpRight
-                          size={15}
-                          className="transition-transform group-hover:translate-x-0.5"
-                        />
-                      </span>
+                      <Destinations story={s} className="mt-4" />
                     </div>
-                  </Link>
+                  </div>
                 </motion.div>
               </li>
             ))}

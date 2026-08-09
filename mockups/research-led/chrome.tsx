@@ -9,12 +9,12 @@
  * footer carries links. The wordmark swaps navy ⇄ white with the theme.
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Trophy, MapPin, Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/theme";
 import { CONTACT_EMAIL, CONTACT_HREF, TAGLINE } from "@/lib/brand";
-import { HOME, NAV } from "./data";
+import { HOME, NAV, type NavItem } from "./data";
 
 /* NavDropdown lived here while the nav carried a WIG-log menu with Tech and
  * Feed under it. The stories came back on-site, the menu had one
@@ -88,8 +88,71 @@ export function Tags({ tags, className = "" }: { tags: string[]; className?: str
   );
 }
 
+/* One nav destination, shared by all three surfaces so they cannot drift.
+ *
+ * Two shapes. An absolute URL is an off-site plain anchor that opens a new
+ * tab (today: Tech, to WIG-log), everything else is a client-side Link.
+ * There used to be a third, `disabled`, written out in all three surfaces
+ * while no NAV entry ever set it; it went with the field.
+ *
+ * The new tab is per review (#78): Tech is a different site, and a nav click
+ * that replaces this one reads as losing your place. It is announced rather
+ * than left to be discovered, which the first pass missed: target="_blank"
+ * with nothing said about it moves a reader's window without telling them.
+ */
+function NavDestination({
+  item,
+  className,
+  onNavigate,
+}: {
+  item: NavItem;
+  className: string;
+  onNavigate?: () => void;
+}) {
+  return item.href.startsWith("http") ? (
+    <a
+      href={item.href}
+      target="_blank"
+      rel="noreferrer"
+      onClick={onNavigate}
+      className={className}
+    >
+      {item.label}
+      <span className="sr-only"> (opens in a new tab)</span>
+    </a>
+  ) : (
+    <Link href={item.href} onClick={onNavigate} className={className}>
+      {item.label}
+    </Link>
+  );
+}
+
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+
+  /* Two ways out of the sheet besides the toggle, because it is the only
+   * thing on the page that can trap you.
+   *
+   * Escape is the one a keyboard reader reaches for first. The resize
+   * listener is the one nobody thinks of: both the sheet and its toggle are
+   * `md:hidden`, so widening past the breakpoint with the sheet open hides
+   * the button that closes it and leaves `open` true underneath. Narrow
+   * again and the sheet is still there. */
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    const mq = window.matchMedia("(min-width: 768px)");
+    const onDesktop = () => setOpen(false);
+    window.addEventListener("keydown", onKey);
+    mq.addEventListener("change", onDesktop);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      mq.removeEventListener("change", onDesktop);
+    };
+  }, [open]);
+
   return (
     <header className="sticky top-0 z-40 border-b border-line/[0.07] bg-paper/80 backdrop-blur-md">
       <nav className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
@@ -100,45 +163,14 @@ export function SiteHeader() {
         {/* right-aligned nav (desktop) + theme toggle (all breakpoints) */}
         <div className="flex items-center gap-2">
           <ul className="hidden items-center gap-2 md:flex">
-            {/* Three shapes, tested in the order that settles them: disabled
-                is a label whatever else the item carries, an absolute URL is
-                an off-site plain anchor (today: Tech, to WIG-log), and the
-                rest are client-side links. The anchor opens a new tab, per
-                review (#78): Tech is a different site, and a nav click that
-                replaces this one reads as losing your place rather than
-                following a link. */}
-            {NAV.map((n) =>
-              n.disabled ? (
-                <li key={n.label}>
-                  <span
-                    aria-disabled="true"
-                    className="cursor-default rounded-full px-3.5 py-1.5 text-sm text-ink-5 select-none"
-                  >
-                    {n.label}
-                  </span>
-                </li>
-              ) : n.href.startsWith("http") ? (
-                <li key={n.label}>
-                  <a
-                    href={n.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="rounded-full px-3.5 py-1.5 text-sm text-ink-3 transition-colors hover:bg-line/[0.04] hover:text-ink"
-                  >
-                    {n.label}
-                  </a>
-                </li>
-              ) : (
-                <li key={n.label}>
-                  <Link
-                    href={n.href}
-                    className="rounded-full px-3.5 py-1.5 text-sm text-ink-3 transition-colors hover:bg-line/[0.04] hover:text-ink"
-                  >
-                    {n.label}
-                  </Link>
-                </li>
-              ),
-            )}
+            {NAV.map((n) => (
+              <li key={n.label}>
+                <NavDestination
+                  item={n}
+                  className="rounded-full px-3.5 py-1.5 text-sm text-ink-3 transition-colors hover:bg-line/[0.04] hover:text-ink"
+                />
+              </li>
+            ))}
           </ul>
 
           <ThemeToggle className="ml-1" />
@@ -149,7 +181,7 @@ export function SiteHeader() {
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
-            aria-controls="rl-mobile-nav"
+            aria-controls={open ? "rl-mobile-nav" : undefined}
             className="grid h-9 w-9 place-items-center rounded-full border border-line/15 text-ink-2 transition-colors hover:border-ink hover:text-ink md:hidden"
           >
             {open ? <X size={17} /> : <Menu size={17} />}
@@ -161,43 +193,17 @@ export function SiteHeader() {
       {open && (
         <div id="rl-mobile-nav" className="border-t border-line/[0.07] bg-paper/95 backdrop-blur-md md:hidden">
           <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-4">
-            {/* Same three shapes as the desktop row, new tab included; the
-                off-site anchor also closes the sheet, so the page left
-                behind the new tab is not sitting under an open menu. */}
-            {NAV.map((n) =>
-              n.disabled ? (
-                <li key={n.label}>
-                  <span
-                    aria-disabled="true"
-                    className="block cursor-default rounded-lg px-3 py-2.5 text-ink-5 select-none"
-                  >
-                    {n.label}
-                  </span>
-                </li>
-              ) : n.href.startsWith("http") ? (
-                <li key={n.label}>
-                  <a
-                    href={n.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => setOpen(false)}
-                    className="block rounded-lg px-3 py-2.5 text-ink-2 transition-colors hover:bg-line/[0.04] hover:text-ink"
-                  >
-                    {n.label}
-                  </a>
-                </li>
-              ) : (
-                <li key={n.label}>
-                  <Link
-                    href={n.href}
-                    onClick={() => setOpen(false)}
-                    className="block rounded-lg px-3 py-2.5 text-ink-2 transition-colors hover:bg-line/[0.04] hover:text-ink"
-                  >
-                    {n.label}
-                  </Link>
-                </li>
-              ),
-            )}
+            {/* Every item closes the sheet, the off-site one included, so the
+                page left behind a new tab is not sitting under an open menu. */}
+            {NAV.map((n) => (
+              <li key={n.label}>
+                <NavDestination
+                  item={n}
+                  onNavigate={() => setOpen(false)}
+                  className="block rounded-lg px-3 py-2.5 text-ink-2 transition-colors hover:bg-line/[0.04] hover:text-ink"
+                />
+              </li>
+            ))}
           </ul>
         </div>
       )}
@@ -228,30 +234,11 @@ export function SiteFooter() {
                 Explore
               </div>
               <ul className="space-y-2.5 text-sm text-ink-3">
-                {NAV.map((n) =>
-                  n.disabled ? (
-                    <li key={n.label} className="cursor-default text-ink-5 select-none">
-                      {n.label}
-                    </li>
-                  ) : n.href.startsWith("http") ? (
-                    <li key={n.label}>
-                      <a
-                        href={n.href}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="hover:text-ink transition-colors"
-                      >
-                        {n.label}
-                      </a>
-                    </li>
-                  ) : (
-                    <li key={n.label}>
-                      <Link href={n.href} className="hover:text-ink transition-colors">
-                        {n.label}
-                      </Link>
-                    </li>
-                  ),
-                )}
+                {NAV.map((n) => (
+                  <li key={n.label}>
+                    <NavDestination item={n} className="hover:text-ink transition-colors" />
+                  </li>
+                ))}
               </ul>
             </div>
             <div>
@@ -266,16 +253,26 @@ export function SiteFooter() {
                     {CONTACT_EMAIL}
                   </a>
                 </li>
-                <li>
-                  <a href="https://github.com/wigtn" className="hover:text-ink transition-colors">
-                    GitHub
-                  </a>
-                </li>
-                <li>
-                  <a href="https://huggingface.co/Wigtn" className="hover:text-ink transition-colors">
-                    Hugging Face
-                  </a>
-                </li>
+                {/* Same treatment as the Explore column's off-site item, which
+                    sits inches away: an off-site link opens a new tab and says
+                    so. Two behaviours for the same kind of link in one footer
+                    is the inconsistency, not the new tab. */}
+                {[
+                  { label: "GitHub", href: "https://github.com/wigtn" },
+                  { label: "Hugging Face", href: "https://huggingface.co/Wigtn" },
+                ].map((l) => (
+                  <li key={l.label}>
+                    <a
+                      href={l.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="hover:text-ink transition-colors"
+                    >
+                      {l.label}
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -301,24 +298,26 @@ export function PageShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* Sub-page hero: display title + lead (no back link / eyebrow). */
+/* Sub-page hero: display title + lead.
+ *
+ * The type used to declare `eyebrow`, `backHref` and `backLabel`, which the
+ * body never destructured and nothing ever rendered: passing one was a
+ * silent no-op with no type error to catch it. Add a prop back with the
+ * markup that renders it, in the same commit. */
 export function PageHero({
   title,
   lead,
   titleClassName = "",
   leadClassName = "max-w-2xl",
 }: {
-  eyebrow?: string;
   title: string;
   /* Not `string`. A lead is one sentence about the page and sometimes that
      sentence names somewhere else, which wants a link inside it rather than a
      second paragraph under it. /notices is the case: it says where the
      conference write-ups went. */
   lead?: React.ReactNode;
-  backHref?: string;
-  backLabel?: string;
   titleClassName?: string;
-  /* Overrides the lead's width cap — pass a wider max-w when a one-sentence
+  /* Overrides the lead's width cap. Pass a wider max-w when a one-sentence
    * lead should stay on a single line at desktop widths. */
   leadClassName?: string;
 }) {

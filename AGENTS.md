@@ -76,21 +76,21 @@ Worked examples:
 
 The two on-site surfaces split the content by shape:
 
-- **/notices** is two lists, in the order a notice is filed. `ANNOUNCEMENTS`
-  comes first: the newsroom posts that are not a release (an acceptance, a
-  placing), each one linking its own page. Under it, `RELEASE_ROWS` flattens
-  the release posts' `versions` arrays into one date-ordered ledger,
-  filterable by each post's `releaseType` (model / plugin / tool), ten rows
-  per page, each row linking the product's release note. The split is that a
-  release has a version and an announcement does not; the Announcements list
-  renders only when there is something in it.
+- **/notices** is the release record and nothing else: `RELEASE_ROWS` in
+  `data.ts` flattens the release posts' `versions` arrays into one
+  date-ordered ledger, filterable by each post's `releaseType` (model /
+  plugin / tool), ten rows per page, each row linking the product's release
+  note. A post with no version does not belong here. An Announcements list
+  was tried above the ledger and taken out again: this page answers what
+  shipped, and an award answers what happened.
 - **/story** promotes the newest story as a feature (cover, title, summary),
-  then lists the rest as rows. Each entry pairs a short news note with its
-  long-form story through `STORIES` in `data.ts`: the note supplies the
-  words, the story post supplies the thumbnail and the /story/<slug>
-  destination. The note is also an entry in the Announcements list above, so
-  its own page and its reference links are reachable; the /story row is the
-  event's headline, not the notice.
+  then lists the rest as rows. Each entry pairs a short notice with its
+  long-form story through `STORIES` in `data.ts`: the notice supplies the
+  words, the story post supplies the thumbnail. Both are reachable, because
+  this section is the only way in for either. An entry names two
+  destinations, "Read the full story" to /story/<slug> and "The notice" to
+  the notice's root slug, which is why the card is a `group` div with linked
+  parts rather than one anchor.
 
 The page at /notices was /news, labelled "Updates", until 2026-08-09, and held
 News and Releases tabs until the Story/Blog split. Retired URLs, including
