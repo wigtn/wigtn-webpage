@@ -17,7 +17,7 @@ import { CONTACT_EMAIL, CONTACT_HREF, TAGLINE } from "@/lib/brand";
 import { HOME, NAV } from "./data";
 
 /* NavDropdown lived here while the nav carried a WIG-log menu with Tech and
- * Feed under it. The stories came back on-site as /blog, the menu had one
+ * Feed under it. The stories came back on-site, the menu had one
  * destination left, and a menu of one is a link, so the dropdown and the
  * `children` shape in NAV went together. It is in the git history if a nav
  * item ever needs children again. */

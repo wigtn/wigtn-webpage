@@ -22,18 +22,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE}/`, changeFrequency: "weekly", priority: 1 },
     { url: `${SITE}/notices`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE}/story`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${SITE}/blog`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE}/team`, changeFrequency: "monthly", priority: 0.7 },
   ];
 
-  /* hrefFor, not articleHref: a blog post's page is /blog/<slug>, and its
-   * root slug is one of the redirects excluded above. */
+  /* hrefFor, not articleHref: a story post's page is /story/<slug>, and its
+   * root slug is one of the redirects excluded above. No /blog entries: the
+   * blog section is closed and exports no pages. */
   const articles: MetadataRoute.Sitemap = ARTICLES.filter((article) => !article.placeholder).map(
     (article) => ({
       url: `${SITE}${hrefFor(article)}`,
       lastModified: articleDate(article.date),
       changeFrequency: "monthly",
-      priority: article.channel === "newsroom" || article.channel === "blog" ? 0.7 : 0.6,
+      priority: article.channel === "newsroom" || article.channel === "story" ? 0.7 : 0.6,
     }),
   );
 

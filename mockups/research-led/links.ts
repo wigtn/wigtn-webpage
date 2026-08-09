@@ -70,9 +70,18 @@ export const techFeedHref = (slug: string) => `${TECH_FEED_INDEX}${slug}/`;
  * as it appears in the report repo's `public/` and nothing else. */
 export const techReportAsset = (path: string) => `${TECH_REPORT_SITE}${path}`;
 
-/* The blog on this site. Story posts (conference trips, hackathon write-ups)
- * are hosted here at /blog/<slug>; they lived on the report site's feed
- * between 2026-08-09 and the restructure that brought them back. No trailing
- * slash: this repo exports flat files, so /blog/x resolves and /blog/x/ 404s. */
+/* The Story section: press-release rows at /story, and the full account of
+ * each event at /story/<slug>. The long-form posts lived on the report
+ * site's feed for a day, then briefly at /blog here, before the blog closed
+ * and Story took both the rows and the pages. No trailing slash: this repo
+ * exports flat files, so /story/x resolves and /story/x/ 404s. */
+export const STORY_INDEX = "/story";
+export const storyHref = (slug: string) => `${STORY_INDEX}/${slug}`;
+
+/* The blog. CLOSED, for now: the section was built for community and
+ * partnership news (a program acceptance, a signed collaboration), none of
+ * which exists yet, and until it does a blog that mirrors Story is two names
+ * for one list. The constants stay because BlogPage and the "blog" channel
+ * stay in the source, unrouted, waiting for the first real post. */
 export const BLOG_INDEX = "/blog";
 export const blogHref = (slug: string) => `${BLOG_INDEX}/${slug}`;

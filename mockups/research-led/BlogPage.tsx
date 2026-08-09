@@ -1,8 +1,20 @@
 "use client";
 
-/** /blog: the story index. A card grid of channel:"blog" posts, newest first.
+/** The blog index. RETAINED BUT CURRENTLY UNROUTED: the section is closed.
  *
- * Cards, not rows, because every blog post carries a cover photograph and the
+ * It was built as the card grid for the long-form stories, which made it a
+ * second name for the Story section, so the app route came out on 2026-08-09
+ * and the stories render under /story instead. What this page is FOR is the
+ * content Story is not: community and partnership news with weight behind it
+ * (a program acceptance, a signed collaboration, a university subcontract).
+ * None of that exists yet, and a section is opened by its first real post,
+ * not ahead of one.
+ *
+ * To reopen: write the post with channel: "blog" (BLOG_FEED picks it up),
+ * restore app/blog/page.tsx and app/blog/[slug]/page.tsx from git history,
+ * add the nav item back, and put /blog in the sitemap.
+ *
+ * Cards, not rows, because a post here carries a cover photograph and the
  * picture is most of what a reader chooses by. The dense-row treatment lives
  * on /notices, where the entries are versions and have no pictures at all. */
 

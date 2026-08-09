@@ -28,8 +28,8 @@
  * hackathon, release, community. Read its README before starting a new one:
  * the outline that suits a hackathon is not the one that suits a release. */
 /* The four conference and hackathon posts left for the WIG-log feed on
- * 2026-08-09 and came back the same day, when this site grew a blog of its
- * own. They carry channel: "blog" and render at /blog/<slug>; their covers
+ * 2026-08-09 and came back the same day. They carry channel: "story" and
+ * render at /story/<slug>, under the rows that summarize them; their covers
  * ship from the post folders again, which is why ./milestones is gone. */
 import { ACL_2026_COVER, acl2026SanDiego } from "./updates/acl-2026-san-diego";
 import { OBA_WEEKENDTHON_COVER, obaWeekendthonTop6 } from "./updates/oba-weekendthon-top6";
@@ -50,29 +50,34 @@ export const HOME = "/";
 /* /news until 2026-08-09. The page is called Notices now and its URL says so;
  * the old one still exports, as a redirect, through RETIRED below. */
 export const NOTICES = `${HOME}notices`;
-export const STORY = `${HOME}story`;
 export const TEAM_PAGE = `${HOME}team`;
 export const articleHref = (slug: string) => `${HOME}${slug}`;
 
 /* These now live in ./links, because posts under `updates/` need them and
  * cannot import a value from this module without closing a cycle. See the
  * comment in links.ts. Imported as well as re-exported: NAV below uses
- * TECH_REPORT_SITE locally, and `export ... from` creates no local binding. */
+ * several locally, and `export ... from` creates no local binding.
+ * STORY_INDEX moved there too (posts link story pages), so /story has no
+ * local constant of its own. */
 import {
   BLOG_INDEX,
+  STORY_INDEX,
   TECH_FEED_INDEX,
   TECH_REPORT_INDEX,
   TECH_REPORT_SITE,
   blogHref,
+  storyHref,
   techFeedHref,
   techReportHref,
 } from "./links";
 export {
   BLOG_INDEX,
+  STORY_INDEX,
   TECH_FEED_INDEX,
   TECH_REPORT_INDEX,
   TECH_REPORT_SITE,
   blogHref,
+  storyHref,
   techFeedHref,
   techReportHref,
 };
@@ -84,8 +89,12 @@ export {
  * Tech is the one external item: it hands the reader to WIG-log's report
  * index, that site's front door for findings. The nav carried a WIG-log
  * dropdown with Tech and Feed under it while the stories lived on the feed;
- * the stories came back here as /blog, which left the menu one destination,
- * and a menu of one is a link. The `children` machinery went with it.
+ * the stories came back on-site, which left the menu one destination, and a
+ * menu of one is a link. The `children` machinery went with it.
+ *
+ * No Blog tab. The section is closed until it has content of its own
+ * (community and partnership news); see BLOG_INDEX in links.ts. While it
+ * mirrored Story it was two names in the nav for one list.
  *
  * No Projects tab. The page it pointed at, /work, is retired and redirects
  * to /story. Restoring the tab means deciding what it should point at first,
@@ -95,8 +104,7 @@ export type NavItem = { label: string; href: string; disabled?: boolean };
 export const NAV: NavItem[] = [
   { label: "About", href: TEAM_PAGE },
   { label: "Notice", href: NOTICES },
-  { label: "Story", href: STORY },
-  { label: "Blog", href: BLOG_INDEX },
+  { label: "Story", href: STORY_INDEX },
   /* Trailing slash on purpose: the report site builds with trailingSlash, so
    * the bare URL 301s. Linking the final URL saves that round trip. */
   { label: "Tech", href: TECH_REPORT_INDEX },
@@ -222,12 +230,14 @@ export const TEAM: TeamMember[] = [
 export type Kind = "report" | "event" | "community" | "insight";
 
 /* Channel split: "newsroom" = in-site news feed (awards, releases,
- * announcements; short posts); "blog" = story posts hosted on this site at
- * /blog/<slug> (conference trips, hackathon write-ups, photographs and all);
- * "report" = deep tech content that lives on the external WIG-log site.
- * Untagged articles are treated as report/back-catalog and stay out of every
- * feed. */
-export type Channel = "newsroom" | "report" | "blog";
+ * announcements; short posts); "story" = long-form event stories rendered at
+ * /story/<slug> (conference trips, hackathon write-ups, photographs and
+ * all); "report" = deep tech content that lives on the external WIG-log
+ * site. "blog" belongs to the closed blog section and no post carries it
+ * today; it stays in the union so BlogPage and the machinery it will need
+ * compile while they wait. Untagged articles are treated as
+ * report/back-catalog and stay out of every feed. */
+export type Channel = "newsroom" | "report" | "story" | "blog";
 export type NewsTopic = "award" | "release" | "announcement" | "community";
 
 /* `aspect` overrides the gallery's default 4/3 crop for a single image.
@@ -357,10 +367,10 @@ export const ARTICLES: Article[] = [
   wigssNpmRelease, // 2026.04.03, v0.1.4
   wigtnocrOpenSource, // 2026.04.03, no version
 
-  /* ───────── Blog · stories (real), newest first ─────────
-   * channel: "blog": hosted at /blog/<slug>, listed on /blog, kept out of
-   * NEWSROOM_FEED by the channel filter. Each pairs with a /story row through
-   * STORIES below. */
+  /* ───────── Story · long-form event stories (real), newest first ─────────
+   * channel: "story": rendered at /story/<slug>, kept out of NEWSROOM_FEED
+   * by the channel filter. Each pairs with a /story row through STORIES
+   * below. */
   acl2026SanDiego, // 2026.07.16, trip report
   obaWeekendthonTop6, // 2026.05.31, hackathon
   snowflakeKorea2026, // 2026.04.29, hackathon
@@ -369,33 +379,46 @@ export const ARTICLES: Article[] = [
 
 export const getArticle = (slug: string) => ARTICLES.find((a) => a.slug === slug);
 
-/* Where an article's page lives. Blog posts render under /blog; everything
- * else renders at the root slug. Any surface that could be handed either kind
- * of article links through this, not through articleHref. */
+/* Where an article's page lives. Story posts render under /story, blog posts
+ * (none today; the section is closed) under /blog, everything else at the
+ * root slug. Any surface that could be handed any kind of article links
+ * through this, not through articleHref. */
 export const hrefFor = (a: Article) =>
-  a.channel === "blog" ? blogHref(a.slug) : articleHref(a.slug);
+  a.channel === "story"
+    ? storyHref(a.slug)
+    : a.channel === "blog"
+      ? blogHref(a.slug)
+      : articleHref(a.slug);
 
-/* The /blog index: story posts, newest first. */
+/* The long-form stories, newest first: the /story detail pages' params. */
+export const STORY_FEED = ARTICLES.filter(
+  (a) => !a.placeholder && a.channel === "story",
+).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+
+/* The /blog index. Empty while the blog is closed; BlogPage (retained,
+ * unrouted) reads it, so the first channel: "blog" post fills the page the
+ * day the section reopens. */
 export const BLOG_FEED = ARTICLES.filter(
   (a) => !a.placeholder && a.channel === "blog",
 ).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
-/* The /story rows: each event's short notice paired with its long account.
+/* The /story rows: each event's short notice paired with its long account,
+ * which renders at /story/<storySlug>.
  *
  * A hand-kept table rather than a field on either post, because the pairing
- * is knowledge about two posts at once, and the thumbnail needs the blog
- * post's cover, which only this module already imports. The note supplies the
- * words (title, summary, date were written for exactly this kind of row); the
- * blog post supplies the picture and the destination.
+ * is knowledge about two posts at once, and the thumbnail needs the story
+ * post's cover, which only this module already imports. The note supplies
+ * the words (title, summary, date were written for exactly this kind of
+ * row); the story post supplies the picture and the destination.
  *
  * Newest first, like every other list on the site. wigvo-acl-2026 pairs with
  * the trip report: the acceptance is the notice, the trip is the story. */
-export type Story = { article: Article; image: string; blogSlug: string };
+export type Story = { article: Article; image: string; storySlug: string };
 export const STORIES: Story[] = [
-  { article: wigvoAcl2026, image: ACL_2026_COVER, blogSlug: "acl-2026-san-diego" },
-  { article: obaWeekendthon2026Top6, image: OBA_WEEKENDTHON_COVER, blogSlug: "oba-weekendthon-top6" },
-  { article: snowflakeKorea2026TechTrack, image: SNOWFLAKE_2026_COVER, blogSlug: "snowflake-korea-2026" },
-  { article: traeSeoul2026GrandPrize, image: TRAE_SEOUL_COVER, blogSlug: "trae-seoul-grand-prize" },
+  { article: wigvoAcl2026, image: ACL_2026_COVER, storySlug: "acl-2026-san-diego" },
+  { article: obaWeekendthon2026Top6, image: OBA_WEEKENDTHON_COVER, storySlug: "oba-weekendthon-top6" },
+  { article: snowflakeKorea2026TechTrack, image: SNOWFLAKE_2026_COVER, storySlug: "snowflake-korea-2026" },
+  { article: traeSeoul2026GrandPrize, image: TRAE_SEOUL_COVER, storySlug: "trae-seoul-grand-prize" },
 ];
 
 /* The homepage report rail (TECH_REPORTS, a hand-kept mirror of three report
@@ -588,13 +611,14 @@ export const RETIRED: {
     title: "WIGVO",
   },
   /* The WIGTN Flake report was removed from the tech-report site, and the
-   * Snowflake hackathon post that replaced it now lives on this site's blog.
-   * This hop follows it rather than pointing at the deleted report. */
+   * Snowflake hackathon story that replaced it now lives on this site's
+   * Story pages. This hop follows it rather than pointing at the deleted
+   * report. */
   {
-    note: "The WIGTN Flake report was taken down with the rest of the hackathon write-ups. The Snowflake post is the account of that project now, and it carries the code-path audit in full.",
+    note: "The WIGTN Flake report was taken down with the rest of the hackathon write-ups. The Snowflake story is the account of that project now, and it carries the code-path audit in full.",
     slug: "wigtn-flake-cortex-debate-video",
-    to: blogHref("snowflake-korea-2026"),
-    title: "the Snowflake hackathon post",
+    to: storyHref("snowflake-korea-2026"),
+    title: "the Snowflake hackathon story",
   },
   {
     note: "Technical write-ups moved to the WIGTN tech-report site, where each one carries its method, its measurements and its limitations. This site now covers what the team does: events, releases and news.",
@@ -604,17 +628,17 @@ export const RETIRED: {
   },
   /* These four URLs served the stories when they were root-level articles,
    * then redirected to the WIG-log feed for the day the stories lived there.
-   * The posts are back on this site under /blog now, and the URLs are in
-   * sitemaps that were already crawled, so each one forwards to the same post
-   * at its blog address rather than 404ing. */
-  { note: "The conference and hackathon write-ups live on this site's blog now. This address predates that section, so it forwards.", slug: "acl-2026-san-diego", to: blogHref("acl-2026-san-diego"), title: "the ACL 2026 trip report" },
-  { note: "The conference and hackathon write-ups live on this site's blog now. This address predates that section, so it forwards.", slug: "oba-weekendthon-top6", to: blogHref("oba-weekendthon-top6"), title: "the OBA Weekendthon post" },
-  { note: "The conference and hackathon write-ups live on this site's blog now. This address predates that section, so it forwards.", slug: "snowflake-korea-2026", to: blogHref("snowflake-korea-2026"), title: "the Snowflake Korea post" },
-  { note: "The conference and hackathon write-ups live on this site's blog now. This address predates that section, so it forwards.", slug: "trae-seoul-grand-prize", to: blogHref("trae-seoul-grand-prize"), title: "the TRAE Seoul post" },
+   * The posts are back on this site under /story now, and the URLs are in
+   * sitemaps that were already crawled, so each one forwards to the same
+   * post at its story address rather than 404ing. */
+  { note: "The conference and hackathon write-ups live under the Story page now. This address predates that section, so it forwards.", slug: "acl-2026-san-diego", to: storyHref("acl-2026-san-diego"), title: "the ACL 2026 trip report" },
+  { note: "The conference and hackathon write-ups live under the Story page now. This address predates that section, so it forwards.", slug: "oba-weekendthon-top6", to: storyHref("oba-weekendthon-top6"), title: "the OBA Weekendthon story" },
+  { note: "The conference and hackathon write-ups live under the Story page now. This address predates that section, so it forwards.", slug: "snowflake-korea-2026", to: storyHref("snowflake-korea-2026"), title: "the Snowflake Korea story" },
+  { note: "The conference and hackathon write-ups live under the Story page now. This address predates that section, so it forwards.", slug: "trae-seoul-grand-prize", to: storyHref("trae-seoul-grand-prize"), title: "the TRAE Seoul story" },
   /* /work is gone with the article groups it listed. What it had that still
    * exists, the events and the awards, is on /story now. */
   { note: "The page that used to be here grouped work that has since moved. What is left of it, the events and the awards, is on the Story page.",
-    slug: "work", to: STORY, title: "WIGTN Story" },
+    slug: "work", to: STORY_INDEX, title: "WIGTN Story" },
   /* /news was this site's own route until 2026.08.09, when the page took the
    * name the nav had been using for it and became /notices. It is the only
    * entry here that retires a static route rather than an article, which is

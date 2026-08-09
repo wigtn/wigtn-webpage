@@ -1,18 +1,20 @@
 "use client";
 
-/** /story: the press-release list. One row per event, from STORIES in data.ts:
- * thumbnail, tag, date, title, summary, and a link to the full account on the
- * blog.
+/** /story: the press-release list. One row per event, from STORIES in
+ * data.ts: thumbnail, tag, date, title, summary, and a link to the full
+ * account at /story/<slug>.
  *
- * Rows navigate, they do not expand. The whole row is one Link to the blog
- * post, and the "Read on Blog" line inside it is a label on that link rather
- * than a second control: a nested anchor would be invalid HTML, and a reader
- * who clicks the picture or the title wants the same place the label names. */
+ * Rows navigate, they do not expand. The whole row is one Link to the story
+ * page, and the "Read the full story" line inside it is a label on that link
+ * rather than a second control: a nested anchor would be invalid HTML, and a
+ * reader who clicks the picture or the title wants the same place the label
+ * names. The label said "Read on Blog" while the pages sat under /blog; the
+ * blog closed before launch and the stories are Story's own pages now. */
 
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { STORIES, BLOG_INDEX, blogHref } from "./data";
+import { STORIES, storyHref } from "./data";
 import { PageShell, PageHero, rise, VIEWPORT } from "./chrome";
 
 export function StoryPage() {
@@ -20,19 +22,7 @@ export function StoryPage() {
     <PageShell>
       <PageHero
         title="What happened."
-        lead={
-          <>
-            One row per event: what it was, and how it ended. The full account
-            of each, photographs and all, is on{" "}
-            <Link
-              href={BLOG_INDEX}
-              className="font-medium text-accent underline-offset-4 hover:underline"
-            >
-              the blog
-            </Link>
-            .
-          </>
-        }
+        lead="One row per event: what it was, and how it ended. Each row opens the full account, photographs and all."
         titleClassName="text-accent"
         leadClassName="max-w-3xl"
       />
@@ -49,7 +39,7 @@ export function StoryPage() {
                 viewport={VIEWPORT}
               >
                 <Link
-                  href={blogHref(s.blogSlug)}
+                  href={storyHref(s.storySlug)}
                   className="group flex flex-col gap-5 py-8 sm:flex-row sm:items-start sm:gap-8"
                 >
                   <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl bg-ink/[0.04] sm:w-52 md:w-64">
@@ -74,7 +64,7 @@ export function StoryPage() {
                       {s.article.summary}
                     </p>
                     <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent">
-                      Read on Blog
+                      Read the full story
                       <ArrowUpRight
                         size={15}
                         className="transition-transform group-hover:translate-x-0.5"

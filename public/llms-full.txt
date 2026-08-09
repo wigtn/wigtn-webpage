@@ -95,8 +95,8 @@ not been published is not described here, including work under review.
 - [Website](https://wigtn.com)
 - [Notice](https://wigtn.com/notices): the release record, every version dated
   from the registry that serves it
-- [Story](https://wigtn.com/story): one row per event, with the outcome
-- [Blog](https://wigtn.com/blog): conference and hackathon stories, in full
+- [Story](https://wigtn.com/story): one row per event, each opening the full
+  story with its photographs
 - [WIG-log](https://wigtn.github.io/wigtn-tech-report/tech/): technical reports
 - [GitHub](https://github.com/wigtn)
 - [HuggingFace](https://huggingface.co/Wigtn)

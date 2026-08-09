@@ -13,16 +13,16 @@
  *     hairline, not boxed.
  * Sections: 1 Hero · 2 What we do (the services) · 3 CTA, a Divider between
  * 2 and 3. The landing held the record's capability list, a Notices rail and
- * a WIG-log rail until 2026-08-09; the release ledger is /notices, and
- * stories live on /story and /blog. MilestoneTimeline is retained but
- * currently unrouted.
+ * a WIG-log rail until 2026-08-09; the release ledger is /notices, and the
+ * stories live under /story. MilestoneTimeline is retained but currently
+ * unrouted.
  */
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
-import { MILESTONES, SERVICES, STORY } from "./data";
+import { MILESTONES, SERVICES, STORY_INDEX } from "./data";
 import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, Tags, rise, VIEWPORT } from "./chrome";
 import { CONTACT_EMAIL, CONTACT_HREF } from "@/lib/brand";
 import type { Theme } from "@/lib/theme";
@@ -327,7 +327,7 @@ function MilestoneTimeline() {
           </motion.div>
 
           <div className="mx-auto mt-8 w-full max-w-6xl px-6">
-            <ViewAll href={STORY} label="Read the full story" />
+            <ViewAll href={STORY_INDEX} label="Read the full story" />
           </div>
         </div>
       </section>

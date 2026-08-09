@@ -24,9 +24,10 @@
  * breakout a 3:4 shot is 1440px tall and buries what follows. They go in a
  * gallery instead, where `aspect: "3/4"` caps a lone portrait at 460px.
  *
- * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09,
- * when the site got a blog of its own at /blog. The return changed `channel`
- * and dropped the unread `externalUrl`; the prose is as written before the
+ * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09
+ * as a long-form story, rendered at /story/<slug> (briefly /blog, which
+ * closed the same day, before launch). The return changed `channel` and
+ * dropped the unread `externalUrl`; the prose is as written before the
  * no-em-dash rule and stays grandfathered until the prose itself is edited.
  */
 
@@ -70,7 +71,7 @@ export const ACL_2026_COVER = teamCover.src;
 export const acl2026SanDiego: Article = {
   slug: "acl-2026-san-diego",
   kind: "event",
-  channel: "blog",
+  channel: "story",
   tag: "ACL 2026",
   icon: "pin",
   /* Titled as a trip report, not a product headline: the subject is the team

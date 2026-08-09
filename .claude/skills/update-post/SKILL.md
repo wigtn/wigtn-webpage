@@ -1,6 +1,6 @@
 ---
 name: update-post
-description: Write a new WIGTN post end to end. Runs a short interview, picks the matching template (announcement / community / conference / hackathon), sources every fact from the repo or a named source, prepares the photos, drafts the post into updates/<slug>/, wires it into data.ts, and verifies the build. Use whenever the user wants to add, write, or draft a post for the Notice, Story, or Blog surfaces: "글 하나 써줘", "업데이트 올려줘", "릴리스 노트 써줘", "블로그 글 써줘", "write an update post", "add a newsroom post", "draft a release note", "write a trip report".
+description: Write a new WIGTN post end to end. Runs a short interview, picks the matching template (announcement / community / conference / hackathon), sources every fact from the repo or a named source, prepares the photos, drafts the post into updates/<slug>/, wires it into data.ts, and verifies the build. Use whenever the user wants to add, write, or draft a post for the Notice or Story surfaces: "글 하나 써줘", "업데이트 올려줘", "릴리스 노트 써줘", "블로그 글 써줘", "write an update post", "add a newsroom post", "draft a release note", "write a trip report".
 ---
 
 # Writing an update post
@@ -9,7 +9,7 @@ A post is a folder: `mockups/research-led/updates/<slug>/index.ts` plus its own
 images. `data.ts` imports it. Four templates exist because an announcement, a
 community note, a conference story, and a hackathon story want different
 sections; the first two are `channel: "newsroom"` posts, the last two are
-`channel: "blog"` stories rendered at /blog/<slug>.
+`channel: "story"` posts rendered at /story/<slug>.
 
 Read `mockups/research-led/updates/_template/README.md` first. It owns the rules
 this skill does not repeat: blocks, gallery layout, image prep, the numbers
@@ -30,10 +30,10 @@ that is the answer, say so and stop.
 
 Everything else lives here, split by channel:
 
-- **A conference or hackathon write-up is a blog story**: `channel: "blog"`,
-  conference or hackathon template, rendered at /blog/<slug>. A story usually
-  pairs with a short news note on /story through `STORIES` in `data.ts`; the
-  note is a separate announcement post.
+- **A conference or hackathon write-up is a long-form story**: `channel:
+  "story"`, conference or hackathon template, rendered at /story/<slug>. A
+  story usually pairs with a short news note in the /story rows through
+  `STORIES` in `data.ts`; the note is a separate announcement post.
 - **A release note or short notice is a newsroom post**: `channel:
   "newsroom"`, announcement or community template.
 
@@ -172,7 +172,7 @@ defect that has already shipped in this repo at least once.
 - [ ] `*_COVER` exported only if something outside the post imports it.
 - [ ] Off-site URLs come from `../../links`, never a value import from `../../data`.
 - [ ] A shell command sequence is a `list`; a single command is a `quote`.
-- [ ] `channel` is the one the template hardcodes ("newsroom" or "blog"), or
+- [ ] `channel` is the one the template hardcodes ("newsroom" or "story"), or
       the field is deleted for a back-catalogue post.
 
 ## Phase 6: Verify
@@ -202,8 +202,8 @@ cover was chosen for.
 
 Register the import in `data.ts` and place the identifier where the post belongs
 in `ARTICLES` (the array is grouped by channel and ordered newest first inside
-each group). A blog story that pairs with a news note also gets a `STORIES`
-row (note article, story cover, blog slug). If the post gets a milestone
+each group). A long-form story that pairs with a news note also gets a
+`STORIES` row (note article, story cover, story slug). If the post gets a milestone
 entry, add it to `MILESTONES` and use the exported `*_COVER`.
 
 Then report, in this order:

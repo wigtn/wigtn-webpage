@@ -1,10 +1,10 @@
 # Post templates
 
 > Four templates: announcements and community notes are the short-form posts
-> for /notices and /story, conference and hackathon write-ups are the
-> long-form stories for /blog. The story templates spent 2026-08-09 in
-> `wigtn-tech-report/components/feed/_template/` and came back with the story
-> posts when this site grew a blog of its own.
+> for /notices and the /story rows, conference and hackathon write-ups are
+> the long-form stories rendered at /story/<slug>. The story templates spent
+> 2026-08-09 in `wigtn-tech-report/components/feed/_template/` and came back
+> with the story posts.
 
 Every post under `updates/` is a folder: the text in `index.ts`, the images
 beside it, nothing referenced by a string path that can rot.
@@ -61,13 +61,13 @@ up with a "what people asked" heading over an empty paragraph.
 | --- | --- | --- | --- | --- |
 | Something shipped, was published, or was accepted | `report` | `newsroom` | `release` | [`announcement/`](announcement/STRUCTURE.md) |
 | A meetup, seminar, or study group we ran | `community` | `newsroom` | `community` | [`community/`](community/STRUCTURE.md) |
-| A conference trip, told as a story with photographs | `event` | `blog` | none | [`conference/`](conference/STRUCTURE.md) |
-| A hackathon or contest, told as a story with photographs | `event` | `blog` | none | [`hackathon/`](hackathon/STRUCTURE.md) |
+| A conference trip, told as a story with photographs | `event` | `story` | none | [`conference/`](conference/STRUCTURE.md) |
+| A hackathon or contest, told as a story with photographs | `event` | `story` | none | [`hackathon/`](hackathon/STRUCTURE.md) |
 
-A blog story usually pairs with a short news note (the acceptance, the
-placing) that lands on /story through `STORIES` in `data.ts`. The note and the
-story are two posts: write the story with its template, write the note as an
-announcement, and add the pairing row.
+A long-form story usually pairs with a short news note (the acceptance, the
+placing) that lands in the /story rows through `STORIES` in `data.ts`. The
+note and the story are two posts: write the story with its template, write
+the note as an announcement, and add the pairing row.
 
 Copy the matching `index.ts.example` into your post folder as `index.ts` and
 read that template's `STRUCTURE.md` before writing. Each one names the section
@@ -197,9 +197,10 @@ next can carry four.
 ## Two fields the templates set for you, and one you may need to unset
 
 `channel` is what routes a post: `"newsroom"` puts it in the newsroom feed
-(`NEWSROOM_FEED`, and its release rows surface on /notices), `"blog"` puts it
-on /blog at `/blog/<slug>`. Each template hardcodes the channel its shape is
-for. **Writing a back-catalogue report? Delete the field.** Leaving one in
+(`NEWSROOM_FEED`, and its release rows surface on /notices), `"story"` puts
+it at `/story/<slug>`. (`"blog"` exists for the closed blog section and no
+template uses it.) Each template hardcodes the channel its shape is for.
+**Writing a back-catalogue report? Delete the field.** Leaving one in
 silently publishes the post to a feed.
 
 `icon` takes `"pin"` or `"trophy"` and is optional. `trophy` for a placing,

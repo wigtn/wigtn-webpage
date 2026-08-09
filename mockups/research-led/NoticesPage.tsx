@@ -41,7 +41,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { PageShell, PageHero } from "./chrome";
-import { BLOG_INDEX, RELEASE_ROWS, STORY } from "./data";
+import { RELEASE_ROWS, STORY_INDEX } from "./data";
 
 const PAGE_SIZE = 10;
 
@@ -131,19 +131,13 @@ export function NoticesPage() {
         lead={
           <>
             Every version of everything we have released, dated from the
-            registry that serves it. The event news is on{" "}
+            registry that serves it. The events, and the stories behind them,
+            are on{" "}
             <Link
-              href={STORY}
+              href={STORY_INDEX}
               className="font-medium text-accent underline-offset-4 hover:underline"
             >
               Story
-            </Link>
-            , and the long accounts are on{" "}
-            <Link
-              href={BLOG_INDEX}
-              className="font-medium text-accent underline-offset-4 hover:underline"
-            >
-              the blog
             </Link>
             .
           </>

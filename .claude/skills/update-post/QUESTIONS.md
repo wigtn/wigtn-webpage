@@ -50,7 +50,7 @@ the rest.
 | Option | Sets |
 | --- | --- |
 | 뉴스룸에 (공지·릴리스) | `channel: "newsroom"`. Releases surface on `/notices`; a note can pair into `/story`. |
-| 블로그에 (스토리) | `channel: "blog"`. Rendered at `/blog/<slug>`, listed on `/blog`. |
+| 스토리로 (장문) | `channel: "story"`. Rendered at `/story/<slug>`, summarized by a `/story` row. |
 | 백카탈로그 | Delete the `channel` field. Reachable by URL, not in any feed. |
 
 ---

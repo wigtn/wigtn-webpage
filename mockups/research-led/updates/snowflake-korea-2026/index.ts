@@ -95,9 +95,10 @@
  *   fine print the reader has to be able to follow against the audit section,
  *   and at gallery width that print closes up.
  *
- * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09,
- * when the site got a blog of its own at /blog. The return changed `channel`
- * and dropped the unread `externalUrl`; the prose is as written before the
+ * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09
+ * as a long-form story, rendered at /story/<slug> (briefly /blog, which
+ * closed the same day, before launch). The return changed `channel` and
+ * dropped the unread `externalUrl`; the prose is as written before the
  * no-em-dash rule and stays grandfathered until the prose itself is edited.
  */
 
@@ -118,7 +119,7 @@ export const SNOWFLAKE_2026_COVER = winnersOnStage.src;
 export const snowflakeKorea2026: Article = {
   slug: "snowflake-korea-2026",
   kind: "event",
-  channel: "blog",
+  channel: "story",
   tag: "2ND PLACE · TECH TRACK",
   icon: "trophy",
   title:

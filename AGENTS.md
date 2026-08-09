@@ -16,20 +16,23 @@ mockups/research-led/
   data.ts                  articles, team, milestones, nav, selectors
   links.ts                 URL constants a post may import (leaf module, see below)
   ArticleDetail.tsx        renders an Article's Block[]
-  updates/<slug>/          one folder per post, notice or blog story: index.ts + images
+  updates/<slug>/          one folder per post, notice or story: index.ts + images
   updates/_template/       four post templates + the shared rules
 public/images/             team portraits, logos. Nothing else.
 ```
 
 `updates/` keeps its folder name through every rename above it, the same way
-`research-led/` kept its. Notice posts and blog stories both live there; the
+`research-led/` kept its. Notice posts and story posts both live there; the
 `channel` field on the post, not the folder, is what routes them.
 
-The site has five nav destinations: **About** (/team), **Notice** (/notices),
-**Story** (/story), **Blog** (/blog), and **Tech**, which is an external link
-to WIG-log's report index. The landing page is three sections: Hero, What we
-do (the business model: Web Agency and AX Agency), Contact. About is "Who we
-are.": the members and the partners, nothing else.
+The site has four nav destinations: **About** (/team), **Notice** (/notices),
+**Story** (/story), and **Tech**, which is an external link to WIG-log's
+report index. The landing page is three sections: Hero, What we do (the
+business model: Web Agency and AX Agency), Contact. About is "Who we are.":
+the members and the partners, nothing else. A **Blog** section exists in the
+source (BlogPage.tsx, the "blog" channel) but is closed and unrouted: it is
+reserved for community and partnership news, and it opens with its first real
+post, not before.
 
 ## Where does a piece of writing belong
 
@@ -49,19 +52,19 @@ and they go on WIG-log under `components/technical-reports/`. The nav's Tech
 item is the pointer.
 
 **Is it a story?** A conference trip, a hackathon, a weekend with a scene to
-describe and photographs to carry it. Stories are `channel: "blog"` posts here,
-rendered at `/blog/<slug>` and indexed at /blog. (They spent 2026-08-09 on the
-WIG-log feed and came back the same day, when this site grew a blog of its own;
-the feed's copies still exist but nothing here links them.)
+describe and photographs to carry it. Stories are `channel: "story"` posts
+here, rendered at `/story/<slug>` under the /story rows that summarize them.
+(They spent 2026-08-09 on the WIG-log feed and came back the same day; the
+feed's copies still exist but nothing here links them.)
 
 Everything else is a **notice**: announcements and releases, `channel:
 "newsroom"`. Short, dated, about the team rather than about the work.
 
 Worked examples:
 
-- The ACL 2026 trip report is a blog story at /blog/acl-2026-san-diego. Five
-  people went somewhere and came back with decisions; there is no method in
-  it, so it is not a report.
+- The ACL 2026 trip report is a story page at /story/acl-2026-san-diego.
+  Five people went somewhere and came back with decisions; there is no method
+  in it, so it is not a report.
 - WigtnOCR's distillation recipe and its KoGovDoc numbers are a report. They
   are not on this site at all.
 - "WigtnOCR is open source" is a notice, because shipping it is something the
@@ -69,19 +72,19 @@ Worked examples:
 - When EMNLP 2026 is accepted, that announcement is a notice. The paper's
   findings are not.
 
-The three on-site surfaces split the newsroom-and-blog content by shape:
+The two on-site surfaces split the content by shape:
 
 - **/notices** is the release record: `RELEASE_ROWS` in `data.ts` flattens the
   release posts' `versions` arrays into one date-ordered ledger, ten rows per
   page, each row linking the product's release note.
 - **/story** is one row per event, each pairing a short news note with its
-  blog story through `STORIES` in `data.ts`: the note supplies the words, the
-  blog post supplies the thumbnail and the destination.
-- **/blog** is the card index of `channel: "blog"` posts.
+  long-form story through `STORIES` in `data.ts`: the note supplies the
+  words, the story post supplies the thumbnail and the /story/<slug>
+  destination.
 
 The page at /notices was /news, labelled "Updates", until 2026-08-09, and held
 News and Releases tabs until the Story/Blog split. Retired URLs, including
-/news, /work, and the blog posts' old root slugs, are listed in `RETIRED` in
+/news, /work, and the story posts' old root slugs, are listed in `RETIRED` in
 `data.ts` and still resolve as redirects. Read the comment there before
 touching them.
 
@@ -99,7 +102,7 @@ nothing loaded. If you find a reference to any of them, it is stale.
 Read `mockups/research-led/updates/_template/README.md` before touching any post.
 It owns the rules for blocks, images, galleries, numbers, and naming. Four
 templates live in its subfolders: announcement and community for the short
-newsroom posts, conference and hackathon for the blog stories.
+newsroom posts, conference and hackathon for the long-form stories.
 
 ## House voice
 
@@ -147,7 +150,7 @@ In:
 
 ```bash
 npx tsc --noEmit     # types; cannot see missing images (see below)
-npm run build        # 35 static pages; this is what catches a missing image
+npm run build        # 34 static pages; this is what catches a missing image
 ```
 
 `next-env.d.ts` declares `*.jpg` as a wildcard module, so a typecheck will

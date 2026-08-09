@@ -47,9 +47,10 @@
  *   Skipping that leaves P3 pixel values labelled as sRGB, which the browser
  *   renders too hot; it is not recoverable from the committed file.
  *
- * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09,
- * when the site got a blog of its own at /blog. The return changed `channel`
- * and dropped the unread `externalUrl`; the prose is as written before the
+ * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09
+ * as a long-form story, rendered at /story/<slug> (briefly /blog, which
+ * closed the same day, before launch). The return changed `channel` and
+ * dropped the unread `externalUrl`; the prose is as written before the
  * no-em-dash rule and stays grandfathered until the prose itself is edited.
  */
 
@@ -72,7 +73,7 @@ export const TRAE_SEOUL_COVER = certificate.src;
 export const traeSeoulGrandPrize: Article = {
   slug: "trae-seoul-grand-prize",
   kind: "event",
-  channel: "blog",
+  channel: "story",
   tag: "GRAND PRIZE",
   icon: "trophy",
   title: "Grand Prize at Build with TRAE Seoul: WIGENT, built in three and a half hours",

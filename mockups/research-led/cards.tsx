@@ -1,6 +1,6 @@
 "use client";
 
-/** Shared article cards. Reused by the /blog index and any article rail. */
+/** Shared article cards. Reused by any article rail or card index. */
 
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -74,9 +74,9 @@ function PlayBadge() {
  * set of pictures is shaped differently from the other. What separates these
  * is the meta row: a date and a place, pointing inside the site.
  *
- * All of that only applies when there is a picture. The blog posts on /blog
- * carry covers, so their cards draw the frame; a release ships no cover by
- * house rule, so its card draws a hairline instead. Do not reinstate the
+ * All of that only applies when there is a picture. The long-form story
+ * posts carry covers, so their cards draw the frame; a release ships no
+ * cover by house rule, so its card draws a hairline instead. Do not reinstate the
  * gradient fallback for coverless cards: it was three copies of the same
  * non-picture standing where three different ones used to be.
  */
