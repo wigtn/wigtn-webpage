@@ -103,8 +103,10 @@ export function SiteHeader() {
             {/* Three shapes, tested in the order that settles them: disabled
                 is a label whatever else the item carries, an absolute URL is
                 an off-site plain anchor (today: Tech, to WIG-log), and the
-                rest are client-side links. Same tab for the anchor, matching
-                every other off-site link on the site. */}
+                rest are client-side links. The anchor opens a new tab, per
+                review (#78): Tech is a different site, and a nav click that
+                replaces this one reads as losing your place rather than
+                following a link. */}
             {NAV.map((n) =>
               n.disabled ? (
                 <li key={n.label}>
@@ -119,6 +121,8 @@ export function SiteHeader() {
                 <li key={n.label}>
                   <a
                     href={n.href}
+                    target="_blank"
+                    rel="noreferrer"
                     className="rounded-full px-3.5 py-1.5 text-sm text-ink-3 transition-colors hover:bg-line/[0.04] hover:text-ink"
                   >
                     {n.label}
@@ -157,9 +161,9 @@ export function SiteHeader() {
       {open && (
         <div id="rl-mobile-nav" className="border-t border-line/[0.07] bg-paper/95 backdrop-blur-md md:hidden">
           <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-4">
-            {/* Same three shapes as the desktop row; the off-site anchor also
-                closes the sheet, so returning with the back button does not
-                land on an open menu. */}
+            {/* Same three shapes as the desktop row, new tab included; the
+                off-site anchor also closes the sheet, so the page left
+                behind the new tab is not sitting under an open menu. */}
             {NAV.map((n) =>
               n.disabled ? (
                 <li key={n.label}>
@@ -174,6 +178,8 @@ export function SiteHeader() {
                 <li key={n.label}>
                   <a
                     href={n.href}
+                    target="_blank"
+                    rel="noreferrer"
                     onClick={() => setOpen(false)}
                     className="block rounded-lg px-3 py-2.5 text-ink-2 transition-colors hover:bg-line/[0.04] hover:text-ink"
                   >
@@ -229,7 +235,12 @@ export function SiteFooter() {
                     </li>
                   ) : n.href.startsWith("http") ? (
                     <li key={n.label}>
-                      <a href={n.href} className="hover:text-ink transition-colors">
+                      <a
+                        href={n.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="hover:text-ink transition-colors"
+                      >
                         {n.label}
                       </a>
                     </li>
