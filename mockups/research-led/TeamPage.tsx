@@ -1,16 +1,27 @@
 "use client";
 
-/** /team: the crew roster, the partners wall, and the history (연혁). */
+/** /team, labelled "About" in the nav: what we do (the record), the crew
+ * roster, and the partners wall.
+ *
+ * The page opened with "Who we are." and a one-sentence self-description
+ * until 2026-08-09. The landing's What-we-do section moved here in the
+ * restructure that slimmed the homepage to Hero, Services, Contact, and it
+ * took the hero slot: the record says who we are better than a sentence
+ * about it did, and the members list right under it is the "who".
+ *
+ * HistoryTimeline at the bottom of this file is retained but currently
+ * unrendered; the deployed page excludes it on purpose. */
 
 import { Fragment } from "react";
 import { motion } from "framer-motion";
-import { PageShell, PageHero, rise, VIEWPORT } from "./chrome";
-import { TEAM, MILESTONES, PARTNERS } from "./data";
+import { PageShell, PageHero, Tags, rise, VIEWPORT } from "./chrome";
+import { TEAM, MILESTONES, PARTNERS, CAPABILITIES } from "./data";
 
 /* Prefer wrapping at commas. Each clause is an inline-block, so the browser
  * takes the break between clauses before it breaks inside one; a clause too
  * long for the line still wraps normally. Keeps timeline one-liners from
- * splitting mid-phrase without hand-tuning each string to a character count. */
+ * splitting mid-phrase without hand-tuning each string to a character count.
+ * Only HistoryTimeline reads it, and it stays with that section. */
 function Clauses({ text }: { text: string }) {
   const clauses = text
     .split(", ")
@@ -39,20 +50,48 @@ function Divider() {
 }
 
 export function TeamPage() {
-  // Newest at the top, founding (2026.01) at the bottom; drop placeholder entries.
-  const history = MILESTONES.filter((m) => !m.placeholder).slice().reverse();
-
   return (
     <PageShell>
       <PageHero
-        title="Who we are."
-        lead="Five engineers who publish peer-reviewed research and release everything it runs on, with no lab behind them."
+        title="What we do."
+        lead="Peer-reviewed papers, open weights, and reports that say what they do not show."
         titleClassName="text-accent"
         leadClassName="max-w-4xl"
       />
 
+      {/* ── The record: four pillars, each naming something that has already
+           happened and can be checked. Moved here from the homepage; the hero
+           above is this section's title, so the rows start straight away,
+           same row markup as the homepage Services list. ── */}
+      <section className="max-w-5xl mx-auto px-6 pt-6 pb-24 md:pt-8 md:pb-32">
+        <div className="divide-y divide-line/[0.08] border-t border-line/[0.08]">
+          {CAPABILITIES.map((c, i) => (
+            <motion.div
+              key={c.title}
+              variants={rise}
+              custom={i}
+              initial="hidden"
+              whileInView="show"
+              viewport={VIEWPORT}
+              className="flex items-start gap-5 py-8 md:py-10"
+            >
+              <span className="pt-1.5 font-mono text-sm text-accent">{`0${i + 1}`}</span>
+              <div>
+                <h3 className="font-display text-2xl font-semibold tracking-tight text-ink md:text-3xl">
+                  {c.title}
+                </h3>
+                <p className="mt-3 text-pretty leading-relaxed text-ink-2">{c.lead}</p>
+                <Tags tags={c.tags} className="mt-4" />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      <Divider />
+
       {/* ── Crew: one row per person — portrait + name left, role + bio right ── */}
-      <section className="max-w-5xl mx-auto px-6 pt-16 pb-28 md:pt-24 md:pb-36">
+      <section className="max-w-5xl mx-auto px-6 pt-24 pb-28 md:pt-32 md:pb-36">
         <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
           Members
         </h2>
@@ -113,9 +152,7 @@ export function TeamPage() {
            Moved here from the homepage. This page answers who we are, and who
            we work with is part of that answer; the homepage is a teaser whose
            sections all hand off to a page, and this one had nowhere to hand off
-           to. It sits between the people and the record, because it reads as a
-           short list of names like the one above it, and putting it after the
-           timeline made the page end on a footnote. */}
+           to. It closes the page now that History is unrendered. */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
         <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
           Partners
@@ -138,61 +175,73 @@ export function TeamPage() {
           ))}
         </div>
       </section>
-
-      <Divider />
-
-      {/* ── History (연혁): left-aligned header, centered timeline ── */}
-      <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
-        <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">History</h2>
-
-        {/* max-w-5xl, not 3xl: each side of the centre line is half of this,
-            so a narrower rail chops titles and one-liners into three-word
-            fragments. This keeps ~430px of measure per side. */}
-        <div className="relative mx-auto mt-14 max-w-5xl md:mt-20">
-          {/* center pipeline */}
-          <span
-            aria-hidden
-            className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-brand/30"
-          />
-          <ul className="space-y-12 md:space-y-16">
-            {history.map((m, i) => {
-              const left = i % 2 === 0;
-              return (
-                <motion.li
-                  key={m.date}
-                  variants={rise}
-                  custom={i}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={VIEWPORT}
-                  className="relative grid md:grid-cols-2 md:gap-16"
-                >
-                  {/* node on the center line */}
-                  <span
-                    aria-hidden
-                    className="absolute left-1/2 top-1.5 h-3.5 w-3.5 -translate-x-1/2 rounded-full bg-brand ring-4 ring-paper"
-                  />
-                  <div className={left ? "md:pr-12 md:text-right" : "md:col-start-2 md:pl-12"}>
-                    <div className="font-mono text-sm text-accent">{m.date}</div>
-                    <h3 className="mt-1 text-pretty text-lg font-semibold tracking-tight text-ink [word-break:keep-all]">
-                      {m.title}
-                      {m.upcoming && (
-                        <span className="ml-2 whitespace-nowrap text-sm font-normal text-ink-4">
-                          (Upcoming)
-                        </span>
-                      )}
-                    </h3>
-                    <p className="mt-1 text-pretty text-sm leading-relaxed text-ink-3 [word-break:keep-all]">
-                      <Clauses text={m.text} />
-                    </p>
-                  </div>
-                </motion.li>
-              );
-            })}
-          </ul>
-        </div>
-      </section>
-
     </PageShell>
+  );
+}
+
+/* ── History (연혁): retained but currently unrendered ──
+ *
+ * The alternating timeline this page carried until 2026-08-09. It came out of
+ * the render by decision, not by neglect: the About page is What we do,
+ * Members, Partners now, and the month-by-month record was retired from the
+ * deployed site while MILESTONES itself stays in data.ts (the homepage's
+ * retained MilestoneTimeline reads it too). Mount it again by rendering
+ * <HistoryTimeline /> after Partners, with a Divider between them. */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function HistoryTimeline() {
+  // Newest at the top, founding (2026.01) at the bottom; drop placeholder entries.
+  const history = MILESTONES.filter((m) => !m.placeholder).slice().reverse();
+
+  return (
+    <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
+      <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">History</h2>
+
+      {/* max-w-5xl, not 3xl: each side of the centre line is half of this,
+          so a narrower rail chops titles and one-liners into three-word
+          fragments. This keeps ~430px of measure per side. */}
+      <div className="relative mx-auto mt-14 max-w-5xl md:mt-20">
+        {/* center pipeline */}
+        <span
+          aria-hidden
+          className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-brand/30"
+        />
+        <ul className="space-y-12 md:space-y-16">
+          {history.map((m, i) => {
+            const left = i % 2 === 0;
+            return (
+              <motion.li
+                key={m.date}
+                variants={rise}
+                custom={i}
+                initial="hidden"
+                whileInView="show"
+                viewport={VIEWPORT}
+                className="relative grid md:grid-cols-2 md:gap-16"
+              >
+                {/* node on the center line */}
+                <span
+                  aria-hidden
+                  className="absolute left-1/2 top-1.5 h-3.5 w-3.5 -translate-x-1/2 rounded-full bg-brand ring-4 ring-paper"
+                />
+                <div className={left ? "md:pr-12 md:text-right" : "md:col-start-2 md:pl-12"}>
+                  <div className="font-mono text-sm text-accent">{m.date}</div>
+                  <h3 className="mt-1 text-pretty text-lg font-semibold tracking-tight text-ink [word-break:keep-all]">
+                    {m.title}
+                    {m.upcoming && (
+                      <span className="ml-2 whitespace-nowrap text-sm font-normal text-ink-4">
+                        (Upcoming)
+                      </span>
+                    )}
+                  </h3>
+                  <p className="mt-1 text-pretty text-sm leading-relaxed text-ink-3 [word-break:keep-all]">
+                    <Clauses text={m.text} />
+                  </p>
+                </div>
+              </motion.li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
   );
 }

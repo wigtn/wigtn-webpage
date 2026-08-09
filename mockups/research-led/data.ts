@@ -65,7 +65,6 @@ import {
   TECH_REPORT_SITE,
   blogHref,
   techFeedHref,
-  techReportAsset,
   techReportHref,
 } from "./links";
 export {
@@ -82,48 +81,49 @@ export {
  * a short teaser; depth lives on these sub-pages. Nav points to pages, not
  * in-page anchors.
  *
- * `children` makes an item a menu instead of a link. Only WIG-log has them:
- * it is one site with two halves, and a tab pointing at one of them hides the
- * other from anyone who does not already know it is there.
+ * Tech is the one external item: it hands the reader to WIG-log's report
+ * index, that site's front door for findings. The nav carried a WIG-log
+ * dropdown with Tech and Feed under it while the stories lived on the feed;
+ * the stories came back here as /blog, which left the menu one destination,
+ * and a menu of one is a link. The `children` machinery went with it.
  *
- * An item with children has no `href` of its own, and that is deliberate
- * rather than an omission. WIG-log's front door is the report index, which is
- * exactly where Tech goes, so a parent link would be a second control to the
- * same URL sitting on top of the first. The children are the destinations and
- * the parent is the name over them, in the header, the footer and the mobile
- * sheet alike. */
-export type NavChild = { label: string; href: string; note: string };
-/* A union rather than one shape with both fields optional, so the renderer
- * gets `href: string` for free in the branch where it is a link, instead of a
- * non-null assertion on a field the data guarantees. */
-export type NavItem =
-  | { label: string; href: string; disabled?: boolean; children?: never }
-  | { label: string; href?: never; disabled?: boolean; children: NavChild[] };
+ * No Projects tab. The page it pointed at, /work, is retired and redirects
+ * to /story. Restoring the tab means deciding what it should point at first,
+ * not adding a line. */
+export type NavItem = { label: string; href: string; disabled?: boolean };
 
 export const NAV: NavItem[] = [
   { label: "About", href: TEAM_PAGE },
-  { label: "Notices", href: NOTICES },
-  /* Trailing slashes on purpose: the report site builds with trailingSlash,
-   * so the bare URL 301s. Linking the final URL saves that round trip. */
+  { label: "Notice", href: NOTICES },
+  { label: "Story", href: STORY },
+  { label: "Blog", href: BLOG_INDEX },
+  /* Trailing slash on purpose: the report site builds with trailingSlash, so
+   * the bare URL 301s. Linking the final URL saves that round trip. */
+  { label: "Tech", href: TECH_REPORT_INDEX },
+];
+
+/* The homepage BM section: the two lines of business, each in the shape a
+ * client would engage it. WIGTN sells no product of its own; what it offers
+ * is the team. Source copy is README.md's services list, folded from four
+ * lines to two: AX Consulting and AI System Integration are one engagement
+ * seen from its two ends, and AI R&D is the record (CAPABILITIES below), not
+ * a service. No figures, because there are none published to cite. */
+export const SERVICES = [
   {
-    label: "WIG-log",
-    children: [
-      {
-        label: "Tech",
-        href: TECH_REPORT_INDEX,
-        note: "Reports: method, measurement, limits",
-      },
-      { label: "Feed", href: TECH_FEED_INDEX, note: "Conferences, hackathons, field notes" },
-    ],
+    title: "Web Agency",
+    lead: "Websites and web products, designed, built, and shipped end to end.",
+    tags: ["Design", "Build", "Deploy"],
   },
-  /* No Projects tab. It was hidden behind a commented-out line here for a
-   * while; the page it pointed at, /work, has since been retired and now
-   * redirects to /notices. Restoring the tab means deciding what it should
-   * point at first, not uncommenting a line. */
+  {
+    title: "AX Agency",
+    lead: "We map where AI creates real leverage in your business, then build it into the products and workflows you already run.",
+    tags: ["Roadmap", "Integration", "AI systems"],
+  },
 ];
 
 /* What we do, in the order the record supports it. Each pillar names something
  * that has already happened and can be checked: a venue, a registry, a placing.
+ * Rendered on /team since the landing slimmed to Hero, Services, Contact.
  *
  * There used to be a fourth pillar for meetups and seminars. It was the only
  * one with nothing behind it, and it sat next to three that were true. It comes
@@ -398,14 +398,6 @@ export const ARTICLES: Article[] = [
   traeSeoulGrandPrize, // 2026.03.28, hackathon
 ];
 
-/* Curated homepage "newsroom": research credibility & wins told as article
- * cards with imagery (papers, conference reports, awards), not a dry list. */
-/* Homepage teaser for /news. It used to name the three newest stories; those
- * moved to the blog, and /news is the release list now, so this is the three
- * newest releases and the section still tells the truth about where it leads. */
-export const NEWSROOM = ARTICLES.filter((a) => a.newsTopic === "release")
-  .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
-  .slice(0, 3);
 export const getArticle = (slug: string) => ARTICLES.find((a) => a.slug === slug);
 
 /* Where an article's page lives. Blog posts render under /blog; everything
@@ -437,96 +429,11 @@ export const STORIES: Story[] = [
   { article: traeSeoul2026GrandPrize, image: TRAE_SEOUL_COVER, blogSlug: "trae-seoul-grand-prize" },
 ];
 
-/* ── Homepage report rail ────────────────────────────────────────────────────
- *
- * The three newest tech reports, as cards that leave this site. The nav already
- * links the report site, but a reader who has not yet decided to go there is
- * not reading the nav. Three covers with real titles under them say what is
- * over there; a single link says only that somewhere else exists.
- *
- * This is a hand-kept mirror, and the report site is the source of truth. This
- * repo has no build-time access to it: separate Next app, separate repository,
- * separate deploy, so nothing here can read its data or notice when it changes.
- * The rules that follow from that are worth stating rather than rediscovering.
- *
- *   - The three are chosen, not computed, and the order is chosen too: Codex,
- *     Claude Code, then WigtnOCR off the "Models & evaluation" track. Two
- *     plugins and one model. This used to be "the three newest", which is a
- *     rule that quietly decides what the site is about; sorted by date it would
- *     have shown the two harness parts and WIGVO and left every model report
- *     off the homepage.
- *   - Codex leads even though it is part 2 of the harness series. On the report
- *     hub the series order matters, because a reader arriving there is reading
- *     the series. Here they are three separate things to click, and the newer
- *     plugin is the one to lead with.
- *   - So a new report does not belong here by being new. It replaces the entry
- *     it competes with, or nothing changes. Three is what the grid is built
- *     for, not a floor.
- *   - `title` is the report's `cardTitle` when it has one and its `title` when
- *     it does not, which is the same choice the report hub card makes. The two
- *     harness reports have no `cardTitle` on purpose: their titles carry the
- *     series numbering, which is how a reader gets from part 1 to part 2.
- *   - Do not copy the `dek` across. It states measured figures, and a figure
- *     living in a repo that cannot check it is a figure that will go wrong here
- *     while staying right there.
- *
- * Re-sourced 2026.08.09 from wigtn-tech-report at 791df3d, the head of
- * feat/report-author-byline, which is open as that repo's PR #6 and not merged.
- * Anticipating an unmerged branch needs a reason, and this is it: #6 redates the
- * Claude Code report from 2026.08.04 to 2026.01.12, the day its plugin
- * repository opened, which drops it from newest to oldest and changes which
- * three reports are the newest three. The card that used to sit here for it
- * carried 2026.08.04, a date that stops being true the moment #6 lands.
- *
- * The three below are safe in the meantime. Their dates, titles and banners are
- * byte-identical on main and on #6, so every value this page renders is correct
- * against the site as deployed today. What anticipates the merge is only which
- * three were picked. Until #6 lands, the live hub still ranks the Claude Code
- * report first and this rail does not show it.
- *
- * When #6 merges, nothing here needs to change. If it is closed instead, the
- * Claude Code report goes back to being the newest and belongs at the top of
- * this list again, with wigtnocr dropping off. */
-export type TechReport = {
-  slug: string;
-  title: string;
-  date: string;
-  /* Full path under the report repo's `public/`, resolved across origins by
-   * `techReportAsset`. Nothing in this build verifies it; see ./links. */
-  image: string;
-  alt: string;
-};
-
-export const TECH_REPORTS: TechReport[] = [
-  {
-    slug: "codex-selective-harness",
-    title: "Running a harness on frontier models, part 2: Codex",
-    date: "2026.07.28",
-    image: techReportAsset("/images/projects/codex_image_v1.jpg"),
-    alt: "Codex",
-  },
-  {
-    slug: "wigtn-coding",
-    title: "Running a harness on frontier models, part 1: Claude Code",
-    /* 2026.01.12, not the 2026.08.04 this card carried before. #6 redates the
-     * report to the day its plugin repository opened (first commit 0593d8d),
-     * because the report is the seven-month history of that plugin and was
-     * dated to its last measurement instead of its start. The live page still
-     * shows 2026.08.04 until #6 lands, so this one value is ahead of the
-     * deployed site; every other value on this rail matches it today. */
-    date: "2026.01.12",
-    image: techReportAsset("/images/projects/claudecode_image_v1.jpg"),
-    alt: "Claude Code",
-  },
-  {
-    slug: "wigtnocr",
-    title: "Distilled from 30B, first of six on Hit@1",
-    date: "2026.05.20",
-    image: techReportAsset("/images/projects/wigtnocr_v1_image.jpg"),
-    alt: "WigtnOCR on Hugging Face",
-  },
-];
-
+/* The homepage report rail (TECH_REPORTS, a hand-kept mirror of three report
+ * cards from the sibling wigtn-tech-report repo) went with the landing
+ * slimming of 2026-08-09: the landing is Hero, Services, Contact now, and the
+ * nav's Tech item is the pointer to WIG-log. If a rail like it comes back,
+ * read that mirror's rules in the git history first; they were earned. */
 
 /* ── Research & Tech Assets (homepage centerpiece) ── */
 

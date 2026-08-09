@@ -12,7 +12,7 @@ import { TeamPage } from "@/mockups/research-led/TeamPage";
  * No trailing slash: the Pages build exports flat files, so `/team` resolves
  * and `/team/` 404s. */
 const DESCRIPTION =
-  "Five engineers who publish peer-reviewed research and release everything it runs on, with no lab behind them.";
+  "What WIGTN does and who does it: published research, open models and code, reports with their limits, and the five engineers behind them.";
 
 export const metadata: Metadata = {
   title: `About | ${ORG_NAME}`,
