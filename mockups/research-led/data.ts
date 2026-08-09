@@ -27,16 +27,15 @@
  * Templates live in updates/_template/, one per kind of post: conference,
  * hackathon, release, community. Read its README before starting a new one:
  * the outline that suits a hackathon is not the one that suits a release. */
-/* The four conference and hackathon posts moved to the WIG-log feed
- * (../wigtn-tech-report, components/feed/posts). Only their cover art
- * stayed, because the homepage milestone rail still shows it. */
-import {
-  ACL_2026_COVER,
-  OBA_WEEKENDTHON_COVER,
-  SNOWFLAKE_2026_COVER,
-  TRAE_SEOUL_COVER,
-} from "./milestones";
+/* The four conference and hackathon posts left for the WIG-log feed on
+ * 2026-08-09 and came back the same day, when this site grew a blog of its
+ * own. They carry channel: "blog" and render at /blog/<slug>; their covers
+ * ship from the post folders again, which is why ./milestones is gone. */
+import { ACL_2026_COVER, acl2026SanDiego } from "./updates/acl-2026-san-diego";
+import { OBA_WEEKENDTHON_COVER, obaWeekendthonTop6 } from "./updates/oba-weekendthon-top6";
 import { obaWeekendthon2026Top6 } from "./updates/oba-weekendthon-2026-top6";
+import { SNOWFLAKE_2026_COVER, snowflakeKorea2026 } from "./updates/snowflake-korea-2026";
+import { TRAE_SEOUL_COVER, traeSeoulGrandPrize } from "./updates/trae-seoul-grand-prize";
 import { snowflakeKorea2026TechTrack } from "./updates/snowflake-korea-2026-tech-track";
 import { traeSeoul2026GrandPrize } from "./updates/trae-seoul-2026-grand-prize";
 import { wigssNpmRelease } from "./updates/wigss-npm-release";
@@ -59,14 +58,24 @@ export const articleHref = (slug: string) => `${HOME}${slug}`;
  * comment in links.ts. Imported as well as re-exported: NAV below uses
  * TECH_REPORT_SITE locally, and `export ... from` creates no local binding. */
 import {
+  BLOG_INDEX,
   TECH_FEED_INDEX,
   TECH_REPORT_INDEX,
   TECH_REPORT_SITE,
+  blogHref,
   techFeedHref,
   techReportAsset,
   techReportHref,
 } from "./links";
-export { TECH_FEED_INDEX, TECH_REPORT_INDEX, TECH_REPORT_SITE, techFeedHref, techReportHref };
+export {
+  BLOG_INDEX,
+  TECH_FEED_INDEX,
+  TECH_REPORT_INDEX,
+  TECH_REPORT_SITE,
+  blogHref,
+  techFeedHref,
+  techReportHref,
+};
 
 /* Reference-led structure (Next Securities / MakinaRocks): the homepage is
  * a short teaser; depth lives on these sub-pages. Nav points to pages, not
@@ -243,10 +252,12 @@ export const TEAM: TeamMember[] = [
 export type Kind = "report" | "event" | "community" | "insight";
 
 /* Channel split: "newsroom" = in-site news feed (awards, releases,
- * announcements, community; LinkedIn-style short posts); "report" = deep tech
- * content that lives on the external GitHub Pages blog. Untagged articles are
- * treated as report/back-catalog and stay out of the newsroom feed. */
-export type Channel = "newsroom" | "report";
+ * announcements; short posts); "blog" = story posts hosted on this site at
+ * /blog/<slug> (conference trips, hackathon write-ups, photographs and all);
+ * "report" = deep tech content that lives on the external WIG-log site.
+ * Untagged articles are treated as report/back-catalog and stay out of every
+ * feed. */
+export type Channel = "newsroom" | "report" | "blog";
 export type NewsTopic = "award" | "release" | "announcement" | "community";
 
 /* `aspect` overrides the gallery's default 4/3 crop for a single image.
@@ -375,6 +386,15 @@ export const ARTICLES: Article[] = [
   wigtnCodexRelease, // 2026.07.28, v0.3.0
   wigssNpmRelease, // 2026.04.03, v0.1.4
   wigtnocrOpenSource, // 2026.04.03, no version
+
+  /* ───────── Blog · stories (real), newest first ─────────
+   * channel: "blog": hosted at /blog/<slug>, listed on /blog, kept out of
+   * NEWSROOM_FEED by the channel filter. Each pairs with a /story row through
+   * STORIES below. */
+  acl2026SanDiego, // 2026.07.16, trip report
+  obaWeekendthonTop6, // 2026.05.31, hackathon
+  snowflakeKorea2026, // 2026.04.29, hackathon
+  traeSeoulGrandPrize, // 2026.03.28, hackathon
 ];
 
 /* Curated homepage "newsroom": research credibility & wins told as article
@@ -386,6 +406,17 @@ export const NEWSROOM = ARTICLES.filter((a) => a.newsTopic === "release")
   .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
   .slice(0, 3);
 export const getArticle = (slug: string) => ARTICLES.find((a) => a.slug === slug);
+
+/* Where an article's page lives. Blog posts render under /blog; everything
+ * else renders at the root slug. Any surface that could be handed either kind
+ * of article links through this, not through articleHref. */
+export const hrefFor = (a: Article) =>
+  a.channel === "blog" ? blogHref(a.slug) : articleHref(a.slug);
+
+/* The /blog index: story posts, newest first. */
+export const BLOG_FEED = ARTICLES.filter(
+  (a) => !a.placeholder && a.channel === "blog",
+).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
 /* ── Homepage report rail ────────────────────────────────────────────────────
  *
@@ -615,12 +646,12 @@ export const RETIRED: {
     title: "WIGVO",
   },
   /* The WIGTN Flake report was removed from the tech-report site, and the
-   * Snowflake hackathon post that replaced it has since moved to that site's
-   * blog. This hop follows it rather than pointing at the deleted local copy. */
+   * Snowflake hackathon post that replaced it now lives on this site's blog.
+   * This hop follows it rather than pointing at the deleted report. */
   {
     note: "The WIGTN Flake report was taken down with the rest of the hackathon write-ups. The Snowflake post is the account of that project now, and it carries the code-path audit in full.",
     slug: "wigtn-flake-cortex-debate-video",
-    to: techFeedHref("snowflake-korea-2026"),
+    to: blogHref("snowflake-korea-2026"),
     title: "the Snowflake hackathon post",
   },
   {
@@ -629,13 +660,15 @@ export const RETIRED: {
     to: techReportHref("wigtnocr"),
     title: "WigtnOCR",
   },
-  /* The four stories moved to the WIG-log feed on 2026.08.09. These URLs
-   * were live on this site and are in the sitemap that has already been
-   * crawled, so they redirect rather than 404. */
-  { note: "The conference and hackathon write-ups moved to the WIG-log feed, where they sit beside the technical reports. This page is the release list now.", slug: "acl-2026-san-diego", to: techFeedHref("acl-2026-san-diego"), title: "the ACL 2026 trip report" },
-  { note: "The conference and hackathon write-ups moved to the WIG-log feed, where they sit beside the technical reports. This page is the release list now.", slug: "oba-weekendthon-top6", to: techFeedHref("oba-weekendthon-top6"), title: "the OBA Weekendthon post" },
-  { note: "The conference and hackathon write-ups moved to the WIG-log feed, where they sit beside the technical reports. This page is the release list now.", slug: "snowflake-korea-2026", to: techFeedHref("snowflake-korea-2026"), title: "the Snowflake Korea post" },
-  { note: "The conference and hackathon write-ups moved to the WIG-log feed, where they sit beside the technical reports. This page is the release list now.", slug: "trae-seoul-grand-prize", to: techFeedHref("trae-seoul-grand-prize"), title: "the TRAE Seoul post" },
+  /* These four URLs served the stories when they were root-level articles,
+   * then redirected to the WIG-log feed for the day the stories lived there.
+   * The posts are back on this site under /blog now, and the URLs are in
+   * sitemaps that were already crawled, so each one forwards to the same post
+   * at its blog address rather than 404ing. */
+  { note: "The conference and hackathon write-ups live on this site's blog now. This address predates that section, so it forwards.", slug: "acl-2026-san-diego", to: blogHref("acl-2026-san-diego"), title: "the ACL 2026 trip report" },
+  { note: "The conference and hackathon write-ups live on this site's blog now. This address predates that section, so it forwards.", slug: "oba-weekendthon-top6", to: blogHref("oba-weekendthon-top6"), title: "the OBA Weekendthon post" },
+  { note: "The conference and hackathon write-ups live on this site's blog now. This address predates that section, so it forwards.", slug: "snowflake-korea-2026", to: blogHref("snowflake-korea-2026"), title: "the Snowflake Korea post" },
+  { note: "The conference and hackathon write-ups live on this site's blog now. This address predates that section, so it forwards.", slug: "trae-seoul-grand-prize", to: blogHref("trae-seoul-grand-prize"), title: "the TRAE Seoul post" },
   /* /work is gone with the article groups it listed. What it had that still
    * exists, the awards, moved on to the WIG-log feed. */
   { note: "The page that used to be here grouped work that has since moved to the tech-report site. What is left of it, the events and the awards, is in the WIG-log feed.",

@@ -1,12 +1,12 @@
 "use client";
 
-/** Shared article cards. Reused by the homepage and /work, /news. */
+/** Shared article cards. Reused by the /blog index and any article rail. */
 
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Calendar, MapPin, Play } from "lucide-react";
-import { articleHref, type Article, type TechReport } from "./data";
+import { hrefFor, type Article, type TechReport } from "./data";
 /* Straight from the leaf module, not re-exported through ./data. Both work at
  * runtime here, but ./links is where the URL is decided and this is one hop
  * fewer to read. */
@@ -82,21 +82,18 @@ function PlayBadge() {
  * shaped differently from the other. What still separates them is the meta row:
  * these carry a date and a place and point inside the site.
  *
- * ALL OF THAT ONLY APPLIES WHEN THERE IS A PICTURE, and on this rail there is
- * not one today. The covers the paragraphs above are arguing about belonged to
- * the conference and hackathon posts, which are on the WIG-log feed now. What
- * is left is releases, and a release ships no cover by house rule, so the card
- * draws a hairline instead of a frame. Do not reinstate the gradient fallback:
- * it was three copies of the same non-picture standing where three different
- * ones used to be. If a notice ever arrives with a photograph that carries a
- * fact, the frame comes back for that one card on its own.
+ * All of that only applies when there is a picture. The blog posts on /blog
+ * carry covers, so their cards draw the frame; a release ships no cover by
+ * house rule, so its card draws a hairline instead. Do not reinstate the
+ * gradient fallback for coverless cards: it was three copies of the same
+ * non-picture standing where three different ones used to be.
  */
 export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
   const cover = coverSrc(a);
   return (
     <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
       <Link
-        href={articleHref(a.slug)}
+        href={hrefFor(a)}
         /* A card with no picture gets a hairline where the frame was. Without
            it the three coverless cards read as loose paragraphs in a row
            rather than as three of one thing, and a rule is what this site uses
@@ -216,7 +213,7 @@ export function ReportCard({ r, i = 0 }: { r: TechReport; i?: number }) {
 export function ArticleRow({ a, i = 0 }: { a: Article; i?: number }) {
   return (
     <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
-      <Link href={articleHref(a.slug)} className="group flex items-start gap-6 py-5">
+      <Link href={hrefFor(a)} className="group flex items-start gap-6 py-5">
         <span className="w-20 shrink-0 pt-1 font-mono text-xs text-ink-5">{a.date}</span>
         <div className="flex-1">
           <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-accent">

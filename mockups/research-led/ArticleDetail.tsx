@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight, Calendar, MapPin, Play, Clock, User } from "lucide-react";
 import {
   HOME,
-  articleHref,
+  hrefFor,
   getArticle,
   ARTICLES,
   type Block,
@@ -171,9 +171,18 @@ export function ArticleDetail({ slug }: { slug: string }) {
    * the body, and the links: everything that is the post rather than around
    * it. */
   const isNote = article.layout === "note";
+  /* Same kind AND same channel. Kind alone would hand a blog post the short
+   * news notes as "related" and link them at root slugs, and hand a release
+   * page the blog posts at slugs that are RETIRED redirects now. A rail should
+   * offer more of what the reader is already reading. */
   const related = isNote
     ? []
-    : ARTICLES.filter((a) => a.kind === article.kind && a.slug !== article.slug).slice(0, 3);
+    : ARTICLES.filter(
+        (a) =>
+          a.kind === article.kind &&
+          a.channel === article.channel &&
+          a.slug !== article.slug,
+      ).slice(0, 3);
 
   return (
     <div className="relative min-h-screen bg-paper text-ink font-sans antialiased selection:bg-brand/20">
@@ -383,7 +392,7 @@ export function ArticleDetail({ slug }: { slug: string }) {
                   className="h-full"
                 >
                   <Link
-                    href={articleHref(r.slug)}
+                    href={hrefFor(r)}
                     className="group flex h-full flex-col rounded-lg border border-line/[0.08] bg-paper-raised p-6 transition-all hover:border-brand/50 hover:bg-paper-tint"
                   >
                     <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-accent">

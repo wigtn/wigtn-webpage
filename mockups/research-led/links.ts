@@ -1,12 +1,16 @@
 /**
- * Off-site link constants.
+ * Link constants a post is allowed to import.
  *
- * This module exists so that a post under `updates/` can build a tech-report
- * URL without importing a value from `data.ts`. `data.ts` imports every post
- * module, so a post importing a *value* back closes a runtime cycle: by the
- * time the post's object literal evaluates, `data.ts` is still mid-evaluation
- * and the constant is in its temporal dead zone. Importing a *type* is fine,
- * because types are erased, which is why posts still do `import type`.
+ * This module exists so that a post under `updates/` can build a URL without
+ * importing a value from `data.ts`. `data.ts` imports every post module, so a
+ * post importing a *value* back closes a runtime cycle: by the time the post's
+ * object literal evaluates, `data.ts` is still mid-evaluation and the constant
+ * is in its temporal dead zone. Importing a *type* is fine, because types are
+ * erased, which is why posts still do `import type`.
+ *
+ * Most of what lives here is off-site (the WIG-log halves), but the rule is
+ * about the import graph, not about origins: BLOG_INDEX below is a local
+ * route, and it is here because posts link each other's blog pages.
  *
  * Keeping the constants in a leaf module with no imports of its own removes
  * the cycle entirely, so the single-point-of-change promise below survives.
@@ -65,3 +69,10 @@ export const techFeedHref = (slug: string) => `${TECH_FEED_INDEX}${slug}/`;
  * /wigtn-tech-report. That prefix lives in TECH_REPORT_SITE, so pass the path
  * as it appears in the report repo's `public/` and nothing else. */
 export const techReportAsset = (path: string) => `${TECH_REPORT_SITE}${path}`;
+
+/* The blog on this site. Story posts (conference trips, hackathon write-ups)
+ * are hosted here at /blog/<slug>; they lived on the report site's feed
+ * between 2026-08-09 and the restructure that brought them back. No trailing
+ * slash: this repo exports flat files, so /blog/x resolves and /blog/x/ 404s. */
+export const BLOG_INDEX = "/blog";
+export const blogHref = (slug: string) => `${BLOG_INDEX}/${slug}`;

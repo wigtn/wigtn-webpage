@@ -2,8 +2,8 @@
  * Notice: WIGVO at ACL 2026 System Demonstrations - announcement.
  *
  * The first post in the News group of /notices, which was empty until this
- * one. Everything already published on this site was a release, because the
- * conference and hackathon stories moved to the WIG-log feed. This is the
+ * one. Everything already published on this site was a release; the conference
+ * and hackathon stories are long-form and live on the blog. This is the
  * other half the group was built for: something the team did that is not a
  * thing you can install.
  *
@@ -26,7 +26,7 @@
  *
  * NO COVER, and the folder holds no image. Same rule the four release posts
  * settled on: the photographs of this trip carry the trip report, and the trip
- * report is on the WIG-log feed. A second copy of the booth photo here would
+ * report is on this site's blog. A second copy of the booth photo here would
  * be a second source for an image whose first source is one link away.
  *
  * WHERE EVERY FACT COMES FROM:
@@ -37,9 +37,9 @@
  *     the two latency figures.
  *   - MILESTONES in ../../data.ts: acceptance in 2026.02, and the July entry
  *     naming the booth (D3) and the IWSLT 2026 invited oral talk and poster.
- *   - The trip report on the WIG-log feed (components/feed/posts/
- *     acl-2026-san-diego.ts) for its own date and title. Nothing else is taken
- *     from it: it is a story and this is a notice.
+ *   - The trip report (../acl-2026-san-diego, on this site's blog) for its
+ *     own date and title. Nothing else is taken from it: it is a story and
+ *     this is a notice.
  *
  * NO BENCHMARK TABLE, no cost figure, no limitations section, and now no
  * latency figure either. Those are report material and the report is better at
@@ -64,7 +64,7 @@
  * other than co-authorship of this paper.
  */
 import type { Article, Block } from "../../data";
-import { techFeedHref, techReportHref } from "../../links";
+import { blogHref, techReportHref } from "../../links";
 
 const p = (text: string): Block => ({ t: "p", text });
 
@@ -91,7 +91,7 @@ export const wigvoAcl2026: Article = {
     { label: "Watch system demo", href: "https://www.youtube.com/watch?v=jK1CDOQExLw" },
     { label: "Try WIGVO", href: "https://wigvo.wigtn.com" },
     { label: "Tech report", href: techReportHref("wigvo") },
-    { label: "Trip report", href: techFeedHref("acl-2026-san-diego") },
+    { label: "Trip report", href: blogHref("acl-2026-san-diego") },
   ],
   body: [
     p(
