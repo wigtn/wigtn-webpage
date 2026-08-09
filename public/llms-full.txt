@@ -6,7 +6,7 @@
 > web development (Web Agency) and AI transformation (AX Agency).
 
 Every figure below comes from a published paper, a public model card, or a
-technical report at https://wigtn.github.io/wigtn-tech-report/. Work that has
+technical report at https://tech.wigtn.com/. Work that has
 not been published is not described here, including work under review.
 
 ## Projects
@@ -43,7 +43,7 @@ not been published is not described here, including work under review.
   translations; cost reflects one provider configuration and pricing period.
 - Venue: ACL 2026 System Demonstrations, accepted, pp. 336-344. An invited oral
   talk and poster followed at IWSLT 2026.
-- Report: https://wigtn.github.io/wigtn-tech-report/wigvo/
+- Report: https://tech.wigtn.com/wigvo/
 
 ### WigtnOCR, a 2B document parser
 
@@ -58,7 +58,7 @@ not been published is not described here, including work under review.
   the student retains a skip rate; no controlled cost or throughput study has
   been published.
 - Open: adapter, evaluation set and code, Apache 2.0.
-- Report: https://wigtn.github.io/wigtn-tech-report/wigtnocr/
+- Report: https://tech.wigtn.com/wigtnocr/
 
 ### WIGTN plugins, multi-agent software workflows
 
@@ -69,7 +69,7 @@ not been published is not described here, including work under review.
   while the harness increased median wall time by 151.7%, output tokens by
   141.2% and command count by 32.0%. The system was redesigned around selective,
   task-dependent intervention because of that result.
-- Report: https://wigtn.github.io/wigtn-tech-report/codex-selective-harness/
+- Report: https://tech.wigtn.com/codex-selective-harness/
 
 ### WIGSS, visual editing that rewrites source
 
@@ -80,7 +80,7 @@ not been published is not described here, including work under review.
   the edited one within a two-pixel tolerance. A mismatch is surfaced as a
   warning rather than reported as a successful refactor.
 - No controlled speed or code-quality benchmark has been published.
-- Report: https://wigtn.github.io/wigtn-tech-report/wigss/
+- Report: https://tech.wigtn.com/wigss/
 
 ## Track record
 
@@ -97,7 +97,7 @@ not been published is not described here, including work under review.
   from the registry that serves it
 - [Story](https://wigtn.com/story): one row per event, each opening the full
   story with its photographs
-- [WIG-log](https://wigtn.github.io/wigtn-tech-report/tech/): technical reports
+- [WIG-log](https://tech.wigtn.com/): technical reports
 - [GitHub](https://github.com/wigtn)
 - [HuggingFace](https://huggingface.co/Wigtn)
 - [npm](https://www.npmjs.com/org/wigtn)

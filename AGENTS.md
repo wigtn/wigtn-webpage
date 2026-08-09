@@ -44,7 +44,7 @@ length.
 | | Subject | The question it answers |
 | --- | --- | --- |
 | **wigtn.com** (this repo) | the team | What did we **do**? |
-| **[WIG-log](https://wigtn.github.io/wigtn-tech-report/tech/)** (`wigtn-tech-report`) | the work | What did we **find**? |
+| **[WIG-log](https://tech.wigtn.com/)** (`wigtn-tech-report`) | the work | What did we **find**? |
 
 Two tests, in order.
 

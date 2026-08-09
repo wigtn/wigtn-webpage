@@ -19,7 +19,7 @@
  * method, the OmniDocBench and KoGovDoc tables, and a long limitations
  * section. All of that moved to the tech-report site under the split described
  * in AGENTS.md: this site says what the team did, the report site says what the
- * work found. The report is at wigtn.github.io/wigtn-tech-report/wigtnocr/ and
+ * work found. The report is at tech.wigtn.com/wigtnocr/ and
  * it is better than what was here, because it is bilingual and it keeps its
  * limitations next to its results.
  *

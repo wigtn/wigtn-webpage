@@ -62,23 +62,19 @@ export const articleHref = (slug: string) => `${HOME}${slug}`;
 import {
   BLOG_INDEX,
   STORY_INDEX,
-  TECH_FEED_INDEX,
   TECH_REPORT_INDEX,
   TECH_REPORT_SITE,
   blogHref,
   storyHref,
-  techFeedHref,
   techReportHref,
 } from "./links";
 export {
   BLOG_INDEX,
   STORY_INDEX,
-  TECH_FEED_INDEX,
   TECH_REPORT_INDEX,
   TECH_REPORT_SITE,
   blogHref,
   storyHref,
-  techFeedHref,
   techReportHref,
 };
 
@@ -92,9 +88,9 @@ export {
  * the stories came back on-site, which left the menu one destination, and a
  * menu of one is a link. The `children` machinery went with it.
  *
- * No Blog tab. The section is closed until it has content of its own
- * (community and partnership news); see BLOG_INDEX in links.ts. While it
- * mirrored Story it was two names in the nav for one list.
+ * No Blog tab. The section is closed until it has business-track content of
+ * its own; docs/blog-section.md is the gate and the reopening steps. While
+ * it mirrored Story it was two names in the nav for one list.
  *
  * No Projects tab. The page it pointed at, /work, is retired and redirects
  * to /story. Restoring the tab means deciding what it should point at first,
