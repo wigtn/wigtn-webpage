@@ -276,6 +276,12 @@ export type ReleaseVersion = {
   note?: string;
 };
 
+/* What shape of artifact a release post ships: weights, an agent plugin, or
+ * a CLI/library. Drives the /notices type filter and nothing else. Three
+ * values because three shapes have shipped; extend the union when a new
+ * shape does (a dataset, a harness), not before. */
+export type ReleaseType = "model" | "plugin" | "tool";
+
 export type Article = {
   slug: string;
   kind: Kind;
@@ -335,6 +341,9 @@ export type Article = {
    * the HuggingFace repo carries no tags and the "v1" in its name is the
    * product line, not a release. */
   version?: string;
+  /* Release only: which shape of artifact the product is, for the /notices
+   * type filter. See ReleaseType above. */
+  releaseType?: ReleaseType;
   externalUrl?: string; // report only: GitHub Pages blog post URL
   body: Block[];
 };
@@ -540,6 +549,7 @@ export const NEWSROOM_FEED = ARTICLES.filter(
 export type ReleaseRow = {
   date: string;
   product: string;
+  type?: ReleaseType;
   version?: string;
   note?: string;
   href: string;
@@ -552,6 +562,7 @@ export const RELEASE_ROWS: ReleaseRow[] = ARTICLES.filter(
       ? a.versions.map((v) => ({
           date: v.date,
           product: a.title,
+          type: a.releaseType,
           version: v.version,
           note: v.note,
           href: articleHref(a.slug),
@@ -560,6 +571,7 @@ export const RELEASE_ROWS: ReleaseRow[] = ARTICLES.filter(
           {
             date: a.date,
             product: a.title,
+            type: a.releaseType,
             version: a.version,
             note: a.summary,
             href: articleHref(a.slug),

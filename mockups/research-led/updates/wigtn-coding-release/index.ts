@@ -88,6 +88,7 @@ export const wigtnCodingRelease: Article = {
   kind: "report",
   channel: "newsroom",
   newsTopic: "release",
+  releaseType: "plugin",
   tag: "RELEASE",
   title: "WIGTN Plugin v1: Claude Code",
   version: "v0.1.16",

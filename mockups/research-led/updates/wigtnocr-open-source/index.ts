@@ -53,6 +53,7 @@ export const wigtnocrOpenSource: Article = {
   kind: "report",
   channel: "newsroom",
   newsTopic: "release",
+  releaseType: "model",
   tag: "RELEASE",
   /* Was "WigtnOCR is on HuggingFace: a 2B adapter that reads Korean government
    * documents". Product name now, so the release rows read as a list. No

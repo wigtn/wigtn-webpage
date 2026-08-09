@@ -6,11 +6,19 @@
  *
  * ONE FLAT LIST. This page held News and Releases as stacked sections, then
  * as two levels of tabs, while it was the site's whole feed. The section
- * split ended that: the event news rows live on /story and the long accounts
- * on /blog, so what is left here is the release record, and a record wants a
- * ledger, not tabs. Every row is one shipped version: date, product, version,
- * and the one-line note sourced with that version's changelog. RELEASE_ROWS
- * in data.ts flattens the release posts' versions arrays into exactly this.
+ * split ended that: the event news rows live on /story, so what is left here
+ * is the release record, and a record wants a ledger, not tabs. Every row is
+ * one shipped version: date, product, version, and the one-line note sourced
+ * with that version's changelog. RELEASE_ROWS in data.ts flattens the
+ * release posts' versions arrays into exactly this.
+ *
+ * A TYPE FILTER, NOT A SPLIT. Review (#78) asked whether the ledger should
+ * break into per-product sections for readability; it stays one list, and
+ * the chips between the hero and the list cut it down instead. Each release
+ * post carries a releaseType (model / plugin / tool), the row inherits it,
+ * and a chip shows only the types that actually have rows. Search joins the
+ * chips when the release count earns it; the per-post metadata is the
+ * groundwork for both.
  *
  * A row navigates to the product's release note, where the full changelog and
  * the post's prose live. It is a link, not a button: the old News rows opened
@@ -21,16 +29,16 @@
  * toggle, which fit a page where each product's changelog was its own list.
  * One flat ledger is long in a different way: the reader is either skimming
  * the top or looking for a specific line, and page numbers serve the second
- * reader without burying the first. Ten to a page.
+ * reader without burying the first. Ten to a page, over the filtered list,
+ * and changing the filter goes back to page one.
  *
- * Every page's rows stay in the DOM and the inactive pages carry `hidden`,
- * rather than the active page being the only thing rendered. A static export
- * ships the first paint as its HTML, so conditional rendering would put page
- * one in the file and leave the rest reachable only by running the page.
- * `hidden` keeps every row in the markup, out of the accessibility tree, and
- * out of the way of a find-in-page that should not match a page nobody is
- * looking at. (The old tab panels made the same choice; the reasoning
- * survives the tabs.)
+ * Every row stays in the DOM whatever the filter and pager say; the inactive
+ * ones carry `hidden`. A static export ships the first paint as its HTML, so
+ * conditional rendering would put the first page in the file and leave the
+ * rest reachable only by running the page. `hidden` keeps all of it in the
+ * markup, out of the accessibility tree, and out of the way of a
+ * find-in-page that should not match a row nobody is looking at. (The old
+ * tab panels made the same choice; the reasoning survives the tabs.)
  *
  * THE HERO IS `PageHero`, the same one /team uses: the nav has no active
  * state, no `aria-current` and no pathname check, so the accent sentence is
@@ -41,9 +49,20 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { PageShell, PageHero } from "./chrome";
-import { RELEASE_ROWS, STORY_INDEX } from "./data";
+import { RELEASE_ROWS, STORY_INDEX, type ReleaseType } from "./data";
 
 const PAGE_SIZE = 10;
+
+/* Chip order is a display choice, not data: plugins first because they carry
+ * most of the ledger's rows. A type with no rows never gets a chip, so the
+ * row is future-proof against the union growing before the artifact ships. */
+const TYPE_ORDER: ReleaseType[] = ["plugin", "tool", "model"];
+const TYPE_LABEL: Record<ReleaseType, string> = {
+  plugin: "Plugin",
+  tool: "Tool",
+  model: "Model",
+};
+const TYPES = TYPE_ORDER.filter((t) => RELEASE_ROWS.some((r) => r.type === t));
 
 /* "WIGTN Plugin v1: Claude Code" carries the org name the sticky header
  * already shows; the row label drops it, the same way the old product tabs
@@ -54,9 +73,15 @@ const productLabel = (product: string) => product.replace(/^WIGTN /, "");
  * note, with the note clamped to one line because its full text lives on the
  * release page. Mobile stacks, and the version joins the date instead of
  * holding a line of its own. */
-function ReleaseRowLine({ row }: { row: (typeof RELEASE_ROWS)[number] }) {
+function ReleaseRowLine({
+  row,
+  hidden,
+}: {
+  row: (typeof RELEASE_ROWS)[number];
+  hidden: boolean;
+}) {
   return (
-    <li className="border-b border-line/[0.08]">
+    <li hidden={hidden} className="border-b border-line/[0.08]">
       <Link
         href={row.href}
         className="group flex flex-col gap-1 py-5 transition-colors hover:bg-line/[0.03] sm:grid sm:grid-cols-[6rem_13rem_4.5rem_minmax(0,1fr)_1.25rem] sm:items-baseline sm:gap-x-6"
@@ -81,9 +106,41 @@ function ReleaseRowLine({ row }: { row: (typeof RELEASE_ROWS)[number] }) {
   );
 }
 
-/* The numbered pager. Buttons, not links: a page here is a filter over one
- * list, and a route per page would be exported files standing in for a
- * scroll position. */
+/* The type chips. Buttons, not links: a filter is display state over one
+ * list, and a route per type would be exported pages standing in for it. */
+function TypeFilter({
+  active,
+  onSelect,
+}: {
+  active: "All" | ReleaseType;
+  onSelect: (f: "All" | ReleaseType) => void;
+}) {
+  const options: ("All" | ReleaseType)[] = ["All", ...TYPES];
+  return (
+    <div role="group" aria-label="Filter by type" className="flex flex-wrap items-center gap-1 pb-4">
+      {options.map((f) => {
+        const on = f === active;
+        return (
+          <button
+            key={f}
+            type="button"
+            aria-pressed={on}
+            onClick={() => onSelect(f)}
+            className={`rounded-full px-3.5 py-1 text-[13px] transition-colors ${
+              on
+                ? "bg-brand font-medium text-white"
+                : "text-ink-4 hover:bg-line/[0.05] hover:text-ink"
+            }`}
+          >
+            {f === "All" ? "All" : TYPE_LABEL[f]}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/* The numbered pager. Buttons, not links, for the same reason as the chips. */
 function Pager({
   pageCount,
   page,
@@ -121,8 +178,17 @@ function Pager({
 }
 
 export function NoticesPage() {
-  const pageCount = Math.ceil(RELEASE_ROWS.length / PAGE_SIZE);
+  const [filter, setFilter] = useState<"All" | ReleaseType>("All");
   const [page, setPage] = useState(0);
+
+  const filtered =
+    filter === "All" ? RELEASE_ROWS : RELEASE_ROWS.filter((r) => r.type === filter);
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  /* Clamped rather than reset in an effect: the only way page can exceed the
+   * count is a filter change, and the chip handler already resets it. The
+   * clamp is the belt for that suspender. */
+  const current = Math.min(page, pageCount - 1);
+  const visible = new Set(filtered.slice(current * PAGE_SIZE, (current + 1) * PAGE_SIZE));
 
   return (
     <PageShell>
@@ -147,14 +213,23 @@ export function NoticesPage() {
       />
 
       <div className="mx-auto max-w-5xl px-6 pb-28 md:pb-40">
-        {Array.from({ length: pageCount }, (_, p) => (
-          <ul key={p} hidden={p !== page} className="border-t border-line/[0.08]">
-            {RELEASE_ROWS.slice(p * PAGE_SIZE, (p + 1) * PAGE_SIZE).map((row) => (
-              <ReleaseRowLine key={`${row.product}@${row.version ?? row.date}`} row={row} />
-            ))}
-          </ul>
-        ))}
-        {pageCount > 1 && <Pager pageCount={pageCount} page={page} onSelect={setPage} />}
+        <TypeFilter
+          active={filter}
+          onSelect={(f) => {
+            setFilter(f);
+            setPage(0);
+          }}
+        />
+        <ul className="border-t border-line/[0.08]">
+          {RELEASE_ROWS.map((row) => (
+            <ReleaseRowLine
+              key={`${row.product}@${row.version ?? row.date}`}
+              row={row}
+              hidden={!visible.has(row)}
+            />
+          ))}
+        </ul>
+        {pageCount > 1 && <Pager pageCount={pageCount} page={current} onSelect={setPage} />}
       </div>
     </PageShell>
   );

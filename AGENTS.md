@@ -77,8 +77,9 @@ Worked examples:
 The two on-site surfaces split the content by shape:
 
 - **/notices** is the release record: `RELEASE_ROWS` in `data.ts` flattens the
-  release posts' `versions` arrays into one date-ordered ledger, ten rows per
-  page, each row linking the product's release note.
+  release posts' `versions` arrays into one date-ordered ledger, filterable
+  by each post's `releaseType` (model / plugin / tool), ten rows per page,
+  each row linking the product's release note.
 - **/story** is one row per event, each pairing a short news note with its
   long-form story through `STORIES` in `data.ts`: the note supplies the
   words, the story post supplies the thumbnail and the /story/<slug>
