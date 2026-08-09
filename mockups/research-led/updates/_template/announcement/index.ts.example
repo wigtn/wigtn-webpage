@@ -35,7 +35,7 @@ export const myNewPost: Article = {
   title: "", // what shipped, at which version, doing what
   summary: "", // one or two sentences; used on cards
   date: "2026.01.01",
-  author: "WIGTN",
+  author: "WIGTN Engineering",
   readTime: "2 min",
   image: cover.src,
   /* The deep write-up lives on the report blog; the note links it, never

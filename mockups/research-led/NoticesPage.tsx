@@ -214,23 +214,22 @@ function AddFilter({
         onClick={() => setOpen((v) => !v)}
         disabled={options.length === 0}
         aria-expanded={open}
-        aria-haspopup="menu"
         className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-line/25 px-3 py-1 text-[13px] text-ink-4 transition-colors hover:border-line/40 hover:text-ink disabled:cursor-default disabled:opacity-40 disabled:hover:border-line/25 disabled:hover:text-ink-4"
       >
         <Plus size={13} />
         Add filter
       </button>
 
+      {/* A disclosure, not a role="menu": that role promises arrow-key
+          navigation between items and this has none. Three buttons in a
+          popover are reached with Tab, which is what actually happens here,
+          so nothing is announced that the widget cannot do. */}
       {open && options.length > 0 && (
-        <div
-          role="menu"
-          className="absolute left-0 top-[calc(100%+6px)] z-30 w-44 overflow-hidden rounded-xl border border-line/12 bg-paper py-1.5 shadow-xl shadow-black/20"
-        >
+        <div className="absolute left-0 top-[calc(100%+6px)] z-30 w-44 overflow-hidden rounded-xl border border-line/12 bg-paper py-1.5 shadow-xl shadow-black/20">
           {options.map((t) => (
             <button
               key={t}
               type="button"
-              role="menuitem"
               onClick={() => {
                 onAdd(t);
                 setOpen(false);
