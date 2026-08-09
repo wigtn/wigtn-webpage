@@ -18,11 +18,16 @@ export const SITE_URL = "https://wigtn.com";
  * schema.org `name` is what an aggregator prints next to the logo. */
 export const ORG_NAME = "WIGTN";
 
-/** One sentence, for the places with room for exactly one. */
-export const TAGLINE = "An independent AI research team.";
+/** One sentence, for the places with room for exactly one.
+ *
+ * "Research team" until 2026-08-09, when the homepage took the business
+ * model above the fold. The blend is deliberate: the client work is what the
+ * team sells, the published record is why anyone should buy it, and a
+ * tagline that names only one of the two misdescribes the site under it. */
+export const TAGLINE = "An independent AI team that builds for clients and publishes in the open.";
 
 /** The tagline plus what follows from it. Every page-level description. */
-export const DESCRIPTION = `${TAGLINE} Peer-reviewed work, open models, and reports that state their own limits.`;
+export const DESCRIPTION = `${TAGLINE} Web products and AI systems built end to end, with peer-reviewed work, open models, and reports that state their own limits.`;
 
 export const CONTACT_EMAIL = "contact@wigtn.com";
 

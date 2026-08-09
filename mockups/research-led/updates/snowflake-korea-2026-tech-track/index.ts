@@ -6,10 +6,10 @@
  *
  * Sections: none, same as its two siblings.
  *
- * NO COVER. The photographs are on the feed post.
+ * NO COVER. The photographs are on the story page.
  *
- * FACTS, all from the feed post (wigtn-tech-report,
- * components/feed/posts/snowflake-korea-2026.ts): 2026.04.29, Seoul, 2nd in the
+ * FACTS, all from the story post (../snowflake-korea-2026, rendered at
+ * /story/snowflake-korea-2026): 2026.04.29, Seoul, 2nd in the
  * Tech Track at the Snowflake AI & Data Hackathon Korea 2026; WIGTN Flake; five
  * agents over Snowflake Cortex evidence; eleven capabilities presented, seven
  * after a later code-path audit.
@@ -23,10 +23,10 @@
  * Nothing is claimed about the size of the field or the value of the prize.
  *
  * SLUG is `snowflake-korea-2026-tech-track`: `snowflake-korea-2026` is taken by
- * the RETIRED redirect to the feed story.
+ * the RETIRED redirect to the story page.
  */
 import type { Article, Block } from "../../data";
-import { techFeedHref } from "../../links";
+import { storyHref } from "../../links";
 
 const p = (text: string): Block => ({ t: "p", text });
 
@@ -44,7 +44,7 @@ export const snowflakeKorea2026TechTrack: Article = {
   date: "2026.04.29",
   place: "Seoul, KOR",
   /* No `author` or `readTime`: see the note in trae-seoul-2026-grand-prize. */
-  links: [{ label: "Read the write-up", href: techFeedHref("snowflake-korea-2026") }],
+  links: [{ label: "Read the write-up", href: storyHref("snowflake-korea-2026") }],
   body: [
     p(
       "WIGTN Flake ranks Seoul districts against a stated goal by having five agents argue over Snowflake Cortex evidence. Built at the Snowflake AI & Data Hackathon Korea 2026 on 2026.04.29.",

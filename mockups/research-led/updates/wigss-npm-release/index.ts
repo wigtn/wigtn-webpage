@@ -70,6 +70,7 @@ export const wigssNpmRelease: Article = {
   kind: "report",
   channel: "newsroom",
   newsTopic: "release",
+  releaseType: "tool",
   tag: "RELEASE",
   /* The title used to be "WIGSS v0.1.4, April 2026: drag a component in the
    * browser and the source file rewrites itself", on the rule that a bare

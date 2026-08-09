@@ -8,16 +8,16 @@ import { NoticesPage } from "@/mockups/research-led/NoticesPage";
  * This route was /news until 2026-08-09. The old URL still exports, as a
  * redirect whose canonical points here: see the "news" entry in RETIRED. */
 const DESCRIPTION =
-  "What the team did: conferences, hackathons, awards, and what shipped. Findings live on WIG-log.";
+  "The release record: every version of everything WIGTN has shipped, dated from the registry that serves it.";
 
 export const metadata: Metadata = {
-  title: `Notices | ${ORG_NAME}`,
+  title: `Notice | ${ORG_NAME}`,
   description: DESCRIPTION,
   alternates: {
     canonical: "/notices",
   },
   openGraph: {
-    title: `Notices | ${ORG_NAME}`,
+    title: `Notice | ${ORG_NAME}`,
     description: DESCRIPTION,
     url: `${SITE_URL}/notices`,
     siteName: ORG_NAME,

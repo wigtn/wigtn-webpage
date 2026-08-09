@@ -1,6 +1,16 @@
 "use client";
 
-/** /team: the crew roster, the partners wall, and the history (연혁). */
+/** /team, labelled "About" in the nav: the crew roster and the partners
+ * wall, under one title and nothing else.
+ *
+ * The page is "Who we are." and then the people. It briefly opened with the
+ * record's capability list after the 2026-08-09 restructure; that duplicated
+ * what the landing's What-we-do section already says, so the list went and
+ * the title came back. No lead under the hero and no "Members" heading over
+ * the roster: with a one-subject page, both were captions on the obvious.
+ *
+ * HistoryTimeline at the bottom of this file is retained but currently
+ * unrendered; the deployed page excludes it on purpose. */
 
 import { Fragment } from "react";
 import { motion } from "framer-motion";
@@ -10,7 +20,8 @@ import { TEAM, MILESTONES, PARTNERS } from "./data";
 /* Prefer wrapping at commas. Each clause is an inline-block, so the browser
  * takes the break between clauses before it breaks inside one; a clause too
  * long for the line still wraps normally. Keeps timeline one-liners from
- * splitting mid-phrase without hand-tuning each string to a character count. */
+ * splitting mid-phrase without hand-tuning each string to a character count.
+ * Only HistoryTimeline reads it, and it stays with that section. */
 function Clauses({ text }: { text: string }) {
   const clauses = text
     .split(", ")
@@ -39,25 +50,15 @@ function Divider() {
 }
 
 export function TeamPage() {
-  // Newest at the top, founding (2026.01) at the bottom; drop placeholder entries.
-  const history = MILESTONES.filter((m) => !m.placeholder).slice().reverse();
-
   return (
     <PageShell>
-      <PageHero
-        title="Who we are."
-        lead="Five engineers who publish peer-reviewed research and release everything it runs on, with no lab behind them."
-        titleClassName="text-accent"
-        leadClassName="max-w-4xl"
-      />
+      <PageHero title="Who we are." titleClassName="text-accent" />
 
-      {/* ── Crew: one row per person — portrait + name left, role + bio right ── */}
-      <section className="max-w-5xl mx-auto px-6 pt-16 pb-28 md:pt-24 md:pb-36">
-        <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
-          Members
-        </h2>
-
-        <ul className="mt-10 divide-y divide-line/[0.08] md:mt-14">
+      {/* ── Crew: one row per person, portrait + name left, role + bio right.
+           Straight under the hero: the title is the section heading, so a
+           "Members" h2 here would say it twice. ── */}
+      <section className="max-w-5xl mx-auto px-6 pt-2 pb-28 md:pt-4 md:pb-36">
+        <ul className="divide-y divide-line/[0.08]">
           {TEAM.map((m, i) => (
             <motion.li
               key={m.name}
@@ -113,9 +114,7 @@ export function TeamPage() {
            Moved here from the homepage. This page answers who we are, and who
            we work with is part of that answer; the homepage is a teaser whose
            sections all hand off to a page, and this one had nowhere to hand off
-           to. It sits between the people and the record, because it reads as a
-           short list of names like the one above it, and putting it after the
-           timeline made the page end on a footnote. */}
+           to. It closes the page now that History is unrendered. */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
         <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
           Partners
@@ -138,61 +137,73 @@ export function TeamPage() {
           ))}
         </div>
       </section>
-
-      <Divider />
-
-      {/* ── History (연혁): left-aligned header, centered timeline ── */}
-      <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
-        <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">History</h2>
-
-        {/* max-w-5xl, not 3xl: each side of the centre line is half of this,
-            so a narrower rail chops titles and one-liners into three-word
-            fragments. This keeps ~430px of measure per side. */}
-        <div className="relative mx-auto mt-14 max-w-5xl md:mt-20">
-          {/* center pipeline */}
-          <span
-            aria-hidden
-            className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-brand/30"
-          />
-          <ul className="space-y-12 md:space-y-16">
-            {history.map((m, i) => {
-              const left = i % 2 === 0;
-              return (
-                <motion.li
-                  key={m.date}
-                  variants={rise}
-                  custom={i}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={VIEWPORT}
-                  className="relative grid md:grid-cols-2 md:gap-16"
-                >
-                  {/* node on the center line */}
-                  <span
-                    aria-hidden
-                    className="absolute left-1/2 top-1.5 h-3.5 w-3.5 -translate-x-1/2 rounded-full bg-brand ring-4 ring-paper"
-                  />
-                  <div className={left ? "md:pr-12 md:text-right" : "md:col-start-2 md:pl-12"}>
-                    <div className="font-mono text-sm text-accent">{m.date}</div>
-                    <h3 className="mt-1 text-pretty text-lg font-semibold tracking-tight text-ink [word-break:keep-all]">
-                      {m.title}
-                      {m.upcoming && (
-                        <span className="ml-2 whitespace-nowrap text-sm font-normal text-ink-4">
-                          (Upcoming)
-                        </span>
-                      )}
-                    </h3>
-                    <p className="mt-1 text-pretty text-sm leading-relaxed text-ink-3 [word-break:keep-all]">
-                      <Clauses text={m.text} />
-                    </p>
-                  </div>
-                </motion.li>
-              );
-            })}
-          </ul>
-        </div>
-      </section>
-
     </PageShell>
+  );
+}
+
+/* ── History (연혁): retained but currently unrendered ──
+ *
+ * The alternating timeline this page carried until 2026-08-09. It came out of
+ * the render by decision, not by neglect: the About page is What we do,
+ * Members, Partners now, and the month-by-month record was retired from the
+ * deployed site while MILESTONES itself stays in data.ts (the homepage's
+ * retained MilestoneTimeline reads it too). Mount it again by rendering
+ * <HistoryTimeline /> after Partners, with a Divider between them. */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function HistoryTimeline() {
+  // Newest at the top, founding (2026.01) at the bottom; drop placeholder entries.
+  const history = MILESTONES.filter((m) => !m.placeholder).slice().reverse();
+
+  return (
+    <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
+      <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">History</h2>
+
+      {/* max-w-5xl, not 3xl: each side of the centre line is half of this,
+          so a narrower rail chops titles and one-liners into three-word
+          fragments. This keeps ~430px of measure per side. */}
+      <div className="relative mx-auto mt-14 max-w-5xl md:mt-20">
+        {/* center pipeline */}
+        <span
+          aria-hidden
+          className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-brand/30"
+        />
+        <ul className="space-y-12 md:space-y-16">
+          {history.map((m, i) => {
+            const left = i % 2 === 0;
+            return (
+              <motion.li
+                key={m.date}
+                variants={rise}
+                custom={i}
+                initial="hidden"
+                whileInView="show"
+                viewport={VIEWPORT}
+                className="relative grid md:grid-cols-2 md:gap-16"
+              >
+                {/* node on the center line */}
+                <span
+                  aria-hidden
+                  className="absolute left-1/2 top-1.5 h-3.5 w-3.5 -translate-x-1/2 rounded-full bg-brand ring-4 ring-paper"
+                />
+                <div className={left ? "md:pr-12 md:text-right" : "md:col-start-2 md:pl-12"}>
+                  <div className="font-mono text-sm text-accent">{m.date}</div>
+                  <h3 className="mt-1 text-pretty text-lg font-semibold tracking-tight text-ink [word-break:keep-all]">
+                    {m.title}
+                    {m.upcoming && (
+                      <span className="ml-2 whitespace-nowrap text-sm font-normal text-ink-4">
+                        (Upcoming)
+                      </span>
+                    )}
+                  </h3>
+                  <p className="mt-1 text-pretty text-sm leading-relaxed text-ink-3 [word-break:keep-all]">
+                    <Clauses text={m.text} />
+                  </p>
+                </div>
+              </motion.li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
   );
 }

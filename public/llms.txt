@@ -1,11 +1,12 @@
 # WIGTN
 
-> An independent AI research team. Five engineers with no lab behind them,
-> publishing peer-reviewed work, releasing the models and code it runs on, and
-> writing down what each result does not show. Korea-based.
+> An independent AI team that builds web products and AI systems for clients,
+> and publishes what it learns in the open: peer-reviewed work, released
+> models, and reports that say what they do not show. Korea-based. Services:
+> web development (Web Agency) and AI transformation (AX Agency).
 
 Every figure below comes from a published paper, a public model card, or a
-technical report at https://wigtn.github.io/wigtn-tech-report/. Nothing here
+technical report at https://tech.wigtn.com/. Nothing here
 describes work that has not been published.
 
 ## Projects
@@ -43,10 +44,11 @@ describes work that has not been published.
 ## Links
 
 - [Website](https://wigtn.com)
-- [Notices](https://wigtn.com/notices): what the team announced, and what shipped
-- [WIG-log / Tech](https://wigtn.github.io/wigtn-tech-report/): technical reports
-- [WIG-log / Feed](https://wigtn.github.io/wigtn-tech-report/feed/): conference
-  and hackathon write-ups
+- [Notice](https://wigtn.com/notices): the release record, every version dated
+  from the registry that serves it
+- [Story](https://wigtn.com/story): one row per event, each opening the full
+  story with its photographs
+- [WIG-log](https://tech.wigtn.com/): technical reports
 - [GitHub](https://github.com/wigtn)
 - [HuggingFace](https://huggingface.co/Wigtn)
 - [npm](https://www.npmjs.com/org/wigtn)

@@ -71,6 +71,7 @@ export const wigtnCodexRelease: Article = {
   kind: "report",
   channel: "newsroom",
   newsTopic: "release",
+  releaseType: "plugin",
   tag: "RELEASE",
   title: "WIGTN Plugin v2: Codex",
   version: "v0.3.0",

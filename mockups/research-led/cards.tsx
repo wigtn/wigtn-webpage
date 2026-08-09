@@ -1,28 +1,20 @@
 "use client";
 
-/** Shared article cards. Reused by the homepage and /work, /news. */
+/** Shared article cards. Reused by any article rail or card index. */
 
-import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Calendar, MapPin, Play } from "lucide-react";
-import { articleHref, type Article, type TechReport } from "./data";
-/* Straight from the leaf module, not re-exported through ./data. Both work at
- * runtime here, but ./links is where the URL is decided and this is one hop
- * fewer to read. */
-import { techReportHref } from "./links";
+import { hrefFor, type Article } from "./data";
 import { rise, VIEWPORT } from "./chrome";
 
 /* Cover source: real image → YouTube thumbnail (for video notes) → none.
  *
- * `undefined` means this article has no picture, and ArticleCard now renders no
+ * `undefined` means this article has no picture, and ArticleCard renders no
  * frame at all in that case. It used to fall back to <BrandCover/>, which was
- * right while the covered posts outnumbered the bare ones; after the stories
- * moved to the WIG-log feed every remaining post is a release, releases ship no
- * cover on purpose, and the whole rail became three identical gradient boxes
- * standing in for pictures that are never coming. ReportCard still uses the
- * fallback, for a different reason: its images are cross-origin and it needs
- * something to draw when one fails to load. */
+ * right while the covered posts outnumbered the bare ones; a release ships no
+ * cover on purpose, and the fallback turned the release rail into identical
+ * gradient boxes standing in for pictures that are never coming. */
 export function coverSrc(a: Article): string | undefined {
   if (a.image) return a.image;
   if (a.video && a.videoUrl) {
@@ -77,26 +69,23 @@ function PlayBadge() {
  * which means the scrim is gone too, because its only job was legibility for
  * text that is no longer there.
  *
- * This is the same frame ReportCard uses, deliberately. The two rails sit on
- * one page and a reader should not have to work out why one set of pictures is
- * shaped differently from the other. What still separates them is the meta row:
- * these carry a date and a place and point inside the site.
+ * This is the same 16/10 frame the report site's own cards use, deliberately:
+ * a reader moving between the two sites should not have to work out why one
+ * set of pictures is shaped differently from the other. What separates these
+ * is the meta row: a date and a place, pointing inside the site.
  *
- * ALL OF THAT ONLY APPLIES WHEN THERE IS A PICTURE, and on this rail there is
- * not one today. The covers the paragraphs above are arguing about belonged to
- * the conference and hackathon posts, which are on the WIG-log feed now. What
- * is left is releases, and a release ships no cover by house rule, so the card
- * draws a hairline instead of a frame. Do not reinstate the gradient fallback:
- * it was three copies of the same non-picture standing where three different
- * ones used to be. If a notice ever arrives with a photograph that carries a
- * fact, the frame comes back for that one card on its own.
+ * All of that only applies when there is a picture. The long-form story
+ * posts carry covers, so their cards draw the frame; a release ships no
+ * cover by house rule, so its card draws a hairline instead. Do not reinstate the
+ * gradient fallback for coverless cards: it was three copies of the same
+ * non-picture standing where three different ones used to be.
  */
 export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
   const cover = coverSrc(a);
   return (
     <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
       <Link
-        href={articleHref(a.slug)}
+        href={hrefFor(a)}
         /* A card with no picture gets a hairline where the frame was. Without
            it the three coverless cards read as loose paragraphs in a row
            rather than as three of one thing, and a rule is what this site uses
@@ -157,66 +146,11 @@ export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
   );
 }
 
-/* Off-site card for a tech report.
- *
- * Deliberately not an ArticleCard. That one is a 4/5 poster with the title
- * burned into the image, which is this site's voice for its own posts; these
- * three land on another site with another layout, and mirroring the report
- * hub's own card (16/10 cover, title underneath, date) means the click does not
- * feel like a page swapped out from under the reader.
- *
- * No kicker row and no summary, for the reason the report hub gives in its own
- * card: a grid of nine-pixel track labels tells a reader nothing, and a clamped
- * dek under every card turns an index into a wall.
- *
- * The cover is served by the report site, so this build never sees it and a
- * rename there would otherwise ship a broken frame here. `failed` swaps in the
- * house cover instead. It is one-way on purpose: an <img> that errored will not
- * recover by being told to try the same URL again on the next render. */
-export function ReportCard({ r, i = 0 }: { r: TechReport; i?: number }) {
-  const [failed, setFailed] = useState(false);
-  return (
-    <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
-      <a
-        href={techReportHref(r.slug)}
-        className="group flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-      >
-        <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-ink/[0.04]">
-          {failed ? (
-            <BrandCover />
-          ) : (
-            <img
-              src={r.image}
-              alt={r.alt}
-              loading="lazy"
-              onError={() => setFailed(true)}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.03]"
-            />
-          )}
-        </div>
-
-        {/* mt-auto pins the footer: these titles run one to three lines, and
-            without it the dates in a row stop lining up. */}
-        <h3 className="font-display mt-4 text-lg font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent">
-          {r.title}
-        </h3>
-        <div className="mt-auto flex items-center gap-3 pt-3 text-xs text-ink-4">
-          <span className="font-mono">{r.date}</span>
-          <ArrowUpRight
-            size={14}
-            className="ml-auto text-ink-5 transition-all group-hover:translate-x-0.5 group-hover:text-accent"
-          />
-        </div>
-      </a>
-    </motion.div>
-  );
-}
-
 /* Compact row, used in dense feeds. */
 export function ArticleRow({ a, i = 0 }: { a: Article; i?: number }) {
   return (
     <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
-      <Link href={articleHref(a.slug)} className="group flex items-start gap-6 py-5">
+      <Link href={hrefFor(a)} className="group flex items-start gap-6 py-5">
         <span className="w-20 shrink-0 pt-1 font-mono text-xs text-ink-5">{a.date}</span>
         <div className="flex-1">
           <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-accent">

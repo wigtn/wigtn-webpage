@@ -27,16 +27,15 @@
  * Templates live in updates/_template/, one per kind of post: conference,
  * hackathon, release, community. Read its README before starting a new one:
  * the outline that suits a hackathon is not the one that suits a release. */
-/* The four conference and hackathon posts moved to the WIG-log feed
- * (../wigtn-tech-report, components/feed/posts). Only their cover art
- * stayed, because the homepage milestone rail still shows it. */
-import {
-  ACL_2026_COVER,
-  OBA_WEEKENDTHON_COVER,
-  SNOWFLAKE_2026_COVER,
-  TRAE_SEOUL_COVER,
-} from "./milestones";
+/* The four conference and hackathon posts left for the WIG-log feed on
+ * 2026-08-09 and came back the same day. They carry channel: "story" and
+ * render at /story/<slug>, under the rows that summarize them; their covers
+ * ship from the post folders again, which is why ./milestones is gone. */
+import { ACL_2026_COVER, acl2026SanDiego } from "./updates/acl-2026-san-diego";
+import { OBA_WEEKENDTHON_COVER, obaWeekendthonTop6 } from "./updates/oba-weekendthon-top6";
 import { obaWeekendthon2026Top6 } from "./updates/oba-weekendthon-2026-top6";
+import { SNOWFLAKE_2026_COVER, snowflakeKorea2026 } from "./updates/snowflake-korea-2026";
+import { TRAE_SEOUL_COVER, traeSeoulGrandPrize } from "./updates/trae-seoul-grand-prize";
 import { snowflakeKorea2026TechTrack } from "./updates/snowflake-korea-2026-tech-track";
 import { traeSeoul2026GrandPrize } from "./updates/trae-seoul-2026-grand-prize";
 import { wigssNpmRelease } from "./updates/wigss-npm-release";
@@ -57,96 +56,80 @@ export const articleHref = (slug: string) => `${HOME}${slug}`;
 /* These now live in ./links, because posts under `updates/` need them and
  * cannot import a value from this module without closing a cycle. See the
  * comment in links.ts. Imported as well as re-exported: NAV below uses
- * TECH_REPORT_SITE locally, and `export ... from` creates no local binding. */
+ * several locally, and `export ... from` creates no local binding.
+ * STORY_INDEX moved there too (posts link story pages), so /story has no
+ * local constant of its own. */
 import {
-  TECH_FEED_INDEX,
+  BLOG_INDEX,
+  STORY_INDEX,
   TECH_REPORT_INDEX,
   TECH_REPORT_SITE,
-  techFeedHref,
-  techReportAsset,
+  blogHref,
+  storyHref,
   techReportHref,
 } from "./links";
-export { TECH_FEED_INDEX, TECH_REPORT_INDEX, TECH_REPORT_SITE, techFeedHref, techReportHref };
+export {
+  BLOG_INDEX,
+  STORY_INDEX,
+  TECH_REPORT_INDEX,
+  TECH_REPORT_SITE,
+  blogHref,
+  storyHref,
+  techReportHref,
+};
 
 /* Reference-led structure (Next Securities / MakinaRocks): the homepage is
  * a short teaser; depth lives on these sub-pages. Nav points to pages, not
  * in-page anchors.
  *
- * `children` makes an item a menu instead of a link. Only WIG-log has them:
- * it is one site with two halves, and a tab pointing at one of them hides the
- * other from anyone who does not already know it is there.
+ * Tech is the one external item: it hands the reader to WIG-log's report
+ * index, that site's front door for findings. The nav carried a WIG-log
+ * dropdown with Tech and Feed under it while the stories lived on the feed;
+ * the stories came back on-site, which left the menu one destination, and a
+ * menu of one is a link. The `children` machinery went with it.
  *
- * An item with children has no `href` of its own, and that is deliberate
- * rather than an omission. WIG-log's front door is the report index, which is
- * exactly where Tech goes, so a parent link would be a second control to the
- * same URL sitting on top of the first. The children are the destinations and
- * the parent is the name over them, in the header, the footer and the mobile
- * sheet alike. */
-export type NavChild = { label: string; href: string; note: string };
-/* A union rather than one shape with both fields optional, so the renderer
- * gets `href: string` for free in the branch where it is a link, instead of a
- * non-null assertion on a field the data guarantees. */
-export type NavItem =
-  | { label: string; href: string; disabled?: boolean; children?: never }
-  | { label: string; href?: never; disabled?: boolean; children: NavChild[] };
+ * No Blog tab. The section is closed until it has business-track content of
+ * its own; docs/blog-section.md is the gate and the reopening steps. While
+ * it mirrored Story it was two names in the nav for one list.
+ *
+ * No Projects tab. The page it pointed at, /work, is retired and redirects
+ * to /story. Restoring the tab means deciding what it should point at first,
+ * not adding a line. */
+export type NavItem = { label: string; href: string; disabled?: boolean };
 
 export const NAV: NavItem[] = [
   { label: "About", href: TEAM_PAGE },
-  { label: "Notices", href: NOTICES },
-  /* Trailing slashes on purpose: the report site builds with trailingSlash,
-   * so the bare URL 301s. Linking the final URL saves that round trip. */
-  {
-    label: "WIG-log",
-    children: [
-      {
-        label: "Tech",
-        href: TECH_REPORT_INDEX,
-        note: "Reports: method, measurement, limits",
-      },
-      { label: "Feed", href: TECH_FEED_INDEX, note: "Conferences, hackathons, field notes" },
-    ],
-  },
-  /* No Projects tab. It was hidden behind a commented-out line here for a
-   * while; the page it pointed at, /work, has since been retired and now
-   * redirects to /notices. Restoring the tab means deciding what it should
-   * point at first, not uncommenting a line. */
+  { label: "Notice", href: NOTICES },
+  { label: "Story", href: STORY_INDEX },
+  /* Trailing slash on purpose: the report site builds with trailingSlash, so
+   * the bare URL 301s. Linking the final URL saves that round trip. */
+  { label: "Tech", href: TECH_REPORT_INDEX },
 ];
 
-/* What we do, in the order the record supports it. Each pillar names something
- * that has already happened and can be checked: a venue, a registry, a placing.
- *
- * There used to be a fourth pillar for meetups and seminars. It was the only
- * one with nothing behind it, and it sat next to three that were true. It comes
- * back when a first meeting has actually happened, and not before. */
-export const CAPABILITIES = [
+/* The homepage What-we-do section: the two lines of business, each in the
+ * shape a client would engage it. WIGTN sells no product of its own; what it
+ * offers is the team. Source copy is README.md's services list, folded from
+ * four lines to two: AX Consulting and AI System Integration are one
+ * engagement seen from its two ends, and AI R&D is the record, not a
+ * service. No figures, because there are none published to cite. */
+export const SERVICES = [
   {
-    title: "Published research",
-    lead: "We publish where the work gets read by people who can check it.",
-    /* ACL only. There is a second paper, and it is under review, and saying so
-     * in public under our own name is the thing the anonymity period forbids.
-     * It goes here after a notification, not before. */
-    body: "WIGVO was accepted to ACL 2026 System Demonstrations and presented at booth D3, alongside an invited talk at IWSLT 2026.",
-    tags: ["ACL 2026", "IWSLT 2026", "Peer reviewed"],
+    title: "Web Agency",
+    lead: "Websites and web products, designed, built, and shipped end to end.",
+    tags: ["Design", "Build", "Deploy"],
   },
   {
-    title: "Open models and code",
-    lead: "Everything we build ships in the open: models, tools, plugins.",
-    body: "Weights, training data, and eval code released on HuggingFace, GitHub, and npm for anyone to use.",
-    tags: ["HuggingFace", "GitHub", "npm"],
-  },
-  {
-    title: "Reports with their limits",
-    lead: "Every result we publish comes with what it does not show.",
-    body: "Every result we publish arrives with its method, its measurements and the questions it leaves open, on a report site of its own.",
-    tags: ["Method", "Measurement", "Limitations"],
-  },
-  {
-    title: "Hackathons and challenges",
-    lead: "We build against a clock in public, and we say what survived.",
-    body: "Grand Prize at Build with TRAE Seoul, 2nd in the Tech Track at Snowflake Korea, Top 6 at OBA Weekendthon.",
-    tags: ["Grand Prize", "2nd Place", "Top 6"],
+    title: "AX Agency",
+    lead: "We map where AI creates real leverage in your business, then build it into the products and workflows you already run.",
+    tags: ["Roadmap", "Integration", "AI systems"],
   },
 ];
+
+/* CAPABILITIES, the four-pillar record list (published research, open models,
+ * reports with their limits, hackathon placings), was deleted when /team went
+ * back to "Who we are." and no surface rendered it. The claims themselves
+ * still live where they are checkable: the posts, MILESTONES, and the report
+ * site. It is in the git history if a surface wants the list back. */
 
 export const PARTNERS = ["Mind AI", "MEGA Code", "Tripla", "Arustay"];
 
@@ -243,10 +226,14 @@ export const TEAM: TeamMember[] = [
 export type Kind = "report" | "event" | "community" | "insight";
 
 /* Channel split: "newsroom" = in-site news feed (awards, releases,
- * announcements, community; LinkedIn-style short posts); "report" = deep tech
- * content that lives on the external GitHub Pages blog. Untagged articles are
- * treated as report/back-catalog and stay out of the newsroom feed. */
-export type Channel = "newsroom" | "report";
+ * announcements; short posts); "story" = long-form event stories rendered at
+ * /story/<slug> (conference trips, hackathon write-ups, photographs and
+ * all); "report" = deep tech content that lives on the external WIG-log
+ * site. "blog" belongs to the closed blog section and no post carries it
+ * today; it stays in the union so BlogPage and the machinery it will need
+ * compile while they wait. Untagged articles are treated as
+ * report/back-catalog and stay out of every feed. */
+export type Channel = "newsroom" | "report" | "story" | "blog";
 export type NewsTopic = "award" | "release" | "announcement" | "community";
 
 /* `aspect` overrides the gallery's default 4/3 crop for a single image.
@@ -288,6 +275,12 @@ export type ReleaseVersion = {
   date: string;
   note?: string;
 };
+
+/* What shape of artifact a release post ships: weights, an agent plugin, or
+ * a CLI/library. Drives the /notices type filter and nothing else. Three
+ * values because three shapes have shipped; extend the union when a new
+ * shape does (a dataset, a harness), not before. */
+export type ReleaseType = "model" | "plugin" | "tool";
 
 export type Article = {
   slug: string;
@@ -348,6 +341,9 @@ export type Article = {
    * the HuggingFace repo carries no tags and the "v1" in its name is the
    * product line, not a release. */
   version?: string;
+  /* Release only: which shape of artifact the product is, for the /notices
+   * type filter. See ReleaseType above. */
+  releaseType?: ReleaseType;
   externalUrl?: string; // report only: GitHub Pages blog post URL
   body: Block[];
 };
@@ -375,108 +371,66 @@ export const ARTICLES: Article[] = [
   wigtnCodexRelease, // 2026.07.28, v0.3.0
   wigssNpmRelease, // 2026.04.03, v0.1.4
   wigtnocrOpenSource, // 2026.04.03, no version
+
+  /* ───────── Story · long-form event stories (real), newest first ─────────
+   * channel: "story": rendered at /story/<slug>, kept out of NEWSROOM_FEED
+   * by the channel filter. Each pairs with a /story row through STORIES
+   * below. */
+  acl2026SanDiego, // 2026.07.16, trip report
+  obaWeekendthonTop6, // 2026.05.31, hackathon
+  snowflakeKorea2026, // 2026.04.29, hackathon
+  traeSeoulGrandPrize, // 2026.03.28, hackathon
 ];
 
-/* Curated homepage "newsroom": research credibility & wins told as article
- * cards with imagery (papers, conference reports, awards), not a dry list. */
-/* Homepage teaser for /news. It used to name the three newest stories; those
- * moved to the blog, and /news is the release list now, so this is the three
- * newest releases and the section still tells the truth about where it leads. */
-export const NEWSROOM = ARTICLES.filter((a) => a.newsTopic === "release")
-  .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
-  .slice(0, 3);
 export const getArticle = (slug: string) => ARTICLES.find((a) => a.slug === slug);
 
-/* ── Homepage report rail ────────────────────────────────────────────────────
- *
- * The three newest tech reports, as cards that leave this site. The nav already
- * links the report site, but a reader who has not yet decided to go there is
- * not reading the nav. Three covers with real titles under them say what is
- * over there; a single link says only that somewhere else exists.
- *
- * This is a hand-kept mirror, and the report site is the source of truth. This
- * repo has no build-time access to it: separate Next app, separate repository,
- * separate deploy, so nothing here can read its data or notice when it changes.
- * The rules that follow from that are worth stating rather than rediscovering.
- *
- *   - The three are chosen, not computed, and the order is chosen too: Codex,
- *     Claude Code, then WigtnOCR off the "Models & evaluation" track. Two
- *     plugins and one model. This used to be "the three newest", which is a
- *     rule that quietly decides what the site is about; sorted by date it would
- *     have shown the two harness parts and WIGVO and left every model report
- *     off the homepage.
- *   - Codex leads even though it is part 2 of the harness series. On the report
- *     hub the series order matters, because a reader arriving there is reading
- *     the series. Here they are three separate things to click, and the newer
- *     plugin is the one to lead with.
- *   - So a new report does not belong here by being new. It replaces the entry
- *     it competes with, or nothing changes. Three is what the grid is built
- *     for, not a floor.
- *   - `title` is the report's `cardTitle` when it has one and its `title` when
- *     it does not, which is the same choice the report hub card makes. The two
- *     harness reports have no `cardTitle` on purpose: their titles carry the
- *     series numbering, which is how a reader gets from part 1 to part 2.
- *   - Do not copy the `dek` across. It states measured figures, and a figure
- *     living in a repo that cannot check it is a figure that will go wrong here
- *     while staying right there.
- *
- * Re-sourced 2026.08.09 from wigtn-tech-report at 791df3d, the head of
- * feat/report-author-byline, which is open as that repo's PR #6 and not merged.
- * Anticipating an unmerged branch needs a reason, and this is it: #6 redates the
- * Claude Code report from 2026.08.04 to 2026.01.12, the day its plugin
- * repository opened, which drops it from newest to oldest and changes which
- * three reports are the newest three. The card that used to sit here for it
- * carried 2026.08.04, a date that stops being true the moment #6 lands.
- *
- * The three below are safe in the meantime. Their dates, titles and banners are
- * byte-identical on main and on #6, so every value this page renders is correct
- * against the site as deployed today. What anticipates the merge is only which
- * three were picked. Until #6 lands, the live hub still ranks the Claude Code
- * report first and this rail does not show it.
- *
- * When #6 merges, nothing here needs to change. If it is closed instead, the
- * Claude Code report goes back to being the newest and belongs at the top of
- * this list again, with wigtnocr dropping off. */
-export type TechReport = {
-  slug: string;
-  title: string;
-  date: string;
-  /* Full path under the report repo's `public/`, resolved across origins by
-   * `techReportAsset`. Nothing in this build verifies it; see ./links. */
-  image: string;
-  alt: string;
-};
+/* Where an article's page lives. Story posts render under /story, blog posts
+ * (none today; the section is closed) under /blog, everything else at the
+ * root slug. Any surface that could be handed any kind of article links
+ * through this, not through articleHref. */
+export const hrefFor = (a: Article) =>
+  a.channel === "story"
+    ? storyHref(a.slug)
+    : a.channel === "blog"
+      ? blogHref(a.slug)
+      : articleHref(a.slug);
 
-export const TECH_REPORTS: TechReport[] = [
-  {
-    slug: "codex-selective-harness",
-    title: "Running a harness on frontier models, part 2: Codex",
-    date: "2026.07.28",
-    image: techReportAsset("/images/projects/codex_image_v1.jpg"),
-    alt: "Codex",
-  },
-  {
-    slug: "wigtn-coding",
-    title: "Running a harness on frontier models, part 1: Claude Code",
-    /* 2026.01.12, not the 2026.08.04 this card carried before. #6 redates the
-     * report to the day its plugin repository opened (first commit 0593d8d),
-     * because the report is the seven-month history of that plugin and was
-     * dated to its last measurement instead of its start. The live page still
-     * shows 2026.08.04 until #6 lands, so this one value is ahead of the
-     * deployed site; every other value on this rail matches it today. */
-    date: "2026.01.12",
-    image: techReportAsset("/images/projects/claudecode_image_v1.jpg"),
-    alt: "Claude Code",
-  },
-  {
-    slug: "wigtnocr",
-    title: "Distilled from 30B, first of six on Hit@1",
-    date: "2026.05.20",
-    image: techReportAsset("/images/projects/wigtnocr_v1_image.jpg"),
-    alt: "WigtnOCR on Hugging Face",
-  },
+/* The long-form stories, newest first: the /story detail pages' params. */
+export const STORY_FEED = ARTICLES.filter(
+  (a) => !a.placeholder && a.channel === "story",
+).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+
+/* The /blog index. Empty while the blog is closed; BlogPage (retained,
+ * unrouted) reads it, so the first channel: "blog" post fills the page the
+ * day the section reopens. */
+export const BLOG_FEED = ARTICLES.filter(
+  (a) => !a.placeholder && a.channel === "blog",
+).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+
+/* The /story rows: each event's short notice paired with its long account,
+ * which renders at /story/<storySlug>.
+ *
+ * A hand-kept table rather than a field on either post, because the pairing
+ * is knowledge about two posts at once, and the thumbnail needs the story
+ * post's cover, which only this module already imports. The note supplies
+ * the words (title, summary, date were written for exactly this kind of
+ * row); the story post supplies the picture and the destination.
+ *
+ * Newest first, like every other list on the site. wigvo-acl-2026 pairs with
+ * the trip report: the acceptance is the notice, the trip is the story. */
+export type Story = { article: Article; image: string; storySlug: string };
+export const STORIES: Story[] = [
+  { article: wigvoAcl2026, image: ACL_2026_COVER, storySlug: "acl-2026-san-diego" },
+  { article: obaWeekendthon2026Top6, image: OBA_WEEKENDTHON_COVER, storySlug: "oba-weekendthon-top6" },
+  { article: snowflakeKorea2026TechTrack, image: SNOWFLAKE_2026_COVER, storySlug: "snowflake-korea-2026" },
+  { article: traeSeoul2026GrandPrize, image: TRAE_SEOUL_COVER, storySlug: "trae-seoul-grand-prize" },
 ];
 
+/* The homepage report rail (TECH_REPORTS, a hand-kept mirror of three report
+ * cards from the sibling wigtn-tech-report repo) went with the landing
+ * slimming of 2026-08-09: the landing is Hero, Services, Contact now, and the
+ * nav's Tech item is the pointer to WIG-log. If a rail like it comes back,
+ * read that mirror's rules in the git history first; they were earned. */
 
 /* ── Research & Tech Assets (homepage centerpiece) ── */
 
@@ -570,11 +524,61 @@ export const MILESTONES: Milestone[] = [
   },
 ];
 /* Notices feed: only channel:"newsroom" items (awards, releases,
- * announcements). Deep tech "report" content lives on WIG-log and is
- * excluded here. Newest first. */
+ * announcements). Blog stories and deep tech "report" content are excluded
+ * by their channels. Newest first. */
 export const NEWSROOM_FEED = ARTICLES.filter(
   (a) => !a.placeholder && a.channel === "newsroom",
 ).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+
+/* The /notices rows: every shipped version of every release post, flattened
+ * into one date-ordered list.
+ *
+ * The one-line impact each row carries is versions[].note, unchanged. Those
+ * notes were derived from the release bodies (or, where bodies are empty, the
+ * release commits) when the changelogs were sourced; a second hand-written
+ * string per version would be a shadow copy that drifts, which is the same
+ * argument the TeamMember comment above makes about dead fields. A row whose
+ * version has no note renders without one, and for those versions that is the
+ * whole truth. WigtnOCR has no versions array at all (the HuggingFace repo
+ * carries no tags), so its post contributes one row from its own date and
+ * summary.
+ *
+ * Sorted by date descending. Array.prototype.sort is stable, so rows sharing
+ * a date (v0.1.15 and v0.1.16 both shipped 2026.08.04) keep the order of
+ * their versions array, which is newest first from the registry. */
+export type ReleaseRow = {
+  date: string;
+  product: string;
+  type?: ReleaseType;
+  version?: string;
+  note?: string;
+  href: string;
+};
+export const RELEASE_ROWS: ReleaseRow[] = ARTICLES.filter(
+  (a) => a.channel === "newsroom" && a.newsTopic === "release",
+)
+  .flatMap((a): ReleaseRow[] =>
+    a.versions?.length
+      ? a.versions.map((v) => ({
+          date: v.date,
+          product: a.title,
+          type: a.releaseType,
+          version: v.version,
+          note: v.note,
+          href: articleHref(a.slug),
+        }))
+      : [
+          {
+            date: a.date,
+            product: a.title,
+            type: a.releaseType,
+            version: a.version,
+            note: a.summary,
+            href: articleHref(a.slug),
+          },
+        ],
+  )
+  .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
 /* ── Retired URLs ────────────────────────────────────────────────────────────
  *
@@ -615,13 +619,14 @@ export const RETIRED: {
     title: "WIGVO",
   },
   /* The WIGTN Flake report was removed from the tech-report site, and the
-   * Snowflake hackathon post that replaced it has since moved to that site's
-   * blog. This hop follows it rather than pointing at the deleted local copy. */
+   * Snowflake hackathon story that replaced it now lives on this site's
+   * Story pages. This hop follows it rather than pointing at the deleted
+   * report. */
   {
-    note: "The WIGTN Flake report was taken down with the rest of the hackathon write-ups. The Snowflake post is the account of that project now, and it carries the code-path audit in full.",
+    note: "The WIGTN Flake report was taken down with the rest of the hackathon write-ups. The Snowflake story is the account of that project now, and it carries the code-path audit in full.",
     slug: "wigtn-flake-cortex-debate-video",
-    to: techFeedHref("snowflake-korea-2026"),
-    title: "the Snowflake hackathon post",
+    to: storyHref("snowflake-korea-2026"),
+    title: "the Snowflake hackathon story",
   },
   {
     note: "Technical write-ups moved to the WIGTN tech-report site, where each one carries its method, its measurements and its limitations. This site now covers what the team does: events, releases and news.",
@@ -629,24 +634,26 @@ export const RETIRED: {
     to: techReportHref("wigtnocr"),
     title: "WigtnOCR",
   },
-  /* The four stories moved to the WIG-log feed on 2026.08.09. These URLs
-   * were live on this site and are in the sitemap that has already been
-   * crawled, so they redirect rather than 404. */
-  { note: "The conference and hackathon write-ups moved to the WIG-log feed, where they sit beside the technical reports. This page is the release list now.", slug: "acl-2026-san-diego", to: techFeedHref("acl-2026-san-diego"), title: "the ACL 2026 trip report" },
-  { note: "The conference and hackathon write-ups moved to the WIG-log feed, where they sit beside the technical reports. This page is the release list now.", slug: "oba-weekendthon-top6", to: techFeedHref("oba-weekendthon-top6"), title: "the OBA Weekendthon post" },
-  { note: "The conference and hackathon write-ups moved to the WIG-log feed, where they sit beside the technical reports. This page is the release list now.", slug: "snowflake-korea-2026", to: techFeedHref("snowflake-korea-2026"), title: "the Snowflake Korea post" },
-  { note: "The conference and hackathon write-ups moved to the WIG-log feed, where they sit beside the technical reports. This page is the release list now.", slug: "trae-seoul-grand-prize", to: techFeedHref("trae-seoul-grand-prize"), title: "the TRAE Seoul post" },
+  /* These four URLs served the stories when they were root-level articles,
+   * then redirected to the WIG-log feed for the day the stories lived there.
+   * The posts are back on this site under /story now, and the URLs are in
+   * sitemaps that were already crawled, so each one forwards to the same
+   * post at its story address rather than 404ing. */
+  { note: "The conference and hackathon write-ups live under the Story page now. This address predates that section, so it forwards.", slug: "acl-2026-san-diego", to: storyHref("acl-2026-san-diego"), title: "the ACL 2026 trip report" },
+  { note: "The conference and hackathon write-ups live under the Story page now. This address predates that section, so it forwards.", slug: "oba-weekendthon-top6", to: storyHref("oba-weekendthon-top6"), title: "the OBA Weekendthon story" },
+  { note: "The conference and hackathon write-ups live under the Story page now. This address predates that section, so it forwards.", slug: "snowflake-korea-2026", to: storyHref("snowflake-korea-2026"), title: "the Snowflake Korea story" },
+  { note: "The conference and hackathon write-ups live under the Story page now. This address predates that section, so it forwards.", slug: "trae-seoul-grand-prize", to: storyHref("trae-seoul-grand-prize"), title: "the TRAE Seoul story" },
   /* /work is gone with the article groups it listed. What it had that still
-   * exists, the awards, moved on to the WIG-log feed. */
-  { note: "The page that used to be here grouped work that has since moved to the tech-report site. What is left of it, the events and the awards, is in the WIG-log feed.",
-    slug: "work", to: NOTICES, title: "WIGTN Notices" },
+   * exists, the events and the awards, is on /story now. */
+  { note: "The page that used to be here grouped work that has since moved. What is left of it, the events and the awards, is on the Story page.",
+    slug: "work", to: STORY_INDEX, title: "WIGTN Story" },
   /* /news was this site's own route until 2026.08.09, when the page took the
    * name the nav had been using for it and became /notices. It is the only
    * entry here that retires a static route rather than an article, which is
    * why it is a slug at all: `app/news/page.tsx` is gone, so `app/[slug]` is
    * free to export /news as a redirect the same way it does the rest. */
-  { note: "The page is called Notices now, and its URL says so. Same list, same posts: what the team announced, and what shipped.",
-    slug: "news", to: NOTICES, title: "WIGTN Notices" },
+  { note: "The page is called Notice now, and its URL says so. It carries the release record; the event news moved to the Story page.",
+    slug: "news", to: NOTICES, title: "WIGTN Notice" },
 ];
 
 /* `wigtnocr-radp` (RCPS) was removed here on 2026.08.08 and is deliberately NOT

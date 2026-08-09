@@ -12,10 +12,17 @@ import { ARTICLES, RETIRED, getArticle, getRetired } from "@/mockups/research-le
  * Retired slugs are generated too. They are not articles any more, but the
  * URLs were indexed, so each one still exports a page that points at the new
  * home. See RETIRED in data.ts.
+ *
+ * Blog posts are excluded: they render under /blog/<slug>, and their root
+ * slugs are RETIRED entries that forward there. Without the filter each of
+ * those slugs would be emitted twice, once as an article and once as a
+ * redirect, for a URL that must only ever be the redirect.
  */
 export function generateStaticParams() {
   return [
-    ...ARTICLES.filter((a) => !a.placeholder).map((a) => ({ slug: a.slug })),
+    ...ARTICLES.filter((a) => !a.placeholder && a.channel !== "blog").map((a) => ({
+      slug: a.slug,
+    })),
     ...RETIRED.map((r) => ({ slug: r.slug })),
   ];
 }

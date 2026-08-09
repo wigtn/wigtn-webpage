@@ -1,38 +1,29 @@
 "use client";
 
 /**
- * Research-led homepage. Positioning is the record: peer-reviewed work,
- * open models, reports that state their own limits.
+ * Homepage. Positioning is the blend the hero states: an independent AI team
+ * that builds for clients and publishes what it learns in the open.
  * ------------------------------------------------------------------
  * Type-led layout. Built on current patterns:
  *   - Display grotesk (Space Grotesk) headlines + mono (JetBrains Mono)
  *     micro-labels; Pretendard body
  *   - Warm off-white base (#F8F8F5), single accent = Pantone 265 (`brand`,
  *     leaning on `accent` for legibility on light)
- *   - Cards only where a card is a destination: Notices and WIG-log. This
- *     used to read "card-less, hairlines not boxes", which the Notices grid
- *     already contradicted and the report grid finished off. Everything that is
- *     not a link out of the page is still separated by a hairline, not boxed.
- *   - "What we do": sticky left header + compact right capability list
- * Sections: 1 Hero · 2 What we do · 3 Notices · 4 WIG-log · 5 CTA, every
- * pair of them separated by a Divider. Partners lives on /team.
- * MilestoneTimeline is retained but currently unrouted.
+ *   - Everything that is not a link out of the page is separated by a
+ *     hairline, not boxed.
+ * Sections: 1 Hero · 2 What we do (the services) · 3 CTA, a Divider between
+ * 2 and 3. The landing held the record's capability list, a Notices rail and
+ * a WIG-log rail until 2026-08-09; the release ledger is /notices, and the
+ * stories live under /story. MilestoneTimeline is retained but currently
+ * unrouted.
  */
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
-import {
-  CAPABILITIES,
-  MILESTONES,
-  NEWSROOM,
-  NOTICES,
-  TECH_REPORTS,
-  TECH_REPORT_INDEX,
-} from "./data";
-import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, rise, VIEWPORT } from "./chrome";
-import { ArticleCard, ReportCard } from "./cards";
+import { MILESTONES, SERVICES, STORY_INDEX } from "./data";
+import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, Tags, rise, VIEWPORT } from "./chrome";
 import { CONTACT_EMAIL, CONTACT_HREF } from "@/lib/brand";
 import type { Theme } from "@/lib/theme";
 
@@ -59,6 +50,8 @@ function SectionTitle({ children, className = "" }: { children: ReactNode; class
   );
 }
 
+/* Read-everything link. Only MilestoneTimeline below uses it now, which keeps
+ * it alive exactly as long as that retained section is. */
 function ViewAll({ href, label }: { href: string; label: string }) {
   return (
     <Link
@@ -163,23 +156,6 @@ function IntroVideo() {
       onLoadedMetadata={restorePlayback}
       className="pointer-events-none absolute inset-0 h-full w-full object-cover"
     />
-  );
-}
-
-/* Keyword labels: scannable metadata, not boxed chips (no card aesthetic). */
-function Tags({ tags, className = "" }: { tags: string[]; className?: string }) {
-  return (
-    <div className={`flex flex-wrap gap-x-6 gap-y-2 ${className}`}>
-      {tags.map((t) => (
-        <span
-          key={t}
-          className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-ink-4"
-        >
-          <span aria-hidden className="h-1 w-1 rounded-full bg-brand/60" />
-          {t}
-        </span>
-      ))}
-    </div>
   );
 }
 
@@ -351,7 +327,7 @@ function MilestoneTimeline() {
           </motion.div>
 
           <div className="mx-auto mt-8 w-full max-w-6xl px-6">
-            <ViewAll href={NOTICES} label="Read the full story" />
+            <ViewAll href={STORY_INDEX} label="Read the full story" />
           </div>
         </div>
       </section>
@@ -436,39 +412,39 @@ export function ResearchLedHome() {
             animate="show"
             className="mt-8 max-w-2xl text-pretty text-lg md:text-xl text-ink-3 leading-relaxed"
           >
-            WIGTN is an independent AI research team. Five engineers with no lab
-            behind them, publishing peer-reviewed work, releasing the models and code
-            it runs on, and writing down what each result does not show.
+            WIGTN builds web products and AI systems for clients, and publishes
+            what it learns in the open: peer-reviewed papers, released models, and
+            reports that say what they do not show.
           </motion.p>
           </div>
         </section>
 
-        {/* ───── 2. What we do: sticky left header + compact right list (no cards) ───── */}
-        {/* pb matches the pt of the section after it, so the Divider below sits
-            centred in the gap the way the other three do. It had none, because
-            until that Divider existed the next section's pt was the whole
-            gap. */}
-        <section
-          id="capabilities"
-          className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40 scroll-mt-24"
-        >
+        {/* ───── 2. What we do: the business model, stated briefly ─────
+            The landing is Hero, What we do, Contact, in that order and
+            nothing else. WIGTN has no product of its own to advertise, so
+            the section a product would occupy holds the two lines of client
+            work instead. The title was "Services" for a day and gave way to
+            the name the About page had been holding: this section is the
+            site's one answer to what the team does, so it carries the plain
+            words for it. Sticky-left layout, same as the capability list
+            this slot held before the split. */}
+        <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
           <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
-            {/* left: sticky header + eyebrow + CTA, anchors the column while the list scrolls */}
             <div className="md:sticky md:top-24 md:self-start">
               <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-4">
-                Activities · 01–04
+                Business · 01–02
               </span>
               <SectionTitle className="mt-4">What we do</SectionTitle>
               <p className="mt-5 max-w-xs text-pretty leading-relaxed text-ink-3">
-                Peer-reviewed papers, open weights, and reports that say what they do not show.
+                No product of our own to sell. What we offer is the team, on
+                your problem.
               </p>
             </div>
 
-            {/* right: index + title + lead + labels (body dropped to keep rows short) */}
             <div className="divide-y divide-line/[0.08] border-t border-line/[0.08]">
-              {CAPABILITIES.map((c, i) => (
+              {SERVICES.map((s, i) => (
                 <motion.div
-                  key={c.title}
+                  key={s.title}
                   variants={rise}
                   custom={i}
                   initial="hidden"
@@ -479,10 +455,10 @@ export function ResearchLedHome() {
                   <span className="pt-1.5 font-mono text-sm text-accent">{`0${i + 1}`}</span>
                   <div>
                     <h3 className="font-display text-2xl font-semibold tracking-tight text-ink md:text-3xl">
-                      {c.title}
+                      {s.title}
                     </h3>
-                    <p className="mt-3 text-pretty leading-relaxed text-ink-2">{c.lead}</p>
-                    <Tags tags={c.tags} className="mt-4" />
+                    <p className="mt-3 text-pretty leading-relaxed text-ink-2">{s.lead}</p>
+                    <Tags tags={s.tags} className="mt-4" />
                   </div>
                 </motion.div>
               ))}
@@ -492,96 +468,19 @@ export function ResearchLedHome() {
 
         <Divider />
 
-        {/* The partners wall used to sit here, titled "Friends & Collaborators".
-            It moved to /team, which is the page about who we are; who we work
-            with is the same question, and the homepage is a teaser whose job is
-            to hand the reader on. See TeamPage. */}
-
-        {/* ───── 3. Notices: featured items as article cards ───── */}
-        <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <SectionTitle>Notices</SectionTitle>
-            <ViewAll href={NOTICES} label="All notices" />
-          </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 md:mt-16">
-            {NEWSROOM.map((a, i) => (
-              <ArticleCard key={a.slug} a={a} i={i} />
-            ))}
-          </div>
-        </section>
-
-        <Divider />
-
-        {/* ───── 4. Reports: three covers pointing off-site ─────
-             This slot used to advertise meetups that had not happened yet, next
-             to three pillars that had. The report site is the thing this site
-             most needs to hand a reader off to, and it exists.
-
-             It was a text band until the cards went in. The band stated that
-             the reports exist and asked the reader to take that on faith; the
-             covers name three of them, and the one under Notices had already
-             shown that a reader will click a cover and will not click a line of
-             body copy. The heading and the link survive the change, so the band
-             is still there for anyone who reads rather than looks.
-
-             The list is TECH_REPORTS in data.ts, hand-kept. Read its comment
-             before editing: nothing in this build checks it against the report
-             site. ────────────────────────────────────────────────────────── */}
-        <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
-          {/* Same title row as Notices, down to the class list: title left, the
-              link to the full index right, both sitting on the baseline. The
-              link used to hang off the bottom of the copy block instead, which
-              put the two sections' "see everything" links at different heights
-              on the same page. */}
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            {/* The section is named for the site it points at, and the cards
-                under it are all from that site's Tech half. The Feed half is
-                one hop further and the nav is where a reader finds it; naming
-                it here would promise a second grid this section does not
-                have. */}
-            <SectionTitle>WIG-log</SectionTitle>
-            <a
-              href={TECH_REPORT_INDEX}
-              className="group inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-medium text-accent transition-colors hover:text-ink"
-            >
-              Read the reports{" "}
-              <span className="transition-transform group-hover:translate-x-0.5">→</span>
-            </a>
-          </div>
-          {/* One lead, one paragraph. It was split in two and stacked, which
-              put a paragraph break inside a single thought and left a ragged
-              gap under the title for no reason.
-
-              It used to end "In English and Korean." The report site dropped
-              its Korean routes in wigtn-tech-report#5 and now ships English
-              only, so the sentence was promising a language the destination no
-              longer serves. */}
-          <p className="mt-5 max-w-3xl text-pretty text-lg leading-relaxed text-ink-2">
-            The work, with its method and its limits: what we measured, what failed
-            first, and what each result still does not answer.
-          </p>
-
-          <div className="mt-12 grid items-stretch gap-x-7 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 md:mt-16">
-            {TECH_REPORTS.map((r, i) => (
-              <ReportCard key={r.slug} r={r} i={i} />
-            ))}
-          </div>
-        </section>
-
-        <Divider />
-
-        {/* ───── 5. CTA: text layout; only the contact link is boxed in purple ───── */}
+        {/* ───── 3. CTA: text layout; only the contact link is boxed in purple ───── */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
           <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-accent">
             Work with us
           </span>
           <h3 className="mt-5 font-display max-w-3xl text-pretty text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.15]">
-            If you build AI in the open, we would rather hear from you than not.
+            If you have work for a team like this, we would rather hear from you
+            than not.
           </h3>
           <p className="mt-6 max-w-2xl text-pretty text-ink-3 leading-relaxed">
-            Read a report and tell us where it is wrong, use one of the models, open an
-            issue, or write to us about work you think we should be doing. All of it is
-            more useful to us than silence.
+            Bring us a site to build or a workflow that wants AI in it. Or read a
+            report and tell us where it is wrong, use one of the models, open an
+            issue. All of it is more useful to us than silence.
           </p>
           <a
             href={CONTACT_HREF}

@@ -6,10 +6,10 @@
  *
  * Sections: none, same as its two siblings.
  *
- * NO COVER. The photographs are on the feed post.
+ * NO COVER. The photographs are on the story page.
  *
- * FACTS, all from the feed post (wigtn-tech-report,
- * components/feed/posts/oba-weekendthon-top6.ts): 2026.05.31, Kakao AI Campus
+ * FACTS, all from the story post (../oba-weekendthon-top6, rendered at
+ * /story/oba-weekendthon-top6): 2026.05.31, Kakao AI Campus
  * in Yongin, Top 6 at OBA Weekendthon; MyunZy; two days; a small open Korean
  * model held in place by a deterministic harness.
  *
@@ -18,10 +18,10 @@
  * denominator, because no source here carries the size of the field.
  *
  * SLUG is `oba-weekendthon-2026-top6`: `oba-weekendthon-top6` is taken by the
- * RETIRED redirect to the feed story.
+ * RETIRED redirect to the story page.
  */
 import type { Article, Block } from "../../data";
-import { techFeedHref } from "../../links";
+import { storyHref } from "../../links";
 
 const p = (text: string): Block => ({ t: "p", text });
 
@@ -39,7 +39,7 @@ export const obaWeekendthon2026Top6: Article = {
   date: "2026.05.31",
   place: "Yongin, KOR",
   /* No `author` or `readTime`: see the note in trae-seoul-2026-grand-prize. */
-  links: [{ label: "Read the write-up", href: techFeedHref("oba-weekendthon-top6") }],
+  links: [{ label: "Read the write-up", href: storyHref("oba-weekendthon-top6") }],
   body: [
     p(
       "MyunZy reads a real resume and a real job posting, then runs the interview before the interview. Two days at the Kakao AI Campus in Yongin on 2026.05.31, on a small open Korean model held in place by a deterministic harness rather than a large one left to improvise. The write-up is the account of that choice.",
