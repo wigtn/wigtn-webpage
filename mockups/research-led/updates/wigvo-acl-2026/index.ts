@@ -1,10 +1,10 @@
 /**
  * Notice: WIGVO at ACL 2026 System Demonstrations - announcement.
  *
- * The first post in the News group of /notices, which was empty until this
- * one. Everything already published on this site was a release; the conference
- * and hackathon stories are long-form and live under /story. This is the
- * other half the group was built for: something the team did that is not a
+ * The first entry in the Announcements list on /notices, which was empty
+ * until this one. Everything already published on this site was a release;
+ * the conference and hackathon stories are long-form and live under /story.
+ * This is the other half a notice is: something the team did that is not a
  * thing you can install.
  *
  * THREE PARAGRAPHS AND NO HEADINGS, which is the third and shortest cut this
@@ -12,7 +12,7 @@
  * and is now around 120. The headings went with the last cut: a heading over a
  * single paragraph names it rather than groups it, and at this length the post
  * is a notice, so it takes `layout: "note"` and matches the three award
- * notices in the same tab. The template it started from,
+ * notices in the same list. The template it started from,
  * updates/_template/announcement/STRUCTURE.md, is written for a release with
  * an artifact to install and stopped applying some way back.
  *
@@ -84,8 +84,9 @@ export const wigvoAcl2026: Article = {
   date: "2026.07",
   place: "San Diego, USA",
   /* No `author` or `readTime`: a note renders neither. */
-  /* No `version`. An accepted paper has no version, and the field renders
-   * under the date on /notices, where an empty cell is the correct output. */
+  /* No `version`. An accepted paper has no version, and the Announcements
+   * list carries no version column, which is why it is a separate list from
+   * the release ledger rather than more rows in it. */
   links: [
     { label: "ACL paper", href: "https://aclanthology.org/2026.acl-demo.33/" },
     { label: "Watch system demo", href: "https://www.youtube.com/watch?v=jK1CDOQExLw" },

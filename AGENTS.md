@@ -18,7 +18,7 @@ mockups/research-led/
   ArticleDetail.tsx        renders an Article's Block[]
   updates/<slug>/          one folder per post, notice or story: index.ts + images
   updates/_template/       four post templates + the shared rules
-public/images/             team portraits, logos. Nothing else.
+public/images/             team portraits, logos, one milestone photo. Nothing else.
 ```
 
 `updates/` keeps its folder name through every rename above it, the same way
@@ -76,15 +76,21 @@ Worked examples:
 
 The two on-site surfaces split the content by shape:
 
-- **/notices** is the release record: `RELEASE_ROWS` in `data.ts` flattens the
-  release posts' `versions` arrays into one date-ordered ledger, filterable
-  by each post's `releaseType` (model / plugin / tool), ten rows per page,
-  each row linking the product's release note.
+- **/notices** is two lists, in the order a notice is filed. `ANNOUNCEMENTS`
+  comes first: the newsroom posts that are not a release (an acceptance, a
+  placing), each one linking its own page. Under it, `RELEASE_ROWS` flattens
+  the release posts' `versions` arrays into one date-ordered ledger,
+  filterable by each post's `releaseType` (model / plugin / tool), ten rows
+  per page, each row linking the product's release note. The split is that a
+  release has a version and an announcement does not; the Announcements list
+  renders only when there is something in it.
 - **/story** promotes the newest story as a feature (cover, title, summary),
   then lists the rest as rows. Each entry pairs a short news note with its
   long-form story through `STORIES` in `data.ts`: the note supplies the
   words, the story post supplies the thumbnail and the /story/<slug>
-  destination.
+  destination. The note is also an entry in the Announcements list above, so
+  its own page and its reference links are reachable; the /story row is the
+  event's headline, not the notice.
 
 The page at /notices was /news, labelled "Updates", until 2026-08-09, and held
 News and Releases tabs until the Story/Blog split. Retired URLs, including

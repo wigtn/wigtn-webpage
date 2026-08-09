@@ -4,13 +4,22 @@
  * /notices, labelled "Notice" in the nav. It was /news, labelled "Updates",
  * until 2026-08-09; the old URL redirects here through RETIRED in data.ts.
  *
- * ONE FLAT LIST. This page held News and Releases as stacked sections, then
- * as two levels of tabs, while it was the site's whole feed. The section
- * split ended that: the event news rows live on /story, so what is left here
- * is the release record, and a record wants a ledger, not tabs. Every row is
- * one shipped version: date, product, version, and the one-line note sourced
+ * TWO LISTS, NOT TWO TABS. This page held News and Releases as stacked
+ * sections, then as two levels of tabs, while it was the site's whole feed.
+ * The section split ended the tabs: the long-form event stories live on
+ * /story, and a release record wants a ledger. Every ledger row is one
+ * shipped version: date, product, version, and the one-line note sourced
  * with that version's changelog. RELEASE_ROWS in data.ts flattens the
  * release posts' versions arrays into exactly this.
+ *
+ * Announcements sit above it in their own list because a notice is
+ * "announcements and releases" (AGENTS.md) and an award or a paper
+ * acceptance has no version to put in a version ledger. Flattening them into
+ * RELEASE_ROWS would have produced rows with an empty version cell and no
+ * type chip; leaving them off the page entirely, which is what the move to a
+ * single ledger did, exported four posts nothing linked. The list renders
+ * only when there is something in it, so the page is the ledger alone until
+ * a notice earns the heading.
  *
  * A TYPE FILTER, NOT A SPLIT. Review (#78) asked whether the ledger should
  * break into per-product sections for readability; it stays one list, and
@@ -49,7 +58,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { PageShell, PageHero } from "./chrome";
-import { RELEASE_ROWS, STORY_INDEX, type ReleaseType } from "./data";
+import {
+  ANNOUNCEMENTS,
+  RELEASE_ROWS,
+  STORY_INDEX,
+  articleHref,
+  type Article,
+  type ReleaseType,
+} from "./data";
 
 const PAGE_SIZE = 10;
 
@@ -103,6 +119,48 @@ function ReleaseRowLine({
         />
       </Link>
     </li>
+  );
+}
+
+/* One announcement. No version column and no type chip, because the thing
+ * being announced is an event rather than an artifact: tag, date, title, and
+ * the summary that was written for a row exactly this shape. The typography
+ * matches the /story rows, which carry the same four fields from the same
+ * posts, so the two surfaces read as one voice. */
+function AnnouncementLine({ article }: { article: Article }) {
+  return (
+    <li className="border-b border-line/[0.08]">
+      <Link
+        href={articleHref(article.slug)}
+        className="group block py-5 transition-colors hover:bg-line/[0.03]"
+      >
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
+            {article.tag}
+          </span>
+          <span className="font-mono text-xs text-ink-5">{article.date}</span>
+        </div>
+        <h3 className="font-display mt-2 flex items-center gap-1.5 text-lg font-semibold leading-snug tracking-tight text-ink transition-colors group-hover:text-accent">
+          {article.title}
+          <ArrowUpRight
+            size={14}
+            className="shrink-0 text-ink-5 transition-transform group-hover:translate-x-0.5 group-hover:text-accent"
+          />
+        </h3>
+        <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-ink-3">{article.summary}</p>
+      </Link>
+    </li>
+  );
+}
+
+/* The label over each list. Only rendered when both lists are on the page:
+ * one heading over one list names it rather than groups it, which is the
+ * same argument the note posts make about their own headings. */
+function SectionLabel({ children }: { children: string }) {
+  return (
+    <h2 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
+      {children}
+    </h2>
   );
 }
 
@@ -189,16 +247,17 @@ export function NoticesPage() {
    * clamp is the belt for that suspender. */
   const current = Math.min(page, pageCount - 1);
   const visible = new Set(filtered.slice(current * PAGE_SIZE, (current + 1) * PAGE_SIZE));
+  const hasAnnouncements = ANNOUNCEMENTS.length > 0;
 
   return (
     <PageShell>
       <PageHero
-        title="What shipped."
+        title="What we announced."
         lead={
           <>
-            Every version of everything we have released, dated from the
-            registry that serves it. The events, and the stories behind them,
-            are on{" "}
+            The awards and the acceptances, then every version of everything
+            we have released, dated from the registry that serves it. The
+            events, and the stories behind them, are on{" "}
             <Link
               href={STORY_INDEX}
               className="font-medium text-accent underline-offset-4 hover:underline"
@@ -213,23 +272,41 @@ export function NoticesPage() {
       />
 
       <div className="mx-auto max-w-5xl px-6 pb-28 md:pb-40">
-        <TypeFilter
-          active={filter}
-          onSelect={(f) => {
-            setFilter(f);
-            setPage(0);
-          }}
-        />
-        <ul className="border-t border-line/[0.08]">
-          {RELEASE_ROWS.map((row) => (
-            <ReleaseRowLine
-              key={`${row.product}@${row.version ?? row.date}`}
-              row={row}
-              hidden={!visible.has(row)}
-            />
-          ))}
-        </ul>
-        {pageCount > 1 && <Pager pageCount={pageCount} page={current} onSelect={setPage} />}
+        {hasAnnouncements && (
+          <section className="pb-14 md:pb-16">
+            <SectionLabel>Announcements</SectionLabel>
+            <ul className="mt-4 border-t border-line/[0.08]">
+              {ANNOUNCEMENTS.map((a) => (
+                <AnnouncementLine key={a.slug} article={a} />
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <section>
+          {hasAnnouncements && (
+            <div className="pb-4">
+              <SectionLabel>Releases</SectionLabel>
+            </div>
+          )}
+          <TypeFilter
+            active={filter}
+            onSelect={(f) => {
+              setFilter(f);
+              setPage(0);
+            }}
+          />
+          <ul className="border-t border-line/[0.08]">
+            {RELEASE_ROWS.map((row) => (
+              <ReleaseRowLine
+                key={`${row.product}@${row.version ?? row.date}`}
+                row={row}
+                hidden={!visible.has(row)}
+              />
+            ))}
+          </ul>
+          {pageCount > 1 && <Pager pageCount={pageCount} page={current} onSelect={setPage} />}
+        </section>
       </div>
     </PageShell>
   );

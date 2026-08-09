@@ -327,8 +327,10 @@ export type Article = {
    * its list and when. */
   versions?: ReleaseVersion[];
   channel?: Channel; // undefined = back-catalog/report (excluded from newsroom)
-  newsTopic?: NewsTopic; // newsroom sub-category; "release" splits the /news groups
-  /* Release only: the shipped version, rendered under the date on /news.
+  /* Newsroom sub-category. "release" puts the post in the version ledger on
+   * /notices; everything else puts it in the Announcements list above it. */
+  newsTopic?: NewsTopic;
+  /* Release only: the shipped version, rendered in the ledger row on /notices.
    *
    * It is a separate field rather than part of the title because two of these
    * products carry two different numbers. "WIGTN Plugin v2: Codex" is the
@@ -351,10 +353,11 @@ export type Article = {
 const p = (text: string): Block => ({ t: "p", text });
 
 export const ARTICLES: Article[] = [
-  /* ───────── Newsroom · News (real), newest first ─────────
+  /* ───────── Newsroom · Announcements (real), newest first ─────────
    * Everything here has `newsTopic` other than "release", which is what puts
-   * it in the News group on /notices rather than the Releases group. The group
-   * was empty until 2026-08-09; these two are what filled it. */
+   * it in the Announcements list on /notices rather than the version ledger
+   * below it. The list was empty until 2026-08-09; these four filled it, and
+   * each one also supplies the words for its /story row through STORIES. */
   wigvoAcl2026, // 2026.07, announcement
   /* One post per contest, on the date that contest was. They were a single
    * roundup for an afternoon; see the header on trae-seoul-2026-grand-prize
@@ -523,11 +526,24 @@ export const MILESTONES: Milestone[] = [
     upcoming: true,
   },
 ];
-/* Notices feed: only channel:"newsroom" items (awards, releases,
- * announcements). Blog stories and deep tech "report" content are excluded
- * by their channels. Newest first. */
-export const NEWSROOM_FEED = ARTICLES.filter(
-  (a) => !a.placeholder && a.channel === "newsroom",
+/* The /notices announcements: newsroom posts that are not a release.
+ *
+ * The awards and the paper acceptance. They are the other half of what a
+ * notice is (see AGENTS.md: "announcements and releases"), and they need
+ * their own list because RELEASE_ROWS is a version ledger and they have no
+ * version to put in it. Flattening them into it would have produced rows
+ * with an empty version cell and no type chip.
+ *
+ * Each one also supplies the words for a /story row through STORIES, and
+ * that row links the long-form story rather than this page. The two are not
+ * a duplicate: the row is the event's headline, this list is the notice
+ * itself, with the reference links (the ACL Anthology entry, the demo video)
+ * that the story does not carry. Without this list those links ship in the
+ * export and nothing reaches them.
+ *
+ * Newest first, like every other list on the site. */
+export const ANNOUNCEMENTS = ARTICLES.filter(
+  (a) => !a.placeholder && a.channel === "newsroom" && a.newsTopic !== "release",
 ).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
 /* The /notices rows: every shipped version of every release post, flattened

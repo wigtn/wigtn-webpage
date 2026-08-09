@@ -75,54 +75,61 @@ export function StoryPage() {
           </Link>
         </motion.div>
 
-        <ul className="mt-16 border-t border-line/[0.08] md:mt-20">
-          {earlier.map((s, i) => (
-            <li key={s.article.slug} className="border-b border-line/[0.08]">
-              <motion.div
-                variants={rise}
-                custom={i}
-                initial="hidden"
-                whileInView="show"
-                viewport={VIEWPORT}
-              >
-                <Link
-                  href={storyHref(s.storySlug)}
-                  className="group flex flex-col gap-5 py-8 sm:flex-row sm:items-start sm:gap-8"
+        {/* Guarded rather than always rendered: with one story `earlier` is
+            empty and the border-t is a 1px rule hanging under the feature
+            with nothing below it. (Zero stories is left to fail the build on
+            the destructure above. STORIES is a hand-kept table, and a /story
+            page with no stories on it is not a page worth exporting.) */}
+        {earlier.length > 0 && (
+          <ul className="mt-16 border-t border-line/[0.08] md:mt-20">
+            {earlier.map((s, i) => (
+              <li key={s.article.slug} className="border-b border-line/[0.08]">
+                <motion.div
+                  variants={rise}
+                  custom={i}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={VIEWPORT}
                 >
-                  <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl bg-ink/[0.04] sm:w-52 md:w-64">
-                    <img
-                      src={s.image}
-                      alt=""
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.04]"
-                    />
-                  </div>
-
-                  <div className="flex min-w-0 flex-1 flex-col">
-                    <div className="flex items-center gap-3">
-                      <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
-                        {s.article.tag}
-                      </span>
-                      <span className="font-mono text-xs text-ink-5">{s.article.date}</span>
-                    </div>
-                    <h2 className="font-display mt-2 text-xl font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent md:text-2xl">
-                      {s.article.title}
-                    </h2>
-                    <p className="mt-2 text-sm leading-relaxed text-ink-3 md:text-base">
-                      {s.article.summary}
-                    </p>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent">
-                      Read the full story
-                      <ArrowUpRight
-                        size={15}
-                        className="transition-transform group-hover:translate-x-0.5"
+                  <Link
+                    href={storyHref(s.storySlug)}
+                    className="group flex flex-col gap-5 py-8 sm:flex-row sm:items-start sm:gap-8"
+                  >
+                    <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl bg-ink/[0.04] sm:w-52 md:w-64">
+                      <img
+                        src={s.image}
+                        alt=""
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.04]"
                       />
-                    </span>
-                  </div>
-                </Link>
-              </motion.div>
-            </li>
-          ))}
-        </ul>
+                    </div>
+
+                    <div className="flex min-w-0 flex-1 flex-col">
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
+                          {s.article.tag}
+                        </span>
+                        <span className="font-mono text-xs text-ink-5">{s.article.date}</span>
+                      </div>
+                      <h2 className="font-display mt-2 text-xl font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent md:text-2xl">
+                        {s.article.title}
+                      </h2>
+                      <p className="mt-2 text-sm leading-relaxed text-ink-3 md:text-base">
+                        {s.article.summary}
+                      </p>
+                      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent">
+                        Read the full story
+                        <ArrowUpRight
+                          size={15}
+                          className="transition-transform group-hover:translate-x-0.5"
+                        />
+                      </span>
+                    </div>
+                  </Link>
+                </motion.div>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </PageShell>
   );

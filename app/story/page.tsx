@@ -8,7 +8,7 @@ import { StoryPage } from "@/mockups/research-led/StoryPage";
  * No trailing slash: the Pages build exports flat files, so `/story` resolves
  * and `/story/` 404s. */
 const DESCRIPTION =
-  "What the team did, one row per event: conferences, hackathons, and where each one ended up. The full account of each is on the blog.";
+  "What the team did, one row per event: conferences, hackathons, and where each one ended up. Each row opens the full account, photographs and all.";
 
 export const metadata: Metadata = {
   title: `Story | ${ORG_NAME}`,

@@ -59,15 +59,35 @@ up with a "what people asked" heading over an empty paragraph.
 
 | The post is about | `kind` | `channel` | `newsTopic` | Template |
 | --- | --- | --- | --- | --- |
-| Something shipped, was published, or was accepted | `report` | `newsroom` | `release` | [`announcement/`](announcement/STRUCTURE.md) |
+| An artifact shipped: weights, a plugin, a tool you can install | `report` | `newsroom` | `release` | [`announcement/`](announcement/STRUCTURE.md) |
+| A paper accepted, a placing won, something announced with nothing to install | `event` | `newsroom` | `announcement` or `award` | [`announcement/`](announcement/STRUCTURE.md), cut to a note |
 | A meetup, seminar, or study group we ran | `community` | `newsroom` | `community` | [`community/`](community/STRUCTURE.md) |
 | A conference trip, told as a story with photographs | `event` | `story` | none | [`conference/`](conference/STRUCTURE.md) |
 | A hackathon or contest, told as a story with photographs | `event` | `story` | none | [`hackathon/`](hackathon/STRUCTURE.md) |
 
+**The first two rows are not the same post.** Both are "something happened
+and we are saying so", and the difference is whether a reader can install
+the thing. A release lands in the version ledger on /notices and needs a
+`releaseType`; an acceptance or a placing lands in the Announcements list
+above it and has no version at all. Putting an acceptance on the `release`
+topic files it in the ledger with an empty version cell and no type chip,
+which is the shape that gave this table its second row.
+
+Rows two and three take `layout: "note"` when the body is a few sentences:
+it drops the standfirst, read time, byline, contact strip and related rail,
+all of which outnumber the text on a fifty-word post. Set it on the post
+rather than inferring it from length; see the field's own comment in
+`data.ts`. There is no separate `STRUCTURE.md` for a note. Start from
+`announcement/`, keep the sourcing rules, and cut the sections that have no
+evidence, which on a short notice is most of them.
+
 A long-form story usually pairs with a short news note (the acceptance, the
 placing) that lands in the /story rows through `STORIES` in `data.ts`. The
 note and the story are two posts: write the story with its template, write
-the note as an announcement, and add the pairing row.
+the note from row two, and add the pairing row. The note is not only row
+copy; it is also an entry in the Announcements list on /notices and keeps
+the reference links (the proceedings entry, the demo video) that the story
+does not carry.
 
 Copy the matching `index.ts.example` into your post folder as `index.ts` and
 read that template's `STRUCTURE.md` before writing. Each one names the section

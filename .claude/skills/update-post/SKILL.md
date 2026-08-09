@@ -35,7 +35,14 @@ Everything else lives here, split by channel:
   story usually pairs with a short news note in the /story rows through
   `STORIES` in `data.ts`; the note is a separate announcement post.
 - **A release note or short notice is a newsroom post**: `channel:
-  "newsroom"`, announcement or community template.
+  "newsroom"`, announcement or community template. The two are filed
+  differently on /notices and it is not a detail: a **release** ships an
+  artifact you can install, takes `newsTopic: "release"`, and must carry a
+  `releaseType` ("model" / "plugin" / "tool") or its row shows only under the
+  All chip; an **acceptance, placing or other announcement** has nothing to
+  install, takes `newsTopic: "announcement"` or `"award"`, usually
+  `layout: "note"`, and lands in the Announcements list instead of the
+  ledger. The routing table in `updates/_template/README.md` is the authority.
 - **Business-track news (a signed engagement, a program selection, a
   partnership) belongs to the closed blog section.** The gate and the
   reopening steps are in `docs/blog-section.md`; read it before writing one,
@@ -178,6 +185,11 @@ defect that has already shipped in this repo at least once.
 - [ ] A shell command sequence is a `list`; a single command is a `quote`.
 - [ ] `channel` is the one the template hardcodes ("newsroom" or "story"), or
       the field is deleted for a back-catalogue post.
+- [ ] `newsTopic` matches the routing table: `release` only when there is an
+      artifact to install.
+- [ ] A `newsTopic: "release"` post sets `releaseType`. Nothing enforces this
+      and nothing will fail; the row just vanishes from every type chip.
+- [ ] A post whose body is a few sentences sets `layout: "note"`.
 
 ## Phase 6: Verify
 

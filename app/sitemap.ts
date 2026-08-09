@@ -26,9 +26,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   /* hrefFor, not articleHref: a story post's page is /story/<slug>, and its
-   * root slug is one of the redirects excluded above. No /blog entries: the
-   * blog section is closed and exports no pages. */
-  const articles: MetadataRoute.Sitemap = ARTICLES.filter((article) => !article.placeholder).map(
+   * root slug is one of the redirects excluded above.
+   *
+   * The blog filter is load-bearing, not a restatement of today's data. The
+   * section is closed and app/blog/* is deleted, but hrefFor still routes
+   * `channel: "blog"` to /blog/<slug>, so the first post written under step 1
+   * of docs/blog-section.md would be advertised here before step 2 restores
+   * the routes. Remove this filter in that step, with the /blog index line
+   * above; the posts need no line of their own. */
+  const articles: MetadataRoute.Sitemap = ARTICLES.filter(
+    (article) => !article.placeholder && article.channel !== "blog",
+  ).map(
     (article) => ({
       url: `${SITE}${hrefFor(article)}`,
       lastModified: articleDate(article.date),

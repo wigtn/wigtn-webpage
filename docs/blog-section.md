@@ -52,13 +52,20 @@ already made public or put in writing.
 
 Four steps, also recorded in the BlogPage.tsx header:
 
-1. Write the post with `channel: "blog"` through the `update-post` skill.
-   `BLOG_FEED` picks it up on its own.
-2. Restore `app/blog/page.tsx` and `app/blog/[slug]/page.tsx` from git
+1. Restore `app/blog/page.tsx` and `app/blog/[slug]/page.tsx` from git
    history (they were removed in the commit that closed the section).
+2. Write the post with `channel: "blog"` through the `update-post` skill.
+   `BLOG_FEED` picks it up on its own.
 3. Put Blog back in `NAV` in `data.ts`, between Story and Tech.
-4. Add /blog and the post to the sitemap; `hrefFor` already routes the
-   `"blog"` channel.
+4. Add the `/blog` index to `staticRoutes` in `app/sitemap.ts` and drop the
+   `channel !== "blog"` filter under it. The post itself needs no line:
+   the article map already routes every channel through `hrefFor`.
+
+Routes before posts, and that order is the point. The sitemap maps every
+non-placeholder article through `hrefFor`, which routes `"blog"` to
+`/blog/<slug>` whether or not the route exists, so writing the post first
+advertises a URL with nothing behind it. The filter in step 4 is what holds
+that shut in the meantime.
 
 One naming caution from the section's history: Story rows once carried a
 "Read on Blog" label while pointing at what is now Story's own pages. When

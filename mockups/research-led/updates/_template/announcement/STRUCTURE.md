@@ -4,6 +4,14 @@ For a thing that happened and is worth telling people about: code or weights
 going public, a paper accepted, a package published, a partnership.
 `kind: "report"`, `newsTopic: "release"`.
 
+That pairing is for a **release**, an artifact a reader can install. For an
+acceptance, a placing or anything else with nothing to install, take row two
+of the [routing table](../README.md): `kind: "event"`, `newsTopic:
+"announcement"` or `"award"`, usually `layout: "note"`. The sections below
+still apply, minus the ones about the artifact, which on a note is most of
+them. Reference implementation for that shape:
+[`../../wigvo-acl-2026/index.ts`](../../wigvo-acl-2026/index.ts).
+
 This template used to be called `release` and used to carry the full release
 note, limitations section and all. That version is now a tech report. The split
 in [`AGENTS.md`](../../../../../AGENTS.md) puts findings on the report site and
@@ -37,8 +45,19 @@ Reference implementation: [`../../wigtnocr-open-source/index.ts`](../../wigtnocr
 Five sections. If you are writing a sixth, check whether it is a finding.
 
 Set `version` on the article. It renders opposite the tag on the detail page and
-under the date in the Releases list, which is why the title is the product name
-and carries no number of its own.
+in the version column of the release ledger on /notices, which is why the title
+is the product name and carries no number of its own.
+
+Set `releaseType` too: `"model"`, `"plugin"` or `"tool"`, whichever shape the
+artifact is. It drives the type filter on /notices and nothing else. The field
+is optional in the type because notes and announcements have no artifact to
+classify, so nothing will fail if you leave it off a release: the row simply
+disappears from every chip except All. Extend the union in `data.ts` when a
+new shape ships (a dataset, a harness), not before.
+
+Set `versions` as well when the product has a history: the ledger is one row
+per version, and a release post with no `versions` array contributes a single
+row built from the post's own date and summary.
 
 ## The section that carries the post
 

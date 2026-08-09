@@ -11,10 +11,13 @@
  * of one.
  *
  * docs/blog-section.md is the decision record: what qualifies, what does
- * not, and the reopening steps. In short: write the post with channel:
- * "blog" (BLOG_FEED picks it up), restore app/blog/page.tsx and
- * app/blog/[slug]/page.tsx from git history, add the nav item back, and put
- * /blog in the sitemap.
+ * not, and the reopening steps. In short, and in this order: restore
+ * app/blog/page.tsx and app/blog/[slug]/page.tsx from git history, write the
+ * post with channel: "blog" (BLOG_FEED picks it up), add the nav item back,
+ * then put /blog in the sitemap and drop the channel filter that keeps blog
+ * articles out of it. Routes before posts: the sitemap routes every article
+ * through hrefFor, so a post written ahead of its route is a sitemap entry
+ * with no page behind it.
  *
  * Cards, not rows, because a post here carries a cover photograph and the
  * picture is most of what a reader chooses by. The dense-row treatment lives
