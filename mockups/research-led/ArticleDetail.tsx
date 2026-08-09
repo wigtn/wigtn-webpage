@@ -23,20 +23,15 @@ import {
 import { SiteHeader, SiteFooter, BackdropDecor, EVENT_ICON, rise } from "./chrome";
 import { CONTACT_HREF } from "@/lib/brand";
 
-/* Media breaks out of the reading column.
+/* Media stays in the reading column.
  *
- * The article column is max-w-3xl because that lands the body near the 45-75
- * characters-per-line range that long-form reading wants; widening the text
- * to fill the window would push it past 100 and make the eye lose the next
- * line. But an image has no such limit, and pictures trapped at text width
- * are what makes a page read as narrow. So text keeps its measure and figures
- * are centred on the viewport instead of the column.
- *
- * left-1/2 + -translate-x-1/2 re-centres against the viewport; the width is
- * capped so it never runs edge to edge, and the vw fallback keeps a gutter on
- * screens narrower than the cap. */
-const MEDIA_BREAKOUT =
-  "relative left-1/2 w-[min(1080px,calc(100vw-4rem))] -translate-x-1/2";
+ * Figures used to break out to min(1080px, 100vw - 4rem), centred on the
+ * viewport, on the argument that pictures trapped at text width read as
+ * narrow. On the story pages, the only picture-heavy pages, the effect was
+ * the opposite: every figure jutted half a column past the margins the eye
+ * had been tracking, and the page read as misaligned rather than generous.
+ * So a figure's width is the column's width now, and the solo caps in the
+ * gallery branch keep a lone portrait or square from towering over it. */
 
 const KIND_LABEL: Record<Article["kind"], string> = {
   report: "Research",
@@ -72,7 +67,7 @@ function BlockView({ block }: { block: Block }) {
       );
     case "image":
       return (
-        <figure className={`my-12 ${MEDIA_BREAKOUT}`}>
+        <figure className="my-12">
           <img
             src={block.src}
             alt={block.alt}
@@ -101,9 +96,10 @@ function BlockView({ block }: { block: Block }) {
         "1/1": "aspect-square",
         "16/9": "aspect-video",
       };
-      /* A lone image gets capped rather than stretched to the full breakout.
-       * A single portrait photo at 1080px wide is 1440px tall, which pushes
-       * everything after it off the screen; landscape can take more room. */
+      /* A lone image gets capped rather than stretched to the full column.
+       * A single portrait photo at column width is taller than a viewport,
+       * which pushes everything after it off the screen; landscape can take
+       * the whole measure. */
       const solo =
         n === 1
           ? block.images[0].aspect === "3/4"
@@ -113,7 +109,7 @@ function BlockView({ block }: { block: Block }) {
               : ""
           : "";
       return (
-        <figure className={`my-12 ${MEDIA_BREAKOUT}`}>
+        <figure className="my-12">
           <div className={`mx-auto grid gap-3 ${cols} ${solo}`}>
             {block.images.map((im, i) => (
               <div key={i}>
@@ -306,11 +302,10 @@ export function ArticleDetail({ slug }: { slug: string }) {
               `image`, or a video to link, gets the frame; one that carries
               neither gets its first paragraph. */}
           {(article.image || article.video) && (
-          /* Breakout lives on a plain wrapper, not on the motion element:
-              framer-motion writes `transform` inline to animate, which would
-              overwrite the -translate-x-1/2 half of the centring trick and
-              shove the cover off the right edge of the page. */
-          <div className={`mt-8 ${MEDIA_BREAKOUT}`}>
+          /* The wrapper used to carry the media breakout; the cover sits in
+              the column now like every other figure, and the plain div stays
+              only to hold the margin outside the animated element. */
+          <div className="mt-8">
             <motion.div
               variants={rise}
               custom={1}

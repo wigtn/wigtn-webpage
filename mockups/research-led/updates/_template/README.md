@@ -187,8 +187,9 @@ Use `3/4` for anything portrait (a person standing, a poster) and `16/9` for a
 slide or a screen capture. A portrait photo forced into a landscape box loses
 its subject.
 
-Portrait shots never run as a full-width `image` block: at the 1080px media
-breakout a 3:4 shot is 1440px tall and buries whatever follows. Put them in a
+Portrait shots never run as a full-width `image` block: at the reading
+column's width a 3:4 shot is taller than a viewport and buries whatever
+follows. Put them in a
 gallery, where `aspect: "3/4"` caps a lone portrait at 460px.
 
 Galleries can sit inside any section, so a section can carry one photo and the

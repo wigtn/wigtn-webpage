@@ -89,8 +89,9 @@
  *   should win.
  *
  *   Two full-width `image` blocks, for two different reasons, both deliberate:
- *   the architecture diagram is 1028px wide natively, so the breakout renders
- *   it at about 1:1 and any gallery crop would cut a layer off it; the dataset
+ *   the architecture diagram is 1028px wide natively and runs near full size
+ *   at the column's width, where any gallery crop would cut a layer off it;
+ *   the dataset
  *   slide is a 16:9 photo like the two in the gallery above it, but it carries
  *   fine print the reader has to be able to follow against the audit section,
  *   and at gallery width that print closes up.

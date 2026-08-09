@@ -20,9 +20,10 @@
  * photos name the company only, never the individual, and the section carries
  * an explicit no-endorsement line — conference interest is not adoption.
  *
- * Portrait photos never run as a full-width `image` block: at the 1080px media
- * breakout a 3:4 shot is 1440px tall and buries what follows. They go in a
- * gallery instead, where `aspect: "3/4"` caps a lone portrait at 460px.
+ * Portrait photos never run as a full-width `image` block: at the reading
+ * column's width a 3:4 shot is taller than a viewport and buries what
+ * follows. They go in a gallery instead, where `aspect: "3/4"` caps a lone
+ * portrait at 460px.
  *
  * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09
  * as a long-form story, rendered at /story/<slug> (briefly /blog, which
