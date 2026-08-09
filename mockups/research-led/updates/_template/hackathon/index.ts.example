@@ -31,8 +31,7 @@ export const MY_NEW_POST_COVER = cover.src;
 export const myNewPost: Article = {
   slug: "my-new-post", // must match the folder name
   kind: "event",
-  channel: "newsroom",
-  newsTopic: "award",
+  channel: "story",
   tag: "GRAND PRIZE", // the placing, in caps; it is the card's kicker
   icon: "trophy",
   title: "", // the result and the build, not one without the other

@@ -70,6 +70,7 @@ export const wigssNpmRelease: Article = {
   kind: "report",
   channel: "newsroom",
   newsTopic: "release",
+  releaseType: "tool",
   tag: "RELEASE",
   /* The title used to be "WIGSS v0.1.4, April 2026: drag a component in the
    * browser and the source file rewrites itself", on the rule that a bare
@@ -90,6 +91,75 @@ export const wigssNpmRelease: Article = {
     { label: "npm", href: "https://npmjs.com/package/wigss" },
     { label: "GitHub", href: "https://github.com/wigtn/wigss" },
     { label: "Tech report", href: techReportHref("wigss") },
+  ],
+  /* Full publish history, from the npm registry document for `wigss`
+   * (registry.npmjs.org/wigss) on 2026-08-09, read off its `time` map with
+   * `created` and `modified` dropped. Five versions, 0.1.0 to 0.1.4, which the
+   * registry reports as the current `latest`.
+   *
+   * THE NOTES COME FROM COMMITS. `gh api repos/wigtn/wigss/releases` returns
+   * an empty list and the repository has no tags at all, so there is no
+   * per-version text to quote and each line below is written from the commit
+   * subjects that fall in that version's window.
+   *
+   * HOW THE WINDOWS WERE DRAWN, because this is the part that would otherwise
+   * be guesswork. Two versions were published within 96 minutes of each other
+   * on 2026-03-30, so a date is not enough to say which commit went into
+   * which. The publish timestamps from the registry were compared against
+   * commit timestamps from
+   * `gh api "repos/wigtn/wigss/commits?per_page=100"`, both in UTC, and a
+   * commit belongs to the first version published after it:
+   *   - 0.1.0, published 08:09:19 on 03-28. Everything up to 08:09:00, which
+   *     is the whole first push of the project.
+   *   - 0.1.1, published 12:52:45 on 03-30. One commit, 12:49:08, and its
+   *     subject already carries "(v0.1.1)".
+   *   - 0.1.2, published 14:28:36 on 03-30. Three commits from 12:59 to 13:02
+   *     plus "chore: Bump version to 0.1.2" at 14:28:01, 35 seconds before the
+   *     publish.
+   *   - 0.1.3, published 17:00:44 on 04-02. Everything from 15:56 on 03-30
+   *     onward, which is where the Apache 2.0 licence, the CSS strategies, the
+   *     AST rewriting and the test suite actually landed, and it ends with a
+   *     commit whose subject carries "v0.1.3".
+   *   - 0.1.4, published 09:41:46 on 04-03. The commit subjected "chore: v0.1.4
+   *     ..." at 09:42:32, which is 46 seconds AFTER the publish. It is counted
+   *     here anyway because it names the version it belongs to; the ordering
+   *     just says the tree was published and then committed.
+   *
+   * WHAT THIS COSTS: 0.1.4 is the version this post is written about, and the
+   * window shows it is a metadata release. That is not a criticism of the post,
+   * which never claimed otherwise, but it is the sort of thing a reader can now
+   * see, and it should stay visible rather than be smoothed over.
+   *
+   * Versions here carry no leading "v", because that is how npm names them and
+   * how `npm i wigss@0.1.4` is typed. The two plugins tag with a "v" and keep
+   * it for the same reason. The lists are not inconsistent; each follows its
+   * own registry. */
+  versions: [
+    {
+      version: "0.1.4",
+      date: "2026.04.03",
+      note: "Package metadata enriched for search and retrieval, and the WIGTN logo added.",
+    },
+    {
+      version: "0.1.3",
+      date: "2026.04.02",
+      note: "Four CSS strategies supported rather than one (Tailwind, inline style, CSS Modules, plain CSS), rewriting moved onto @babel/parser and postcss, Apache 2.0 applied, and the test suite grown to 252.",
+    },
+    {
+      version: "0.1.2",
+      date: "2026.03.30",
+      note: "Dead code removed, the demo target excluded from the published package, and a data-flow diagram added to the READMEs.",
+    },
+    {
+      version: "0.1.1",
+      date: "2026.03.30",
+      note: "False GPT-5.4 claims corrected, with memory-leak, performance and security fixes.",
+    },
+    {
+      version: "0.1.0",
+      date: "2026.03.28",
+      note: "First publish. Tailwind rewriting done directly instead of through a model, a live iframe preview, and one-click save with safe diffs.",
+    },
   ],
   body: [
     p(

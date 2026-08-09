@@ -44,13 +44,14 @@ the rest.
 | 내가 폴더에 넣어두겠다 | Give the exact folder path, wait, then run `magick identify` on what arrives. |
 | 없다 | No `image` field, no `*_COVER`. The card renders `BrandCover`, which is intended. Say so in the header. |
 
-### Q4. Updates 피드에 올라가야 하나요?
+### Q4. 어느 피드에 올라가야 하나요?
 `header: "피드"`
 
 | Option | Sets |
 | --- | --- |
-| 예, 뉴스룸에 | `channel: "newsroom"`. Appears in `/news`. |
-| 아니오, 백카탈로그 | Delete the `channel` field. Reachable by URL, not in the feed. |
+| 뉴스룸에 (공지·릴리스) | `channel: "newsroom"`. Releases surface on `/notices`; a note can pair into `/story`. |
+| 스토리로 (장문) | `channel: "story"`. Rendered at `/story/<slug>`, summarized by a `/story` row. |
+| 백카탈로그 | Delete the `channel` field. Reachable by URL, not in any feed. |
 
 ---
 
@@ -65,7 +66,8 @@ and record why in the header.
 **Q5. 이 빌드에서 지금도 살아 있는 게 있나요?** `header: "살아남은 것"`
 - 아직 돌아가는 게 있다 → write the section; ask what, and what replaced the rest
 - 다 버렸다, 그게 요점이다 → write it as a list of what was thrown away and why
-- 아직 모르겠다 → **cut the section**; header records it, per `oba-weekendthon-top6`
+- 아직 모르겠다 → **cut the section**; header records it (worked example:
+  `updates/oba-weekendthon-top6`, the hackathon story)
 
 **Q6. 글을 지배한 제약은 무엇이었나요?** `header: "제약"`
 - 시계 (몇 시간 안에) · 필수 플랫폼/API · 팀 규모 · 심사 방식
@@ -158,7 +160,8 @@ explicit line that interest is not adoption or endorsement by their employer.
 | 특별히 없다 | Still apply the standing rules in `AGENTS.md`. |
 
 Also mask anything personal that survives into a screenshot. The WIGVO console
-shot in `acl-2026-san-diego` has a masked phone number, and it has to be masked
+shot in the `acl-2026-san-diego` story post has a masked phone number,
+and it has to be masked
 again on any re-export.
 
 ### Q11. 커버는 무엇으로 할까요?

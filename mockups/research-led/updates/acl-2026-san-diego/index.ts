@@ -20,9 +20,16 @@
  * photos name the company only, never the individual, and the section carries
  * an explicit no-endorsement line — conference interest is not adoption.
  *
- * Portrait photos never run as a full-width `image` block: at the 1080px media
- * breakout a 3:4 shot is 1440px tall and buries what follows. They go in a
- * gallery instead, where `aspect: "3/4"` caps a lone portrait at 460px.
+ * Portrait photos never run as a full-width `image` block: at the reading
+ * column's width a 3:4 shot is taller than a viewport and buries what
+ * follows. They go in a gallery instead, where `aspect: "3/4"` caps a lone
+ * portrait at 460px.
+ *
+ * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09
+ * as a long-form story, rendered at /story/<slug> (briefly /blog, which
+ * closed the same day, before launch). The return changed `channel` and
+ * dropped the unread `externalUrl`; the prose is as written before the
+ * no-em-dash rule and stays grandfathered until the prose itself is edited.
  */
 
 import type { Article, Block } from "../../data";
@@ -65,8 +72,7 @@ export const ACL_2026_COVER = teamCover.src;
 export const acl2026SanDiego: Article = {
   slug: "acl-2026-san-diego",
   kind: "event",
-  channel: "newsroom",
-  newsTopic: "announcement",
+  channel: "story",
   tag: "ACL 2026",
   icon: "pin",
   /* Titled as a trip report, not a product headline: the subject is the team
@@ -80,7 +86,6 @@ export const acl2026SanDiego: Article = {
   author: "WIGTN Research",
   readTime: "11 min",
   image: teamCover.src,
-  externalUrl: "https://wigtn.github.io/blog/wigvo/",
   links: [
     { label: "ACL paper", href: "https://aclanthology.org/2026.acl-demo.33/" },
     { label: "Tech report", href: techReportHref("wigvo") },

@@ -1,13 +1,15 @@
 ---
 name: update-post
-description: Write a new WIGTN update post end to end. Runs a short interview, picks the matching template (conference / hackathon / announcement / community), sources every fact from the repo or a named source, prepares the photos, drafts the post into updates/<slug>/, wires it into data.ts, and verifies the build. Use whenever the user wants to add, write, or draft a post for the Updates feed: "글 하나 써줘", "업데이트 올려줘", "이번 해커톤 글 써줘", "릴리스 노트 써줘", "학회 다녀온 거 정리해줘", "write an update post", "add a newsroom post", "draft a release note", "conference recap".
+description: Write a new WIGTN post end to end. Runs a short interview, picks the matching template (announcement / community / conference / hackathon), sources every fact from the repo or a named source, prepares the photos, drafts the post into updates/<slug>/, wires it into data.ts, and verifies the build. Use whenever the user wants to add, write, or draft a post for the Notice or Story surfaces: "글 하나 써줘", "업데이트 올려줘", "릴리스 노트 써줘", "블로그 글 써줘", "write an update post", "add a newsroom post", "draft a release note", "write a trip report".
 ---
 
 # Writing an update post
 
 A post is a folder: `mockups/research-led/updates/<slug>/index.ts` plus its own
-images. `data.ts` imports it. Four templates exist because a hackathon report and
-an announcement want different sections.
+images. `data.ts` imports it. Four templates exist because an announcement, a
+community note, a conference story, and a hackathon story want different
+sections; the first two are `channel: "newsroom"` posts, the last two are
+`channel: "story"` posts rendered at /story/<slug>.
 
 Read `mockups/research-led/updates/_template/README.md` first. It owns the rules
 this skill does not repeat: blocks, gallery layout, image prep, the numbers
@@ -20,14 +22,31 @@ facts**. Every phase below exists to make inventing harder than sourcing.
 
 ## Phase -1: Does it belong on this site?
 
-Before anything else, apply the test in `AGENTS.md`: **a post with a method and
-a limitations section is a tech report**, and it belongs in the `wigtn-tech-report`
-repo, not here. This site covers what the team did; the report site covers what
-the work found.
+Before anything else, route the subject. **One kind of post belongs in the
+`wigtn-tech-report` repo instead**: a post with a method and a limitations
+section is a tech report, and it goes to `components/technical-reports/`. This
+site covers what the team did; the report site covers what the work found. If
+that is the answer, say so and stop.
 
-If the answer is "report", say so and stop. Writing it here and moving it later
-is how the two sites ended up with three copies of the same content once
-already.
+Everything else lives here, split by channel:
+
+- **A conference or hackathon write-up is a long-form story**: `channel:
+  "story"`, conference or hackathon template, rendered at /story/<slug>. A
+  story usually pairs with a short news note in the /story rows through
+  `STORIES` in `data.ts`; the note is a separate announcement post.
+- **A release note or short notice is a newsroom post**: `channel:
+  "newsroom"`, announcement or community template. The two are filed
+  differently on /notices and it is not a detail: a **release** ships an
+  artifact you can install, takes `newsTopic: "release"`, and must carry a
+  `releaseType` ("model" / "plugin" / "tool") or its row shows only under the
+  All chip; an **acceptance, placing or other announcement** has nothing to
+  install, takes `newsTopic: "announcement"` or `"award"`, usually
+  `layout: "note"`, and lands in the Announcements list instead of the
+  ledger. The routing table in `updates/_template/README.md` is the authority.
+- **Business-track news (a signed engagement, a program selection, a
+  partnership) belongs to the closed blog section.** The gate and the
+  reopening steps are in `docs/blog-section.md`; read it before writing one,
+  and do not reopen the section for anything less.
 
 ## Phase 0: Scan before you ask
 
@@ -84,7 +103,8 @@ exists to find out whether that section has anything real behind it:
 
 If the user cannot answer round 2, **the section does not get written.** Cut it,
 and record in the file header that it was cut for lack of evidence and what would
-let someone add it later. `oba-weekendthon-top6/index.ts` is the worked example.
+let someone add it later. `wigtnocr-open-source/index.ts` is the short-form
+worked example; `acl-2026-san-diego/index.ts` is the long-form one.
 That is a correct outcome, not a failure.
 
 ## Phase 2: Source every fact
@@ -163,7 +183,13 @@ defect that has already shipped in this repo at least once.
 - [ ] `*_COVER` exported only if something outside the post imports it.
 - [ ] Off-site URLs come from `../../links`, never a value import from `../../data`.
 - [ ] A shell command sequence is a `list`; a single command is a `quote`.
-- [ ] `channel: "newsroom"` is correct for this post, or the field is deleted.
+- [ ] `channel` is the one the template hardcodes ("newsroom" or "story"), or
+      the field is deleted for a back-catalogue post.
+- [ ] `newsTopic` matches the routing table: `release` only when there is an
+      artifact to install.
+- [ ] A `newsTopic: "release"` post sets `releaseType`. Nothing enforces this
+      and nothing will fail; the row just vanishes from every type chip.
+- [ ] A post whose body is a few sentences sets `layout: "note"`.
 
 ## Phase 6: Verify
 
@@ -191,9 +217,10 @@ cover was chosen for.
 ## Phase 7: Wire it up and report
 
 Register the import in `data.ts` and place the identifier where the post belongs
-in `ARTICLES` (the array is grouped by kind and ordered newest first inside each
-group). If the post gets a homepage rail entry, add it to `MILESTONES` and use
-the exported `*_COVER`.
+in `ARTICLES` (the array is grouped by channel and ordered newest first inside
+each group). A long-form story that pairs with a news note also gets a
+`STORIES` row (note article, story cover, story slug). If the post gets a milestone
+entry, add it to `MILESTONES` and use the exported `*_COVER`.
 
 Then report, in this order:
 

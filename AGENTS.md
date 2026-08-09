@@ -14,45 +14,89 @@ promoted from a mockup and kept its folder name.
 app/                       routes; thin wrappers around mockups/research-led/*
 mockups/research-led/
   data.ts                  articles, team, milestones, nav, selectors
-  links.ts                 off-site URL constants (leaf module, see below)
+  links.ts                 URL constants a post may import (leaf module, see below)
   ArticleDetail.tsx        renders an Article's Block[]
-  updates/<slug>/          one folder per update post: index.ts + its images
+  updates/<slug>/          one folder per post, notice or story: index.ts + images
   updates/_template/       four post templates + the shared rules
 public/images/             team portraits, logos, one milestone photo. Nothing else.
 ```
 
-## Which site does this belong on
+`updates/` keeps its folder name through every rename above it, the same way
+`research-led/` kept its. Notice posts and story posts both live there; the
+`channel` field on the post, not the folder, is what routes them.
 
-WIGTN publishes in two places, and the line between them is the subject, not the
-length. A short story and a long story both belong here if the subject is right.
+The site has four nav destinations: **About** (/team), **Notice** (/notices),
+**Story** (/story), and **Tech**, which is an external link to WIG-log's
+report index. The landing page is three sections: Hero, What we do (the
+business model: Web Agency and AX Agency), Contact. About is "Who we are.":
+the members and the partners, nothing else. A **Blog** section exists in the
+source (BlogPage.tsx, the "blog" channel) but is closed and unrouted: it is
+reserved for business-track news (a signed subcontract, a program selection,
+a partnership), and it opens with its first qualifying post, not before.
+**The gate and the reopening steps are in [`docs/blog-section.md`](docs/blog-section.md)**;
+read it before writing anything for the blog or reviving the routes.
+
+## Where does a piece of writing belong
+
+WIGTN publishes in two repos, and the line between them is the subject, not the
+length.
 
 | | Subject | The question it answers |
 | --- | --- | --- |
 | **wigtn.com** (this repo) | the team | What did we **do**? |
-| **[tech reports](https://wigtn.github.io/wigtn-tech-report/)** (`wigtn-tech-report`) | the work | What did we **find**? |
+| **[WIG-log](https://tech.wigtn.com/)** (`wigtn-tech-report`) | the work | What did we **find**? |
 
-Test: **if it has a method and a limitations section, it is a report.** Events,
-awards, releases, conference trips, papers being accepted: those are things the
-team did, and they go here. Benchmarks, ablations, architecture decisions,
-what did not transfer: those are findings, and they go on the report site.
+Two tests, in order.
+
+**Is it a report?** If it has a method and a limitations section, yes.
+Benchmarks, ablations, architecture decisions, what did not transfer: findings,
+and they go on WIG-log under `components/technical-reports/`. The nav's Tech
+item is the pointer.
+
+**Is it a story?** A conference trip, a hackathon, a weekend with a scene to
+describe and photographs to carry it. Stories are `channel: "story"` posts
+here, rendered at `/story/<slug>` under the /story rows that summarize them.
+(They spent 2026-08-09 on the WIG-log feed and came back the same day; the
+feed's copies still exist but nothing here links them.)
+
+Everything else is a **notice**: announcements and releases, `channel:
+"newsroom"`. Short, dated, about the team rather than about the work.
 
 Worked examples:
 
-- The ACL 2026 trip report is here. Five people went somewhere and came back
-  with decisions. There is no method in it.
-- WigtnOCR's distillation recipe and its KoGovDoc numbers are a report. They are
-  not on this site at all.
-- "WigtnOCR is open source" is here, because shipping it is something the team
-  did. It says what was released and links the report for the numbers.
-- When EMNLP 2026 is accepted, that announcement goes here. The paper's findings
-  do not.
+- The ACL 2026 trip report is a story page at /story/acl-2026-san-diego.
+  Five people went somewhere and came back with decisions; there is no method
+  in it, so it is not a report.
+- WigtnOCR's distillation recipe and its KoGovDoc numbers are a report. They
+  are not on this site at all.
+- "WigtnOCR is open source" is a notice, because shipping it is something the
+  team did. It says what was released and links the report for the numbers.
+- When EMNLP 2026 is accepted, that announcement is a notice. The paper's
+  findings are not.
 
-There is no blog. There was going to be one, and folding it into Updates is what
-this structure replaced. If a post feels like it needs a third home, the answer
-is that it is either a longer Update or a report, and the test above decides it.
+The two on-site surfaces split the content by shape:
 
-Pages that moved to the report site are listed in `RETIRED` in `data.ts` and
-still resolve, as redirects. Read the comment there before touching them.
+- **/notices** is two lists, in the order a notice is filed. `ANNOUNCEMENTS`
+  comes first: the newsroom posts that are not a release (an acceptance, a
+  placing), each one linking its own page. Under it, `RELEASE_ROWS` flattens
+  the release posts' `versions` arrays into one date-ordered ledger,
+  filterable by each post's `releaseType` (model / plugin / tool), ten rows
+  per page, each row linking the product's release note. The split is that a
+  release has a version and an announcement does not; the Announcements list
+  renders only when there is something in it.
+- **/story** promotes the newest story as a feature (cover, title, summary),
+  then lists the rest as rows. Each entry pairs a short news note with its
+  long-form story through `STORIES` in `data.ts`: the note supplies the
+  words, the story post supplies the thumbnail and the /story/<slug>
+  destination. The note is also an entry in the Announcements list above, so
+  its own page and its reference links are reachable; the /story row is the
+  event's headline, not the notice.
+
+The page at /notices was /news, labelled "Updates", until 2026-08-09, and held
+News and Releases tabs until the Story/Blog split. Retired URLs, including
+/news, /work, and the story posts' old root slugs, are listed in `RETIRED` in
+`data.ts` and still resolve as redirects. Read the comment there before
+touching them.
 
 ## Writing an update post
 
@@ -66,9 +110,9 @@ redundant: about 6,300 lines of code no entry point reached, and 42 MB of images
 nothing loaded. If you find a reference to any of them, it is stale.
 
 Read `mockups/research-led/updates/_template/README.md` before touching any post.
-It owns the rules for blocks, images, galleries, numbers, and naming. The four
-templates in its subfolders each own a different outline, because a release note
-and a conference report do not want the same sections.
+It owns the rules for blocks, images, galleries, numbers, and naming. Four
+templates live in its subfolders: announcement and community for the short
+newsroom posts, conference and hackathon for the long-form stories.
 
 ## House voice
 
@@ -116,7 +160,7 @@ In:
 
 ```bash
 npx tsc --noEmit     # types; cannot see missing images (see below)
-npm run build        # 33 static pages; this is what catches a missing image
+npm run build        # 34 static pages; this is what catches a missing image
 ```
 
 `next-env.d.ts` declares `*.jpg` as a wildcard module, so a typecheck will

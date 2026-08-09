@@ -16,6 +16,12 @@ import { ThemeToggle } from "@/components/theme";
 import { CONTACT_EMAIL, CONTACT_HREF, TAGLINE } from "@/lib/brand";
 import { HOME, NAV } from "./data";
 
+/* NavDropdown lived here while the nav carried a WIG-log menu with Tech and
+ * Feed under it. The stories came back on-site, the menu had one
+ * destination left, and a menu of one is a link, so the dropdown and the
+ * `children` shape in NAV went together. It is in the git history if a nav
+ * item ever needs children again. */
+
 export const EVENT_ICON = { trophy: Trophy, pin: MapPin } as const;
 
 /* Single custom-indexed motion variant; preserves the easing curve. */
@@ -63,6 +69,25 @@ export function IndexRule({ n, label }: { n: string; label: string }) {
   );
 }
 
+/* Keyword labels: scannable metadata, not boxed chips (no card aesthetic).
+ * Only the homepage What-we-do rows (SERVICES) use it today; it stays here
+ * because it is chrome-grade markup any page may pick up. */
+export function Tags({ tags, className = "" }: { tags: string[]; className?: string }) {
+  return (
+    <div className={`flex flex-wrap gap-x-6 gap-y-2 ${className}`}>
+      {tags.map((t) => (
+        <span
+          key={t}
+          className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-ink-4"
+        >
+          <span aria-hidden className="h-1 w-1 rounded-full bg-brand/60" />
+          {t}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   return (
@@ -75,6 +100,13 @@ export function SiteHeader() {
         {/* right-aligned nav (desktop) + theme toggle (all breakpoints) */}
         <div className="flex items-center gap-2">
           <ul className="hidden items-center gap-2 md:flex">
+            {/* Three shapes, tested in the order that settles them: disabled
+                is a label whatever else the item carries, an absolute URL is
+                an off-site plain anchor (today: Tech, to WIG-log), and the
+                rest are client-side links. The anchor opens a new tab, per
+                review (#78): Tech is a different site, and a nav click that
+                replaces this one reads as losing your place rather than
+                following a link. */}
             {NAV.map((n) =>
               n.disabled ? (
                 <li key={n.label}>
@@ -84,6 +116,17 @@ export function SiteHeader() {
                   >
                     {n.label}
                   </span>
+                </li>
+              ) : n.href.startsWith("http") ? (
+                <li key={n.label}>
+                  <a
+                    href={n.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-full px-3.5 py-1.5 text-sm text-ink-3 transition-colors hover:bg-line/[0.04] hover:text-ink"
+                  >
+                    {n.label}
+                  </a>
                 </li>
               ) : (
                 <li key={n.label}>
@@ -118,6 +161,9 @@ export function SiteHeader() {
       {open && (
         <div id="rl-mobile-nav" className="border-t border-line/[0.07] bg-paper/95 backdrop-blur-md md:hidden">
           <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-4">
+            {/* Same three shapes as the desktop row, new tab included; the
+                off-site anchor also closes the sheet, so the page left
+                behind the new tab is not sitting under an open menu. */}
             {NAV.map((n) =>
               n.disabled ? (
                 <li key={n.label}>
@@ -127,6 +173,18 @@ export function SiteHeader() {
                   >
                     {n.label}
                   </span>
+                </li>
+              ) : n.href.startsWith("http") ? (
+                <li key={n.label}>
+                  <a
+                    href={n.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setOpen(false)}
+                    className="block rounded-lg px-3 py-2.5 text-ink-2 transition-colors hover:bg-line/[0.04] hover:text-ink"
+                  >
+                    {n.label}
+                  </a>
                 </li>
               ) : (
                 <li key={n.label}>
@@ -174,6 +232,17 @@ export function SiteFooter() {
                   n.disabled ? (
                     <li key={n.label} className="cursor-default text-ink-5 select-none">
                       {n.label}
+                    </li>
+                  ) : n.href.startsWith("http") ? (
+                    <li key={n.label}>
+                      <a
+                        href={n.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="hover:text-ink transition-colors"
+                      >
+                        {n.label}
+                      </a>
                     </li>
                   ) : (
                     <li key={n.label}>
@@ -241,7 +310,11 @@ export function PageHero({
 }: {
   eyebrow?: string;
   title: string;
-  lead?: string;
+  /* Not `string`. A lead is one sentence about the page and sometimes that
+     sentence names somewhere else, which wants a link inside it rather than a
+     second paragraph under it. /notices is the case: it says where the
+     conference write-ups went. */
+  lead?: React.ReactNode;
   backHref?: string;
   backLabel?: string;
   titleClassName?: string;

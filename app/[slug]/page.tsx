@@ -1,20 +1,44 @@
 import type { Metadata } from "next";
 import { ArticleDetail } from "@/mockups/research-led/ArticleDetail";
 import { RetiredPage } from "@/mockups/research-led/RetiredPage";
-import { ARTICLES, RETIRED, getArticle, getRetired } from "@/mockups/research-led/data";
+import {
+  ARTICLES,
+  RETIRED,
+  articleHref,
+  getArticle,
+  getRetired,
+  hrefFor,
+} from "@/mockups/research-led/data";
 
 /**
  * Static params for `output: "export"`: one page per article slug, served at
- * the site root (e.g. /acl-2026-san-diego/). Static routes (/news, /team,
- * /projects) take precedence over this dynamic segment.
+ * the site root (e.g. /acl-2026-san-diego/). Static routes (/notices, /team)
+ * take precedence over this dynamic segment, which is why /news can be a
+ * retired slug here now that its own route is gone.
  *
  * Retired slugs are generated too. They are not articles any more, but the
  * URLs were indexed, so each one still exports a page that points at the new
  * home. See RETIRED in data.ts.
+ *
+ * Articles that live off the root are excluded: a story post renders at
+ * /story/<slug> and a blog post would render at /blog/<slug>, while their
+ * root slugs are RETIRED entries that forward there. Without the filter each
+ * of those slugs is emitted twice, once as an article and once as a
+ * redirect, for a URL that must only ever be the redirect. Next dedupes the
+ * params, so the duplicate does not fail the build; what it does is make the
+ * page's output depend on getRetired being checked before getArticle below.
+ *
+ * The test is the routing predicate rather than a list of channel names, so
+ * it stays true for the next channel that renders off the root. It was
+ * `channel !== "blog"` while the stories were blog posts, and it kept that
+ * spelling when they moved to the story channel, which left it guarding
+ * nothing.
  */
 export function generateStaticParams() {
   return [
-    ...ARTICLES.filter((a) => !a.placeholder).map((a) => ({ slug: a.slug })),
+    ...ARTICLES.filter((a) => !a.placeholder && hrefFor(a) === articleHref(a.slug)).map((a) => ({
+      slug: a.slug,
+    })),
     ...RETIRED.map((r) => ({ slug: r.slug })),
   ];
 }

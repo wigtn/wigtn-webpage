@@ -1,4 +1,10 @@
-# Update post template
+# Post templates
+
+> Four templates: announcements and community notes are the short-form posts
+> for /notices and the /story rows, conference and hackathon write-ups are
+> the long-form stories rendered at /story/<slug>. The story templates spent
+> 2026-08-09 in `wigtn-tech-report/components/feed/_template/` and came back
+> with the story posts.
 
 Every post under `updates/` is a folder: the text in `index.ts`, the images
 beside it, nothing referenced by a string path that can rot.
@@ -47,16 +53,41 @@ limitations section, it is a tech report**, and it goes to the `wigtn-tech-repor
 repo instead. See [`AGENTS.md`](../../../../AGENTS.md). Everything below assumes
 the subject is something the team did.
 
-The recap shape is not one shape. A conference report and an announcement want
+The recap shape is not one shape. A community note and an announcement want
 different sections, and forcing one into the other's outline is how a post ends
 up with a "what people asked" heading over an empty paragraph.
 
-| The post is about | `kind` | `newsTopic` | Template |
-| --- | --- | --- | --- |
-| A conference, workshop, or a talk we gave | `event` | `announcement` | [`conference/`](conference/STRUCTURE.md) |
-| A hackathon or competition we entered | `event` | `award` | [`hackathon/`](hackathon/STRUCTURE.md) |
-| Something shipped, was published, or was accepted | `report` | `release` | [`announcement/`](announcement/STRUCTURE.md) |
-| A meetup, seminar, or study group we ran | `community` | `community` | [`community/`](community/STRUCTURE.md) |
+| The post is about | `kind` | `channel` | `newsTopic` | Template |
+| --- | --- | --- | --- | --- |
+| An artifact shipped: weights, a plugin, a tool you can install | `report` | `newsroom` | `release` | [`announcement/`](announcement/STRUCTURE.md) |
+| A paper accepted, a placing won, something announced with nothing to install | `event` | `newsroom` | `announcement` or `award` | [`announcement/`](announcement/STRUCTURE.md), cut to a note |
+| A meetup, seminar, or study group we ran | `community` | `newsroom` | `community` | [`community/`](community/STRUCTURE.md) |
+| A conference trip, told as a story with photographs | `event` | `story` | none | [`conference/`](conference/STRUCTURE.md) |
+| A hackathon or contest, told as a story with photographs | `event` | `story` | none | [`hackathon/`](hackathon/STRUCTURE.md) |
+
+**The first two rows are not the same post.** Both are "something happened
+and we are saying so", and the difference is whether a reader can install
+the thing. A release lands in the version ledger on /notices and needs a
+`releaseType`; an acceptance or a placing lands in the Announcements list
+above it and has no version at all. Putting an acceptance on the `release`
+topic files it in the ledger with an empty version cell and no type chip,
+which is the shape that gave this table its second row.
+
+Rows two and three take `layout: "note"` when the body is a few sentences:
+it drops the standfirst, read time, byline, contact strip and related rail,
+all of which outnumber the text on a fifty-word post. Set it on the post
+rather than inferring it from length; see the field's own comment in
+`data.ts`. There is no separate `STRUCTURE.md` for a note. Start from
+`announcement/`, keep the sourcing rules, and cut the sections that have no
+evidence, which on a short notice is most of them.
+
+A long-form story usually pairs with a short news note (the acceptance, the
+placing) that lands in the /story rows through `STORIES` in `data.ts`. The
+note and the story are two posts: write the story with its template, write
+the note from row two, and add the pairing row. The note is not only row
+copy; it is also an entry in the Announcements list on /notices and keeps
+the reference links (the proceedings entry, the demo video) that the story
+does not carry.
 
 Copy the matching `index.ts.example` into your post folder as `index.ts` and
 read that template's `STRUCTURE.md` before writing. Each one names the section
@@ -64,7 +95,7 @@ that carries the post, which is the section everyone skips and readers
 actually want.
 
 The four share this file's rules, and each tightens or extends them where its
-shape demands it. The hackathon template admits a commit count; the community
+shape demands it. The announcement template admits a version number; the community
 template forbids naming attendees at all. **Read both files**, not just this
 one: where they disagree, the template is the stricter and it wins.
 
@@ -120,7 +151,7 @@ out entirely is the failure.)
 **`-profile` is not optional either**, and this one fails silently. iPhones
 capture in Display P3. `-strip` drops the profile without converting the
 pixels, so the browser reads P3 values as sRGB and every saturated colour comes
-out too hot. Measured across the five P3 photos in the hackathon posts, the
+out too hot. Measured across the five P3 photos in the migrated hackathon posts, the
 worst pixel lands between 33% and 53% off (`magick compare -metric PAE`): the
 TRAE stage shot 40%, the OBA sponsor board 53%. The *mean* shift is under 1%,
 so it never looks broken. It concentrates in the saturated content, which on
@@ -176,8 +207,9 @@ Use `3/4` for anything portrait (a person standing, a poster) and `16/9` for a
 slide or a screen capture. A portrait photo forced into a landscape box loses
 its subject.
 
-Portrait shots never run as a full-width `image` block: at the 1080px media
-breakout a 3:4 shot is 1440px tall and buries whatever follows. Put them in a
+Portrait shots never run as a full-width `image` block: at the reading
+column's width a 3:4 shot is taller than a viewport and buries whatever
+follows. Put them in a
 gallery, where `aspect: "3/4"` caps a lone portrait at 460px.
 
 Galleries can sit inside any section, so a section can carry one photo and the
@@ -185,10 +217,12 @@ next can carry four.
 
 ## Two fields the templates set for you, and one you may need to unset
 
-`channel: "newsroom"` is what puts a post in the `/news` feed: `data.ts`
-filters `NEWSROOM_FEED` on it. Every template hardcodes it because every
-template describes a newsroom post. **Writing a back-catalogue report? Delete
-the field.** Leaving it in silently publishes the post to the feed.
+`channel` is what routes a post: `"newsroom"` puts it in the newsroom feed
+(`NEWSROOM_FEED`, and its release rows surface on /notices), `"story"` puts
+it at `/story/<slug>`. (`"blog"` exists for the closed blog section and no
+template uses it.) Each template hardcodes the channel its shape is for.
+**Writing a back-catalogue report? Delete the field.** Leaving one in
+silently publishes the post to a feed.
 
 `icon` takes `"pin"` or `"trophy"` and is optional. `trophy` for a placing,
 `pin` for a place we went. Anything else, omit it.

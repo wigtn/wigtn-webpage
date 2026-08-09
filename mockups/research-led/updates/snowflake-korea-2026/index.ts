@@ -89,11 +89,18 @@
  *   should win.
  *
  *   Two full-width `image` blocks, for two different reasons, both deliberate:
- *   the architecture diagram is 1028px wide natively, so the breakout renders
- *   it at about 1:1 and any gallery crop would cut a layer off it; the dataset
+ *   the architecture diagram is 1028px wide natively and runs near full size
+ *   at the column's width, where any gallery crop would cut a layer off it;
+ *   the dataset
  *   slide is a 16:9 photo like the two in the gallery above it, but it carries
  *   fine print the reader has to be able to follow against the audit section,
  *   and at gallery width that print closes up.
+ *
+ * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09
+ * as a long-form story, rendered at /story/<slug> (briefly /blog, which
+ * closed the same day, before launch). The return changed `channel` and
+ * dropped the unread `externalUrl`; the prose is as written before the
+ * no-em-dash rule and stays grandfathered until the prose itself is edited.
  */
 
 import type { Article, Block } from "../../data";
@@ -113,8 +120,7 @@ export const SNOWFLAKE_2026_COVER = winnersOnStage.src;
 export const snowflakeKorea2026: Article = {
   slug: "snowflake-korea-2026",
   kind: "event",
-  channel: "newsroom",
-  newsTopic: "award",
+  channel: "story",
   tag: "2ND PLACE · TECH TRACK",
   icon: "trophy",
   title:
@@ -126,7 +132,6 @@ export const snowflakeKorea2026: Article = {
   author: "Snowflake",
   readTime: "9 min",
   image: winnersOnStage.src,
-  externalUrl: "https://wigtn.github.io/blog/wigtn-flake/",
   links: [
     { label: "Watch demo", href: "https://www.youtube.com/watch?v=1YzSp3SdzTk" },
     { label: "Press", href: "https://www.newswire.co.kr/newsRead.php?no=1033575" },

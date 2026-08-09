@@ -12,7 +12,7 @@ export const viewport: Viewport = {
 
 /* Sub-pages override `title`, `description`, `alternates` and `openGraph.url`.
  * Anything a page leaves unset is inherited from here, which is why /team and
- * /news used to advertise og:url = https://wigtn.com: they set no metadata at
+ * /notices used to advertise og:url = https://wigtn.com: they set no metadata at
  * all, so a shared link to either resolved to the homepage card. */
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

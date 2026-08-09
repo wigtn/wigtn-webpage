@@ -54,6 +54,12 @@
  * describes what the row *is* rather than inviting the reader to read it off
  * the picture, and every company named in the prose is named there because a
  * source says so, not because it can be made out in the photo.
+ *
+ * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09
+ * as a long-form story, rendered at /story/<slug> (briefly /blog, which
+ * closed the same day, before launch). The return changed `channel` only;
+ * the prose is as written before the no-em-dash rule and stays grandfathered
+ * until the prose itself is edited.
  */
 
 import type { Article, Block } from "../../data";
@@ -74,8 +80,7 @@ export const OBA_WEEKENDTHON_COVER = titleScreen.src;
 export const obaWeekendthonTop6: Article = {
   slug: "oba-weekendthon-top6",
   kind: "event",
-  channel: "newsroom",
-  newsTopic: "award",
+  channel: "story",
   tag: "TOP 6",
   icon: "trophy",
   title: "Top 6 at OBA Weekendthon: MyunZy, an AI interviewer built in a weekend",

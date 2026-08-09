@@ -1,20 +1,20 @@
 "use client";
 
-/** Shared article cards. Reused by the homepage and /work, /news. */
+/** Shared article cards. Reused by any article rail or card index. */
 
-import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Calendar, MapPin, Play } from "lucide-react";
-import { articleHref, type Article, type TechReport } from "./data";
-/* Straight from the leaf module, not re-exported through ./data. Both work at
- * runtime here, but ./links is where the URL is decided and this is one hop
- * fewer to read. */
-import { techReportHref } from "./links";
+import { hrefFor, type Article } from "./data";
 import { rise, VIEWPORT } from "./chrome";
 
 /* Cover source: real image → YouTube thumbnail (for video notes) → none.
- * A missing cover falls back to <BrandCover/> so nothing renders empty. */
+ *
+ * `undefined` means this article has no picture, and ArticleCard renders no
+ * frame at all in that case. It used to fall back to <BrandCover/>, which was
+ * right while the covered posts outnumbered the bare ones; a release ships no
+ * cover on purpose, and the fallback turned the release rail into identical
+ * gradient boxes standing in for pictures that are never coming. */
 export function coverSrc(a: Article): string | undefined {
   if (a.image) return a.image;
   if (a.video && a.videoUrl) {
@@ -56,7 +56,7 @@ function PlayBadge() {
   );
 }
 
-/* Homepage Updates card.
+/* Homepage Notices card.
  *
  * This was a 4/5 portrait with the title burned into the bottom of the image
  * over a black scrim. The frame was taller than it was wide and every cover is
@@ -69,38 +69,56 @@ function PlayBadge() {
  * which means the scrim is gone too, because its only job was legibility for
  * text that is no longer there.
  *
- * This is the same frame ReportCard uses, deliberately. The two rails sit on
- * one page and a reader should not have to work out why one set of pictures is
- * shaped differently from the other. What still separates them is the meta row:
- * these carry a date and a place and point inside the site.
+ * This is the same 16/10 frame the report site's own cards use, deliberately:
+ * a reader moving between the two sites should not have to work out why one
+ * set of pictures is shaped differently from the other. What separates these
+ * is the meta row: a date and a place, pointing inside the site.
+ *
+ * All of that only applies when there is a picture. The long-form story
+ * posts carry covers, so their cards draw the frame; a release ships no
+ * cover by house rule, so its card draws a hairline instead. Do not reinstate the
+ * gradient fallback for coverless cards: it was three copies of the same
+ * non-picture standing where three different ones used to be.
  */
 export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
   const cover = coverSrc(a);
   return (
     <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
-      <Link href={articleHref(a.slug)} className="group flex h-full flex-col">
-        {/* Cover */}
-        <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-ink/[0.04]">
-          {cover ? (
+      <Link
+        href={hrefFor(a)}
+        /* A card with no picture gets a hairline where the frame was. Without
+           it the three coverless cards read as loose paragraphs in a row
+           rather than as three of one thing, and a rule is what this site uses
+           to separate anything that is not a link out of the page. The
+           `placeholder` badge lives inside the frame and so is not drawn here;
+           no placeholder article has ever been coverless, and if one is, the
+           badge is a build-time affordance rather than something a reader
+           needs. */
+        className={`group flex h-full flex-col ${cover ? "" : "border-t border-line/[0.10] pt-5"}`}
+      >
+        {cover && (
+          <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-ink/[0.04]">
             <img
               src={cover}
               alt=""
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.04]"
             />
-          ) : (
-            <BrandCover />
-          )}
-          {a.video && <PlayBadge />}
+            {a.video && <PlayBadge />}
 
-          {a.placeholder && (
-            <span className="absolute right-3 top-3 rounded-full border border-white/15 bg-black/50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-zinc-300 backdrop-blur">
-              Placeholder
-            </span>
-          )}
-        </div>
+            {a.placeholder && (
+              <span className="absolute right-3 top-3 rounded-full border border-white/15 bg-black/50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-zinc-300 backdrop-blur">
+                Placeholder
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Kicker and title, under the frame rather than on it */}
-        <span className="mt-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
+        <span
+          className={`text-[10px] font-semibold uppercase tracking-[0.16em] text-accent ${
+            cover ? "mt-4" : ""
+          }`}
+        >
           {a.tag}
         </span>
         <h3 className="font-display mt-2 text-lg font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent">
@@ -128,66 +146,11 @@ export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
   );
 }
 
-/* Off-site card for a tech report.
- *
- * Deliberately not an ArticleCard. That one is a 4/5 poster with the title
- * burned into the image, which is this site's voice for its own posts; these
- * three land on another site with another layout, and mirroring the report
- * hub's own card (16/10 cover, title underneath, date) means the click does not
- * feel like a page swapped out from under the reader.
- *
- * No kicker row and no summary, for the reason the report hub gives in its own
- * card: a grid of nine-pixel track labels tells a reader nothing, and a clamped
- * dek under every card turns an index into a wall.
- *
- * The cover is served by the report site, so this build never sees it and a
- * rename there would otherwise ship a broken frame here. `failed` swaps in the
- * house cover instead. It is one-way on purpose: an <img> that errored will not
- * recover by being told to try the same URL again on the next render. */
-export function ReportCard({ r, i = 0 }: { r: TechReport; i?: number }) {
-  const [failed, setFailed] = useState(false);
-  return (
-    <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
-      <a
-        href={techReportHref(r.slug)}
-        className="group flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-      >
-        <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-ink/[0.04]">
-          {failed ? (
-            <BrandCover />
-          ) : (
-            <img
-              src={r.image}
-              alt={r.alt}
-              loading="lazy"
-              onError={() => setFailed(true)}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.03]"
-            />
-          )}
-        </div>
-
-        {/* mt-auto pins the footer: these titles run one to three lines, and
-            without it the dates in a row stop lining up. */}
-        <h3 className="font-display mt-4 text-lg font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent">
-          {r.title}
-        </h3>
-        <div className="mt-auto flex items-center gap-3 pt-3 text-xs text-ink-4">
-          <span className="font-mono">{r.date}</span>
-          <ArrowUpRight
-            size={14}
-            className="ml-auto text-ink-5 transition-all group-hover:translate-x-0.5 group-hover:text-accent"
-          />
-        </div>
-      </a>
-    </motion.div>
-  );
-}
-
 /* Compact row, used in dense feeds. */
 export function ArticleRow({ a, i = 0 }: { a: Article; i?: number }) {
   return (
     <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
-      <Link href={articleHref(a.slug)} className="group flex items-start gap-6 py-5">
+      <Link href={hrefFor(a)} className="group flex items-start gap-6 py-5">
         <span className="w-20 shrink-0 pt-1 font-mono text-xs text-ink-5">{a.date}</span>
         <div className="flex-1">
           <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-accent">

@@ -71,6 +71,7 @@ export const wigtnCodexRelease: Article = {
   kind: "report",
   channel: "newsroom",
   newsTopic: "release",
+  releaseType: "plugin",
   tag: "RELEASE",
   title: "WIGTN Plugin v2: Codex",
   version: "v0.3.0",
@@ -82,6 +83,48 @@ export const wigtnCodexRelease: Article = {
   links: [
     { label: "GitHub", href: "https://github.com/wigtn/wigtn-plugins-codex" },
     { label: "Tech report", href: techReportHref("codex-selective-harness") },
+  ],
+  /* Full tag history, from `gh api repos/wigtn/wigtn-plugins-codex/releases`
+   * on 2026-08-09. Three releases. Dates are `published_at`.
+   *
+   * THE NOTES COME FROM COMMITS, NOT FROM RELEASE NOTES, and that is a weaker
+   * source than the one the Claude Code plugin's list uses. All three releases
+   * here have a body containing a "Full Changelog" compare link and nothing
+   * else, so each line below is written from the release commit's own subject
+   * and the files it touched, read through
+   * `gh api repos/wigtn/wigtn-plugins-codex/compare/<prev>...<tag>` and
+   * `.../commits/<sha>` on 2026-08-09:
+   *   - v0.3.0, 14ac417c "feat: release selective lifecycle plugin v0.3.0",
+   *     which adds docs/WORKGRAPH-LIFECYCLE.md and docs/EVIDENCE-CONTRACT.md
+   *     alongside the 2026-07-28 evaluation protocol documents.
+   *   - v0.2.0, 07a99150 "feat: release evidence-first Codex plugin v0.2.0",
+   *     which replaces product-spec's prd-template.md and review-checklist.md
+   *     with create-contract.md and review-contract.md and adds
+   *     scripts/validate-prd.py.
+   *   - v0.1.0, bcc4232b "feat: launch WIGTN Codex plugin marketplace", the
+   *     first commit with content: the marketplace manifest, the skills, the
+   *     evidence-collection scripts, and the validate and release workflows.
+   *
+   * Each line therefore says what the commit says it did and names what the
+   * diff shows was added or removed. Nothing here is inferred from reading the
+   * code and deciding what mattered. The real fix is still to write release
+   * notes in the plugin repo, and when they exist, re-source from those. */
+  versions: [
+    {
+      version: "v0.3.0",
+      date: "2026.07.28",
+      note: "The selective lifecycle release: a workgraph lifecycle and an evidence contract, with the evaluation protocol documents behind them.",
+    },
+    {
+      version: "v0.2.0",
+      date: "2026.07.27",
+      note: "The evidence-first release: product-spec rebuilt around a create contract and a review contract, with a PRD validator in place of the old template and checklist.",
+    },
+    {
+      version: "v0.1.0",
+      date: "2026.07.14",
+      note: "First release: the marketplace manifest, the skills, the change-evidence scripts, and the validate and release workflows.",
+    },
   ],
   body: [
     p(
