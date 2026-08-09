@@ -620,11 +620,58 @@ export const MILESTONES: Milestone[] = [
   },
 ];
 /* Notices feed: only channel:"newsroom" items (awards, releases,
- * announcements). Deep tech "report" content lives on WIG-log and is
- * excluded here. Newest first. */
+ * announcements). Blog stories and deep tech "report" content are excluded
+ * by their channels. Newest first. */
 export const NEWSROOM_FEED = ARTICLES.filter(
   (a) => !a.placeholder && a.channel === "newsroom",
 ).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+
+/* The /notices rows: every shipped version of every release post, flattened
+ * into one date-ordered list.
+ *
+ * The one-line impact each row carries is versions[].note, unchanged. Those
+ * notes were derived from the release bodies (or, where bodies are empty, the
+ * release commits) when the changelogs were sourced; a second hand-written
+ * string per version would be a shadow copy that drifts, which is the same
+ * argument the TeamMember comment above makes about dead fields. A row whose
+ * version has no note renders without one, and for those versions that is the
+ * whole truth. WigtnOCR has no versions array at all (the HuggingFace repo
+ * carries no tags), so its post contributes one row from its own date and
+ * summary.
+ *
+ * Sorted by date descending. Array.prototype.sort is stable, so rows sharing
+ * a date (v0.1.15 and v0.1.16 both shipped 2026.08.04) keep the order of
+ * their versions array, which is newest first from the registry. */
+export type ReleaseRow = {
+  date: string;
+  product: string;
+  version?: string;
+  note?: string;
+  href: string;
+};
+export const RELEASE_ROWS: ReleaseRow[] = ARTICLES.filter(
+  (a) => a.channel === "newsroom" && a.newsTopic === "release",
+)
+  .flatMap((a): ReleaseRow[] =>
+    a.versions?.length
+      ? a.versions.map((v) => ({
+          date: v.date,
+          product: a.title,
+          version: v.version,
+          note: v.note,
+          href: articleHref(a.slug),
+        }))
+      : [
+          {
+            date: a.date,
+            product: a.title,
+            version: a.version,
+            note: a.summary,
+            href: articleHref(a.slug),
+          },
+        ],
+  )
+  .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
 /* ── Retired URLs ────────────────────────────────────────────────────────────
  *
@@ -697,8 +744,8 @@ export const RETIRED: {
    * entry here that retires a static route rather than an article, which is
    * why it is a slug at all: `app/news/page.tsx` is gone, so `app/[slug]` is
    * free to export /news as a redirect the same way it does the rest. */
-  { note: "The page is called Notices now, and its URL says so. Same list, same posts: what the team announced, and what shipped.",
-    slug: "news", to: NOTICES, title: "WIGTN Notices" },
+  { note: "The page is called Notice now, and its URL says so. It carries the release record; the event news moved to the Story page.",
+    slug: "news", to: NOTICES, title: "WIGTN Notice" },
 ];
 
 /* `wigtnocr-radp` (RCPS) was removed here on 2026.08.08 and is deliberately NOT
