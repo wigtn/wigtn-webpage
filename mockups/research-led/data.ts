@@ -27,10 +27,15 @@
  * Templates live in updates/_template/, one per kind of post: conference,
  * hackathon, release, community. Read its README before starting a new one:
  * the outline that suits a hackathon is not the one that suits a release. */
-import { acl2026SanDiego, ACL_2026_COVER } from "./updates/acl-2026-san-diego";
-import { obaWeekendthonTop6, OBA_WEEKENDTHON_COVER } from "./updates/oba-weekendthon-top6";
-import { snowflakeKorea2026, SNOWFLAKE_2026_COVER } from "./updates/snowflake-korea-2026";
-import { traeSeoulGrandPrize, TRAE_SEOUL_COVER } from "./updates/trae-seoul-grand-prize";
+/* The four conference and hackathon posts moved to the tech report site's
+ * blog (../wigtn-tech-report, components/blog/posts). Only their cover art
+ * stayed, because the homepage milestone rail still shows it. */
+import {
+  ACL_2026_COVER,
+  OBA_WEEKENDTHON_COVER,
+  SNOWFLAKE_2026_COVER,
+  TRAE_SEOUL_COVER,
+} from "./milestones";
 import { wigssNpmRelease } from "./updates/wigss-npm-release";
 import { wigtnCodexRelease } from "./updates/wigtn-codex-release";
 import { wigtnCodingRelease } from "./updates/wigtn-coding-release";
@@ -47,8 +52,8 @@ export const articleHref = (slug: string) => `${HOME}${slug}`;
  * cannot import a value from this module without closing a cycle. See the
  * comment in links.ts. Imported as well as re-exported: NAV below uses
  * TECH_REPORT_SITE locally, and `export ... from` creates no local binding. */
-import { TECH_REPORT_SITE, techReportAsset, techReportHref } from "./links";
-export { TECH_REPORT_SITE, techReportHref };
+import { TECH_REPORT_SITE, techBlogHref, techReportAsset, techReportHref } from "./links";
+export { TECH_REPORT_SITE, techBlogHref, techReportHref };
 
 /* Reference-led structure (Next Securities / MakinaRocks): the homepage is
  * a short teaser; depth lives on these sub-pages. Nav points to pages, not
@@ -265,10 +270,6 @@ const p = (text: string): Block => ({ t: "p", text });
 
 export const ARTICLES: Article[] = [
   /* ───────── Events (real) ───────── */
-  traeSeoulGrandPrize,
-  snowflakeKorea2026,
-  obaWeekendthonTop6,
-  acl2026SanDiego,
 
   /* ───────── Newsroom · Releases (real), newest first ─────────
    * One entry per product, not per version. NEWSROOM_FEED sorts by date, so
@@ -281,11 +282,12 @@ export const ARTICLES: Article[] = [
 
 /* Curated homepage "newsroom": research credibility & wins told as article
  * cards with imagery (papers, conference reports, awards), not a dry list. */
-export const NEWSROOM = [
-  ARTICLES.find((a) => a.slug === "acl-2026-san-diego")!, // 2026.07.16
-  ARTICLES.find((a) => a.slug === "snowflake-korea-2026")!, // 2026.04.29
-  ARTICLES.find((a) => a.slug === "trae-seoul-grand-prize")!, // 2026.03.28
-];
+/* Homepage teaser for /news. It used to name the three newest stories; those
+ * moved to the blog, and /news is the release list now, so this is the three
+ * newest releases and the section still tells the truth about where it leads. */
+export const NEWSROOM = ARTICLES.filter((a) => a.newsTopic === "release")
+  .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
+  .slice(0, 3);
 export const getArticle = (slug: string) => ARTICLES.find((a) => a.slug === slug);
 
 /* ── Homepage report rail ────────────────────────────────────────────────────
@@ -398,7 +400,6 @@ export type Milestone = {
   railTitle?: string;
   railText?: string;
   image?: string; // optional photo; blank frame when absent
-  slug?: string; // optional link to the full article
   upcoming?: boolean; // future / roadmap entry
   placeholder?: boolean; // copy not finalized yet
 };
@@ -426,7 +427,6 @@ export const MILESTONES: Milestone[] = [
     title: "Build with TRAE Seoul",
     text: "WIGENT, a multi-agent debate arena, wins the Grand Prize (ByteDance).",
     image: TRAE_SEOUL_COVER,
-    slug: "trae-seoul-grand-prize",
   },
   {
     month: "Apr",
@@ -435,7 +435,6 @@ export const MILESTONES: Milestone[] = [
     title: "Snowflake AI & Data Hackathon",
     text: "WIGTN Flake takes 2nd in the Tech Track, built on Snowflake Cortex.",
     image: SNOWFLAKE_2026_COVER,
-    slug: "snowflake-korea-2026",
   },
   {
     month: "May",
@@ -444,7 +443,6 @@ export const MILESTONES: Milestone[] = [
     title: "OBA Weekendthon",
     text: "MyunZy, an AI interviewer built in two days, finishes in the Top 6.",
     image: OBA_WEEKENDTHON_COVER,
-    slug: "oba-weekendthon-top6",
   },
   {
     month: "Jun",
@@ -462,7 +460,6 @@ export const MILESTONES: Milestone[] = [
     railTitle: "ACL 2026 & IWSLT 2026",
     railText: "A live demo booth at ACL, then an invited talk at IWSLT.",
     image: ACL_2026_COVER,
-    slug: "acl-2026-san-diego",
   },
   {
     month: "Aug",
@@ -520,13 +517,13 @@ export const RETIRED: {
     to: techReportHref("wigvo"),
     title: "WIGVO",
   },
-  /* The WIGTN Flake report was removed from the tech-report site, so this one
-   * points back into this site rather than off it. The Snowflake hackathon post
-   * is the surviving account of that project. */
+  /* The WIGTN Flake report was removed from the tech-report site, and the
+   * Snowflake hackathon post that replaced it has since moved to that site's
+   * blog. This hop follows it rather than pointing at the deleted local copy. */
   {
     note: "The WIGTN Flake report was taken down with the rest of the hackathon write-ups. The Snowflake post is the account of that project now, and it carries the code-path audit in full.",
     slug: "wigtn-flake-cortex-debate-video",
-    to: `${HOME}snowflake-korea-2026`,
+    to: techBlogHref("snowflake-korea-2026"),
     title: "the Snowflake hackathon post",
   },
   {
@@ -535,9 +532,16 @@ export const RETIRED: {
     to: techReportHref("wigtnocr"),
     title: "WigtnOCR",
   },
+  /* The four stories moved to the report site's blog on 2026.08.09. These URLs
+   * were live on this site and are in the sitemap that has already been
+   * crawled, so they redirect rather than 404. */
+  { note: "The conference and hackathon write-ups moved to the WIGTN tech-report site's blog, where they sit beside the technical reports. This page is the release list now.", slug: "acl-2026-san-diego", to: techBlogHref("acl-2026-san-diego"), title: "the ACL 2026 trip report" },
+  { note: "The conference and hackathon write-ups moved to the WIGTN tech-report site's blog, where they sit beside the technical reports. This page is the release list now.", slug: "oba-weekendthon-top6", to: techBlogHref("oba-weekendthon-top6"), title: "the OBA Weekendthon post" },
+  { note: "The conference and hackathon write-ups moved to the WIGTN tech-report site's blog, where they sit beside the technical reports. This page is the release list now.", slug: "snowflake-korea-2026", to: techBlogHref("snowflake-korea-2026"), title: "the Snowflake Korea post" },
+  { note: "The conference and hackathon write-ups moved to the WIGTN tech-report site's blog, where they sit beside the technical reports. This page is the release list now.", slug: "trae-seoul-grand-prize", to: techBlogHref("trae-seoul-grand-prize"), title: "the TRAE Seoul post" },
   /* /work is gone with the article groups it listed. What it had that still
-   * exists, the awards, is the Stories group on /news. */
-  { note: "The page that used to be here grouped work that has since moved to the tech-report site. What is left of it, the events and the awards, lives in Updates.",
+   * exists, the awards, moved on to the report site's blog. */
+  { note: "The page that used to be here grouped work that has since moved to the tech-report site. What is left of it, the events and the awards, is on the report site\u2019s blog.",
     slug: "work", to: NEWS, title: "WIGTN Updates" },
 ];
 

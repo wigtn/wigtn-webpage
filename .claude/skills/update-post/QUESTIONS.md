@@ -65,7 +65,8 @@ and record why in the header.
 **Q5. 이 빌드에서 지금도 살아 있는 게 있나요?** `header: "살아남은 것"`
 - 아직 돌아가는 게 있다 → write the section; ask what, and what replaced the rest
 - 다 버렸다, 그게 요점이다 → write it as a list of what was thrown away and why
-- 아직 모르겠다 → **cut the section**; header records it, per `oba-weekendthon-top6`
+- 아직 모르겠다 → **cut the section**; header records it (worked example:
+  `oba-weekendthon-top6` in the report repo's blog)
 
 **Q6. 글을 지배한 제약은 무엇이었나요?** `header: "제약"`
 - 시계 (몇 시간 안에) · 필수 플랫폼/API · 팀 규모 · 심사 방식
@@ -158,7 +159,8 @@ explicit line that interest is not adoption or endorsement by their employer.
 | 특별히 없다 | Still apply the standing rules in `AGENTS.md`. |
 
 Also mask anything personal that survives into a screenshot. The WIGVO console
-shot in `acl-2026-san-diego` has a masked phone number, and it has to be masked
+shot in the report repo's `acl-2026-san-diego` post has a masked phone number,
+and it has to be masked
 again on any re-export.
 
 ### Q11. 커버는 무엇으로 할까요?

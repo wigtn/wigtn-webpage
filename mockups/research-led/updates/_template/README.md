@@ -1,5 +1,10 @@
 # Update post template
 
+> Conference and hackathon posts are no longer written here. Their templates
+> moved to `wigtn-tech-report/components/blog/_template/` on 2026-08-09, with
+> the four posts that used them. This file now covers announcements and
+> community notes: the short-form things that stay on wigtn.com.
+
 Every post under `updates/` is a folder: the text in `index.ts`, the images
 beside it, nothing referenced by a string path that can rot.
 
@@ -47,14 +52,12 @@ limitations section, it is a tech report**, and it goes to the `wigtn-tech-repor
 repo instead. See [`AGENTS.md`](../../../../AGENTS.md). Everything below assumes
 the subject is something the team did.
 
-The recap shape is not one shape. A conference report and an announcement want
+The recap shape is not one shape. A community note and an announcement want
 different sections, and forcing one into the other's outline is how a post ends
 up with a "what people asked" heading over an empty paragraph.
 
 | The post is about | `kind` | `newsTopic` | Template |
 | --- | --- | --- | --- |
-| A conference, workshop, or a talk we gave | `event` | `announcement` | [`conference/`](conference/STRUCTURE.md) |
-| A hackathon or competition we entered | `event` | `award` | [`hackathon/`](hackathon/STRUCTURE.md) |
 | Something shipped, was published, or was accepted | `report` | `release` | [`announcement/`](announcement/STRUCTURE.md) |
 | A meetup, seminar, or study group we ran | `community` | `community` | [`community/`](community/STRUCTURE.md) |
 
@@ -64,7 +67,7 @@ that carries the post, which is the section everyone skips and readers
 actually want.
 
 The four share this file's rules, and each tightens or extends them where its
-shape demands it. The hackathon template admits a commit count; the community
+shape demands it. The announcement template admits a version number; the community
 template forbids naming attendees at all. **Read both files**, not just this
 one: where they disagree, the template is the stricter and it wins.
 
@@ -120,7 +123,7 @@ out entirely is the failure.)
 **`-profile` is not optional either**, and this one fails silently. iPhones
 capture in Display P3. `-strip` drops the profile without converting the
 pixels, so the browser reads P3 values as sRGB and every saturated colour comes
-out too hot. Measured across the five P3 photos in the hackathon posts, the
+out too hot. Measured across the five P3 photos in the migrated hackathon posts, the
 worst pixel lands between 33% and 53% off (`magick compare -metric PAE`): the
 TRAE stage shot 40%, the OBA sponsor board 53%. The *mean* shift is under 1%,
 so it never looks broken. It concentrates in the saturated content, which on

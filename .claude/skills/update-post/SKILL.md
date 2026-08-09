@@ -1,13 +1,13 @@
 ---
 name: update-post
-description: Write a new WIGTN update post end to end. Runs a short interview, picks the matching template (conference / hackathon / announcement / community), sources every fact from the repo or a named source, prepares the photos, drafts the post into updates/<slug>/, wires it into data.ts, and verifies the build. Use whenever the user wants to add, write, or draft a post for the Updates feed: "글 하나 써줘", "업데이트 올려줘", "이번 해커톤 글 써줘", "릴리스 노트 써줘", "학회 다녀온 거 정리해줘", "write an update post", "add a newsroom post", "draft a release note", "conference recap".
+description: Write a new WIGTN update post end to end. Runs a short interview, picks the matching template (announcement / community), sources every fact from the repo or a named source, prepares the photos, drafts the post into updates/<slug>/, wires it into data.ts, and verifies the build. Use whenever the user wants to add, write, or draft a post for the Updates feed: "글 하나 써줘", "업데이트 올려줘", "릴리스 노트 써줘", "write an update post", "add a newsroom post", "draft a release note".
 ---
 
 # Writing an update post
 
 A post is a folder: `mockups/research-led/updates/<slug>/index.ts` plus its own
-images. `data.ts` imports it. Four templates exist because a hackathon report and
-an announcement want different sections.
+images. `data.ts` imports it. Two templates exist because an announcement and a community note want
+different sections.
 
 Read `mockups/research-led/updates/_template/README.md` first. It owns the rules
 this skill does not repeat: blocks, gallery layout, image prep, the numbers
@@ -20,14 +20,22 @@ facts**. Every phase below exists to make inventing harder than sourcing.
 
 ## Phase -1: Does it belong on this site?
 
-Before anything else, apply the test in `AGENTS.md`: **a post with a method and
-a limitations section is a tech report**, and it belongs in the `wigtn-tech-report`
-repo, not here. This site covers what the team did; the report site covers what
-the work found.
+Before anything else: **this site publishes release notes and short notices,
+and nothing else.** Two kinds of post belong in the `wigtn-tech-report` repo
+instead.
 
-If the answer is "report", say so and stop. Writing it here and moving it later
-is how the two sites ended up with three copies of the same content once
-already.
+- **A post with a method and a limitations section is a tech report.** It goes
+  to `components/technical-reports/`. This site covers what the team did; the
+  report site covers what the work found.
+- **A conference or hackathon write-up is a blog post.** It goes to
+  `components/blog/posts/`, and its templates went with it
+  (`components/blog/_template/`). The four that used to live here moved on
+  2026-08-09; a reader who wants the ACL trip report is the same reader who
+  wants the WIGVO report, so they sit together now.
+
+If the answer is either of those, say so and stop. Writing it here and moving
+it later is how the two sites ended up with three copies of the same content
+once already.
 
 ## Phase 0: Scan before you ask
 
@@ -84,7 +92,8 @@ exists to find out whether that section has anything real behind it:
 
 If the user cannot answer round 2, **the section does not get written.** Cut it,
 and record in the file header that it was cut for lack of evidence and what would
-let someone add it later. `oba-weekendthon-top6/index.ts` is the worked example.
+let someone add it later. `wigtnocr-open-source/index.ts` is the worked example
+here; the longer-form ones are in the report repo's blog.
 That is a correct outcome, not a failure.
 
 ## Phase 2: Source every fact

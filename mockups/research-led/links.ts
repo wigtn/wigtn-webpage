@@ -27,6 +27,11 @@ export const TECH_REPORT_SITE = "https://wigtn.github.io/wigtn-tech-report";
  * final URL saves that round trip. */
 export const techReportHref = (slug: string) => `${TECH_REPORT_SITE}/${slug}/`;
 
+/* The report site's other half. Conference and hackathon write-ups live under
+ * /blog/ there, so redirects and links out of this site need their own builder
+ * rather than techReportHref with the prefix hand-typed at each call site. */
+export const techBlogHref = (slug: string) => `${TECH_REPORT_SITE}/blog/${slug}/`;
+
 /* An asset served by the report site, addressed across origins.
  *
  * The homepage report cards show that site's own banners rather than copies.
