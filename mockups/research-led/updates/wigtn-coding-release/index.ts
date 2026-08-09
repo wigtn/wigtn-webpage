@@ -47,6 +47,13 @@
  * history. The counts in this post are the ones that can be recounted from the
  * tree in a minute. Do not swap them for the PR numbers.
  *
+ * That applies to the `versions` notes too, which is where it was broken: the
+ * v0.1.15 note quoted its release body verbatim and carried both figures back
+ * in, and the flattening of versions into the /notices ledger made that line
+ * one of the first rows on the page. The rule the two sourcing paragraphs
+ * disagreed about is settled this way: quote the release body, minus any
+ * figure this header disowns.
+ *
  * The conflicting counts, resolved rather than quietly picked, and kept here
  * because the stale source is still live: .github/WIGTN_META.md carries an SEO
  * string reading "12 agents, 3 commands, 17 design styles", stale since the
@@ -68,14 +75,10 @@
  *
  * No cover image, deliberately. There is no screenshot of this plugin anywhere
  * in the repository, and inventing one or borrowing another project's would be
- * worse than the fallback: with no `image` field the news card renders
- * BrandCover, which is the intended behaviour. There is no *_COVER export for
- * the same reason. The folder exists anyway, for structural parity with the
- * other posts, so the first real screenshot has an obvious home.
- *
- * externalUrl is preserved from the old entry and currently 404s. So does every
- * other wigtn.github.io/blog/ URL on the site, including the ACL post's, so it
- * is a site-wide condition rather than anything to fix in this file.
+ * worse than nothing: with no `image` field a card renders no frame at all.
+ * There is no *_COVER export for the same reason. The folder exists anyway,
+ * for structural parity with the other posts, so the first real screenshot
+ * has an obvious home.
  */
 
 import type { Article, Block } from "../../data";
@@ -97,7 +100,6 @@ export const wigtnCodingRelease: Article = {
   date: "2026.08.04",
   author: "WIGTN",
   readTime: "2 min",
-  externalUrl: "https://wigtn.github.io/blog/wigtn-coding/",
   links: [
     /* The live address. The inline entry this replaced still pointed at
      * wigtn-plugins-with-claude-code, which GitHub redirects, but the body
@@ -130,7 +132,7 @@ export const wigtnCodingRelease: Article = {
     {
       version: "v0.1.15",
       date: "2026.08.04",
-      note: "The harness cut back to its contracts: instructions down 20 percent, 39 product files.",
+      note: "The harness cut back to its contracts.",
     },
     {
       version: "v0.1.14",

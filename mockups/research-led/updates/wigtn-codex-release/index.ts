@@ -38,9 +38,9 @@
  *    plugin in either repository. The report site has a Codex banner, but it is
  *    OpenAI's brand image for the tool being evaluated, and running it as the
  *    cover of a WIGTN release would claim it depicts something of ours. With no
- *    `image` the feed renders BrandCover, which is the intended behaviour and
- *    what wigtn-coding-release does for the same reason. The folder exists so
- *    the first real screenshot has an obvious home.
+ *    `image` a card renders no frame at all, which is the intended behaviour
+ *    and what wigtn-coding-release does for the same reason. The folder exists
+ *    so the first real screenshot has an obvious home.
  *
  * 2. The one-of-nine invocation rule is the lede, not the skill count. Nine
  *    skills is a package surface, and the template says a surface is labelled
@@ -52,11 +52,8 @@
  *    the line break, which makes the pair unpastable. Same call as the sibling
  *    post.
  *
- * 4. No `externalUrl`. The two older release posts carry one pointing at
- *    wigtn.github.io/blog/, which 404s site-wide; there is no reason to add a
- *    fourth dead link to the set.
  *
- * 5. The comparison with the Claude Code plugin is one sentence, not the
+ * 4. The comparison with the Claude Code plugin is one sentence, not the
  *    README's table. The table is a design argument, and the reader who wants
  *    it has the repository linked at the top of the page.
  */

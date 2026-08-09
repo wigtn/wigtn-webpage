@@ -1,5 +1,5 @@
 /**
- * Update: OBA Weekendthon S1, Kakao AI Campus — hackathon report.
+ * Update: OBA Weekendthon S1, Kakao AI Campus. Hackathon report.
  *
  * Colocated post: the text here, the image beside it, imported rather than
  * referenced by a string path that can rot. Follows the hackathon template
@@ -7,17 +7,17 @@
  * constraints → what we built → the bet → what shipped → the result.
  *
  * Sources, and nothing outside them:
- *   - the event page, https://luma.com/y3nz68hw — dates, hours, venue, the
+ *   - the event page, https://luma.com/y3nz68hw, for dates, hours, venue, the
  *     fifty-person cap, teams of up to three, the Open API rule, the ten-plus
  *     API-sharing companies, the 50/50 judging split, the first-evening pitch;
- *   - the repo README, https://github.com/wigtn/myunzy-hackathone — the stack,
- *     the four personas, the mock-first architecture, the env-var promotion
- *     path, what is mocked and what is live, the pending adapters;
- *   - the repo's own commit log via the GitHub API — eight commits, all on
+ *   - the repo README, https://github.com/wigtn/myunzy-hackathone, for the
+ *     stack, the four personas, the mock-first architecture, the env-var
+ *     promotion path, what is mocked and what is live, the pending adapters;
+ *   - the repo's own commit log via the GitHub API, for eight commits, all on
  *     31 May, and the two merged pull requests;
  *   - the photo in this folder, which is a picture of the event's sponsor
  *     board and is therefore also a source. At native resolution it gives the
- *     dates, the venue, and the sponsor tiers by name — 주최 (Hashed, Market
+ *     dates, the venue, and the sponsor tiers by name: 주최 (Hashed, Market
  *     Fit Lab, vooy), Main (OpenAI), Premium (Nexon, LG U+, GS Neotek), and
  *     the ten-company API Sponsor row. The tiers are distinct and the post
  *     keeps them distinct; an earlier draft called Nexon and LG U+ API
@@ -36,15 +36,15 @@
  *    what was built**, because the public repo was created at 13:51 on the
  *    second day. Eight commits is real; "built in two hours" would not be.
  *
- * One photo, and that is the whole budget — it is the only image that exists
+ * One photo, and that is the whole budget. It is the only image that exists
  * for this event. Do not fill the gap with a stock shot or borrow a figure
  * from another project. A one-image post is fine; an invented one is not.
  *
  * That one photo does two jobs, and they want different framings. In the body
  * it runs in a gallery at `aspect: "3/4"`, uncropped, so the shape of the
  * board survives. As the cover it is cropped 2:1 by the hero and 4:3 by the
- * news card, which keeps the title art — the event name, the dates, the venue
- * — and drops the board. That is the right trade for a cover: it says what
+ * news card, which keeps the title art (the event name, the dates, the venue)
+ * and drops the board. That is the right trade for a cover: it says what
  * this was and when, and the board is two paragraphs down. Do not swap the
  * cover for a board crop to "fix" the hero; the body already carries it.
  *
@@ -57,9 +57,11 @@
  *
  * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09
  * as a long-form story, rendered at /story/<slug> (briefly /blog, which
- * closed the same day, before launch). The return changed `channel` only;
- * the prose is as written before the no-em-dash rule and stays grandfathered
- * until the prose itself is edited.
+ * closed the same day, before launch). The return changed `channel` only.
+ * The em-dashes the prose carried from before the rule came out on
+ * 2026-08-09: each one was a sentence that wanted to be two, a clause that
+ * wanted parentheses, or a list that wanted a colon, and it was rewritten
+ * as one of those rather than swapped for another mark.
  */
 
 import type { Article, Block } from "../../data";
@@ -67,7 +69,7 @@ import type { Article, Block } from "../../data";
  * the original is gone rather than duplicated. Prepped with the shared
  * README's command: EXIF orientation was already Undefined, so nothing
  * rotated, but the source was Display P3 and is converted to sRGB before the
- * strip — without that the neon pinks and cyans ship oversaturated. */
+ * strip. Without that the neon pinks and cyans ship oversaturated. */
 import titleScreen from "./title-screen.jpg";
 
 const p = (text: string): Block => ({ t: "p", text });
@@ -105,7 +107,7 @@ export const obaWeekendthonTop6: Article = {
       "The room was capped at fifty people, entering alone or in teams of up to three. Participation and lodging were free. The weekend was cut into four build sessions with three networking blocks wedged between them, and on the first evening every team stood up and pitched for about a minute, which is not long enough to explain an architecture and is exactly long enough to find out whether you have a product.",
     ),
     p(
-      "One rule shaped every project: whatever you build has to run on the Open APIs the event provides. The board in the hall was in effect the spec sheet — OpenAI at the top as main sponsor, Nexon and LG U+ among the premium tier, and then the API sponsor row itself, ten companies deep: 강남언니, maroo, Rocketpunch, MyRealTrip, MOAT AI, SWING, Apifuse, GenRank, CryptoQuant, tobl.ai. You did not pick a stack and then go looking for an API. You read the board and worked backwards from it.",
+      "One rule shaped every project: whatever you build has to run on the Open APIs the event provides. The board in the hall was in effect the spec sheet. OpenAI at the top as main sponsor, Nexon and LG U+ among the premium tier, and then the API sponsor row itself, ten companies deep: 강남언니, maroo, Rocketpunch, MyRealTrip, MOAT AI, SWING, Apifuse, GenRank, CryptoQuant, tobl.ai. You did not pick a stack and then go looking for an API. You read the board and worked backwards from it.",
     ),
     {
       t: "gallery",
@@ -125,7 +127,7 @@ export const obaWeekendthonTop6: Article = {
 
     { t: "h", text: "What MyunZy does" },
     p(
-      "You hand it two things: your actual resume and an actual job posting. It reads both and assembles four interviewers — technical, culture fit, executive, and HR — each already knowing where your story is thin. Then you answer out loud.",
+      "You hand it two things: your actual resume and an actual job posting. It reads both and assembles four interviewers (technical, culture fit, executive, and HR), each already knowing where your story is thin. Then you answer out loud.",
     ),
     p(
       "It follows up on whatever you fumble. Each round it keeps a weakness profile and diffs it before and after, so the questions in the third round come out of what you failed to say in the first. A branch replay takes you back to a single answer to try it a different way, which is the feature everyone used twice.",
@@ -152,12 +154,12 @@ export const obaWeekendthonTop6: Article = {
         "The whole product runs with zero API keys. All eight external integrations ship mocked, alongside a mock LLM, so the repo can be cloned and an interview held end to end without an account anywhere.",
         "Promotion to the live services is an environment variable rather than a code change: LLM_PROVIDER=exaone swaps the mock model for EXAONE-4.5, HARNESS=deepagents swaps the stub for a real DeepAgents bootstrap.",
         "Complete by the end: the web UI on Next.js 16, the Python agent service on FastAPI, the EXAONE integration, the real harness, and voice in and out.",
-        "Not complete: the external adapters. MISO for resume OCR, Rocketpunch for job postings and GenRank for company ratings, all behind API Fuse as the gateway — written, wired, and still pointed at their mocks, because the keys had not landed. It shipped that way rather than pretending otherwise.",
+        "Not complete: the external adapters. MISO for resume OCR, Rocketpunch for job postings and GenRank for company ratings, all behind API Fuse as the gateway. Written, wired, and still pointed at their mocks, because the keys had not landed. It shipped that way rather than pretending otherwise.",
         "Prompt-injection defense on user input, on the grounds that a resume and a job posting are both text somebody else wrote.",
       ],
     },
     p(
-      "The commit log is not a good measure of this weekend. The public repo was created at 13:51 on the Sunday and holds eight commits over the two hours after that, closing with three small fixes to the microphone, the PDF path, and a leftover sample. The two merged pull requests in it — model-driven skill selection by progressive disclosure, and streaming a turn so the text arrives before the speech does — were the last real features in. Everything earlier lived elsewhere. Take the eight as a count of what was pushed, not of what was built.",
+      "The commit log is not a good measure of this weekend. The public repo was created at 13:51 on the Sunday and holds eight commits over the two hours after that, closing with three small fixes to the microphone, the PDF path, and a leftover sample. Its two merged pull requests were the last real features in: model-driven skill selection by progressive disclosure, and streaming a turn so the text arrives before the speech does. Everything earlier lived elsewhere. Take the eight as a count of what was pushed, not of what was built.",
     ),
 
     { t: "h", text: "Top 6" },

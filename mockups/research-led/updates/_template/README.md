@@ -68,10 +68,11 @@ up with a "what people asked" heading over an empty paragraph.
 **The first two rows are not the same post.** Both are "something happened
 and we are saying so", and the difference is whether a reader can install
 the thing. A release lands in the version ledger on /notices and needs a
-`releaseType`; an acceptance or a placing lands in the Announcements list
-above it and has no version at all. Putting an acceptance on the `release`
-topic files it in the ledger with an empty version cell and no type chip,
-which is the shape that gave this table its second row.
+`releaseType`. An acceptance or a placing has no version and does not go on
+/notices at all: it reaches readers through its /story entry, paired with
+the long-form story. Putting one on the `release` topic files it in the
+ledger with an empty version cell and no type chip, which is the shape that
+gave this table its second row.
 
 Rows two and three take `layout: "note"` when the body is a few sentences:
 it drops the standfirst, read time, byline, contact strip and related rail,
@@ -84,10 +85,11 @@ evidence, which on a short notice is most of them.
 A long-form story usually pairs with a short news note (the acceptance, the
 placing) that lands in the /story rows through `STORIES` in `data.ts`. The
 note and the story are two posts: write the story with its template, write
-the note from row two, and add the pairing row. The note is not only row
-copy; it is also an entry in the Announcements list on /notices and keeps
-the reference links (the proceedings entry, the demo video) that the story
-does not carry.
+the note from row two, and add the pairing row. **The pairing row is the
+note's only way in.** /notices carries releases alone, so a row-two post
+written without a `STORIES` entry exports a page nothing links. The /story
+entry names both destinations, the story and the notice, so the note's
+reference links (the proceedings entry, the demo video) stay reachable.
 
 Copy the matching `index.ts.example` into your post folder as `index.ts` and
 read that template's `STRUCTURE.md` before writing. Each one names the section

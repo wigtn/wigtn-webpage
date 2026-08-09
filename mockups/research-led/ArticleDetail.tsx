@@ -187,7 +187,7 @@ export function ArticleDetail({ slug }: { slug: string }) {
 
       <main className="relative z-10">
         {/* 52rem, not max-w-3xl. Paired with the 20px body this lands the
-            measure near 75 characters — wider page, same readability. */}
+            measure near 75 characters: wider page, same readability. */}
         <article className="max-w-[52rem] mx-auto px-6 pt-24 pb-8 md:pt-28">
           {/* Header */}
           <motion.header variants={rise} initial="hidden" animate="show">

@@ -95,7 +95,10 @@ export {
  * No Projects tab. The page it pointed at, /work, is retired and redirects
  * to /story. Restoring the tab means deciding what it should point at first,
  * not adding a line. */
-export type NavItem = { label: string; href: string; disabled?: boolean };
+/* `disabled` was on this type and no entry ever set it, while all three nav
+ * surfaces carried a branch for it. Both are gone. A nav item that should
+ * not be clickable yet is an item that should not be in NAV yet. */
+export type NavItem = { label: string; href: string };
 
 export const NAV: NavItem[] = [
   { label: "About", href: TEAM_PAGE },
@@ -307,8 +310,9 @@ export type Article = {
    * list is scaffolding around the text, and around fifty words of text it
    * outnumbers what it is holding: the award notices ran eight blocks of
    * chrome over two paragraphs, and the standfirst restated the body's first
-   * sentence one type size larger, because `summary` is written for the row on
-   * /notices and was being reused as a lede.
+   * sentence one type size larger, because `summary` is written for a row
+   * (the /notices ledger for a release, the /story entry for a notice) and
+   * was being reused as a lede.
    *
    * Set it on the post, do not infer it from body length. A short post that
    * wants the full treatment should be able to say so, and a threshold in the
@@ -328,7 +332,8 @@ export type Article = {
   versions?: ReleaseVersion[];
   channel?: Channel; // undefined = back-catalog/report (excluded from newsroom)
   /* Newsroom sub-category. "release" puts the post in the version ledger on
-   * /notices; everything else puts it in the Announcements list above it. */
+   * /notices; everything else keeps it out, and it reaches readers through
+   * its /story entry instead. */
   newsTopic?: NewsTopic;
   /* Release only: the shipped version, rendered in the ledger row on /notices.
    *
@@ -346,18 +351,19 @@ export type Article = {
   /* Release only: which shape of artifact the product is, for the /notices
    * type filter. See ReleaseType above. */
   releaseType?: ReleaseType;
-  externalUrl?: string; // report only: GitHub Pages blog post URL
   body: Block[];
 };
 
 const p = (text: string): Block => ({ t: "p", text });
 
 export const ARTICLES: Article[] = [
-  /* ───────── Newsroom · Announcements (real), newest first ─────────
-   * Everything here has `newsTopic` other than "release", which is what puts
-   * it in the Announcements list on /notices rather than the version ledger
-   * below it. The list was empty until 2026-08-09; these four filled it, and
-   * each one also supplies the words for its /story row through STORIES. */
+  /* ───────── Newsroom · Notices (real), newest first ─────────
+   * Everything here has `newsTopic` other than "release", which keeps it out
+   * of RELEASE_ROWS: /notices is the version ledger and these have no
+   * version. Each one reaches readers through its STORIES entry, which
+   * carries its words on /story and links both its page and the story. A
+   * notice with no story to pair with has nowhere to land; see the comment
+   * above NEWSROOM_FEED's replacement below. */
   wigvoAcl2026, // 2026.07, announcement
   /* One post per contest, on the date that contest was. They were a single
    * roundup for an afternoon; see the header on trae-seoul-2026-grand-prize
@@ -437,11 +443,19 @@ export const STORIES: Story[] = [
 
 /* ── Research & Tech Assets (homepage centerpiece) ── */
 
-/* Milestones: the build-in-public track record, oldest → newest, one per
- * month since founding. Horizontal swipe rail on the homepage; each card's
- * photo rises into view on scroll. Items without a real photo yet leave the
- * frame blank; entries whose copy is not final carry placeholder: true, which
- * also keeps them out of the /team History timeline. */
+/* Milestones: the build-in-public track record, oldest → newest. Horizontal
+ * swipe rail on the homepage; each card's photo rises into view on scroll.
+ * Items without a real photo yet leave the frame blank; entries whose copy is
+ * not final carry placeholder: true, which also keeps them out of the /team
+ * History timeline.
+ *
+ * It was one entry per month since founding, and it is not any more. The ACL
+ * acceptance sat in the February slot with the wrong date on it: the
+ * acceptance email arrived in April (the trip report says so in its lede,
+ * ../updates/acl-2026-san-diego, and camera-ready was May). Correcting it put
+ * two entries in April and left February empty, which is the honest shape.
+ * Do not fill February back in to restore the cadence, and do not redate this
+ * entry to do it either. */
 export type Milestone = {
   month: string; // short month label, e.g. "Jan"
   date: string; // "2026.01"
@@ -467,20 +481,20 @@ export const MILESTONES: Milestone[] = [
     text: "Five engineers start publishing research and shipping open source together, without a lab behind them.",
   },
   {
-    month: "Feb",
-    date: "2026.02",
-    label: "ACL 2026",
-    title: "WIGVO accepted to ACL",
-    text: "Real-time phone-call translation accepted to ACL 2026, System Demonstrations.",
-    image: "/images/projects/wigvo_screenshot_call.png",
-  },
-  {
     month: "Mar",
     date: "2026.03",
     label: "Grand Prize",
     title: "Build with TRAE Seoul",
     text: "WIGENT, a multi-agent debate arena, wins the Grand Prize (ByteDance).",
     image: TRAE_SEOUL_COVER,
+  },
+  {
+    month: "Apr",
+    date: "2026.04",
+    label: "ACL 2026",
+    title: "WIGVO accepted to ACL",
+    text: "Real-time phone-call translation accepted to ACL 2026, System Demonstrations.",
+    image: "/images/projects/wigvo_screenshot_call.png",
   },
   {
     month: "Apr",
@@ -526,25 +540,16 @@ export const MILESTONES: Milestone[] = [
     upcoming: true,
   },
 ];
-/* The /notices announcements: newsroom posts that are not a release.
+/* There is no announcements feed, and that is deliberate.
  *
- * The awards and the paper acceptance. They are the other half of what a
- * notice is (see AGENTS.md: "announcements and releases"), and they need
- * their own list because RELEASE_ROWS is a version ledger and they have no
- * version to put in it. Flattening them into it would have produced rows
- * with an empty version cell and no type chip.
- *
- * Each one also supplies the words for a /story row through STORIES, and
- * that row links the long-form story rather than this page. The two are not
- * a duplicate: the row is the event's headline, this list is the notice
- * itself, with the reference links (the ACL Anthology entry, the demo video)
- * that the story does not carry. Without this list those links ship in the
- * export and nothing reaches them.
- *
- * Newest first, like every other list on the site. */
-export const ANNOUNCEMENTS = ARTICLES.filter(
-  (a) => !a.placeholder && a.channel === "newsroom" && a.newsTopic !== "release",
-).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+ * NEWSROOM_FEED used to be every channel: "newsroom" post and lost its last
+ * consumer when /notices became the release ledger; an ANNOUNCEMENTS list
+ * replaced it for one commit and came out again, because /notices answers
+ * what shipped and an award answers what happened. The notices reach readers
+ * through STORIES below: the /story entry carries the note's words and links
+ * both its page and the long-form story. If a notice ever arrives that pairs
+ * with no story, it needs a surface before it needs a post, or it exports a
+ * page nothing links. */
 
 /* The /notices rows: every shipped version of every release post, flattened
  * into one date-ordered list.

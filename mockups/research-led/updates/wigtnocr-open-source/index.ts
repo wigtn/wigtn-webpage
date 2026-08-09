@@ -72,7 +72,6 @@ export const wigtnocrOpenSource: Article = {
   date: "2026.04.03",
   author: "WIGTN",
   readTime: "2 min",
-  externalUrl: "https://wigtn.github.io/blog/wigtnocr/",
   links: [
     { label: "HuggingFace", href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR" },
     { label: "GitHub", href: "https://github.com/wigtn/wigtnOCR-v1" },
@@ -108,8 +107,8 @@ export const wigtnocrOpenSource: Article = {
       t: "list",
       items: [
         "Wigtn/Qwen3-VL-2B-WigtnOCR on HuggingFace, a LoRA adapter at rank 8, alpha 32, applied to the language model's linear layers. The vision encoder and the aligner were frozen during training and are unchanged from the base model.",
-        "Wigtn/KoGovDoc-Bench on HuggingFace: the 294-page Korean government document set held out of training and held out of training.",
-        "github.com/wigtn/wigtnOCR-v1: the training recipe (ms-swift with DeepSpeed ZeRO-2), the evaluation code, and the evaluation code.",
+        "Wigtn/KoGovDoc-Bench on HuggingFace: the 294-page Korean government document set held out of training.",
+        "github.com/wigtn/wigtnOCR-v1: the training recipe (ms-swift with DeepSpeed ZeRO-2) and the evaluation code.",
         "Apache 2.0 across the model, the dataset and the code.",
       ],
     },

@@ -1,5 +1,5 @@
 /**
- * Update: Build with TRAE Seoul (ByteDance), March 2026 — hackathon report.
+ * Update: Build with TRAE Seoul (ByteDance), March 2026. Hackathon report.
  *
  * Colocated post: the text lives here, the images live beside it and are
  * imported, so a photo is never referenced by a string path that can rot.
@@ -41,7 +41,7 @@
  * - The stage photo's original carries EXIF Orientation=6, so `-auto-orient`
  *   is not optional here: without it `-strip` removes the tag the browser was
  *   relying on and the shot ships sideways. It is now portrait, and portrait
- *   shots never run as a full-width `image` block — it goes in a gallery with
+ *   shots never run as a full-width `image` block, so it goes in a gallery with
  *   `aspect: "3/4"`, which caps a lone portrait at 460px.
  * - Both originals are Display P3 and are converted to sRGB before the strip.
  *   Skipping that leaves P3 pixel values labelled as sRGB, which the browser
@@ -50,8 +50,10 @@
  * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09
  * as a long-form story, rendered at /story/<slug> (briefly /blog, which
  * closed the same day, before launch). The return changed `channel` and
- * dropped the unread `externalUrl`; the prose is as written before the
- * no-em-dash rule and stays grandfathered until the prose itself is edited.
+ * dropped the unread `externalUrl`. The em-dashes the prose carried from
+ * before the rule came out on 2026-08-09: each one was a sentence that wanted
+ * to be two, a clause that wanted parentheses, or a list that wanted a colon,
+ * and it was rewritten as one of those rather than swapped for another mark.
  */
 
 import type { Article, Block } from "../../data";
@@ -87,7 +89,7 @@ export const traeSeoulGrandPrize: Article = {
   links: [{ label: "GitHub", href: "https://github.com/wigtn/wigent" }],
   body: [
     p(
-      "Build with TRAE Seoul ran on 28 March 2026, one afternoon, organised by ByteDance around TRAE. Three of us entered and came out with 대상 — the Grand Prize, KRW 500,000, certificate No. 20260328001. What we built was WIGENT: you give it a topic, a room of AI agents argues about it, and the page you have been reading the argument on turns into a landing page for whatever they agreed.",
+      "Build with TRAE Seoul ran on 28 March 2026, one afternoon, organised by ByteDance around TRAE. Three of us entered and came out with 대상: the Grand Prize, KRW 500,000, certificate No. 20260328001. What we built was WIGENT: you give it a topic, a room of AI agents argues about it, and the page you have been reading the argument on turns into a landing page for whatever they agreed.",
     ),
 
     { t: "h", text: "The brief, and the clock" },
@@ -106,7 +108,7 @@ export const traeSeoulGrandPrize: Article = {
       "You type a topic and press enter. Two agents appear: a PM, who is the realist and whose first move is to ask who would actually pay for this, and a domain expert generated for whatever you typed, who is the visionary. They start talking in what looks like a Slack channel. A Designer joins at turn 3.",
     ),
     p(
-      "The debate runs 30 turns. At turns 12 and 22 the non-fixed agents retire — with an exit line, not a disappearance — and new specialists are spawned in their place, so the expertise in the room tracks where the argument has actually gone. After turn 25 the system prompt changes and no new ideas are allowed. The agents are told the debate is ending and that they must reach a conclusion, and the last stretch is them agreeing, narrowing, and writing down what they agreed.",
+      "The debate runs 30 turns. At turns 12 and 22 the non-fixed agents retire, with an exit line rather than a disappearance, and new specialists are spawned in their place, so the expertise in the room tracks where the argument has actually gone. After turn 25 the system prompt changes and no new ideas are allowed. The agents are told the debate is ending and that they must reach a conclusion, and the last stretch is them agreeing, narrowing, and writing down what they agreed.",
     ),
     p(
       "The conversation is then summarized and distilled into a structured idea: title, one-liner, target audience, revenue model, differentiator, market size, next steps. And then the page you have been watching stops being a chat and becomes a landing page for that idea.",
@@ -136,7 +138,7 @@ export const traeSeoulGrandPrize: Article = {
       text: "Sixty seconds of \"Generating…\" in front of the judges is not a loading state. It is the end of your demo.",
     },
     p(
-      "What shipped instead runs two paths at once. When the final result arrives, a keyword match picks one of nine hand-built design templates — Glassmorphism, Neobrutalism, Editorial, Minimalism, Dark Neon, Bento Grid, Organic Shapes, Corporate, Gradient Mesh — and renders it immediately with the debate's conclusions in it. GPT-4o carries on generating its custom version in the background, and if the template is already on screen, that result is dropped unread.",
+      "What shipped instead runs two paths at once. When the final result arrives, a keyword match picks one of nine hand-built design templates (Glassmorphism, Neobrutalism, Editorial, Minimalism, Dark Neon, Bento Grid, Organic Shapes, Corporate, Gradient Mesh) and renders it immediately with the debate's conclusions in it. GPT-4o carries on generating its custom version in the background, and if the template is already on screen, that result is dropped unread.",
     ),
     p(
       "The trade-off is real and we would make it again in the same room. Nine templates cannot produce a design specific to your idea the way a model can. We took instant and consistent over bespoke and unpredictable, because the thing being judged was a demo.",
@@ -166,7 +168,7 @@ export const traeSeoulGrandPrize: Article = {
       "Each of the three worked with Claude Code, which is why a single commit here can contain ten finished components rather than one. It is not pair programming; it is three people each producing more than one person's output, held in line by a file they agreed on before any of them started.",
     ),
     p(
-      "Two things we accepted rather than solved. Moving from three structured rounds to a 30-turn free debate tripled the model calls, from 10 to around 35, and stretched a session from two or three minutes to five or eight — we took it because real meetings do not announce Round 2, and the round boundaries were where the orchestrator's edge cases lived. And there are no tests. None. The orchestrator, the reducer and the SSE parser all deserve them and none of them have any.",
+      "Two things we accepted rather than solved. Moving from three structured rounds to a 30-turn free debate tripled the model calls, from 10 to around 35, and stretched a session from two or three minutes to five or eight. We took it because real meetings do not announce Round 2, and the round boundaries were where the orchestrator's edge cases lived. And there are no tests. None. The orchestrator, the reducer and the SSE parser all deserve them and none of them have any.",
     ),
 
     { t: "h", text: "The result" },
@@ -188,7 +190,7 @@ export const traeSeoulGrandPrize: Article = {
         "Human control is still watch-and-reject only. Letting a user steer the debate mid-conversation is the single change that would most improve the output, and it is not built.",
         "Every turn still calls GPT-4o. Only the opening, the closing and the synthesis need the top model; the rest could run on GPT-4o-mini at a tenth of the cost.",
         "There is still no editor. The only way to improve a generated page is to reject it and make them argue again.",
-        "The shape came back. A month later at the Snowflake AI & Data Hackathon Korea, the build was again a panel of experts arguing over evidence before answering — that time over three Snowflake datasets, and it took 2nd in the Tech Track.",
+        "The shape came back. A month later at the Snowflake AI & Data Hackathon Korea, the build was again a panel of experts arguing over evidence before answering, that time over three Snowflake datasets, and it took 2nd in the Tech Track.",
       ],
     },
 

@@ -11,10 +11,13 @@ import { rise, VIEWPORT } from "./chrome";
 /* Cover source: real image → YouTube thumbnail (for video notes) → none.
  *
  * `undefined` means this article has no picture, and ArticleCard renders no
- * frame at all in that case. It used to fall back to <BrandCover/>, which was
- * right while the covered posts outnumbered the bare ones; a release ships no
- * cover on purpose, and the fallback turned the release rail into identical
- * gradient boxes standing in for pictures that are never coming. */
+ * frame at all in that case. It used to fall back to a branded gradient
+ * cover, which was right while the covered posts outnumbered the bare ones;
+ * a release ships no cover on purpose, and the fallback turned the release
+ * rail into identical gradient boxes standing in for pictures that are never
+ * coming. That component (BrandCover) and the compact ArticleRow went with
+ * their last callers when /news was deleted; both are in the history of this
+ * file if a dense feed ever wants them back. */
 export function coverSrc(a: Article): string | undefined {
   if (a.image) return a.image;
   if (a.video && a.videoUrl) {
@@ -22,29 +25,6 @@ export function coverSrc(a: Article): string | undefined {
     if (m) return `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg`;
   }
   return undefined;
-}
-
-/* Branded fallback cover: aurora mesh + centered WIGTN mark. Used when an
- * article has no image and no video thumbnail. */
-export function BrandCover() {
-  return (
-    <div
-      aria-hidden
-      className="absolute inset-0"
-      style={{
-        background:
-          "radial-gradient(120% 120% at 12% 0%, rgba(117,59,189,0.50), transparent 46%)," +
-          "radial-gradient(100% 100% at 100% 100%, rgba(80,110,220,0.20), transparent 52%)," +
-          "linear-gradient(160deg, #1a1130 0%, #0b0b0e 100%)",
-      }}
-    >
-      <img
-        src="/images/wigtn_mark_purple.png"
-        alt=""
-        className="absolute left-1/2 top-[40%] w-14 -translate-x-1/2 -translate-y-1/2 opacity-40 md:w-16"
-      />
-    </div>
-  );
 }
 
 /* Centered play affordance for video covers. */
@@ -141,27 +121,6 @@ export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
             className="ml-auto text-ink-5 transition-all group-hover:translate-x-0.5 group-hover:text-accent"
           />
         </div>
-      </Link>
-    </motion.div>
-  );
-}
-
-/* Compact row, used in dense feeds. */
-export function ArticleRow({ a, i = 0 }: { a: Article; i?: number }) {
-  return (
-    <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
-      <Link href={hrefFor(a)} className="group flex items-start gap-6 py-5">
-        <span className="w-20 shrink-0 pt-1 font-mono text-xs text-ink-5">{a.date}</span>
-        <div className="flex-1">
-          <span className="text-[10px] font-semibold tracking-[0.14em] uppercase text-accent">
-            {a.tag}
-          </span>
-          <h3 className="mt-1 text-lg font-semibold leading-snug text-ink group-hover:text-accent transition-colors">
-            {a.title}
-          </h3>
-          <p className="mt-1 text-sm text-ink-3 leading-relaxed">{a.summary}</p>
-        </div>
-        <ArrowUpRight size={18} className="mt-1 shrink-0 text-ink-5 group-hover:text-accent transition-colors" />
       </Link>
     </motion.div>
   );

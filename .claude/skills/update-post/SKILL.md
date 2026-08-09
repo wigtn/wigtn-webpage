@@ -41,8 +41,9 @@ Everything else lives here, split by channel:
   `releaseType` ("model" / "plugin" / "tool") or its row shows only under the
   All chip; an **acceptance, placing or other announcement** has nothing to
   install, takes `newsTopic: "announcement"` or `"award"`, usually
-  `layout: "note"`, and lands in the Announcements list instead of the
-  ledger. The routing table in `updates/_template/README.md` is the authority.
+  `layout: "note"`, and does not go on /notices at all: it reaches readers
+  through its `STORIES` pairing on /story, which is the only thing that links
+  it. The routing table in `updates/_template/README.md` is the authority.
 - **Business-track news (a signed engagement, a program selection, a
   partnership) belongs to the closed blog section.** The gate and the
   reopening steps are in `docs/blog-section.md`; read it before writing one,

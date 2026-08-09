@@ -86,7 +86,6 @@ export const wigssNpmRelease: Article = {
   readTime: "2 min",
   /* The method write-up lives on the report blog; this note links it rather
    * than restating it. Two copies of one explanation drift apart in a month. */
-  externalUrl: "https://wigtn.github.io/blog/wigss/",
   links: [
     { label: "npm", href: "https://npmjs.com/package/wigss" },
     { label: "GitHub", href: "https://github.com/wigtn/wigss" },

@@ -11,7 +11,7 @@ function articleDate(value: string): Date {
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  /* Retired routes (/work, /news, and the blog posts' old root slugs) still
+  /* Retired routes (/work, /news, and the story posts' old root slugs) still
    * resolve as redirect pages and none is listed here, because a redirect is
    * not a page worth indexing. */
   /* No trailing slashes. The Pages build exports flat files, so `/notices` is
