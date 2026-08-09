@@ -17,8 +17,9 @@ mockups/research-led/
   links.ts                 off-site URL constants (leaf module, see below)
   ArticleDetail.tsx        renders an Article's Block[]
   updates/<slug>/          one folder per update post: index.ts + its images
-  updates/_template/       four post templates + the shared rules
-public/images/             team portraits, logos, one milestone photo. Nothing else.
+  updates/_template/       two post templates + the shared rules
+  milestones/              cover art for rail entries whose posts live off-site
+public/images/             team portraits, logos. Nothing else.
 ```
 
 ## Which site does this belong on
@@ -31,15 +32,25 @@ length. A short story and a long story both belong here if the subject is right.
 | **wigtn.com** (this repo) | the team | What did we **do**? |
 | **[tech reports](https://wigtn.github.io/wigtn-tech-report/)** (`wigtn-tech-report`) | the work | What did we **find**? |
 
-Test: **if it has a method and a limitations section, it is a report.** Events,
-awards, releases, conference trips, papers being accepted: those are things the
-team did, and they go here. Benchmarks, ablations, architecture decisions,
-what did not transfer: those are findings, and they go on the report site.
+Two tests, in order.
+
+**Is it a report?** If it has a method and a limitations section, yes.
+Benchmarks, ablations, architecture decisions, what did not transfer: findings,
+and they go on the report site under `components/technical-reports/`.
+
+**Is it a story?** A conference trip, a hackathon, a weekend with a scene to
+describe and photographs to carry it. Those moved to the report site's blog on
+2026-08-09, under `components/blog/posts/`, because the reader who wants the ACL
+trip report is the reader who wants the WIGVO report.
+
+What is left here is what this site is for: **announcements and releases.**
+Short, dated, about the team rather than about the work.
 
 Worked examples:
 
-- The ACL 2026 trip report is here. Five people went somewhere and came back
-  with decisions. There is no method in it.
+- The ACL 2026 trip report is on the blog. Five people went somewhere and came
+  back with decisions; there is no method in it, so it is not a report, but it
+  is a story and stories are not here any more.
 - WigtnOCR's distillation recipe and its KoGovDoc numbers are a report. They are
   not on this site at all.
 - "WigtnOCR is open source" is here, because shipping it is something the team
@@ -47,9 +58,13 @@ Worked examples:
 - When EMNLP 2026 is accepted, that announcement goes here. The paper's findings
   do not.
 
-There is no blog. There was going to be one, and folding it into Updates is what
-this structure replaced. If a post feels like it needs a third home, the answer
-is that it is either a longer Update or a report, and the test above decides it.
+The blog is on the report site, not here. Updates held both for a while and the
+split above is what replaced that. If a post feels like it needs a third home,
+the answer is that it is a release note, a story, or a report, and the tests
+above decide which.
+
+/news has two groups, News and Releases, split on `newsTopic === "release"`.
+News renders nothing at all while it is empty, which it is today.
 
 Pages that moved to the report site are listed in `RETIRED` in `data.ts` and
 still resolve, as redirects. Read the comment there before touching them.
@@ -66,9 +81,10 @@ redundant: about 6,300 lines of code no entry point reached, and 42 MB of images
 nothing loaded. If you find a reference to any of them, it is stale.
 
 Read `mockups/research-led/updates/_template/README.md` before touching any post.
-It owns the rules for blocks, images, galleries, numbers, and naming. The four
-templates in its subfolders each own a different outline, because a release note
-and a conference report do not want the same sections.
+It owns the rules for blocks, images, galleries, numbers, and naming. Two
+templates live in its subfolders, announcement and community. The conference and
+hackathon templates went to the report site with the posts they describe, and
+are at `wigtn-tech-report/components/blog/_template/`.
 
 ## House voice
 
@@ -116,7 +132,7 @@ In:
 
 ```bash
 npx tsc --noEmit     # types; cannot see missing images (see below)
-npm run build        # 33 static pages; this is what catches a missing image
+npm run build        # 24 static pages; this is what catches a missing image
 ```
 
 `next-env.d.ts` declares `*.jpg` as a wildcard module, so a typecheck will
