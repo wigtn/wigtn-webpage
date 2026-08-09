@@ -14,7 +14,7 @@
 
 import { Fragment } from "react";
 import { motion } from "framer-motion";
-import { PageShell, PageHero, Tags, rise, VIEWPORT } from "./chrome";
+import { PageShell, PageHero, rise, VIEWPORT } from "./chrome";
 import { TEAM, MILESTONES, PARTNERS, CAPABILITIES } from "./data";
 
 /* Prefer wrapping at commas. Each clause is an inline-block, so the browser
@@ -59,33 +59,31 @@ export function TeamPage() {
         leadClassName="max-w-4xl"
       />
 
-      {/* ── The record: four pillars, each naming something that has already
-           happened and can be checked. Moved here from the homepage; the hero
-           above is this section's title, so the rows start straight away,
-           same row markup as the homepage Services list. ── */}
-      <section className="max-w-5xl mx-auto px-6 pt-6 pb-24 md:pt-8 md:pb-32">
-        <div className="divide-y divide-line/[0.08] border-t border-line/[0.08]">
+      {/* ── The record, kept short: one line per pillar, title left, lead
+           right. The landing's Services section already says what we sell,
+           so this list only has to name the record behind it before the page
+           gets to the people. It was the homepage's full display list for a
+           day, index numbers and tag chips included; at that size it buried
+           Members, which is what this page is for. ── */}
+      <section className="max-w-5xl mx-auto px-6 pt-6 pb-20 md:pt-8 md:pb-28">
+        <ul className="divide-y divide-line/[0.08] border-t border-line/[0.08]">
           {CAPABILITIES.map((c, i) => (
-            <motion.div
+            <motion.li
               key={c.title}
               variants={rise}
               custom={i}
               initial="hidden"
               whileInView="show"
               viewport={VIEWPORT}
-              className="flex items-start gap-5 py-8 md:py-10"
+              className="flex flex-col gap-1 py-5 sm:flex-row sm:items-baseline sm:gap-8"
             >
-              <span className="pt-1.5 font-mono text-sm text-accent">{`0${i + 1}`}</span>
-              <div>
-                <h3 className="font-display text-2xl font-semibold tracking-tight text-ink md:text-3xl">
-                  {c.title}
-                </h3>
-                <p className="mt-3 text-pretty leading-relaxed text-ink-2">{c.lead}</p>
-                <Tags tags={c.tags} className="mt-4" />
-              </div>
-            </motion.div>
+              <h3 className="w-56 shrink-0 text-base font-semibold tracking-tight text-ink">
+                {c.title}
+              </h3>
+              <p className="text-pretty text-sm leading-relaxed text-ink-3">{c.lead}</p>
+            </motion.li>
           ))}
-        </div>
+        </ul>
       </section>
 
       <Divider />
