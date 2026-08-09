@@ -5,14 +5,16 @@
  * It was built as the card grid for the long-form stories, which made it a
  * second name for the Story section, so the app route came out on 2026-08-09
  * and the stories render under /story instead. What this page is FOR is the
- * content Story is not: community and partnership news with weight behind it
- * (a program acceptance, a signed collaboration, a university subcontract).
- * None of that exists yet, and a section is opened by its first real post,
- * not ahead of one.
+ * content Story is not: business-track news with weight behind it (a program
+ * acceptance, a signed collaboration, a university subcontract). None of
+ * that exists yet, and a section is opened by its first real post, not ahead
+ * of one.
  *
- * To reopen: write the post with channel: "blog" (BLOG_FEED picks it up),
- * restore app/blog/page.tsx and app/blog/[slug]/page.tsx from git history,
- * add the nav item back, and put /blog in the sitemap.
+ * docs/blog-section.md is the decision record: what qualifies, what does
+ * not, and the reopening steps. In short: write the post with channel:
+ * "blog" (BLOG_FEED picks it up), restore app/blog/page.tsx and
+ * app/blog/[slug]/page.tsx from git history, add the nav item back, and put
+ * /blog in the sitemap.
  *
  * Cards, not rows, because a post here carries a cover photograph and the
  * picture is most of what a reader chooses by. The dense-row treatment lives

@@ -36,6 +36,10 @@ Everything else lives here, split by channel:
   `STORIES` in `data.ts`; the note is a separate announcement post.
 - **A release note or short notice is a newsroom post**: `channel:
   "newsroom"`, announcement or community template.
+- **Business-track news (a signed engagement, a program selection, a
+  partnership) belongs to the closed blog section.** The gate and the
+  reopening steps are in `docs/blog-section.md`; read it before writing one,
+  and do not reopen the section for anything less.
 
 ## Phase 0: Scan before you ask
 

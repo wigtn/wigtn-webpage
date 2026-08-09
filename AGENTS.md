@@ -31,8 +31,10 @@ report index. The landing page is three sections: Hero, What we do (the
 business model: Web Agency and AX Agency), Contact. About is "Who we are.":
 the members and the partners, nothing else. A **Blog** section exists in the
 source (BlogPage.tsx, the "blog" channel) but is closed and unrouted: it is
-reserved for community and partnership news, and it opens with its first real
-post, not before.
+reserved for business-track news (a signed subcontract, a program selection,
+a partnership), and it opens with its first qualifying post, not before.
+**The gate and the reopening steps are in [`docs/blog-section.md`](docs/blog-section.md)**;
+read it before writing anything for the blog or reviving the routes.
 
 ## Where does a piece of writing belong
 
