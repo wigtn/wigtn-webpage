@@ -90,7 +90,7 @@ export const obaWeekendthonTop6: Article = {
     "MyunZy reads your real resume and a real job posting, then runs the interview before the interview. Two days at the Kakao AI Campus, built on a small open Korean model held in place by a deterministic harness rather than a large one left to improvise.",
   date: "2026.05.31",
   place: "Yongin, KOR",
-  author: "Open Builders Alliance",
+  author: "WIGTN Engineering",
   readTime: "5 min",
   image: titleScreen.src,
   links: [

@@ -293,7 +293,17 @@ export type Article = {
   summary: string;
   date: string;
   readTime?: string;
-  author?: string;
+  /* The byline on a detail page, and it is a WIGTN team, never a company.
+   *
+   * Two values and no others: "WIGTN Research" for the papers and the models,
+   * "WIGTN Engineering" for the tools, the plugins and the hackathon builds.
+   * The story posts each carried their event's organizer here (Snowflake,
+   * ByteDance, Open Builders Alliance), which put another company's name
+   * under a post that company did not write. Where an organizer belongs is
+   * in the title or the prose, as TRAE Seoul's "by ByteDance" is.
+   *
+   * A note renders no byline, which is why the notice posts set nothing. */
+  author?: "WIGTN Research" | "WIGTN Engineering";
   place?: string;
   icon?: "trophy" | "pin";
   featured?: boolean;

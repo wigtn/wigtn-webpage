@@ -21,13 +21,26 @@
  * either: the no-versions branch would file it with an empty version cell
  * and no type chip.
  *
- * A TYPE FILTER, NOT A SPLIT. Review (#78) asked whether the ledger should
- * break into per-product sections for readability; it stays one list, and
- * the chips between the hero and the list cut it down instead. Each release
- * post carries a releaseType (model / plugin / tool), the row inherits it,
- * and a chip shows only the types that actually have rows. Search joins the
- * chips when the release count earns it; the per-post metadata is the
- * groundwork for both.
+ * A QUERY BAR, NOT A CHIP ROW. Review (#78) asked whether the ledger should
+ * break into per-product sections for readability; it stays one list and the
+ * bar above it cuts the list down instead. The bar was four always-on chips
+ * (All / Plugin / Tool / Model) and is now search + applied filters +
+ * "Add filter", the shape a console uses for a table it expects to grow.
+ *
+ * The reason for the change is what the chip row could not say. Four chips
+ * is one dimension, exclusive, and every value of it is on screen whether or
+ * not the reader wants to filter at all. A reader arriving here is usually
+ * after one product's history, which is a dimension the chips did not have,
+ * and often after one word ("knowledge-wiki", "v0.1.11"), which no chip can
+ * express. So: a free-text search over product, version and note; filters
+ * added from a menu rather than parked in the layout; each applied filter a
+ * removable pill; and a live result count, because a filtered list with no
+ * count makes the reader wonder what they are not seeing.
+ *
+ * Filters are OR within a dimension and AND across them, which is what a
+ * reader means by picking Plugin and Tool (either) and then WIGSS (and only
+ * WIGSS). No "All" pill: no filters is all, and a pill for the absence of a
+ * filter is a control that does nothing.
  *
  * A row navigates to the product's release note, where the full changelog and
  * the post's prose live. It is a link, not a button: the old News rows opened
@@ -39,9 +52,9 @@
  * One flat ledger is long in a different way: the reader is either skimming
  * the top or looking for a specific line, and page numbers serve the second
  * reader without burying the first. Ten to a page, over the filtered list,
- * and changing the filter goes back to page one.
+ * and anything that changes the filtered set goes back to page one.
  *
- * Every row stays in the DOM whatever the filter and pager say; the inactive
+ * Every row stays in the DOM whatever the bar and pager say; the inactive
  * ones carry `hidden`. A static export ships the first paint as its HTML, so
  * conditional rendering would put the first page in the file and leave the
  * rest reachable only by running the page. `hidden` keeps all of it in the
@@ -49,34 +62,66 @@
  * find-in-page that should not match a row nobody is looking at. (The old
  * tab panels made the same choice; the reasoning survives the tabs.)
  *
+ * THE EMPTY STATE IS NOT DECORATION ANY MORE. With chips alone it was
+ * unreachable, because a chip only existed for a type that had rows. A search
+ * box reaches it on the first typo, so the list says so rather than showing
+ * a bare hairline.
+ *
  * THE HERO IS `PageHero`, the same one /team uses: the nav has no active
  * state, no `aria-current` and no pathname check, so the accent sentence is
  * what tells a reader arriving on a shared link which page they are on.
  */
 
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Check, Plus, Search, X } from "lucide-react";
 import { PageShell, PageHero } from "./chrome";
 import { RELEASE_ROWS, STORY_INDEX, type ReleaseType } from "./data";
 
 const PAGE_SIZE = 10;
 
-/* Chip order is a display choice, not data: plugins first because they carry
- * most of the ledger's rows. A type with no rows never gets a chip, so the
- * row is future-proof against the union growing before the artifact ships. */
+/* Menu order is a display choice, not data: plugins first because they carry
+ * most of the ledger's rows. A value with no rows never gets an option, so
+ * this is future-proof against the union growing before the artifact ships. */
 const TYPE_ORDER: ReleaseType[] = ["plugin", "tool", "model"];
 const TYPE_LABEL: Record<ReleaseType, string> = {
   plugin: "Plugin",
   tool: "Tool",
   model: "Model",
 };
-const TYPES = TYPE_ORDER.filter((t) => RELEASE_ROWS.some((r) => r.type === t));
 
 /* "WIGTN Plugin v1: Claude Code" carries the org name the sticky header
  * already shows; the row label drops it, the same way the old product tabs
  * did. The release page the row links to keeps the full title. */
 const productLabel = (product: string) => product.replace(/^WIGTN /, "");
+
+/* A filter the reader has applied. `dimension` is what it filters on and
+ * `value` is the raw row value, never the label: the label is display and
+ * changing productLabel must not silently stop matching anything. */
+type Dimension = "type" | "product";
+type Facet = { dimension: Dimension; value: string };
+
+const facetId = (f: Facet) => `${f.dimension}:${f.value}`;
+
+/* The options the menu offers, derived from the rows rather than declared, so
+ * a product added to ARTICLES appears here with no second edit. */
+const TYPE_OPTIONS: Facet[] = TYPE_ORDER.filter((t) =>
+  RELEASE_ROWS.some((r) => r.type === t),
+).map((t) => ({ dimension: "type" as const, value: t }));
+
+const PRODUCT_OPTIONS: Facet[] = Array.from(
+  new Set(RELEASE_ROWS.map((r) => r.product)),
+).map((p) => ({ dimension: "product" as const, value: p }));
+
+const facetLabel = (f: Facet) =>
+  f.dimension === "type" ? TYPE_LABEL[f.value as ReleaseType] : productLabel(f.value);
+
+/* What a row is searched over. Version and note are in it because that is
+ * what a reader actually types: a version number they half remember, or a
+ * word out of a changelog line. The date is not, because "2026.08" matches
+ * a third of the ledger and tells them nothing. */
+const haystack = (row: (typeof RELEASE_ROWS)[number]) =>
+  `${row.product} ${row.version ?? ""} ${row.note ?? ""}`.toLowerCase();
 
 /* One shipped version. Desktop is a ledger line: date | product | version |
  * note, with the note clamped to one line because its full text lives on the
@@ -115,41 +160,107 @@ function ReleaseRowLine({
   );
 }
 
-/* The type chips. Buttons, not links: a filter is display state over one
- * list, and a route per type would be exported pages standing in for it. */
-function TypeFilter({
-  active,
-  onSelect,
-}: {
-  active: "All" | ReleaseType;
-  onSelect: (f: "All" | ReleaseType) => void;
-}) {
-  const options: ("All" | ReleaseType)[] = ["All", ...TYPES];
+/* An applied filter. The pill is a span with a button in it rather than one
+ * button doing both jobs: the label is not a control, and a reader who wants
+ * the filter gone is aiming at the cross. */
+function FacetPill({ facet, onRemove }: { facet: Facet; onRemove: () => void }) {
   return (
-    <div role="group" aria-label="Filter by type" className="flex flex-wrap items-center gap-1 pb-4">
-      {options.map((f) => {
-        const on = f === active;
-        return (
-          <button
-            key={f}
-            type="button"
-            aria-pressed={on}
-            onClick={() => onSelect(f)}
-            className={`rounded-full px-3.5 py-1 text-[13px] transition-colors ${
-              on
-                ? "bg-brand font-medium text-white"
-                : "text-ink-4 hover:bg-line/[0.05] hover:text-ink"
-            }`}
-          >
-            {f === "All" ? "All" : TYPE_LABEL[f]}
-          </button>
-        );
-      })}
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-line/[0.07] py-1 pl-2.5 pr-1.5 text-[13px] text-ink">
+      <Check size={13} className="shrink-0 text-accent" aria-hidden />
+      {facetLabel(facet)}
+      <button
+        type="button"
+        onClick={onRemove}
+        aria-label={`Remove filter ${facetLabel(facet)}`}
+        className="grid h-4 w-4 place-items-center rounded-full text-ink-4 transition-colors hover:bg-line/[0.12] hover:text-ink"
+      >
+        <X size={12} />
+      </button>
+    </span>
+  );
+}
+
+/* The Add filter menu. Two groups, one per dimension, and an option already
+ * applied is left out rather than shown ticked: it is in the bar two inches
+ * away as a pill, and offering it twice invites a reader to wonder whether
+ * the two do different things. */
+function AddFilter({ applied, onAdd }: { applied: Facet[]; onAdd: (f: Facet) => void }) {
+  const [open, setOpen] = useState(false);
+  const wrap = useRef<HTMLDivElement>(null);
+
+  /* Escape and click-away, the two exits a popover needs. Mousedown rather
+   * than click so a drag that starts inside and ends outside does not close
+   * it, which is how a reader selecting text in the menu loses their place. */
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    const onDown = (e: MouseEvent) => {
+      if (!wrap.current?.contains(e.target as Node)) setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onDown);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onDown);
+    };
+  }, [open]);
+
+  const isApplied = (f: Facet) => applied.some((a) => facetId(a) === facetId(f));
+  const groups: { label: string; options: Facet[] }[] = [
+    { label: "Type", options: TYPE_OPTIONS.filter((f) => !isApplied(f)) },
+    { label: "Product", options: PRODUCT_OPTIONS.filter((f) => !isApplied(f)) },
+  ].filter((g) => g.options.length > 0);
+
+  return (
+    <div ref={wrap} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        disabled={groups.length === 0}
+        aria-expanded={open}
+        aria-haspopup="menu"
+        className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-line/25 px-3 py-1 text-[13px] text-ink-4 transition-colors hover:border-line/40 hover:text-ink disabled:cursor-default disabled:opacity-40 disabled:hover:border-line/25 disabled:hover:text-ink-4"
+      >
+        <Plus size={13} />
+        Add filter
+      </button>
+
+      {open && groups.length > 0 && (
+        <div
+          role="menu"
+          className="absolute left-0 top-[calc(100%+6px)] z-30 w-56 overflow-hidden rounded-xl border border-line/12 bg-paper py-1.5 shadow-xl shadow-black/20"
+        >
+          {groups.map((g) => (
+            <div key={g.label}>
+              <div className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-5">
+                {g.label}
+              </div>
+              {g.options.map((f) => (
+                <button
+                  key={facetId(f)}
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    onAdd(f);
+                    setOpen(false);
+                  }}
+                  className="block w-full px-3 py-1.5 text-left text-sm text-ink-2 transition-colors hover:bg-line/[0.06] hover:text-ink"
+                >
+                  {facetLabel(f)}
+                </button>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-/* The numbered pager. Buttons, not links, for the same reason as the chips. */
+/* The numbered pager. Buttons, not links: a route per page would be exported
+ * pages standing in for display state. */
 function Pager({
   pageCount,
   page,
@@ -188,17 +299,40 @@ function Pager({
 }
 
 export function NoticesPage() {
-  const [filter, setFilter] = useState<"All" | ReleaseType>("All");
+  const [query, setQuery] = useState("");
+  const [facets, setFacets] = useState<Facet[]>([]);
   const [page, setPage] = useState(0);
 
-  const filtered =
-    filter === "All" ? RELEASE_ROWS : RELEASE_ROWS.filter((r) => r.type === filter);
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const types = facets.filter((f) => f.dimension === "type").map((f) => f.value);
+    const products = facets.filter((f) => f.dimension === "product").map((f) => f.value);
+    return RELEASE_ROWS.filter(
+      (r) =>
+        (types.length === 0 || (r.type !== undefined && types.includes(r.type))) &&
+        (products.length === 0 || products.includes(r.product)) &&
+        (q === "" || haystack(r).includes(q)),
+    );
+  }, [query, facets]);
+
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  /* Clamped rather than reset in an effect: the only way page can exceed the
-   * count is a filter change, and the chip handler already resets it. The
-   * clamp is the belt for that suspender. */
+  /* Clamped rather than reset in an effect: every control that can shrink the
+   * filtered set already resets the page, and the clamp is the belt for that
+   * suspender. Typing is the one that would otherwise strand a reader on page
+   * 2 of a set that just became one page long. */
   const current = Math.min(page, pageCount - 1);
   const visible = new Set(filtered.slice(current * PAGE_SIZE, (current + 1) * PAGE_SIZE));
+
+  const addFacet = (f: Facet) => {
+    setFacets((prev) => (prev.some((a) => facetId(a) === facetId(f)) ? prev : [...prev, f]));
+    setPage(0);
+  };
+  const removeFacet = (f: Facet) => {
+    setFacets((prev) => prev.filter((a) => facetId(a) !== facetId(f)));
+    setPage(0);
+  };
+
+  const narrowed = query.trim() !== "" || facets.length > 0;
 
   return (
     <PageShell>
@@ -223,23 +357,63 @@ export function NoticesPage() {
       />
 
       <div className="mx-auto max-w-5xl px-6 pb-28 md:pb-40">
-        <TypeFilter
-          active={filter}
-          onSelect={(f) => {
-            setFilter(f);
-            setPage(0);
-          }}
-        />
-        {/* The chips and the pager both change what is on screen without
-            moving focus or the page, so a screen reader is given the count in
-            words. `sr-only` rather than a visible line: a sighted reader can
-            see the list change, and a running total above a ledger this short
-            reads as chrome. */}
-        <p aria-live="polite" className="sr-only">
-          {`Showing ${visible.size} of ${filtered.length} releases`}
-          {filter === "All" ? "" : `, filtered to ${TYPE_LABEL[filter]}`}
-          {pageCount > 1 ? `, page ${current + 1} of ${pageCount}` : ""}
-        </p>
+        {/* The bar. One row at desktop, wrapping at narrow widths, with the
+            count pushed to the end so it sits opposite the search box and
+            reads as the answer to it. */}
+        <div className="flex flex-wrap items-center gap-2 pb-4">
+          <div className="relative">
+            <Search
+              size={14}
+              aria-hidden
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-5"
+            />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setPage(0);
+              }}
+              placeholder="Search releases"
+              aria-label="Search releases by product, version or note"
+              className="w-56 rounded-full border border-line/15 bg-transparent py-1.5 pl-8 pr-3 text-[13px] text-ink transition-colors placeholder:text-ink-5 hover:border-line/25 focus:border-accent focus:outline-none"
+            />
+          </div>
+
+          {facets.map((f) => (
+            <FacetPill key={facetId(f)} facet={f} onRemove={() => removeFacet(f)} />
+          ))}
+
+          <AddFilter applied={facets} onAdd={addFacet} />
+
+          {narrowed && (
+            <button
+              type="button"
+              onClick={() => {
+                setQuery("");
+                setFacets([]);
+                setPage(0);
+              }}
+              className="text-[13px] text-ink-5 underline-offset-4 transition-colors hover:text-ink hover:underline"
+            >
+              Clear
+            </button>
+          )}
+
+          {/* aria-live on the count alone: it is already the sentence a
+              screen reader needs when a chip or a keystroke changes the list,
+              and a second announcement elsewhere would talk over it. */}
+          <span aria-live="polite" className="ml-auto text-[13px] text-ink-4">
+            {filtered.length} {filtered.length === 1 ? "result" : "results"}
+            {pageCount > 1 && (
+              <span className="text-ink-5">
+                {" "}
+                · page {current + 1} of {pageCount}
+              </span>
+            )}
+          </span>
+        </div>
+
         <ul className="border-t border-line/[0.08]">
           {RELEASE_ROWS.map((row) => (
             <ReleaseRowLine
@@ -249,6 +423,14 @@ export function NoticesPage() {
             />
           ))}
         </ul>
+
+        {filtered.length === 0 && (
+          <p className="py-10 text-center text-sm text-ink-4">
+            Nothing matches that. Every release is one of{" "}
+            {PRODUCT_OPTIONS.length} products.
+          </p>
+        )}
+
         {pageCount > 1 && <Pager pageCount={pageCount} page={current} onSelect={setPage} />}
       </div>
     </PageShell>

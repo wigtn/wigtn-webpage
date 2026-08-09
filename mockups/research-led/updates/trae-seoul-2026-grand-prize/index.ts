@@ -41,7 +41,7 @@ export const traeSeoul2026GrandPrize: Article = {
   tag: "AWARD",
   icon: "trophy",
   layout: "note",
-  title: "Grand Prize at Build with TRAE Seoul",
+  title: "Grand Prize at Build with TRAE Seoul by ByteDance",
   summary:
     "WIGENT, a room of AI agents that argue an idea to a conclusion, took the Grand Prize at ByteDance's TRAE hackathon.",
   date: "2026.03.28",

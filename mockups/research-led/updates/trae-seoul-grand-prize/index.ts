@@ -78,12 +78,13 @@ export const traeSeoulGrandPrize: Article = {
   channel: "story",
   tag: "GRAND PRIZE",
   icon: "trophy",
-  title: "Grand Prize at Build with TRAE Seoul: WIGENT, built in three and a half hours",
+  title:
+    "Grand Prize at Build with TRAE Seoul by ByteDance: WIGENT, built in three and a half hours",
   summary:
     "WIGENT drops your idea into a room of AI agents, lets them argue it to a conclusion, then turns the chat page itself into a landing page. Three of us built it in one afternoon at ByteDance's TRAE hackathon, and it took the Grand Prize.",
   date: "2026.03.28",
   place: "Seoul, KOR",
-  author: "ByteDance",
+  author: "WIGTN Engineering",
   readTime: "7 min",
   image: certificate.src,
   links: [{ label: "GitHub", href: "https://github.com/wigtn/wigent" }],
