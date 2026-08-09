@@ -27,8 +27,9 @@ public/images/             team portraits, logos. Nothing else.
 
 The site has five nav destinations: **About** (/team), **Notice** (/notices),
 **Story** (/story), **Blog** (/blog), and **Tech**, which is an external link
-to WIG-log's report index. The landing page is three sections: Hero, Services
-(the business model: Web Agency and AX Agency), Contact.
+to WIG-log's report index. The landing page is three sections: Hero, What we
+do (the business model: Web Agency and AX Agency), Contact. About is "Who we
+are.": the members and the partners, nothing else.
 
 ## Where does a piece of writing belong
 

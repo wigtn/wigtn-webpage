@@ -1,13 +1,13 @@
 "use client";
 
-/** /team, labelled "About" in the nav: what we do (the record), the crew
- * roster, and the partners wall.
+/** /team, labelled "About" in the nav: the crew roster and the partners
+ * wall, under one title and nothing else.
  *
- * The page opened with "Who we are." and a one-sentence self-description
- * until 2026-08-09. The landing's What-we-do section moved here in the
- * restructure that slimmed the homepage to Hero, Services, Contact, and it
- * took the hero slot: the record says who we are better than a sentence
- * about it did, and the members list right under it is the "who".
+ * The page is "Who we are." and then the people. It briefly opened with the
+ * record's capability list after the 2026-08-09 restructure; that duplicated
+ * what the landing's What-we-do section already says, so the list went and
+ * the title came back. No lead under the hero and no "Members" heading over
+ * the roster: with a one-subject page, both were captions on the obvious.
  *
  * HistoryTimeline at the bottom of this file is retained but currently
  * unrendered; the deployed page excludes it on purpose. */
@@ -15,7 +15,7 @@
 import { Fragment } from "react";
 import { motion } from "framer-motion";
 import { PageShell, PageHero, rise, VIEWPORT } from "./chrome";
-import { TEAM, MILESTONES, PARTNERS, CAPABILITIES } from "./data";
+import { TEAM, MILESTONES, PARTNERS } from "./data";
 
 /* Prefer wrapping at commas. Each clause is an inline-block, so the browser
  * takes the break between clauses before it breaks inside one; a clause too
@@ -52,49 +52,13 @@ function Divider() {
 export function TeamPage() {
   return (
     <PageShell>
-      <PageHero
-        title="What we do."
-        lead="Peer-reviewed papers, open weights, and reports that say what they do not show."
-        titleClassName="text-accent"
-        leadClassName="max-w-4xl"
-      />
+      <PageHero title="Who we are." titleClassName="text-accent" />
 
-      {/* ── The record, kept short: one line per pillar, title left, lead
-           right. The landing's Services section already says what we sell,
-           so this list only has to name the record behind it before the page
-           gets to the people. It was the homepage's full display list for a
-           day, index numbers and tag chips included; at that size it buried
-           Members, which is what this page is for. ── */}
-      <section className="max-w-5xl mx-auto px-6 pt-6 pb-20 md:pt-8 md:pb-28">
-        <ul className="divide-y divide-line/[0.08] border-t border-line/[0.08]">
-          {CAPABILITIES.map((c, i) => (
-            <motion.li
-              key={c.title}
-              variants={rise}
-              custom={i}
-              initial="hidden"
-              whileInView="show"
-              viewport={VIEWPORT}
-              className="flex flex-col gap-1 py-5 sm:flex-row sm:items-baseline sm:gap-8"
-            >
-              <h3 className="w-56 shrink-0 text-base font-semibold tracking-tight text-ink">
-                {c.title}
-              </h3>
-              <p className="text-pretty text-sm leading-relaxed text-ink-3">{c.lead}</p>
-            </motion.li>
-          ))}
-        </ul>
-      </section>
-
-      <Divider />
-
-      {/* ── Crew: one row per person — portrait + name left, role + bio right ── */}
-      <section className="max-w-5xl mx-auto px-6 pt-24 pb-28 md:pt-32 md:pb-36">
-        <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
-          Members
-        </h2>
-
-        <ul className="mt-10 divide-y divide-line/[0.08] md:mt-14">
+      {/* ── Crew: one row per person, portrait + name left, role + bio right.
+           Straight under the hero: the title is the section heading, so a
+           "Members" h2 here would say it twice. ── */}
+      <section className="max-w-5xl mx-auto px-6 pt-2 pb-28 md:pt-4 md:pb-36">
+        <ul className="divide-y divide-line/[0.08]">
           {TEAM.map((m, i) => (
             <motion.li
               key={m.name}

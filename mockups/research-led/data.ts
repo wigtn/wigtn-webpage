@@ -102,12 +102,12 @@ export const NAV: NavItem[] = [
   { label: "Tech", href: TECH_REPORT_INDEX },
 ];
 
-/* The homepage BM section: the two lines of business, each in the shape a
- * client would engage it. WIGTN sells no product of its own; what it offers
- * is the team. Source copy is README.md's services list, folded from four
- * lines to two: AX Consulting and AI System Integration are one engagement
- * seen from its two ends, and AI R&D is the record (CAPABILITIES below), not
- * a service. No figures, because there are none published to cite. */
+/* The homepage What-we-do section: the two lines of business, each in the
+ * shape a client would engage it. WIGTN sells no product of its own; what it
+ * offers is the team. Source copy is README.md's services list, folded from
+ * four lines to two: AX Consulting and AI System Integration are one
+ * engagement seen from its two ends, and AI R&D is the record, not a
+ * service. No figures, because there are none published to cite. */
 export const SERVICES = [
   {
     title: "Web Agency",
@@ -121,42 +121,11 @@ export const SERVICES = [
   },
 ];
 
-/* What we do, in the order the record supports it. Each pillar names something
- * that has already happened and can be checked: a venue, a registry, a placing.
- * Rendered on /team since the landing slimmed to Hero, Services, Contact.
- *
- * There used to be a fourth pillar for meetups and seminars. It was the only
- * one with nothing behind it, and it sat next to three that were true. It comes
- * back when a first meeting has actually happened, and not before. */
-export const CAPABILITIES = [
-  {
-    title: "Published research",
-    lead: "We publish where the work gets read by people who can check it.",
-    /* ACL only. There is a second paper, and it is under review, and saying so
-     * in public under our own name is the thing the anonymity period forbids.
-     * It goes here after a notification, not before. */
-    body: "WIGVO was accepted to ACL 2026 System Demonstrations and presented at booth D3, alongside an invited talk at IWSLT 2026.",
-    tags: ["ACL 2026", "IWSLT 2026", "Peer reviewed"],
-  },
-  {
-    title: "Open models and code",
-    lead: "Everything we build ships in the open: models, tools, plugins.",
-    body: "Weights, training data, and eval code released on HuggingFace, GitHub, and npm for anyone to use.",
-    tags: ["HuggingFace", "GitHub", "npm"],
-  },
-  {
-    title: "Reports with their limits",
-    lead: "Every result we publish comes with what it does not show.",
-    body: "Every result we publish arrives with its method, its measurements and the questions it leaves open, on a report site of its own.",
-    tags: ["Method", "Measurement", "Limitations"],
-  },
-  {
-    title: "Hackathons and challenges",
-    lead: "We build against a clock in public, and we say what survived.",
-    body: "Grand Prize at Build with TRAE Seoul, 2nd in the Tech Track at Snowflake Korea, Top 6 at OBA Weekendthon.",
-    tags: ["Grand Prize", "2nd Place", "Top 6"],
-  },
-];
+/* CAPABILITIES, the four-pillar record list (published research, open models,
+ * reports with their limits, hackathon placings), was deleted when /team went
+ * back to "Who we are." and no surface rendered it. The claims themselves
+ * still live where they are checkable: the posts, MILESTONES, and the report
+ * site. It is in the git history if a surface wants the list back. */
 
 export const PARTNERS = ["Mind AI", "MEGA Code", "Tripla", "Arustay"];
 

@@ -70,8 +70,8 @@ export function IndexRule({ n, label }: { n: string; label: string }) {
 }
 
 /* Keyword labels: scannable metadata, not boxed chips (no card aesthetic).
- * Only the homepage Services rows use it today; it stays here because it is
- * chrome-grade markup any page may pick up. */
+ * Only the homepage What-we-do rows (SERVICES) use it today; it stays here
+ * because it is chrome-grade markup any page may pick up. */
 export function Tags({ tags, className = "" }: { tags: string[]; className?: string }) {
   return (
     <div className={`flex flex-wrap gap-x-6 gap-y-2 ${className}`}>

@@ -11,9 +11,9 @@
  *     leaning on `accent` for legibility on light)
  *   - Everything that is not a link out of the page is separated by a
  *     hairline, not boxed.
- * Sections: 1 Hero · 2 Services · 3 CTA, a Divider between 2 and 3. The
- * landing held What we do, a Notices rail and a WIG-log rail until
- * 2026-08-09; the record moved to /team, the release ledger is /notices, and
+ * Sections: 1 Hero · 2 What we do (the services) · 3 CTA, a Divider between
+ * 2 and 3. The landing held the record's capability list, a Notices rail and
+ * a WIG-log rail until 2026-08-09; the release ledger is /notices, and
  * stories live on /story and /blog. MilestoneTimeline is retained but
  * currently unrouted.
  */
@@ -419,21 +419,22 @@ export function ResearchLedHome() {
           </div>
         </section>
 
-        {/* ───── 2. Services: the business model, stated briefly ─────
-            The landing is Hero, Services, Contact, in that order and nothing
-            else. WIGTN has no product of its own to advertise, so the section
-            a product would occupy holds the two lines of client work instead.
-            The record that backs them lives on /team (What we do) and on
-            WIG-log; this section only says what we build for clients.
-            Sticky-left layout, same as the capability list this slot held
-            before the record moved to /team. */}
+        {/* ───── 2. What we do: the business model, stated briefly ─────
+            The landing is Hero, What we do, Contact, in that order and
+            nothing else. WIGTN has no product of its own to advertise, so
+            the section a product would occupy holds the two lines of client
+            work instead. The title was "Services" for a day and gave way to
+            the name the About page had been holding: this section is the
+            site's one answer to what the team does, so it carries the plain
+            words for it. Sticky-left layout, same as the capability list
+            this slot held before the split. */}
         <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
           <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
             <div className="md:sticky md:top-24 md:self-start">
               <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-4">
                 Business · 01–02
               </span>
-              <SectionTitle className="mt-4">Services</SectionTitle>
+              <SectionTitle className="mt-4">What we do</SectionTitle>
               <p className="mt-5 max-w-xs text-pretty leading-relaxed text-ink-3">
                 No product of our own to sell. What we offer is the team, on
                 your problem.
