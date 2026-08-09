@@ -27,20 +27,27 @@
  * (All / Plugin / Tool / Model) and is now search + applied filters +
  * "Add filter", the shape a console uses for a table it expects to grow.
  *
- * The reason for the change is what the chip row could not say. Four chips
- * is one dimension, exclusive, and every value of it is on screen whether or
- * not the reader wants to filter at all. A reader arriving here is usually
- * after one product's history, which is a dimension the chips did not have,
- * and often after one word ("knowledge-wiki", "v0.1.11"), which no chip can
- * express. So: a free-text search over product, version and note; filters
- * added from a menu rather than parked in the layout; each applied filter a
- * removable pill; and a live result count, because a filtered list with no
- * count makes the reader wonder what they are not seeing.
+ * TWO CONTROLS, TWO JOBS, AND THEY DO NOT OVERLAP.
  *
- * Filters are OR within a dimension and AND across them, which is what a
- * reader means by picking Plugin and Tool (either) and then WIGSS (and only
- * WIGSS). No "All" pill: no filters is all, and a pill for the absence of a
- * filter is a control that does nothing.
+ *   Filter answers "what kind of thing is this", and the only answer the
+ *   data has is `releaseType`: model, plugin, tool. It is metadata, it is a
+ *   closed set, and a menu is the right shape for a closed set.
+ *
+ *   Search answers "which project", and a project is a name. It matches the
+ *   product name and nothing else.
+ *
+ * A product filter was tried here and taken out. It made the two controls
+ * answer the same question from different ends, and it let a reader build
+ * Plugin + WIGSS, which is empty because WIGSS is a tool: a combination the
+ * UI offered, the reader could not have predicted, and no data can satisfy.
+ * One filter dimension has no cross-dimension case, so it cannot happen. If
+ * a second dimension is ever added, it needs an answer to that first.
+ *
+ * Within the one dimension the filters are OR, which is what picking Plugin
+ * and Tool means and is the only reading available. No "All" pill: no
+ * filters is all, and a pill for the absence of a filter is a control that
+ * does nothing. The count is live, because a filtered list with no count
+ * makes the reader wonder what they are not seeing.
  *
  * A row navigates to the product's release note, where the full changelog and
  * the post's prose live. It is a link, not a button: the old News rows opened
@@ -95,33 +102,18 @@ const TYPE_LABEL: Record<ReleaseType, string> = {
  * did. The release page the row links to keeps the full title. */
 const productLabel = (product: string) => product.replace(/^WIGTN /, "");
 
-/* A filter the reader has applied. `dimension` is what it filters on and
- * `value` is the raw row value, never the label: the label is display and
- * changing productLabel must not silently stop matching anything. */
-type Dimension = "type" | "product";
-type Facet = { dimension: Dimension; value: string };
-
-const facetId = (f: Facet) => `${f.dimension}:${f.value}`;
-
-/* The options the menu offers, derived from the rows rather than declared, so
- * a product added to ARTICLES appears here with no second edit. */
-const TYPE_OPTIONS: Facet[] = TYPE_ORDER.filter((t) =>
+/* The filter options, derived from the rows rather than declared, so a type
+ * that has no releases yet never offers a filter that returns nothing. */
+const TYPE_OPTIONS: ReleaseType[] = TYPE_ORDER.filter((t) =>
   RELEASE_ROWS.some((r) => r.type === t),
-).map((t) => ({ dimension: "type" as const, value: t }));
+);
 
-const PRODUCT_OPTIONS: Facet[] = Array.from(
-  new Set(RELEASE_ROWS.map((r) => r.product)),
-).map((p) => ({ dimension: "product" as const, value: p }));
-
-const facetLabel = (f: Facet) =>
-  f.dimension === "type" ? TYPE_LABEL[f.value as ReleaseType] : productLabel(f.value);
-
-/* What a row is searched over. Version and note are in it because that is
- * what a reader actually types: a version number they half remember, or a
- * word out of a changelog line. The date is not, because "2026.08" matches
- * a third of the ledger and tells them nothing. */
-const haystack = (row: (typeof RELEASE_ROWS)[number]) =>
-  `${row.product} ${row.version ?? ""} ${row.note ?? ""}`.toLowerCase();
+/* What search matches: the product name, which is what a project is called.
+ * Not the note, and not the version. Both were in here for one commit and
+ * came out: they turn a name box into a full-text box, so "release" matches
+ * half the ledger through changelog prose and the reader cannot tell why.
+ * The date was never in it, for the same reason at a larger scale. */
+const searchable = (row: (typeof RELEASE_ROWS)[number]) => row.product.toLowerCase();
 
 /* One shipped version. Desktop is a ledger line: date | product | version |
  * note, with the note clamped to one line because its full text lives on the
@@ -163,15 +155,15 @@ function ReleaseRowLine({
 /* An applied filter. The pill is a span with a button in it rather than one
  * button doing both jobs: the label is not a control, and a reader who wants
  * the filter gone is aiming at the cross. */
-function FacetPill({ facet, onRemove }: { facet: Facet; onRemove: () => void }) {
+function TypePill({ type, onRemove }: { type: ReleaseType; onRemove: () => void }) {
   return (
     <span className="inline-flex items-center gap-1.5 rounded-full bg-line/[0.07] py-1 pl-2.5 pr-1.5 text-[13px] text-ink">
       <Check size={13} className="shrink-0 text-accent" aria-hidden />
-      {facetLabel(facet)}
+      {TYPE_LABEL[type]}
       <button
         type="button"
         onClick={onRemove}
-        aria-label={`Remove filter ${facetLabel(facet)}`}
+        aria-label={`Remove filter ${TYPE_LABEL[type]}`}
         className="grid h-4 w-4 place-items-center rounded-full text-ink-4 transition-colors hover:bg-line/[0.12] hover:text-ink"
       >
         <X size={12} />
@@ -180,11 +172,17 @@ function FacetPill({ facet, onRemove }: { facet: Facet; onRemove: () => void }) 
   );
 }
 
-/* The Add filter menu. Two groups, one per dimension, and an option already
- * applied is left out rather than shown ticked: it is in the bar two inches
- * away as a pill, and offering it twice invites a reader to wonder whether
- * the two do different things. */
-function AddFilter({ applied, onAdd }: { applied: Facet[]; onAdd: (f: Facet) => void }) {
+/* The Add filter menu. One flat list, because there is one dimension: a
+ * "Type" heading over the only group would name it rather than group it. An
+ * option already applied is left out rather than shown ticked, since it is
+ * in the bar two inches away as a pill. */
+function AddFilter({
+  applied,
+  onAdd,
+}: {
+  applied: ReleaseType[];
+  onAdd: (t: ReleaseType) => void;
+}) {
   const [open, setOpen] = useState(false);
   const wrap = useRef<HTMLDivElement>(null);
 
@@ -207,18 +205,14 @@ function AddFilter({ applied, onAdd }: { applied: Facet[]; onAdd: (f: Facet) => 
     };
   }, [open]);
 
-  const isApplied = (f: Facet) => applied.some((a) => facetId(a) === facetId(f));
-  const groups: { label: string; options: Facet[] }[] = [
-    { label: "Type", options: TYPE_OPTIONS.filter((f) => !isApplied(f)) },
-    { label: "Product", options: PRODUCT_OPTIONS.filter((f) => !isApplied(f)) },
-  ].filter((g) => g.options.length > 0);
+  const options = TYPE_OPTIONS.filter((t) => !applied.includes(t));
 
   return (
     <div ref={wrap} className="relative">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        disabled={groups.length === 0}
+        disabled={options.length === 0}
         aria-expanded={open}
         aria-haspopup="menu"
         className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-line/25 px-3 py-1 text-[13px] text-ink-4 transition-colors hover:border-line/40 hover:text-ink disabled:cursor-default disabled:opacity-40 disabled:hover:border-line/25 disabled:hover:text-ink-4"
@@ -227,31 +221,24 @@ function AddFilter({ applied, onAdd }: { applied: Facet[]; onAdd: (f: Facet) => 
         Add filter
       </button>
 
-      {open && groups.length > 0 && (
+      {open && options.length > 0 && (
         <div
           role="menu"
-          className="absolute left-0 top-[calc(100%+6px)] z-30 w-56 overflow-hidden rounded-xl border border-line/12 bg-paper py-1.5 shadow-xl shadow-black/20"
+          className="absolute left-0 top-[calc(100%+6px)] z-30 w-44 overflow-hidden rounded-xl border border-line/12 bg-paper py-1.5 shadow-xl shadow-black/20"
         >
-          {groups.map((g) => (
-            <div key={g.label}>
-              <div className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-5">
-                {g.label}
-              </div>
-              {g.options.map((f) => (
-                <button
-                  key={facetId(f)}
-                  type="button"
-                  role="menuitem"
-                  onClick={() => {
-                    onAdd(f);
-                    setOpen(false);
-                  }}
-                  className="block w-full px-3 py-1.5 text-left text-sm text-ink-2 transition-colors hover:bg-line/[0.06] hover:text-ink"
-                >
-                  {facetLabel(f)}
-                </button>
-              ))}
-            </div>
+          {options.map((t) => (
+            <button
+              key={t}
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                onAdd(t);
+                setOpen(false);
+              }}
+              className="block w-full px-3 py-1.5 text-left text-sm text-ink-2 transition-colors hover:bg-line/[0.06] hover:text-ink"
+            >
+              {TYPE_LABEL[t]}
+            </button>
           ))}
         </div>
       )}
@@ -300,20 +287,26 @@ function Pager({
 
 export function NoticesPage() {
   const [query, setQuery] = useState("");
-  const [facets, setFacets] = useState<Facet[]>([]);
+  const [types, setTypes] = useState<ReleaseType[]>([]);
   const [page, setPage] = useState(0);
 
+  /* The kind narrows, the name narrows, and they compose: Plugin plus
+   * "codex" is the Codex plugin's history.
+   *
+   * Typing "wigss" with Plugin applied still returns nothing, because WIGSS
+   * is a tool. The difference from the product filter is where the empty set
+   * comes from: that one was built out of two menus the bar itself offered,
+   * so the UI proposed a combination it could not satisfy. This one is a
+   * name the reader typed against a kind they picked, which is their own
+   * question, and the empty state is the answer to it. */
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const types = facets.filter((f) => f.dimension === "type").map((f) => f.value);
-    const products = facets.filter((f) => f.dimension === "product").map((f) => f.value);
     return RELEASE_ROWS.filter(
       (r) =>
         (types.length === 0 || (r.type !== undefined && types.includes(r.type))) &&
-        (products.length === 0 || products.includes(r.product)) &&
-        (q === "" || haystack(r).includes(q)),
+        (q === "" || searchable(r).includes(q)),
     );
-  }, [query, facets]);
+  }, [query, types]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   /* Clamped rather than reset in an effect: every control that can shrink the
@@ -323,16 +316,16 @@ export function NoticesPage() {
   const current = Math.min(page, pageCount - 1);
   const visible = new Set(filtered.slice(current * PAGE_SIZE, (current + 1) * PAGE_SIZE));
 
-  const addFacet = (f: Facet) => {
-    setFacets((prev) => (prev.some((a) => facetId(a) === facetId(f)) ? prev : [...prev, f]));
+  const addType = (t: ReleaseType) => {
+    setTypes((prev) => (prev.includes(t) ? prev : [...prev, t]));
     setPage(0);
   };
-  const removeFacet = (f: Facet) => {
-    setFacets((prev) => prev.filter((a) => facetId(a) !== facetId(f)));
+  const removeType = (t: ReleaseType) => {
+    setTypes((prev) => prev.filter((x) => x !== t));
     setPage(0);
   };
 
-  const narrowed = query.trim() !== "" || facets.length > 0;
+  const narrowed = query.trim() !== "" || types.length > 0;
 
   return (
     <PageShell>
@@ -374,24 +367,26 @@ export function NoticesPage() {
                 setQuery(e.target.value);
                 setPage(0);
               }}
-              placeholder="Search releases"
-              aria-label="Search releases by product, version or note"
+              placeholder="Search by project"
+              aria-label="Search releases by project name"
               className="w-56 rounded-full border border-line/15 bg-transparent py-1.5 pl-8 pr-3 text-[13px] text-ink transition-colors placeholder:text-ink-5 hover:border-line/25 focus:border-accent focus:outline-none"
             />
           </div>
 
-          {facets.map((f) => (
-            <FacetPill key={facetId(f)} facet={f} onRemove={() => removeFacet(f)} />
+          {/* Pills in TYPE_ORDER, not in the order they were clicked: the bar
+              should look the same for the same filter however it was built. */}
+          {TYPE_OPTIONS.filter((t) => types.includes(t)).map((t) => (
+            <TypePill key={t} type={t} onRemove={() => removeType(t)} />
           ))}
 
-          <AddFilter applied={facets} onAdd={addFacet} />
+          <AddFilter applied={types} onAdd={addType} />
 
           {narrowed && (
             <button
               type="button"
               onClick={() => {
                 setQuery("");
-                setFacets([]);
+                setTypes([]);
                 setPage(0);
               }}
               className="text-[13px] text-ink-5 underline-offset-4 transition-colors hover:text-ink hover:underline"
@@ -401,7 +396,7 @@ export function NoticesPage() {
           )}
 
           {/* aria-live on the count alone: it is already the sentence a
-              screen reader needs when a chip or a keystroke changes the list,
+              screen reader needs when a pill or a keystroke changes the list,
               and a second announcement elsewhere would talk over it. */}
           <span aria-live="polite" className="ml-auto text-[13px] text-ink-4">
             {filtered.length} {filtered.length === 1 ? "result" : "results"}
@@ -426,8 +421,7 @@ export function NoticesPage() {
 
         {filtered.length === 0 && (
           <p className="py-10 text-center text-sm text-ink-4">
-            Nothing matches that. Every release is one of{" "}
-            {PRODUCT_OPTIONS.length} products.
+            No release matches that. Search takes a project name.
           </p>
         )}
 
