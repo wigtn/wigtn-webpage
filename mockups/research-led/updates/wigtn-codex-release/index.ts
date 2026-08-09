@@ -75,7 +75,7 @@ export const wigtnCodexRelease: Article = {
   summary:
     "A second plugin, for Codex rather than Claude Code. Nine skills, of which eight open on their own and one has to be named, so an ordinary coding request cannot grow into the full delivery pipeline by accident.",
   date: "2026.07.28",
-  author: "WIGTN",
+  author: "WIGTN Engineering",
   readTime: "2 min",
   links: [
     { label: "GitHub", href: "https://github.com/wigtn/wigtn-plugins-codex" },

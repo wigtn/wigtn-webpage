@@ -82,7 +82,7 @@ export const wigssNpmRelease: Article = {
   summary:
     "Drag and resize components on your running dev server, and the source file rewrites itself into whichever of five CSS strategies the project already uses.",
   date: "2026.04.03",
-  author: "WIGTN",
+  author: "WIGTN Engineering",
   readTime: "2 min",
   /* The method write-up lives on the report blog; this note links it rather
    * than restating it. Two copies of one explanation drift apart in a month. */

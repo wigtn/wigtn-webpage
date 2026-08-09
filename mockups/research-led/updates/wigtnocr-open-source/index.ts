@@ -70,7 +70,7 @@ export const wigtnocrOpenSource: Article = {
    * file with no note saying where it came from. If it was the announcement
    * date, restore it and write down the source this time. */
   date: "2026.04.03",
-  author: "WIGTN",
+  author: "WIGTN Research",
   readTime: "2 min",
   links: [
     { label: "HuggingFace", href: "https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR" },

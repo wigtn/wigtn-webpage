@@ -131,7 +131,7 @@ export const snowflakeKorea2026: Article = {
     "Pick a goal, and five agents argue over Snowflake Cortex evidence before ranking Seoul districts. WIGTN Flake placed second in the Tech Track. A later code-path audit cut the eleven capabilities we presented down to seven.",
   date: "2026.04.29",
   place: "Seoul, KOR",
-  author: "Snowflake",
+  author: "WIGTN Engineering",
   readTime: "9 min",
   image: winnersOnStage.src,
   links: [

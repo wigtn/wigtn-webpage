@@ -42,7 +42,7 @@ export const myNewPost: Article = {
    * ran the event and awarded the placing. Renders as the article byline, so
    * it reads "ByteDance" on a WIGTN post; that is the existing convention on
    * every award entry, not an oversight. */
-  author: "Organizer",
+  author: "WIGTN Engineering",
   readTime: "5 min",
   image: cover.src,
   /* One placeholder on purpose. `ArticleDetail` keys links by `href`, so two

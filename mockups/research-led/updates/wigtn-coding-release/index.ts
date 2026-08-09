@@ -98,7 +98,7 @@ export const wigtnCodingRelease: Article = {
   summary:
     "The first of the two plugins, for Claude Code. It got smaller in the release before this one, then gained a skill that files what a session worked out and gates what leaves the machine.",
   date: "2026.08.04",
-  author: "WIGTN",
+  author: "WIGTN Engineering",
   readTime: "2 min",
   links: [
     /* The live address. The inline entry this replaced still pointed at

@@ -265,6 +265,14 @@ filler.
 
 ## Naming people and companies
 
+`author` is a WIGTN team and only ever one of two strings, `"WIGTN Research"`
+for the papers and the models or `"WIGTN Engineering"` for the tools, the
+plugins and the hackathon builds. It is not the event's organizer: three story
+posts carried Snowflake, ByteDance and Open Builders Alliance there, which put
+another company's name under a post they did not write. An organizer goes in
+the title or the prose, as TRAE Seoul's "by ByteDance" does. The type in
+`data.ts` rejects anything else.
+
 Name people only in their published role (program chair, organizer, author),
 and spell the role the way the proceedings do. Name visitors and attendees by
 company, never by individual. Where a photo shows someone from another company,
