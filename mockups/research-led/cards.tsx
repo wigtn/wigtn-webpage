@@ -14,7 +14,15 @@ import { techReportHref } from "./links";
 import { rise, VIEWPORT } from "./chrome";
 
 /* Cover source: real image → YouTube thumbnail (for video notes) → none.
- * A missing cover falls back to <BrandCover/> so nothing renders empty. */
+ *
+ * `undefined` means this article has no picture, and ArticleCard now renders no
+ * frame at all in that case. It used to fall back to <BrandCover/>, which was
+ * right while the covered posts outnumbered the bare ones; after the stories
+ * moved to the WIG-log feed every remaining post is a release, releases ship no
+ * cover on purpose, and the whole rail became three identical gradient boxes
+ * standing in for pictures that are never coming. ReportCard still uses the
+ * fallback, for a different reason: its images are cross-origin and it needs
+ * something to draw when one fails to load. */
 export function coverSrc(a: Article): string | undefined {
   if (a.image) return a.image;
   if (a.video && a.videoUrl) {
@@ -56,7 +64,7 @@ function PlayBadge() {
   );
 }
 
-/* Homepage Updates card.
+/* Homepage Notices card.
  *
  * This was a 4/5 portrait with the title burned into the bottom of the image
  * over a black scrim. The frame was taller than it was wide and every cover is
@@ -73,34 +81,55 @@ function PlayBadge() {
  * one page and a reader should not have to work out why one set of pictures is
  * shaped differently from the other. What still separates them is the meta row:
  * these carry a date and a place and point inside the site.
+ *
+ * ALL OF THAT ONLY APPLIES WHEN THERE IS A PICTURE, and on this rail there is
+ * not one today. The covers the paragraphs above are arguing about belonged to
+ * the conference and hackathon posts, which are on the WIG-log feed now. What
+ * is left is releases, and a release ships no cover by house rule, so the card
+ * draws a hairline instead of a frame. Do not reinstate the gradient fallback:
+ * it was three copies of the same non-picture standing where three different
+ * ones used to be. If a notice ever arrives with a photograph that carries a
+ * fact, the frame comes back for that one card on its own.
  */
 export function ArticleCard({ a, i = 0 }: { a: Article; i?: number }) {
   const cover = coverSrc(a);
   return (
     <motion.div variants={rise} custom={i} initial="hidden" whileInView="show" viewport={VIEWPORT}>
-      <Link href={articleHref(a.slug)} className="group flex h-full flex-col">
-        {/* Cover */}
-        <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-ink/[0.04]">
-          {cover ? (
+      <Link
+        href={articleHref(a.slug)}
+        /* A card with no picture gets a hairline where the frame was. Without
+           it the three coverless cards read as loose paragraphs in a row
+           rather than as three of one thing, and a rule is what this site uses
+           to separate anything that is not a link out of the page. The
+           `placeholder` badge lives inside the frame and so is not drawn here;
+           no placeholder article has ever been coverless, and if one is, the
+           badge is a build-time affordance rather than something a reader
+           needs. */
+        className={`group flex h-full flex-col ${cover ? "" : "border-t border-line/[0.10] pt-5"}`}
+      >
+        {cover && (
+          <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-ink/[0.04]">
             <img
               src={cover}
               alt=""
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.04]"
             />
-          ) : (
-            <BrandCover />
-          )}
-          {a.video && <PlayBadge />}
+            {a.video && <PlayBadge />}
 
-          {a.placeholder && (
-            <span className="absolute right-3 top-3 rounded-full border border-white/15 bg-black/50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-zinc-300 backdrop-blur">
-              Placeholder
-            </span>
-          )}
-        </div>
+            {a.placeholder && (
+              <span className="absolute right-3 top-3 rounded-full border border-white/15 bg-black/50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-zinc-300 backdrop-blur">
+                Placeholder
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Kicker and title, under the frame rather than on it */}
-        <span className="mt-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
+        <span
+          className={`text-[10px] font-semibold uppercase tracking-[0.16em] text-accent ${
+            cover ? "mt-4" : ""
+          }`}
+        >
           {a.tag}
         </span>
         <h3 className="font-display mt-2 text-lg font-semibold leading-snug tracking-tight text-ink text-balance transition-colors group-hover:text-accent">

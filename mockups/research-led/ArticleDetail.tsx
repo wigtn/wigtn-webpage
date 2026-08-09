@@ -165,7 +165,15 @@ export function ArticleDetail({ slug }: { slug: string }) {
   }
 
   const EventIcon = article.icon ? EVENT_ICON[article.icon] : null;
-  const related = ARTICLES.filter((a) => a.kind === article.kind && a.slug !== article.slug).slice(0, 3);
+  /* A note drops the standfirst, the read time, the byline, the contact strip
+   * and the related rail. See `layout` in data.ts for why that list and not a
+   * word count. What a note keeps is the tag, the title, the date and place,
+   * the body, and the links: everything that is the post rather than around
+   * it. */
+  const isNote = article.layout === "note";
+  const related = isNote
+    ? []
+    : ARTICLES.filter((a) => a.kind === article.kind && a.slug !== article.slug).slice(0, 3);
 
   return (
     <div className="relative min-h-screen bg-paper text-ink font-sans antialiased selection:bg-brand/20">
@@ -195,18 +203,39 @@ export function ArticleDetail({ slug }: { slug: string }) {
                 <span className="ml-auto font-mono text-sm text-ink-4">{article.version}</span>
               )}
             </div>
-            <h1 className="mt-3 text-[clamp(1.9rem,4.5vw,3rem)] font-bold tracking-tight leading-[1.1]">
+            {/* A note's title tops out near where an article's starts. At
+                3rem over two paragraphs the heading was the page and the post
+                was the caption. */}
+            <h1
+              className={`mt-3 font-bold tracking-tight leading-[1.1] ${
+                isNote
+                  ? "text-[clamp(1.6rem,3.2vw,2.1rem)]"
+                  : "text-[clamp(1.9rem,4.5vw,3rem)]"
+              }`}
+            >
               {article.title}
             </h1>
             {/* Standfirst sits above the body, so it has to be at least as
-                large as it — 18px under a 20px body read as a mistake. */}
-            <p className="mt-4 text-[1.375rem] leading-[1.6] text-ink-2">{article.summary}</p>
+                large as it: 18px under a 20px body read as a mistake. A note
+                has none, because `summary` is the row's subtitle on /notices
+                and on a two-paragraph post it says what the first paragraph is
+                about to say, one size larger. */}
+            {!isNote && (
+              <p className="mt-4 text-[1.375rem] leading-[1.6] text-ink-2">{article.summary}</p>
+            )}
 
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-4">
+            <div
+              className={`flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-4 ${
+                isNote ? "mt-4" : "mt-6"
+              }`}
+            >
               <span className="inline-flex items-center gap-1.5">
                 <Calendar size={14} /> {article.date}
               </span>
-              {article.readTime && (
+              {/* Both are dropped on a note. "1 min read" over fifty words is
+                  a label longer than the thing it measures, and the byline is
+                  "WIGTN" on every post this site has ever published. */}
+              {!isNote && article.readTime && (
                 <span className="inline-flex items-center gap-1.5">
                   <Clock size={14} /> {article.readTime} read
                 </span>
@@ -216,7 +245,7 @@ export function ArticleDetail({ slug }: { slug: string }) {
                   <MapPin size={14} /> {article.place}
                 </span>
               )}
-              {article.author && (
+              {!isNote && article.author && (
                 <span className="inline-flex items-center gap-1.5">
                   <User size={14} /> {article.author}
                 </span>
@@ -254,16 +283,20 @@ export function ArticleDetail({ slug }: { slug: string }) {
             )}
           </motion.header>
 
-          {/* Hero visual, for anything but a release.
-              A release page has no picture and does not want a stand-in for
-              one: the gradient panel that renders when `image` is absent is
-              scenery, and it pushed the first real sentence a full screen down
-              on every one of the four. Stories keep it, because a conference
-              or a hackathon post has a photograph and the photograph is half
-              the point. A release that ever earns a picture gets this back by
-              carrying an `image`, so this condition is on the topic and not on
-              whether the field happens to be set. */}
-          {article.newsTopic !== "release" && (
+          {/* Hero visual, for a post that actually has one.
+              This used to read `newsTopic !== "release"`, on the reasoning that
+              a release has no picture but a story does, and a story's
+              photograph is half the point. Both halves were true and the
+              second one stopped being true here: the stories moved to the
+              WIG-log feed, and every post left on this site is a release or a
+              short notice. So the topic test only ever fired for a post with
+              no picture, and drew the thing it was written to prevent, a
+              gradient panel standing in for a photograph and pushing the first
+              real sentence most of a screen down.
+              The test is now on the picture itself. A post that carries an
+              `image`, or a video to link, gets the frame; one that carries
+              neither gets its first paragraph. */}
+          {(article.image || article.video) && (
           /* Breakout lives on a plain wrapper, not on the motion element:
               framer-motion writes `transform` inline to animate, which would
               overwrite the -translate-x-1/2 half of the centring trick and
@@ -309,16 +342,20 @@ export function ArticleDetail({ slug }: { slug: string }) {
             ))}
           </motion.div>
 
-          {/* CTA strip */}
-          <div className="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-line/[0.08] bg-paper-raised px-6 py-5">
-            <p className="text-sm text-ink-3">Working on something like this? Let's talk.</p>
-            <a
-              href={CONTACT_HREF}
-              className="inline-flex items-center gap-2 rounded-sm bg-brand text-white px-5 py-2.5 text-sm font-semibold uppercase tracking-wide hover:bg-brand-dark transition-colors"
-            >
-              Talk to us <ArrowUpRight size={16} />
-            </a>
-          </div>
+          {/* CTA strip. Not on a note: a panel asking the reader to get in
+              touch, set directly under two sentences saying a hackathon was
+              won, is longer than the post and changes what the page is for. */}
+          {!isNote && (
+            <div className="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-line/[0.08] bg-paper-raised px-6 py-5">
+              <p className="text-sm text-ink-3">Working on something like this? Let's talk.</p>
+              <a
+                href={CONTACT_HREF}
+                className="inline-flex items-center gap-2 rounded-sm bg-brand text-white px-5 py-2.5 text-sm font-semibold uppercase tracking-wide hover:bg-brand-dark transition-colors"
+              >
+                Talk to us <ArrowUpRight size={16} />
+              </a>
+            </div>
+          )}
         </article>
 
         {/* Related */}

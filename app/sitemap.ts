@@ -11,16 +11,17 @@ function articleDate(value: string): Date {
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  /* /work is retired: it grouped the technical articles that moved to the
-   * tech-report site, and its one surviving group is a filter on /news. The URL
-   * still resolves to a redirect page, which is deliberately not listed here. */
-  /* No trailing slashes. The Pages build exports flat files, so `/news` is the
-   * URL that resolves and `/news/` 404s. This sitemap advertised the slashed
-   * form for both sub-pages, which meant two of its ten entries pointed at
-   * nothing. The root keeps its slash because `/` is the root. */
+  /* /work and /news are retired: /work grouped the technical articles that
+   * moved to the tech-report site, and /news is what /notices was called until
+   * 2026-08-09. Both still resolve, as redirect pages, and neither is listed
+   * here, because a redirect is not a page worth indexing. */
+  /* No trailing slashes. The Pages build exports flat files, so `/notices` is
+   * the URL that resolves and `/notices/` 404s. This sitemap advertised the
+   * slashed form for both sub-pages, which meant two of its ten entries
+   * pointed at nothing. The root keeps its slash because `/` is the root. */
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${SITE}/`, changeFrequency: "weekly", priority: 1 },
-    { url: `${SITE}/news`, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${SITE}/notices`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE}/team`, changeFrequency: "monthly", priority: 0.7 },
   ];
 

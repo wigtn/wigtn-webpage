@@ -105,6 +105,68 @@ export const wigtnCodingRelease: Article = {
     { label: "GitHub", href: "https://github.com/wigtn/wigtn-plugins" },
     { label: "Tech report", href: techReportHref("wigtn-coding") },
   ],
+  /* Full tag history, from `gh api repos/wigtn/wigtn-plugins/releases` on
+   * 2026-08-09. Nine releases, v0.1.7 to v0.1.16. Dates are `published_at`,
+   * converted from UTC to YYYY.MM.DD and nothing else.
+   *
+   * Each note is one line taken from that release's own body, which for this
+   * repo is a generated "What's Changed" list of merged pull requests. Where
+   * the PR title is Korean the line is put into English; no fact is added on
+   * the way across, and where the source states a figure without its unit the
+   * figure is quoted as it stands. v0.1.11's "1.7k" is the case: the release
+   * says the prompt surface was cut by 1.7k and does not say 1.7k of what.
+   *
+   * v0.1.8 IS NOT IN THIS LIST and its absence is a fact rather than a gap.
+   * The v0.1.9 release says it was a manifest-only bump that never got a
+   * release of its own, so the API returns nine tags and not ten. Do not
+   * "restore" it; its changes are in the v0.1.9 line. */
+  versions: [
+    {
+      version: "v0.1.16",
+      date: "2026.08.04",
+      note: "knowledge-wiki: a session's knowledge accumulated automatically, behind a four-stage export gate.",
+    },
+    {
+      version: "v0.1.15",
+      date: "2026.08.04",
+      note: "The harness cut back to its contracts: instructions down 20 percent, 39 product files.",
+    },
+    {
+      version: "v0.1.14",
+      date: "2026.07.14",
+      note: "PRD external grounding: web evidence blocks a false premise before it reaches a build.",
+    },
+    {
+      version: "v0.1.13",
+      date: "2026.07.10",
+      note: "objective-check on by default, and no spec tags left in shipped code.",
+    },
+    {
+      version: "v0.1.12",
+      date: "2026.07.10",
+      note: "Hard gate hardened: repo-root resolution, and objective checks made opt-in.",
+    },
+    {
+      version: "v0.1.11",
+      date: "2026.07.10",
+      note: "Prompt surface cut by 1.7k, plus a hard-gate commit hook.",
+    },
+    {
+      version: "v0.1.10",
+      date: "2026.07.09",
+      note: "CI publishes a GitHub Release on a version bump.",
+    },
+    {
+      version: "v0.1.9",
+      date: "2026.06.27",
+      note: "The wigtn-ppt skill, handdrawn-diagram colour rules, Opus 4.8 tuning, and the rename to wigtn-plugins. v0.1.8 was a manifest-only bump with no release of its own and is folded in here.",
+    },
+    {
+      version: "v0.1.7",
+      date: "2026.06.01",
+      note: "First tagged release: Opus 4.8 support across 13 agents, a rebuilt /screen-spec, the handdrawn-diagram skill, and Linear issue tracking.",
+    },
+  ],
   body: [
     p(
       "WIGTN Plugin v1 is the Claude Code plugin, and v0.1.16 landed on 4 August 2026. Two releases went out that day. v0.1.15 cut the plugin back to its contracts, and v0.1.16 added knowledge-wiki, a skill that writes down what a session established and puts a gate in front of anything leaving the machine.",

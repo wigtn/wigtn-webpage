@@ -5,8 +5,9 @@ import { ARTICLES, RETIRED, getArticle, getRetired } from "@/mockups/research-le
 
 /**
  * Static params for `output: "export"`: one page per article slug, served at
- * the site root (e.g. /acl-2026-san-diego/). Static routes (/news, /team,
- * /projects) take precedence over this dynamic segment.
+ * the site root (e.g. /acl-2026-san-diego/). Static routes (/notices, /team)
+ * take precedence over this dynamic segment, which is why /news can be a
+ * retired slug here now that its own route is gone.
  *
  * Retired slugs are generated too. They are not articles any more, but the
  * URLs were indexed, so each one still exports a page that points at the new

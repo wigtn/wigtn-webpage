@@ -43,7 +43,10 @@ describes work that has not been published.
 ## Links
 
 - [Website](https://wigtn.com)
-- [Tech reports](https://wigtn.github.io/wigtn-tech-report/) (English and Korean)
+- [Notices](https://wigtn.com/notices): what the team announced, and what shipped
+- [WIG-log / Tech](https://wigtn.github.io/wigtn-tech-report/): technical reports
+- [WIG-log / Feed](https://wigtn.github.io/wigtn-tech-report/feed/): conference
+  and hackathon write-ups
 - [GitHub](https://github.com/wigtn)
 - [HuggingFace](https://huggingface.co/Wigtn)
 - [npm](https://www.npmjs.com/org/wigtn)

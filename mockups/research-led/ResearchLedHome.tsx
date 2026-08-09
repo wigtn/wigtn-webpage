@@ -9,12 +9,12 @@
  *     micro-labels; Pretendard body
  *   - Warm off-white base (#F8F8F5), single accent = Pantone 265 (`brand`,
  *     leaning on `accent` for legibility on light)
- *   - Cards only where a card is a destination: Updates and Tech Reports. This
- *     used to read "card-less, hairlines not boxes", which the Updates grid
+ *   - Cards only where a card is a destination: Notices and WIG-log. This
+ *     used to read "card-less, hairlines not boxes", which the Notices grid
  *     already contradicted and the report grid finished off. Everything that is
  *     not a link out of the page is still separated by a hairline, not boxed.
  *   - "What we do": sticky left header + compact right capability list
- * Sections: 1 Hero · 2 What we do · 3 Updates · 4 Tech Reports · 5 CTA, every
+ * Sections: 1 Hero · 2 What we do · 3 Notices · 4 WIG-log · 5 CTA, every
  * pair of them separated by a Divider. Partners lives on /team.
  * MilestoneTimeline is retained but currently unrouted.
  */
@@ -27,9 +27,9 @@ import {
   CAPABILITIES,
   MILESTONES,
   NEWSROOM,
-  NEWS,
+  NOTICES,
   TECH_REPORTS,
-  TECH_REPORT_SITE,
+  TECH_REPORT_INDEX,
 } from "./data";
 import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, rise, VIEWPORT } from "./chrome";
 import { ArticleCard, ReportCard } from "./cards";
@@ -39,7 +39,7 @@ import type { Theme } from "@/lib/theme";
 /* The one type scale for a section title on this page.
  *
  * The four of them had drifted to four different sizes, from 3rem on Friends to
- * 6rem on Updates, which read as four unrelated pages stacked rather than one
+ * 6rem on Notices, which read as four unrelated pages stacked rather than one
  * page with four parts. This is the size "What we do" was already using, and it
  * is the one that survives at the top of a viewport without pushing its own
  * content off it.
@@ -351,7 +351,7 @@ function MilestoneTimeline() {
           </motion.div>
 
           <div className="mx-auto mt-8 w-full max-w-6xl px-6">
-            <ViewAll href={NEWS} label="Read the full story" />
+            <ViewAll href={NOTICES} label="Read the full story" />
           </div>
         </div>
       </section>
@@ -497,11 +497,11 @@ export function ResearchLedHome() {
             with is the same question, and the homepage is a teaser whose job is
             to hand the reader on. See TeamPage. */}
 
-        {/* ───── 3. Updates: featured items as article cards ───── */}
+        {/* ───── 3. Notices: featured items as article cards ───── */}
         <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <SectionTitle>Updates</SectionTitle>
-            <ViewAll href={NEWS} label="All updates" />
+            <SectionTitle>Notices</SectionTitle>
+            <ViewAll href={NOTICES} label="All notices" />
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 md:mt-16">
             {NEWSROOM.map((a, i) => (
@@ -519,7 +519,7 @@ export function ResearchLedHome() {
 
              It was a text band until the cards went in. The band stated that
              the reports exist and asked the reader to take that on faith; the
-             covers name three of them, and the one under Updates had already
+             covers name three of them, and the one under Notices had already
              shown that a reader will click a cover and will not click a line of
              body copy. The heading and the link survive the change, so the band
              is still there for anyone who reads rather than looks.
@@ -528,15 +528,20 @@ export function ResearchLedHome() {
              before editing: nothing in this build checks it against the report
              site. ────────────────────────────────────────────────────────── */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
-          {/* Same title row as Updates, down to the class list: title left, the
+          {/* Same title row as Notices, down to the class list: title left, the
               link to the full index right, both sitting on the baseline. The
               link used to hang off the bottom of the copy block instead, which
               put the two sections' "see everything" links at different heights
               on the same page. */}
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <SectionTitle>Tech Reports</SectionTitle>
+            {/* The section is named for the site it points at, and the cards
+                under it are all from that site's Tech half. The Feed half is
+                one hop further and the nav is where a reader finds it; naming
+                it here would promise a second grid this section does not
+                have. */}
+            <SectionTitle>WIG-log</SectionTitle>
             <a
-              href={`${TECH_REPORT_SITE}/`}
+              href={TECH_REPORT_INDEX}
               className="group inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-medium text-accent transition-colors hover:text-ink"
             >
               Read the reports{" "}

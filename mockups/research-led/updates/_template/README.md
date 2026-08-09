@@ -1,7 +1,7 @@
-# Update post template
+# Notice post template
 
 > Conference and hackathon posts are no longer written here. Their templates
-> moved to `wigtn-tech-report/components/blog/_template/` on 2026-08-09, with
+> moved to `wigtn-tech-report/components/feed/_template/` on 2026-08-09, with
 > the four posts that used them. This file now covers announcements and
 > community notes: the short-form things that stay on wigtn.com.
 
@@ -188,7 +188,7 @@ next can carry four.
 
 ## Two fields the templates set for you, and one you may need to unset
 
-`channel: "newsroom"` is what puts a post in the `/news` feed: `data.ts`
+`channel: "newsroom"` is what puts a post in the `/notices` feed: `data.ts`
 filters `NEWSROOM_FEED` on it. Every template hardcodes it because every
 template describes a newsroom post. **Writing a back-catalogue report? Delete
 the field.** Leaving it in silently publishes the post to the feed.

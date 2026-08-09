@@ -12,9 +12,13 @@
  * the cycle entirely, so the single-point-of-change promise below survives.
  */
 
-/* External research / tech-report site: its own GitHub Pages app for now.
- * When the custom domain is ready, change ONLY this constant to
+/* External research / tech-report site, named WIG-log: its own GitHub Pages
+ * app for now. When the custom domain is ready, change ONLY this constant to
  * "https://research.wigtn.com".
+ *
+ * WIG-log has two halves and this constant is the root of neither. Tech is
+ * /tech/ and Feed is /feed/, both below. The root is the site's front door and
+ * belongs to both halves, so link a half by its own index, not by this.
  *
  * Slugs match the report site's routes. As of 2026-08: wigvo, wigtnocr, wigss,
  * wigtn-coding, codex-selective-harness. That list is a convenience, not a
@@ -24,13 +28,24 @@
 export const TECH_REPORT_SITE = "https://wigtn.github.io/wigtn-tech-report";
 
 /* The report site builds with trailingSlash, so the bare URL 301s. Linking the
- * final URL saves that round trip. */
-export const techReportHref = (slug: string) => `${TECH_REPORT_SITE}/${slug}/`;
+ * final URL saves that round trip.
+ *
+ * Reports moved from that site's root to /tech/ on 2026-08-09, when it split
+ * into Tech and Feed and neither half kept the root. The old root URLs still
+ * resolve, as redirects, but linking a redirect from here costs every reader a
+ * hop for nothing. */
+export const TECH_REPORT_INDEX = `${TECH_REPORT_SITE}/tech/`;
+export const techReportHref = (slug: string) => `${TECH_REPORT_INDEX}${slug}/`;
 
 /* The report site's other half. Conference and hackathon write-ups live under
- * /blog/ there, so redirects and links out of this site need their own builder
- * rather than techReportHref with the prefix hand-typed at each call site. */
-export const techBlogHref = (slug: string) => `${TECH_REPORT_SITE}/blog/${slug}/`;
+ * /feed/ there, so redirects and links out of this site need their own builder
+ * rather than techReportHref with the prefix hand-typed at each call site.
+ *
+ * The section was called Blog and served /blog/ until 2026-08-09, when the
+ * report site took the name WIG-log and split itself into Tech and Feed. These
+ * URLs are the ones that site exports now; a /blog/ link from here is stale. */
+export const TECH_FEED_INDEX = `${TECH_REPORT_SITE}/feed/`;
+export const techFeedHref = (slug: string) => `${TECH_FEED_INDEX}${slug}/`;
 
 /* An asset served by the report site, addressed across origins.
  *

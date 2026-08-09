@@ -9,12 +9,103 @@
  * footer carries links. The wordmark swaps navy ⇄ white with the theme.
  */
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Trophy, MapPin, Menu, X } from "lucide-react";
+import { Trophy, MapPin, Menu, X, ChevronDown } from "lucide-react";
 import { ThemeToggle } from "@/components/theme";
 import { CONTACT_EMAIL, CONTACT_HREF, TAGLINE } from "@/lib/brand";
-import { HOME, NAV } from "./data";
+import { HOME, NAV, type NavChild } from "./data";
+
+/**
+ * Desktop dropdown for a NAV item with children (today: WIG-log).
+ *
+ * Opens on hover for a mouse and on click for everything else, and the same
+ * `open` state drives both, so a keyboard user gets the menu a mouse user
+ * gets rather than a hover-only affordance they cannot reach. The trigger is
+ * a button, not a link: the parent has no destination of its own (see NAV in
+ * data.ts), and a link that only opens a menu lies to a screen reader.
+ *
+ * Closing is handled in three places because there are three ways out:
+ * Escape, a click elsewhere on the page, and focus leaving the group. The
+ * pointer handlers sit on the wrapper rather than the button so the cursor can
+ * travel from the tab down into the panel without crossing a gap that closes
+ * it; the panel is flush against the trigger for the same reason.
+ */
+function NavDropdown({ item }: { item: { label: string; children: NavChild[] } }) {
+  const [open, setOpen] = useState(false);
+  const wrap = useRef<HTMLLIElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    const onPointer = (e: PointerEvent) => {
+      if (!wrap.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onPointer);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onPointer);
+    };
+  }, [open]);
+
+  return (
+    <li
+      ref={wrap}
+      className="relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpen(false);
+      }}
+    >
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-haspopup="menu"
+        onClick={() => setOpen((v) => !v)}
+        className={`flex items-center gap-1 rounded-full px-3.5 py-1.5 text-sm transition-colors hover:bg-line/[0.04] hover:text-ink ${
+          open ? "bg-line/[0.04] text-ink" : "text-ink-3"
+        }`}
+      >
+        {item.label}
+        <ChevronDown
+          aria-hidden
+          size={14}
+          className={`transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          aria-label={item.label}
+          /* pt-2 rather than mt-2: the gap belongs inside the element the
+             pointer is still over, so crossing it does not fire mouseleave. */
+          className="absolute right-0 top-full z-50 w-64 pt-2"
+        >
+          <ul className="overflow-hidden rounded-xl border border-line/10 bg-paper/95 p-1.5 shadow-lg shadow-ink/5 backdrop-blur-md">
+            {item.children.map((c) => (
+              <li key={c.label}>
+                <a
+                  role="menuitem"
+                  href={c.href}
+                  onClick={() => setOpen(false)}
+                  className="block rounded-lg px-3 py-2.5 transition-colors hover:bg-line/[0.05]"
+                >
+                  <span className="block text-sm font-medium text-ink">{c.label}</span>
+                  <span className="mt-0.5 block text-xs leading-snug text-ink-4">{c.note}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </li>
+  );
+}
 
 export const EVENT_ICON = { trophy: Trophy, pin: MapPin } as const;
 
@@ -75,6 +166,9 @@ export function SiteHeader() {
         {/* right-aligned nav (desktop) + theme toggle (all breakpoints) */}
         <div className="flex items-center gap-2">
           <ul className="hidden items-center gap-2 md:flex">
+            {/* Three shapes, tested in the order that settles them: disabled
+                is a label whatever else the item carries, an item with
+                children is a menu, and the rest are links. */}
             {NAV.map((n) =>
               n.disabled ? (
                 <li key={n.label}>
@@ -85,6 +179,8 @@ export function SiteHeader() {
                     {n.label}
                   </span>
                 </li>
+              ) : n.children ? (
+                <NavDropdown key={n.label} item={n} />
               ) : (
                 <li key={n.label}>
                   <Link
@@ -118,6 +214,10 @@ export function SiteHeader() {
       {open && (
         <div id="rl-mobile-nav" className="border-t border-line/[0.07] bg-paper/95 backdrop-blur-md md:hidden">
           <ul className="mx-auto flex max-w-6xl flex-col gap-1 px-6 py-4">
+            {/* No nested disclosure here. The sheet is already the disclosure,
+                and burying two links behind a second tap on a surface with
+                room for four rows costs a tap and gains nothing. The parent is
+                a heading over its children instead. */}
             {NAV.map((n) =>
               n.disabled ? (
                 <li key={n.label}>
@@ -127,6 +227,26 @@ export function SiteHeader() {
                   >
                     {n.label}
                   </span>
+                </li>
+              ) : n.children ? (
+                <li key={n.label}>
+                  <span className="block px-3 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-ink-4">
+                    {n.label}
+                  </span>
+                  <ul className="flex flex-col gap-1">
+                    {n.children.map((c) => (
+                      <li key={c.label}>
+                        <a
+                          href={c.href}
+                          onClick={() => setOpen(false)}
+                          className="block rounded-lg px-3 py-2.5 text-ink-2 transition-colors hover:bg-line/[0.04] hover:text-ink"
+                        >
+                          {c.label}
+                          <span className="mt-0.5 block text-xs text-ink-4">{c.note}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
                 </li>
               ) : (
                 <li key={n.label}>
@@ -170,10 +290,26 @@ export function SiteFooter() {
                 Explore
               </div>
               <ul className="space-y-2.5 text-sm text-ink-3">
+                {/* Same flattening as the mobile sheet: a footer that hides
+                    half a destination behind a hover menu is a footer that
+                    does not carry the route, which is the one job it has. */}
                 {NAV.map((n) =>
                   n.disabled ? (
                     <li key={n.label} className="cursor-default text-ink-5 select-none">
                       {n.label}
+                    </li>
+                  ) : n.children ? (
+                    <li key={n.label}>
+                      <span className="text-ink-4">{n.label}</span>
+                      <ul className="mt-2 space-y-2 border-l border-line/10 pl-3">
+                        {n.children.map((c) => (
+                          <li key={c.label}>
+                            <a href={c.href} className="hover:text-ink transition-colors">
+                              {c.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
                     </li>
                   ) : (
                     <li key={n.label}>
@@ -241,7 +377,11 @@ export function PageHero({
 }: {
   eyebrow?: string;
   title: string;
-  lead?: string;
+  /* Not `string`. A lead is one sentence about the page and sometimes that
+     sentence names somewhere else, which wants a link inside it rather than a
+     second paragraph under it. /notices is the case: it says where the
+     conference write-ups went. */
+  lead?: React.ReactNode;
   backHref?: string;
   backLabel?: string;
   titleClassName?: string;
