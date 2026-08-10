@@ -61,6 +61,14 @@
  * reader without burying the first. Ten to a page, over the filtered list,
  * and anything that changes the filtered set goes back to page one.
  *
+ * TEN SLOTS, NOT TEN ROWS. The block holds PAGE_SIZE slots however many rows
+ * the filter leaves, padded with FillerRow, and the pager's line is rendered
+ * whether or not it has buttons in it. Sized to its contents the ledger was
+ * a different height on every view: Tool (five rows) pulled the pager half a
+ * screen up, page 2 of All (eight rows) moved it again, and the reader who
+ * had just clicked "2" found the control had walked out from under the
+ * cursor. A record should look like a record on every view of it.
+ *
  * Every row stays in the DOM whatever the bar and pager say; the inactive
  * ones carry `hidden`. A static export ships the first paint as its HTML, so
  * conditional rendering would put the first page in the file and leave the
@@ -245,8 +253,44 @@ function AddFilter({
   );
 }
 
+/* A slot with nothing in it, so a short page is still a full page.
+ *
+ * The ledger reserves PAGE_SIZE rows whatever the filter returns, and these
+ * make up the difference. Without them the block is as tall as its result
+ * count: picking Tool lifts the pager two hundred pixels up the page, and
+ * paging from 1 to 2 (ten rows, then eight) moves the control the reader is
+ * aiming at while they are aiming at it.
+ *
+ * It mirrors the real row's box rather than setting a height, so the two
+ * cannot drift apart: same `py-5`, and the same stacked-on-mobile shape. The
+ * reservation is exact at `sm` and up, where every row is one clamped line.
+ * On mobile a row whose note wraps to two lines is one line taller than a
+ * filler, so the block is stable there rather than fixed.
+ *
+ * aria-hidden and no content: it is a spacer, and a screen reader counting
+ * ten list items where the page says five results would be worse than the
+ * shrinking it fixes. */
+function FillerRow() {
+  return (
+    <li aria-hidden className="border-b border-line/[0.08]">
+      <div className="flex flex-col gap-1 py-5 sm:block">
+        <span className="block font-mono text-xs sm:hidden">&nbsp;</span>
+        <span className="block text-sm font-semibold sm:hidden">&nbsp;</span>
+        <span className="block text-sm leading-relaxed">&nbsp;</span>
+      </div>
+    </li>
+  );
+}
+
 /* The numbered pager. Buttons, not links: a route per page would be exported
- * pages standing in for display state. */
+ * pages standing in for display state.
+ *
+ * The row it sits in is always rendered, and the buttons only when there is
+ * more than one page. A single-page pager is a control that does nothing,
+ * the same argument the All pill lost; but if the row came and went with it,
+ * the whole block below the ledger would jump every time a filter took the
+ * result count under eleven. So the space is held and the contents are
+ * conditional. */
 function Pager({
   pageCount,
   page,
@@ -257,29 +301,33 @@ function Pager({
   onSelect: (p: number) => void;
 }) {
   return (
-    <nav aria-label="Pagination" className="mt-8 flex items-center justify-center gap-1">
-      {Array.from({ length: pageCount }, (_, p) => (
-        <span key={p} className="flex items-center gap-1">
-          {p > 0 && (
-            <span aria-hidden className="text-xs text-ink-5">
-              |
-            </span>
-          )}
-          <button
-            type="button"
-            aria-label={`Page ${p + 1}`}
-            aria-current={p === page ? "page" : undefined}
-            onClick={() => onSelect(p)}
-            className={`rounded-full px-3 py-1 font-mono text-[13px] transition-colors ${
-              p === page
-                ? "bg-brand font-medium text-white"
-                : "text-ink-4 hover:bg-line/[0.05] hover:text-ink"
-            }`}
-          >
-            {p + 1}
-          </button>
-        </span>
-      ))}
+    <nav
+      aria-label="Pagination"
+      className="mt-8 flex h-[30px] items-center justify-center gap-1"
+    >
+      {pageCount > 1 &&
+        Array.from({ length: pageCount }, (_, p) => (
+          <span key={p} className="flex items-center gap-1">
+            {p > 0 && (
+              <span aria-hidden className="text-xs text-ink-5">
+                |
+              </span>
+            )}
+            <button
+              type="button"
+              aria-label={`Page ${p + 1}`}
+              aria-current={p === page ? "page" : undefined}
+              onClick={() => onSelect(p)}
+              className={`rounded-full px-3 py-1 font-mono text-[13px] transition-colors ${
+                p === page
+                  ? "bg-brand font-medium text-white"
+                  : "text-ink-4 hover:bg-line/[0.05] hover:text-ink"
+              }`}
+            >
+              {p + 1}
+            </button>
+          </span>
+        ))}
     </nav>
   );
 }
@@ -408,23 +456,39 @@ export function NoticesPage() {
           </span>
         </div>
 
-        <ul className="border-t border-line/[0.08]">
-          {RELEASE_ROWS.map((row) => (
-            <ReleaseRowLine
-              key={`${row.product}@${row.version ?? row.date}`}
-              row={row}
-              hidden={!visible.has(row)}
-            />
-          ))}
-        </ul>
+        {/* The reserved block. Ten slots whatever the filter returns, so the
+            ledger is the same height on every view of it and the pager below
+            does not travel. The empty message is laid over the blank slots
+            rather than put after them, which would make the one view with no
+            rows the one view that is a different height. */}
+        <div className="relative">
+          <ul className="border-t border-line/[0.08]">
+            {RELEASE_ROWS.map((row) => (
+              <ReleaseRowLine
+                key={`${row.product}@${row.version ?? row.date}`}
+                row={row}
+                hidden={!visible.has(row)}
+              />
+            ))}
+            {Array.from({ length: PAGE_SIZE - visible.size }, (_, i) => (
+              <FillerRow key={`filler-${i}`} />
+            ))}
+          </ul>
 
-        {filtered.length === 0 && (
-          <p className="py-10 text-center text-sm text-ink-4">
-            No release matches that. Search takes a project name.
-          </p>
-        )}
+          {/* The message knocks out the hairline behind it with the page
+              background, the way a legend sits in a fieldset border. It lands
+              mid-block, which is where a rule is, and text crossed out by a
+              1px line reads as a rendering fault. */}
+          {filtered.length === 0 && (
+            <p className="absolute inset-0 grid place-items-center px-6 text-center">
+              <span className="bg-paper px-4 py-1 text-sm text-ink-4">
+                No release matches that. Search takes a project name.
+              </span>
+            </p>
+          )}
+        </div>
 
-        {pageCount > 1 && <Pager pageCount={pageCount} page={current} onSelect={setPage} />}
+        <Pager pageCount={pageCount} page={current} onSelect={setPage} />
       </div>
     </PageShell>
   );
