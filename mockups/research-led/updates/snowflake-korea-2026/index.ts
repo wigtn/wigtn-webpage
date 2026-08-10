@@ -169,7 +169,7 @@ export const snowflakeKorea2026: Article = {
   title:
     "Tech Track 2nd at Snowflake Korea 2026: the eleven Cortex features that were really seven",
   summary:
-    "Pick a goal, and five agents argue over Snowflake Cortex evidence before ranking Seoul districts. WIGTN Flake placed second in the Tech Track, took four questions from a panel drawn out of the companies whose data was in the brief, and failed to answer the one about cost. A later code-path audit cut the eleven capabilities we presented down to seven.",
+    "Pick a goal, and five agents argue over Snowflake Cortex evidence before ranking Seoul districts. WIGTN Flake placed second in the Tech Track, took questions from a panel half drawn from the companies whose data was in the brief, and failed to answer the one about cost. A later code-path audit cut the eleven capabilities we presented down to seven.",
   date: "2026.04.29",
   place: "Seoul, KOR",
   author: "WIGTN Engineering",
@@ -277,7 +277,7 @@ export const snowflakeKorea2026: Article = {
 
     { t: "h", text: "What the judges asked" },
     p(
-      "David presented. Six judges sat in front of the stage: Snowflake Korea's SE Director, the CEO of RichGo, the CTO of SPH, the CMO of AJD, the EVP running LG U+'s AI R&D centre, and Naver Webtoon's SVP for AI and Data. Three of the six run companies whose data was in the brief, which is a particular audience for a system claiming to have used it well.",
+      "David presented. Six judges sat in front of the stage: Snowflake Korea's SE Director, the CEO of RichGo, the CTO of SPH, the CMO of AJD, the EVP running LG U+'s AI R&D centre, and Naver Webtoon's SVP for AI and Data. Three of the six came from companies whose data was in the brief, which is a particular audience for a system claiming to have used it well.",
     ),
     {
       t: "gallery",
