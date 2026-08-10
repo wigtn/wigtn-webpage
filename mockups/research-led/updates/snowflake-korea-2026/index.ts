@@ -37,6 +37,24 @@
  *   wigtn-for-snowflake repository README and PRD. That file was deleted with
  *   the /projects tree; the WIGTN Flake tech report is the live source now.
  *
+ *   The judges' section, the 40-turn answer, the audience-vote mechanism and
+ *   the two quotes come from a speech-to-text transcript of the final round,
+ *   recorded by the team. THE TRANSCRIPT IS NOT IN THIS REPOSITORY and should
+ *   not be added to it: it is a verbatim record of a room, and most of what
+ *   is in it is other teams' presentations and other people's remarks, which
+ *   are not ours to publish. Quotes here are translated from the Korean and
+ *   say so.
+ *
+ *   THE AUDIENCE SCORE IS 20.7 AND THE TRANSCRIPT SAYS "20점, 7점". Korean
+ *   reads a decimal point as "점", so "이십 점 칠 점" is 20.7 points and the
+ *   speech-to-text split it into two numbers. Three corroborations: every
+ *   other score in the same transcript is one decimal on a 30-point scale
+ *   (22.5, 19.2, 17.4, 20.7), the emcee elsewhere says the scores are being
+ *   read to one decimal because the race is close, and 22.5 against 20.7 is
+ *   consistent with that team placing first and this one second. A summary at
+ *   the head of the transcript reads it as "최종 점수: 7점", the same split
+ *   misread the other way; it is wrong.
+ *
  * THE CAPABILITY COUNT IS SEVEN, NOT ELEVEN. DO NOT "CORRECT" IT BACK.
  *
  *   The April presentation claimed eleven Cortex capabilities across four
@@ -54,10 +72,22 @@
  * NAMING
  *
  *   Competing teams are named as teams; their individual members are not,
- *   even though the press release lists some. Judges are referred to by the
- *   rubric they applied rather than by name, because the only quotes we have
- *   are machine translations of a Korean press release and a misattributed
- *   quote is worse than no quote.
+ *   even though the press release lists some.
+ *
+ *   Judges were referred to by rubric alone until this revision, because the
+ *   only quotes available were machine translations of a press release. The
+ *   recording gave real quotes, so they are identified now, and by title and
+ *   company rather than by name: "Naver Webtoon's SVP for AI and Data", not
+ *   the person. The names are on the panel slide in this folder, and the
+ *   speech-to-text mangled three of them (김재구 as "김진구", 전병기 as
+ *   "전병리", 이하석 as "이하상"), which is exactly why the slide and not the
+ *   transcript is the source for who was in the room. A title is also the
+ *   published role, which is what AGENTS.md asks for. If the names are
+ *   wanted in the prose later, they are on the slide, spelled.
+ *
+ *   The presenter is "David", the English name he goes by. He is the only
+ *   individual on our side named in this post, and he is named because
+ *   somebody has to be standing at the podium in the sentence.
  *
  *   There is no teammate credits line. The WIGTN Flake roster is not recorded
  *   anywhere in this repository and the template's rule is to cut rather than
@@ -81,12 +111,19 @@
  *   `winners-on-stage.jpg` carried no profile at all; there was nothing to
  *   convert, and both reproduce bit-exact under a plain strip.
  *
- *   Five images is more than the hackathon template's "two or three", and
- *   deliberately: they do five different jobs, being the winners, the room,
- *   the placing slide, the architecture, and the dataset slide the audit
- *   section argues against. Drop one and a section loses its evidence. If a sixth
- *   stage shot ever gets added, that one is a third crowd shot and the budget
- *   should win.
+ *   Nine images is well past the hackathon template's "two or three", and
+ *   each is the only evidence its section has: the winners, the room, the
+ *   placing slide, the architecture, the dataset slide the audit argues
+ *   against, the podium, the panel slide, and the two from dinner. Drop one
+ *   and a section loses its picture.
+ *
+ *   Thirty-three photographs were handed over for this revision and four are
+ *   used. The rest were slides this post already carries a better copy of
+ *   (the architecture here is a clean render, not a photograph of a screen),
+ *   title cards, the conference panel session, dessert tables, and three
+ *   near-identical frames of the same podium. A second crowd shot and a
+ *   second title card do not do a second job. If a tenth image is proposed,
+ *   it has to name the job no existing one is doing.
  *
  *   Two full-width `image` blocks, for two different reasons, both deliberate:
  *   the architecture diagram is 1028px wide natively and runs near full size
@@ -107,7 +144,11 @@
 
 import type { Article, Block } from "../../data";
 import datasetsSlide from "./datasets-slide.jpg";
+import dinnerGrill from "./dinner-grill.jpg";
+import dinnerWhisky from "./dinner-whisky.jpg";
 import finalRoundStage from "./final-round-stage.jpg";
+import judgesAndMc from "./judges-and-mc.jpg";
+import presenting from "./presenting.jpg";
 import techTrackTop3 from "./tech-track-top3.jpg";
 import threeLayerArchitecture from "./three-layer-architecture.jpg";
 import winnersOnStage from "./winners-on-stage.jpg";
@@ -128,11 +169,11 @@ export const snowflakeKorea2026: Article = {
   title:
     "Tech Track 2nd at Snowflake Korea 2026: the eleven Cortex features that were really seven",
   summary:
-    "Pick a goal, and five agents argue over Snowflake Cortex evidence before ranking Seoul districts. WIGTN Flake placed second in the Tech Track. A later code-path audit cut the eleven capabilities we presented down to seven.",
+    "Pick a goal, and five agents argue over Snowflake Cortex evidence before ranking Seoul districts. WIGTN Flake placed second in the Tech Track, took questions from a panel half drawn from the companies whose data was in the brief, and failed to answer the one about cost. A later code-path audit cut the eleven capabilities we presented down to seven.",
   date: "2026.04.29",
   place: "Seoul, KOR",
   author: "WIGTN Engineering",
-  readTime: "9 min",
+  readTime: "13 min",
   image: winnersOnStage.src,
   links: [
     { label: "Watch demo", href: "https://www.youtube.com/watch?v=1YzSp3SdzTk" },
@@ -213,6 +254,9 @@ export const snowflakeKorea2026: Article = {
     p(
       "Second in the Tech Track. First went to 너의 모든 순간 for 정정당당, a Cortex RAG multi-agent platform that combines external data to improve field sales strategy and call conversion in real time; third to 우승하고싶은맘이커졌어막공룡만해. On the Business Track, Team Kaos won with 상권, a service that merges trade-area data to forecast which districts will be worth being in six months out. Snowflake announced all six placings at the April 29 final round.",
     ),
+    p(
+      "The score was 70 per cent judges and 30 per cent the room. The audience vote was taken on the spot: a QR code on the screen, fifteen seconds, one to ten a team, converted to a 30-point scale and read out before the next team presented. Ours came back 20.7. The team that won the track scored 22.5 on the same measure, which is the whole of the distance between first and second that the audience could see.",
+    ),
     {
       t: "gallery",
       images: [
@@ -231,9 +275,61 @@ export const snowflakeKorea2026: Article = {
       ],
     },
 
+    { t: "h", text: "What the judges asked" },
+    p(
+      "David presented. Six judges sat in front of the stage: Snowflake Korea's SE Director, the CEO of RichGo, the CTO of SPH, the CMO of AJD, the EVP running LG U+'s AI R&D centre, and Naver Webtoon's SVP for AI and Data. Three of the six came from companies whose data was in the brief, which is a particular audience for a system claiming to have used it well.",
+    ),
+    {
+      t: "gallery",
+      images: [
+        {
+          src: presenting.src,
+          alt: "A WIGTN presenter alone at the acrylic podium on the Snowflake hackathon stage, lit blue, speaking into a handheld microphone.",
+          caption: "Eight minutes at the podium, then the panel.",
+          aspect: "3/4",
+        },
+      ],
+    },
+    p(
+      "Naver Webtoon went first and asked three things at once. A room full of agents talking to each other is expensive and probably inefficient. Why is there no human in the loop, when a person could steer it mid-argument. How is the context not exhausted. And why an older model.",
+    ),
+    p(
+      "The answers, in order. Human-in-the-loop was excluded on purpose: the product is one question in and a finished decision out, and a system that stops to ask is a different product. Context is held by fixing the debate at 40 turns, and we said plainly that we had not verified 40 turns is enough to reach a complete answer. The model was chosen for cost and speed, because a debate that streams slowly is a demo nobody watches to the end.",
+    ),
+    p(
+      "LG U+ asked the harder version of the same question: token cost, and whether the conversation can fall into an infinite loop. The framing was that an agent system needs a harness around it, and whether this project had demonstrated one.",
+    ),
+    {
+      t: "quote",
+      text: "We did have to think about cost, and I think we thought about it only in technical terms.",
+    },
+    p(
+      "That is the answer as given, translated from the Korean, and it is the one worth keeping. What we did have was a separate Cortex Analyst per dataset so no single one dominates the argument, next-speaker selection that reads the context and picks the viewpoint the room is missing, and the fixed turn count. We called the turn count the most primitive way to stop a loop, because it is.",
+    ),
+    p(
+      "RichGo's CEO closed with feedback rather than a question. Every company is trying to put agents inside its own operations, he said, and what decides whether that works is not the orchestration.",
+    ),
+    {
+      t: "quote",
+      text: "In the end the question is whether you have enough data, and enough coverage, to produce a good decision.",
+    },
+    {
+      t: "image",
+      src: judgesAndMc.src,
+      alt: "The \"심사위원 & MC 소개\" slide on the hackathon stage, showing seven headshots in a row with names and titles: Snowflake Korea's SE Director, RichGo's CEO, SPH's CTO, AJD's CMO, LG U+'s AI R&D centre head, Naver Webtoon's SVP of AI and Data, and the MC.",
+      caption:
+        "The panel slide, which is also where the names and titles in this section come from. Reading them off the screen was more reliable than reading them off the recording.",
+    },
+    p(
+      "Coming from the person whose data we ranked districts with, that lands differently than it would from a platform vendor. It is also the argument against the thing we had just been caught doing: four datasets on a slide is coverage on paper, and three actively selected is coverage in fact.",
+    ),
+
     { t: "h", text: "Eleven capabilities, then seven" },
     p(
       "The deck said eleven Cortex capabilities across four datasets. Afterwards, someone read the production code path end to end, and three of those claims did not survive it.",
+    ),
+    p(
+      "It was not only on the deck. The recording has the number said out loud twice from the stage, once walking through the data layer and once pointing at the badge row under the generated report. A slide can be a draft nobody re-read before it went up. A sentence in a presentation is a claim.",
     ),
     {
       t: "list",
@@ -275,12 +371,37 @@ export const snowflakeKorea2026: Article = {
       ],
     },
 
+    { t: "h", text: "After" },
+    p(
+      "Second place came with a Mac mini. The Tech Track's first prize, a MacBook Pro, was put up by NextTrade, the one dataset in the brief we connected and never actively selected.",
+    ),
+    p(
+      "Then samgyeopsal and a bottle of Kavalan, which is where a month of work and one cost question we could not answer got talked through properly.",
+    ),
+    {
+      t: "gallery",
+      images: [
+        {
+          src: dinnerWhisky.src,
+          alt: "A bottle of Kavalan Master's Select on a wooden restaurant table beside brass banchan bowls and a grill flue, with a teammate seated behind it.",
+          caption: "The bottle that came out once the laptops were shut.",
+          aspect: "3/4",
+        },
+        {
+          src: dinnerGrill.src,
+          alt: "Samgyeopsal cooking on a perforated grill plate under a steel flue, with a bowl of pickled radish in the foreground.",
+          caption: "Seoul, the evening of April 29.",
+          aspect: "3/4",
+        },
+      ],
+    },
+
     { t: "h", text: "Thanks to" },
     p(
       "Snowflake Korea, for running it and for supplying the data through NextTrade, RichGo, SPH and AJD on Marketplace. A hackathon that hands you the datasets is a hackathon where the teams are actually comparable.",
     ),
     p(
-      "The judges, for a rubric that put security and data governance next to technology utilization. That is not where a hackathon usually puts it, and it is a better question than the one we were braced for.",
+      "The judges, for a rubric that put security and data governance next to technology utilization, and for a panel built out of the companies whose data was on the table rather than out of platform vendors alone. That is not where a hackathon usually puts either one, and the questions that came back were better than the ones we were braced for.",
     ),
     p(
       "And the other five finalists. A month, four shared datasets, six teams, and no two of the systems on that stage looked anything alike. That is the part worth showing up for.",
