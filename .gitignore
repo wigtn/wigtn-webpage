@@ -49,3 +49,12 @@ docs/prd
 app/wigtn_logo.*
 memory-lake/
 PLANNING/
+
+# post source material: recordings, transcripts, unprepped originals.
+# A post folder ships index.ts and the images it imports; the raw material a
+# post was written FROM lives in `_source/` beside it and never leaves the
+# machine. The Snowflake final-round transcript is why this exists: a
+# speech-to-text of the whole room, most of it other teams' presentations
+# and other people's remarks, which are not ours to publish. Keeping it next
+# to the post it sources is useful; committing it is not.
+mockups/research-led/updates/*/_source/
