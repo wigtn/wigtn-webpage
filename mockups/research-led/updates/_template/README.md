@@ -173,6 +173,36 @@ what `wigss-npm-release` does.
 Name files for what they show (`booth-d3.jpg`), never for their position
 (`photo-3.jpg`). The order changes and the name stops being true.
 
+## Where the raw material goes
+
+A post folder ships `index.ts` and the images it imports. The material a post
+was written **from** goes in `_source/` beside it, which `.gitignore` keeps out
+of the repository:
+
+```
+updates/my-post/
+├── index.ts
+├── cover.jpg
+└── _source/          ← recordings, transcripts, unprepped originals
+    └── transcript.md
+```
+
+Two reasons it is ignored rather than committed. A recording of a room is
+mostly other people talking: the Snowflake final-round transcript that filled
+in that post's judging section is three hours of six teams' presentations and
+six judges' remarks, and none of it is ours to publish. And an unprepped
+original is a 3 MB file the build never reads, which is the thing the image
+rule already exists to prevent.
+
+Keeping it beside the post is still worth doing. The header of a post cites
+its sources by name, and the next editor should be able to open the one the
+post was checked against without going hunting. It just stays on the machine.
+
+What goes in the header instead is where the fact came from and how it was
+read: which recording, which slide, translated or not, and where a
+speech-to-text was reconstructed rather than quoted. See
+`../snowflake-korea-2026/index.ts`, which does all four.
+
 ## Blocks
 
 | Block | Use |
