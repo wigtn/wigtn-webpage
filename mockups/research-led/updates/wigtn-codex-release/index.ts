@@ -1,61 +1,31 @@
 /**
- * Update: WIGTN Plugin v2 for Codex, v0.3.0 - announcement.
+ * Release record: WIGTN Plugin v2 for Codex, current through v0.4.0.
  *
- * Follows updates/_template/announcement/STRUCTURE.md: lede -> what it does ->
- * get it -> what shipped -> read the report. Voice follows
- * updates/wigtn-coding-release, the sibling post for the Claude Code plugin.
- *
- * "What it does" rather than "What changed since", because this is the plugin's
- * first appearance on this site. Its repository has three releases behind it
- * (v0.1.0, v0.2.0, v0.3.0, all in July 2026), and their dates are in "What
- * shipped"; a reader meeting the plugin here needs what it is before what moved
- * in it.
+ * Follows updates/_template/announcement/STRUCTURE.md. This is one product
+ * record with a newest-first versions array, not one post per version.
  *
  * Sources, in order of authority:
- *  - The public repository, https://github.com/wigtn/wigtn-plugins-codex, read
- *    at tag v0.3.0. The install lines are verbatim from its README. The nine
- *    skills are the nine directories under
- *    plugins/wigtn-plugins-with-codex/skills, which match the README's own
- *    table one for one, so the count is checked twice rather than transcribed.
- *  - The GitHub releases API for the same repository: v0.1.0 on 2026-07-14,
- *    v0.2.0 on 2026-07-27, v0.3.0 on 2026-07-28. Every release body is a bare
- *    changelog link, so the repository is the only description of what shipped.
- *  - LICENSE at that tag, Apache 2.0.
+ *  - https://github.com/wigtn/wigtn-plugins-codex at annotated tag v0.4.0,
+ *    created 2026-08-12. Commit 92175ff adds the opt-in knowledge-wiki skill,
+ *    its Stop hook, safety gates, examples and regression checks.
+ *  - README.md and .codex-plugin/plugin.json at v0.4.0. They support the
+ *    ten-skill count, the two install commands, the opt-in boundary and the
+ *    per-user-only automatic publishing boundary.
+ *  - LICENSE at v0.4.0, Apache 2.0.
  *  - The Codex tech report, "Running a harness on frontier models, part 2",
- *    which is where the evaluation behind the selective design lives.
+ *    for the evaluation behind the earlier selective lifecycle design. There
+ *    is no separate report for knowledge-wiki, so this notice makes no
+ *    performance or effectiveness claim about it.
  *
- * WHY THE POST IS SHORT ON EVIDENCE FOR THE DESIGN. The README states an
- * evaluation on GPT-5.5 and GPT-5.6 Sol, a table of which claims it supports,
- * and one row reading that a claim is contradicted by the current fixtures.
- * None of that is quoted here. It is a finding, findings live on the report
- * site under the split described in AGENTS.md, and the report already carries
- * the same evaluation with its method next to it. This post says the plugin
- * shipped and what is in it. Do not import the table.
- *
- * EDITORIAL DECISIONS a future editor would otherwise undo:
- *
- * 1. No cover, and the folder holds no image. There is no screenshot of this
- *    plugin in either repository. The report site has a Codex banner, but it is
- *    OpenAI's brand image for the tool being evaluated, and running it as the
- *    cover of a WIGTN release would claim it depicts something of ours. With no
- *    `image` a card renders no frame at all, which is the intended behaviour
- *    and what wigtn-coding-release does for the same reason. The folder exists
- *    so the first real screenshot has an obvious home.
- *
- * 2. The one-of-nine invocation rule is the lede, not the skill count. Nine
- *    skills is a package surface, and the template says a surface is labelled
- *    as one rather than presented as an achievement. What is actually new is
- *    that eight of them open on their own and the ninth refuses to.
- *
- * 3. The install is two commands, so it is a `list` and not a `quote`. A quote
- *    renders as one paragraph and the browser collapses anything used to fake
- *    the line break, which makes the pair unpastable. Same call as the sibling
- *    post.
- *
- *
- * 4. The comparison with the Claude Code plugin is one sentence, not the
- *    README's table. The table is a design argument, and the reader who wants
- *    it has the repository linked at the top of the page.
+ * Editorial decisions:
+ * 1. No cover. Neither repository contains a product screenshot that carries
+ *    a fact the prose cannot, and the announcement template has a zero-photo
+ *    default.
+ * 2. The v0.4.0 change is the lead. The skill count is package inventory, not
+ *    an achievement claim.
+ * 3. The install remains a two-command list copied from the v0.4.0 README.
+ * 4. The original v0.1.0 through v0.3.0 rows remain unchanged because their
+ *    source history has not changed.
  */
 
 import type { Article, Block } from "../../data";
@@ -71,26 +41,29 @@ export const wigtnCodexRelease: Article = {
   releaseType: "plugin",
   tag: "RELEASE",
   title: "WIGTN Plugin v2: Codex",
-  version: "v0.3.0",
+  version: "v0.4.0",
   summary:
-    "A second plugin, for Codex rather than Claude Code. Nine skills, of which eight open on their own and one has to be named, so an ordinary coding request cannot grow into the full delivery pipeline by accident.",
-  date: "2026.07.28",
+    "v0.4.0 adds an opt-in Knowledge Wiki that turns reusable Codex session learning into gated per-user notes. Installation alone captures nothing.",
+  date: "2026.08.12",
   author: "WIGTN Engineering",
   readTime: "2 min",
   links: [
     { label: "GitHub", href: "https://github.com/wigtn/wigtn-plugins-codex" },
     { label: "Tech report", href: techReportHref("codex-selective-harness") },
   ],
-  /* Full tag history, from `gh api repos/wigtn/wigtn-plugins-codex/releases`
-   * on 2026-08-09. Three releases. Dates are `published_at`.
+  /* Full version history. v0.1.0 through v0.3.0 were sourced from `gh api
+   * repos/wigtn/wigtn-plugins-codex/releases` on 2026-08-09. v0.4.0 is sourced
+   * from its annotated tag and release commit on 2026-08-12.
    *
    * THE NOTES COME FROM COMMITS, NOT FROM RELEASE NOTES, and that is a weaker
-   * source than the one the Claude Code plugin's list uses. All three releases
-   * here have a body containing a "Full Changelog" compare link and nothing
-   * else, so each line below is written from the release commit's own subject
-   * and the files it touched, read through
-   * `gh api repos/wigtn/wigtn-plugins-codex/compare/<prev>...<tag>` and
-   * `.../commits/<sha>` on 2026-08-09:
+   * source than the one the Claude Code plugin's list uses. The first three
+   * release objects contain a "Full Changelog" compare link and nothing else.
+   * Their lines come from the release commits and files they touched, read
+   * through `gh api repos/wigtn/wigtn-plugins-codex/compare/<prev>...<tag>` and
+   * `.../commits/<sha>` on 2026-08-09. The v0.4.0 line comes from its annotated
+   * tag and commit diff on 2026-08-12:
+   *   - v0.4.0, 92175ff6 "feat: add opt-in Codex knowledge wiki", which adds
+   *     the knowledge-wiki skill, Stop hook, gated worker and regression test.
    *   - v0.3.0, 14ac417c "feat: release selective lifecycle plugin v0.3.0",
    *     which adds docs/WORKGRAPH-LIFECYCLE.md and docs/EVIDENCE-CONTRACT.md
    *     alongside the 2026-07-28 evaluation protocol documents.
@@ -107,6 +80,11 @@ export const wigtnCodexRelease: Article = {
    * code and deciding what mattered. The real fix is still to write release
    * notes in the plugin repo, and when they exist, re-source from those. */
   versions: [
+    {
+      version: "v0.4.0",
+      date: "2026.08.12",
+      note: "Adds an opt-in Knowledge Wiki with scope, secret, semantic audit and output gates before a generated note can enter a per-user wiki path.",
+    },
     {
       version: "v0.3.0",
       date: "2026.07.28",
@@ -125,18 +103,18 @@ export const wigtnCodexRelease: Article = {
   ],
   body: [
     p(
-      "WIGTN Plugin v2 is a Codex plugin, and v0.3.0 landed on 28 July 2026. It is not the Claude Code plugin ported across: that one puts a fixed team of agents in front of the model, and this one hands Codex nine skills and stays out of the way until a request matches one of them.",
+      "WIGTN Plugin v2 for Codex reached v0.4.0 on 12 August 2026. The release adds an opt-in Knowledge Wiki that can turn reusable session learning into a Markdown note under a personal wiki path. Installing the plugin does not turn capture on.",
     ),
-    { t: "h", text: "What it does" },
+    { t: "h", text: "What changed since v0.3.0" },
     p(
-      "The rule that shapes it is which skills are allowed to start themselves. Eight are selected automatically when a request matches what they do. The ninth, verified-delivery, runs only when it is named, because it is the one that opens the whole implement-and-verify loop and an ordinary bug fix should not fall into it.",
+      "Knowledge Wiki is the tenth skill. It runs only after a separate configuration sets enabled to true and names a narrow repository scope. A completed Codex turn first passes a scope check and a deterministic secret scan. A detached worker then generalises reusable knowledge, runs a separate semantic audit and scans the output again before it can write a note.",
     ),
     p(
-      "So the day-to-day behaviour is that nothing happens. Ask for a fix and Codex fixes it. The skills open on the work that repeats across products: writing a PRD, turning it into screens, planning the tasks, checking the requirements against executed tests, and getting a branch to the point where it can be pushed.",
+      "Automatic publishing stops at per-user paths. The shared area still requires human review, and remote push stays off unless it is enabled separately. If a gate cannot decide, the pipeline discards the note rather than publishing it.",
     ),
 
     { t: "h", text: "Get it" },
-    p("Two lines, verbatim from the v0.3.0 README:"),
+    p("Two lines, verbatim from the v0.4.0 README:"),
     {
       t: "list",
       items: [
@@ -145,27 +123,28 @@ export const wigtnCodexRelease: Article = {
       ],
     },
     p(
-      "After that there is nothing to memorise: the skills are chosen from plain requests. Naming one explicitly is $wigtn-plugins-with-codex:<skill>, which is also how verified-delivery is invoked, since it will not start any other way.",
+      "The existing product workflow skills are still chosen from plain requests. Knowledge capture is different: installation makes the skill available, but a separate local configuration must enable the hook and define what repositories and personal wiki path it may touch.",
     ),
 
     { t: "h", text: "What shipped" },
     p(
-      "Nothing here compiles. The plugin is skill definitions, JSON schemas and one Python script that reads and writes a project's WorkGraph state file.",
+      "The release adds a Stop hook, a private one-shot queue and Python workers alongside the existing skill definitions and schemas.",
     ),
     {
       t: "list",
       items: [
-        "Nine skills at v0.3.0, from the repository tree and matching the README's table: product-spec, screen-spec, work-planner, verified-delivery, acceptance-verifier, design-direction, release-readiness, handdrawn-diagram and wigtn-presentation. That is an inventory of what is in the box, not a claim about what comes out of it.",
-        "The state contract that v0.3.0 is named for: requirement, artifact, task, check and release gate are linked, and a change to a source hash marks everything downstream of it stale. A task cannot reach verified without a passing check behind it.",
-        "Release authority is separated from the rest. Reviewing, committing, pushing and opening a PR are distinct permissions, and none of them is taken without being asked for.",
+        "Ten skills at v0.4.0. Knowledge-wiki joins the nine skills shipped in v0.3.0.",
+        "Four knowledge export gates: repository scope, deterministic secret blocking, a separate semantic audit and a deterministic output scan.",
+        "Automatic wiki writes are limited to per-user paths. The shared path remains a human-reviewed promotion step.",
+        "The v0.3.0 WorkGraph, evidence and release-authority contracts remain in the package.",
         "Apache 2.0.",
-        "Not included: any claim that this makes ordinary coding faster. The README lists that one as contradicted by its own fixtures, and the report is where the evaluation is set out.",
+        "Not included: a claim that Knowledge Wiki improves productivity or captures every useful session. No evaluation supporting either claim has been published.",
       ],
     },
 
     { t: "h", text: "Read the report" },
     p(
-      "Why the harness got smaller instead of larger is the second part of the Codex tech report: what the evaluation on two SWE-bench Verified tasks actually showed, what it cost, and what the result does not cover. The release history and every skill definition are in the repository. Both are linked at the top of this page.",
+      "The Codex tech report explains the selective lifecycle design that preceded this release. The v0.4.0 implementation, safety policy and full version history are in the repository. Both are linked at the top of this page.",
     ),
   ],
 };
