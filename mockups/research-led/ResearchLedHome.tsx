@@ -187,11 +187,11 @@ function Divider() {
  * reference is light at 80px and that is most of why it reads as an index of
  * capabilities rather than four adverts.
  *
- * NO IMAGES, and that is also the reference. Four rendered module screens were
- * built for an earlier version of this section and are still in the session
- * scratchpad; they are not here because the row is the argument and a picture
- * beside it would be decoration. If they come back it should be on their own
- * page, not in this list.
+ * THE PICTURE IS HOVER-ONLY, which is the reference's behaviour rather than a
+ * flourish added to it: each of their rows carries its own clip, sized to
+ * nothing until the row is pointed at. Ours does the same with a still. The
+ * row is the argument and the picture is the receipt, so the row has to read
+ * with the picture never shown, and on a phone it never is.
  *
  * NO PIN, NO SCROLL MACHINERY. The whole section is under a viewport tall,
  * which is the point: the AX section goes directly beneath it. Rows reveal on
@@ -227,6 +227,27 @@ function Modules() {
             viewport={VIEWPORT}
             className="group relative block border-t border-line/[0.14] py-7 md:py-9"
           >
+            {/* The receipt. It sits over the row's right half, clipped, and
+                arrives with a small push in. `pointer-events-none` so it never
+                takes the cursor off the row that summoned it, and `hidden
+                lg:block` because below that width it would cover the sentence
+                it is illustrating rather than sit beside it. */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute right-0 top-1/2 hidden h-[13.5rem] w-[21.5rem] -translate-y-1/2 overflow-hidden rounded-sm opacity-0 shadow-[0_30px_70px_-40px_rgba(21,21,21,0.7)] ring-1 ring-inset ring-line/15 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 group-focus-visible:opacity-100 lg:block"
+            >
+              <img
+                src={m.image}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                /* The zoom lives on the image, not the frame: scaling the frame
+                   would move its shadow and edges with it, which reads as the
+                   whole panel breathing. */
+                className="h-full w-full scale-[1.06] object-cover object-top transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100 group-focus-visible:scale-100"
+              />
+            </span>
+
             {/* The index sits hard right on its own baseline, the way a plate
                 number does. It is the only thing that changes colour on hover,
                 because the row is already at full contrast and dimming three
@@ -235,11 +256,11 @@ function Modules() {
               {`/0.${i + 1}`}
             </span>
 
-            <h3 className="max-w-[85%] font-display text-[clamp(1.9rem,5.5vw,3.75rem)] font-normal leading-[1.02] tracking-[-0.05em] text-ink transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5">
+            <h3 className="max-w-[85%] font-display text-[clamp(1.9rem,5.5vw,3.75rem)] lg:max-w-[58%] font-normal leading-[1.02] tracking-[-0.05em] text-ink transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5">
               {m.role}
             </h3>
 
-            <p className="mt-3 max-w-3xl text-pretty leading-relaxed text-ink-3">{m.blurb}</p>
+            <p className="mt-3 max-w-3xl text-pretty leading-relaxed text-ink-3 lg:max-w-[58%]">{m.blurb}</p>
 
             <span className="mt-3 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-5 transition-colors group-hover:text-accent">
               {`${m.name} · running at ${m.route}`}

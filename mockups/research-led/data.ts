@@ -172,6 +172,18 @@ export type ModuleItem = {
   blurb: string;
   /* The demo route this module runs on, so the row can be opened. */
   route: string;
+  /* The picture that appears when the row is pointed at. A composition, not a
+   * screenshot: each was built as HTML at 1600x1000, rendered at 2x with
+   * Playwright, and shipped at 1200px. Four of them share one stylesheet, so
+   * the lighting and the component set are identical across the set.
+   *
+   * Hover-only on purpose. The row has to read without it, because a phone has
+   * no hover and a keyboard arrives through focus rather than a pointer.
+   * Nothing in the copy depends on the picture being seen.
+   *
+   * Scene sources are in the session scratchpad as art/scene-*.html. To change
+   * one, edit the scene and re-render rather than retouching the JPEG. */
+  image: string;
 };
 
 export const MODULES: ModuleItem[] = [
@@ -182,6 +194,7 @@ export const MODULES: ModuleItem[] = [
     blurb:
       "Semantic tokens for light and dark, a brand theme, and a form renderer driven by schema. Vendored into every scaffold, so a new site starts with the components already decided.",
     route: "/",
+    image: "/images/modules/ui-kit.jpg",
   },
   {
     slug: "backoffice-frame",
@@ -190,6 +203,7 @@ export const MODULES: ModuleItem[] = [
     blurb:
       "A tool registry, screen layout validation, an MCP metadata adapter and an outbox batch runner. The half of a product a client sees only after launch, built before it.",
     route: "/admin",
+    image: "/images/modules/backoffice-frame.jpg",
   },
   {
     slug: "ai-pipeline-sdk",
@@ -198,6 +212,7 @@ export const MODULES: ModuleItem[] = [
     blurb:
       "The shared contract and runner for an event-driven asynchronous answer pipeline. Safety strength, the rules that fired, and what was held back are operator settings rather than code changes.",
     route: "/admin/ai",
+    image: "/images/modules/ai-pipeline-sdk.jpg",
   },
   {
     slug: "notification-file",
@@ -206,6 +221,7 @@ export const MODULES: ModuleItem[] = [
     blurb:
       "Transactional mail, in-app notifications, recipient rules and presigned upload ports. The plumbing nobody specifies and everybody assumes.",
     route: "/admin/inquiries",
+    image: "/images/modules/notification-file.jpg",
   },
 ];
 
