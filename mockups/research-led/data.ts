@@ -128,6 +128,90 @@ export const SERVICES = [
   },
 ];
 
+/* ── The module kit ─────────────────────────────────────────────────────────
+ *
+ * The homepage's answer to what Web Agency actually is. A portfolio says we
+ * finished some jobs; a kit says the next one starts from something already
+ * built and already under test, which is nearer to what a client is buying.
+ *
+ * FOUR MODULES, AND THE OTHER SIX ARE LEFT OUT AFTER COUNTING. The `module/`
+ * directory in wigtn/web-agency holds ten, and on 2026-08-16 they were counted
+ * rather than assumed:
+ *
+ *     ui-kit                   69 source files, 31 test files
+ *     backoffice-frame         20              5
+ *     ai-pipeline-sdk          18             14
+ *     notification-file        14              7
+ *     api-contracts             7              5   README: "v0 skeleton"
+ *     auth-membership           2              2
+ *     content-engine            2              2
+ *     portfolio-showcase        2              1
+ *     project-scaffold-deploy   0             10
+ *     company-review            0              0
+ *
+ * The four here are the four with a body of code behind them and a running
+ * surface a visitor can open. `api-contracts` says in its own README that it is
+ * a scaffold skeleton awaiting a contract, and `company-review` is empty.
+ * Putting either on a homepage would be the overclaim the web-agency brief
+ * spends a section banning. When one fills out, it earns a row.
+ *
+ * NO TOTAL IS QUOTED for the same reason. "Ten modules" is true of the folder
+ * and false about what is ready, and a client who counted would find two of the
+ * ten empty.
+ *
+ * `role` leads and `name` follows, because "backoffice-frame" is a folder and
+ * "the room your team works in" is the thing being bought. The descriptions are
+ * the modules' own README and package descriptions put into English, with no
+ * capability added on the way across. */
+export type ModuleItem = {
+  slug: string;
+  /* The plain-language name, and what the row is titled with. */
+  role: string;
+  /* The repository's own name for it, kept so the claim can be traced. */
+  name: string;
+  blurb: string;
+  /* The demo route this module runs on, so the row can be opened. */
+  route: string;
+};
+
+export const MODULES: ModuleItem[] = [
+  {
+    slug: "ui-kit",
+    role: "The look, decided once",
+    name: "ui-kit",
+    blurb:
+      "Semantic tokens for light and dark, a brand theme, and a form renderer driven by schema. Vendored into every scaffold, so a new site starts with the components already decided.",
+    route: "/",
+  },
+  {
+    slug: "backoffice-frame",
+    role: "The room your team works in",
+    name: "backoffice-frame",
+    blurb:
+      "A tool registry, screen layout validation, an MCP metadata adapter and an outbox batch runner. The half of a product a client sees only after launch, built before it.",
+    route: "/admin",
+  },
+  {
+    slug: "ai-pipeline-sdk",
+    role: "Answers, with brakes on",
+    name: "ai-pipeline-sdk",
+    blurb:
+      "The shared contract and runner for an event-driven asynchronous answer pipeline. Safety strength, the rules that fired, and what was held back are operator settings rather than code changes.",
+    route: "/admin/ai",
+  },
+  {
+    slug: "notification-file",
+    role: "What leaves the building",
+    name: "notification-file",
+    blurb:
+      "Transactional mail, in-app notifications, recipient rules and presigned upload ports. The plumbing nobody specifies and everybody assumes.",
+    route: "/admin/inquiries",
+  },
+];
+
+/* Where the modules are running, so a row can be opened rather than believed. */
+export const MODULE_DEMO = "https://portfolio-recruit-platform.vercel.app";
+
 /* CAPABILITIES, the four-pillar record list (published research, open models,
  * reports with their limits, hackathon placings), was deleted when /team went
  * back to "Who we are." and no surface rendered it. The claims themselves

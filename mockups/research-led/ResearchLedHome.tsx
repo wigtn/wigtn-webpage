@@ -11,8 +11,9 @@
  *     leaning on `accent` for legibility on light)
  *   - Everything that is not a link out of the page is separated by a
  *     hairline, not boxed.
- * Sections: 1 Hero · 2 What we do (the services) · 3 CTA, a Divider between
- * 2 and 3. The landing held the record's capability list, a Notices rail and
+ * Sections: 1 Hero · 2 What we do (the services) · 3 Our modules · 4 CTA,
+ * a Divider between each pair. Section 3 is evidence for section 2's first
+ * line and sits between the claim and the request on purpose. The landing held the record's capability list, a Notices rail and
  * a WIG-log rail until 2026-08-09; the release ledger is /notices, and the
  * stories live under /story. MilestoneTimeline is retained but currently
  * unrouted.
@@ -22,7 +23,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import Link from "next/link";
 import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
-import { MILESTONES, SERVICES, STORY_INDEX } from "./data";
+import { MILESTONES, MODULES, MODULE_DEMO, SERVICES, STORY_INDEX } from "./data";
 import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, Tags, rise, VIEWPORT } from "./chrome";
 import { CONTACT_EMAIL, CONTACT_HREF } from "@/lib/brand";
 import type { Theme } from "@/lib/theme";
@@ -165,6 +166,90 @@ function Divider() {
     <div className="max-w-6xl mx-auto px-6">
       <div className="border-t border-line/[0.08]" />
     </div>
+  );
+}
+
+/* ───── Our modules ─────────────────────────────────────────────────────────
+ *
+ * The expansion of What we do's first line, and the eyebrow repeats that
+ * section's numbering, "01 Web Agency", so the two read as claim and evidence.
+ * Line 02 takes the same slot below when AX Agency has something to show.
+ *
+ * The form is palantir.com's "Our Software" block, measured off the live page
+ * on 2026-08-16 rather than recalled: a small heading, then rows separated by
+ * full-width hairlines, each carrying an enormous name at weight 400 with
+ * roughly -0.05em tracking, a `/0.1` index hard right, and one line under it.
+ * No imagery at all. Their names sit near 80px; ours are longer sentences, so
+ * the clamp tops out lower and the tracking does the rest.
+ *
+ * WEIGHT 400, WHICH IS A DELIBERATE BREAK from this page. Every other heading
+ * here is `font-bold`, and at this size bold turns a row into a banner. The
+ * reference is light at 80px and that is most of why it reads as an index of
+ * capabilities rather than four adverts.
+ *
+ * NO IMAGES, and that is also the reference. Four rendered module screens were
+ * built for an earlier version of this section and are still in the session
+ * scratchpad; they are not here because the row is the argument and a picture
+ * beside it would be decoration. If they come back it should be on their own
+ * page, not in this list.
+ *
+ * NO PIN, NO SCROLL MACHINERY. The whole section is under a viewport tall,
+ * which is the point: the AX section goes directly beneath it. Rows reveal on
+ * entry with the page's existing `rise` and nothing else moves.
+ *
+ * Each row is a link to the demo route that module runs on, so the claim can be
+ * opened rather than believed.
+ */
+function Modules() {
+  return (
+    <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
+      <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-4">
+        01 Web Agency
+      </span>
+      <h2 className="mt-5 font-display text-2xl font-normal tracking-tight text-ink md:text-[1.75rem]">
+        Our modules
+      </h2>
+      <p className="mt-3 max-w-2xl text-pretty leading-relaxed text-ink-3">
+        A client site is assembled from these. We do not start from an empty folder.
+      </p>
+
+      <div className="mt-10 md:mt-14">
+        {MODULES.map((m, i) => (
+          <motion.a
+            key={m.slug}
+            href={`${MODULE_DEMO}${m.route}`}
+            target="_blank"
+            rel="noreferrer"
+            variants={rise}
+            custom={i}
+            initial="hidden"
+            whileInView="show"
+            viewport={VIEWPORT}
+            className="group relative block border-t border-line/[0.14] py-7 md:py-9"
+          >
+            {/* The index sits hard right on its own baseline, the way a plate
+                number does. It is the only thing that changes colour on hover,
+                because the row is already at full contrast and dimming three
+                rows to light one is a state the reference does not have. */}
+            <span className="absolute right-0 top-7 font-mono text-xs text-ink-5 transition-colors group-hover:text-ink md:top-9">
+              {`/0.${i + 1}`}
+            </span>
+
+            <h3 className="max-w-[85%] font-display text-[clamp(1.9rem,5.5vw,3.75rem)] font-normal leading-[1.02] tracking-[-0.05em] text-ink transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5">
+              {m.role}
+            </h3>
+
+            <p className="mt-3 max-w-3xl text-pretty leading-relaxed text-ink-3">{m.blurb}</p>
+
+            <span className="mt-3 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-5 transition-colors group-hover:text-accent">
+              {`${m.name} · running at ${m.route}`}
+              <ArrowUpRight aria-hidden size={12} />
+            </span>
+          </motion.a>
+        ))}
+        <div className="border-t border-line/[0.14]" />
+      </div>
+    </section>
   );
 }
 
@@ -468,7 +553,11 @@ export function ResearchLedHome() {
 
         <Divider />
 
-        {/* ───── 3. CTA: text layout; only the contact link is boxed in purple ───── */}
+        <Modules />
+
+        <Divider />
+
+        {/* ───── 4. CTA: text layout; only the contact link is boxed in purple ───── */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
           <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-accent">
             Work with us
