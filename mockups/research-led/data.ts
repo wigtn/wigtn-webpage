@@ -159,9 +159,20 @@ export type PracticeRow = {
    * the row says what it is offering evidence of before it is clicked. */
   meta: string;
   /* The picture that appears when the row is pointed at. A composition, not a
-   * screenshot: each was built as HTML at 1600x1000, rendered at 2x with
-   * Playwright, and shipped at 1200px. Four of them share one stylesheet, so
-   * the lighting and the component set are identical across the set.
+   * screenshot: built as HTML, rendered at 2x with Playwright, shipped at
+   * 1000px. Four of them share one stylesheet, so the lighting and the
+   * component set are identical across the set.
+   *
+   * EACH ONE IS A CROP, NOT A SCREEN. The first pass drew the whole product
+   * for every module and all four came out as the same dark admin page with a
+   * sidebar; at the 344px the hover frame gives them, nothing told them apart
+   * and none of them said which module it belonged to. Each now shows the one
+   * thing that makes that module that module and nothing else: the token ramp
+   * beside the same card in both themes, the operator queue with its counts,
+   * the three safety gates with the number they held, the mail that went out
+   * beside the rule that stopped one. Legible at thumbnail size is the whole
+   * requirement; if a new one needs a caption to be understood, it is drawing
+   * too much.
    *
    * Hover-only on purpose. The row has to read without it, because a phone has
    * no hover and a keyboard arrives through focus rather than a pointer.
