@@ -329,6 +329,11 @@ export type Practice = {
   name: string;
   lead: string;
   rows: PracticeRow[];
+  /* How the rows are presented. The web modules are a set and read as a list.
+   * The AX rows are three stages in the order they happen, and a carousel puts
+   * the reader on one stage with the next one next, which a stacked list cannot
+   * say. It is the shape of the content deciding the shape of the control. */
+  carousel?: boolean;
 };
 
 export const PRACTICES: Practice[] = [
@@ -341,6 +346,7 @@ export const PRACTICES: Practice[] = [
   {
     index: "02",
     name: "AX Agency",
+    carousel: true,
     lead: "We map where AI has leverage in your business, build it into the products and workflows you already run, and measure whether it moved anything. How we measure, applied to our own work and including the results that went nowhere, is on WIG-log.",
     rows: AX_ROWS,
   },

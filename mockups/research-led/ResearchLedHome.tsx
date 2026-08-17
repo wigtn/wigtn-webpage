@@ -241,12 +241,16 @@ function Practices() {
               {practice.lead}
             </p>
 
-            <div className="mt-9 md:mt-12">
-              {practice.rows.map((row, i) => (
-                <PracticeRowView key={row.slug} row={row} i={i} />
-              ))}
-              <div className="border-t border-line/[0.14]" />
-            </div>
+              {practice.carousel ? (
+              <PracticeCarousel rows={practice.rows} />
+            ) : (
+              <div className="mt-9 md:mt-12">
+                {practice.rows.map((row, i) => (
+                  <PracticeRowView key={row.slug} row={row} i={i} />
+                ))}
+                <div className="border-t border-line/[0.14]" />
+              </div>
+            )}
           </div>
         </div>
       ))}
@@ -310,6 +314,125 @@ function RowMedia({ row, on }: { row: PracticeRow; on: boolean }) {
         className="h-full w-full scale-[1.06] object-cover object-top transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100 group-focus-visible:scale-100"
       />
     </span>
+  );
+}
+
+
+/* ───── The AX practice, one stage at a time ────────────────────────────────
+ *
+ * The web modules are a set and read as a list. These are three stages in the
+ * order they happen, and a carousel enforces that order: you are on one stage,
+ * and the next one is next.
+ *
+ * BUILT ON SCROLL SNAP, not on a drag implementation. The track is an ordinary
+ * horizontal scroller with `snap-mandatory`, so touch swipe, trackpad, shift
+ * plus wheel, and the arrow keys all work without a line of code, and the
+ * buttons below only call `scrollTo`. A hand-written drag would have to
+ * reimplement momentum, rubber-banding and every one of those inputs, and would
+ * still be worse on a phone.
+ *
+ * The active index is read back off scroll position rather than held as the
+ * source of truth, so a swipe and a button press cannot disagree about where
+ * the track is.
+ *
+ * The counter is the one place a number belongs on this page: it says where you
+ * are in something that has an order, which is what the /0.1 index on the rows
+ * was pretending to do and could not.
+ */
+function PracticeCarousel({ rows }: { rows: PracticeRow[] }) {
+  const track = useRef<HTMLDivElement | null>(null);
+  const [at, setAt] = useState(0);
+
+  const onScroll = () => {
+    const el = track.current;
+    if (!el) return;
+    /* Round rather than floor: at rest the snap leaves scrollLeft within a
+     * pixel of a slide boundary, and floor puts the counter one behind. */
+    setAt(Math.round(el.scrollLeft / el.clientWidth));
+  };
+
+  const go = (n: number) => {
+    const el = track.current;
+    if (!el) return;
+    const next = Math.max(0, Math.min(rows.length - 1, n));
+    el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
+  };
+
+  return (
+    <div className="mt-9 md:mt-12">
+      <div className="border-t border-line/[0.14]" />
+
+      <div
+        ref={track}
+        onScroll={onScroll}
+        tabIndex={0}
+        role="group"
+        aria-label="AX Agency stages"
+        /* The scrollbar is hidden because the dots and the counter already say
+           how much there is; a native bar under three slides reads as a second,
+           contradicting control. */
+        className="flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {rows.map((row) => (
+          <div key={row.slug} className="w-full shrink-0 snap-start py-10 pr-6 md:py-14">
+            <h3 className="font-display text-[clamp(2.1rem,6.5vw,4.5rem)] font-normal leading-[1.0] tracking-[-0.05em] text-ink">
+              {row.name}
+            </h3>
+            <p className="mt-4 max-w-2xl text-pretty text-[15px] leading-relaxed text-ink-3">
+              {row.line}
+            </p>
+            <span className="mt-6 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-5">
+              {row.meta}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex items-center gap-5 border-t border-line/[0.14] pt-5">
+        <span className="font-mono text-xs tabular-nums text-ink-4">
+          {`${at + 1} / ${rows.length}`}
+        </span>
+
+        {/* Dots are the destinations; the arrows are the neighbours. Both,
+            because three slides is few enough to jump between and a reader who
+            wants the next one should not have to aim. */}
+        <div className="flex items-center gap-2">
+          {rows.map((row, i) => (
+            <button
+              key={row.slug}
+              type="button"
+              onClick={() => go(i)}
+              aria-label={row.name}
+              aria-current={i === at}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === at ? "w-6 bg-accent" : "w-1.5 bg-line/25 hover:bg-line/50"
+              }`}
+            />
+          ))}
+        </div>
+
+        <div className="ml-auto flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => go(at - 1)}
+            disabled={at === 0}
+            aria-label="Previous stage"
+            className="grid h-9 w-9 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/[0.06] hover:text-ink disabled:pointer-events-none disabled:text-ink-5/40"
+          >
+            <ArrowRight aria-hidden size={16} className="rotate-180" />
+          </button>
+          <button
+            type="button"
+            onClick={() => go(at + 1)}
+            disabled={at === rows.length - 1}
+            aria-label="Next stage"
+            className="grid h-9 w-9 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/[0.06] hover:text-ink disabled:pointer-events-none disabled:text-ink-5/40"
+          >
+            <ArrowRight aria-hidden size={16} />
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
