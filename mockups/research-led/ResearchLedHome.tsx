@@ -23,8 +23,8 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import Link from "next/link";
 import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
-import { MILESTONES, MODULES, MODULE_DEMO, SERVICES, STORY_INDEX } from "./data";
-import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, Tags, rise, VIEWPORT } from "./chrome";
+import { MILESTONES, PRACTICES, STORY_INDEX, type PracticeRow } from "./data";
+import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, rise, VIEWPORT } from "./chrome";
 import { CONTACT_EMAIL, CONTACT_HREF } from "@/lib/brand";
 import type { Theme } from "@/lib/theme";
 
@@ -169,108 +169,128 @@ function Divider() {
   );
 }
 
-/* ───── Our modules ─────────────────────────────────────────────────────────
+/* ───── What we do ──────────────────────────────────────────────────────────
  *
- * The expansion of What we do's first line, and the eyebrow repeats that
- * section's numbering, "01 Web Agency", so the two read as claim and evidence.
- * Line 02 takes the same slot below when AX Agency has something to show.
+ * Two lines of business, each a heading over its own evidence.
+ *
+ * It used to be a sticky left header beside two cards with keyword tags, which
+ * is the shape every agency site uses and said nothing either line could not
+ * have said. The tags in particular ("Design", "Build", "Deploy") are the sort
+ * of thing that survives on a page precisely because nobody can disagree with
+ * it. What replaced them is a row per thing we have actually built, and every
+ * row opens: the web rows into the running demo, the AX rows into the report
+ * that carries the method and the limits.
  *
  * The form is palantir.com's "Our Software" block, measured off the live page
- * on 2026-08-16 rather than recalled: a small heading, then rows separated by
- * full-width hairlines, each carrying an enormous name at weight 400 with
- * roughly -0.05em tracking, a `/0.1` index hard right, and one line under it.
- * No imagery at all. Their names sit near 80px; ours are longer sentences, so
- * the clamp tops out lower and the tracking does the rest.
+ * on 2026-08-16 rather than recalled: a small heading, rows separated by
+ * full-width hairlines, an enormous name at weight 400 with roughly -0.05em
+ * tracking, a `/0.1` index hard right, and one line under it.
  *
- * WEIGHT 400, WHICH IS A DELIBERATE BREAK from this page. Every other heading
- * here is `font-bold`, and at this size bold turns a row into a banner. The
- * reference is light at 80px and that is most of why it reads as an index of
- * capabilities rather than four adverts.
+ * WEIGHT 400 IS A DELIBERATE BREAK from the rest of this page, where every
+ * heading is bold. At this size bold turns a row into a banner; the reference
+ * is light at 80px and that is most of why it reads as an index of what a firm
+ * can do rather than a stack of adverts.
  *
- * THE PICTURE IS HOVER-ONLY, which is the reference's behaviour rather than a
- * flourish added to it: each of their rows carries its own clip, sized to
- * nothing until the row is pointed at. Ours does the same with a still. The
- * row is the argument and the picture is the receipt, so the row has to read
- * with the picture never shown, and on a phone it never is.
+ * The picture is hover-only, which is the reference's behaviour rather than a
+ * flourish added to it: each of their rows carries a clip sized to nothing
+ * until the row is pointed at. Ours does the same with a still, and only the
+ * web rows have one. An AX row is a published paper and inventing a picture
+ * for it would be dressing.
  *
- * NO PIN, NO SCROLL MACHINERY. The whole section is under a viewport tall,
- * which is the point: the AX section goes directly beneath it. Rows reveal on
- * entry with the page's existing `rise` and nothing else moves.
- *
- * Each row is a link to the demo route that module runs on, so the claim can be
- * opened rather than believed.
+ * No pin and no scroll machinery. Rows reveal on entry with the page's `rise`
+ * and nothing else moves.
  */
-function Modules() {
+function Practices() {
   return (
     <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
-      <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-4">
-        01 Web Agency
-      </span>
-      <h2 className="mt-5 font-display text-2xl font-normal tracking-tight text-ink md:text-[1.75rem]">
-        Our modules
-      </h2>
-      <p className="mt-3 max-w-2xl text-pretty leading-relaxed text-ink-3">
-        A client site is assembled from these. We do not start from an empty folder.
+      <SectionTitle className="max-w-3xl">What we do</SectionTitle>
+      <p className="mt-5 max-w-xl text-pretty leading-relaxed text-ink-3">
+        No product of our own to sell. What we offer is the team, on your problem.
       </p>
 
-      <div className="mt-10 md:mt-14">
-        {MODULES.map((m, i) => (
-          <motion.a
-            key={m.slug}
-            href={`${MODULE_DEMO}${m.route}`}
-            target="_blank"
-            rel="noreferrer"
-            variants={rise}
-            custom={i}
-            initial="hidden"
-            whileInView="show"
-            viewport={VIEWPORT}
-            className="group relative block border-t border-line/[0.14] py-7 md:py-9"
-          >
-            {/* The receipt. It sits over the row's right half, clipped, and
-                arrives with a small push in. `pointer-events-none` so it never
-                takes the cursor off the row that summoned it, and `hidden
-                lg:block` because below that width it would cover the sentence
-                it is illustrating rather than sit beside it. */}
-            <span
-              aria-hidden
-              className="pointer-events-none absolute right-0 top-1/2 hidden h-[13.5rem] w-[21.5rem] -translate-y-1/2 overflow-hidden rounded-sm opacity-0 shadow-[0_30px_70px_-40px_rgba(21,21,21,0.7)] ring-1 ring-inset ring-line/15 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 group-focus-visible:opacity-100 lg:block"
-            >
-              <img
-                src={m.image}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                /* The zoom lives on the image, not the frame: scaling the frame
-                   would move its shadow and edges with it, which reads as the
-                   whole panel breathing. */
-                className="h-full w-full scale-[1.06] object-cover object-top transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100 group-focus-visible:scale-100"
-              />
-            </span>
+      {PRACTICES.map((practice) => (
+        <div key={practice.index} className="mt-16 md:mt-24">
+          <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-4">
+            {`${practice.index} ${practice.name}`}
+          </span>
+          <p className="mt-4 max-w-2xl text-pretty text-lg leading-relaxed text-ink-2">
+            {practice.lead}
+          </p>
 
-            {/* The index sits hard right on its own baseline, the way a plate
-                number does. It is the only thing that changes colour on hover,
-                because the row is already at full contrast and dimming three
-                rows to light one is a state the reference does not have. */}
-            <span className="absolute right-0 top-7 font-mono text-xs text-ink-5 transition-colors group-hover:text-ink md:top-9">
-              {`/0.${i + 1}`}
-            </span>
-
-            <h3 className="max-w-[85%] font-display text-[clamp(1.9rem,5.5vw,3.75rem)] lg:max-w-[58%] font-normal leading-[1.02] tracking-[-0.05em] text-ink transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5">
-              {m.role}
-            </h3>
-
-            <p className="mt-3 max-w-3xl text-pretty leading-relaxed text-ink-3 lg:max-w-[58%]">{m.blurb}</p>
-
-            <span className="mt-3 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-5 transition-colors group-hover:text-accent">
-              {`${m.name} · running at ${m.route}`}
-              <ArrowUpRight aria-hidden size={12} />
-            </span>
-          </motion.a>
-        ))}
-        <div className="border-t border-line/[0.14]" />
-      </div>
+          <div className="mt-9 md:mt-12">
+            {practice.rows.map((row, i) => (
+              <PracticeRowView key={row.slug} row={row} i={i} />
+            ))}
+            <div className="border-t border-line/[0.14]" />
+          </div>
+        </div>
+      ))}
     </section>
+  );
+}
+
+function PracticeRowView({ row, i }: { row: PracticeRow; i: number }) {
+  return (
+    <motion.a
+      href={row.href}
+      target="_blank"
+      rel="noreferrer"
+      variants={rise}
+      custom={i}
+      initial="hidden"
+      whileInView="show"
+      viewport={VIEWPORT}
+      className="group relative block border-t border-line/[0.14] py-7 md:py-9"
+    >
+      {/* The receipt, on the rows that have one. It sits over the row's right
+          half, clipped, and arrives with a slow push in. `pointer-events-none`
+          so it never takes the cursor off the row that summoned it, and hidden
+          below lg because at that width it would cover the sentence it is
+          illustrating rather than sit beside it. The row has to read with the
+          picture never shown, and on a phone it never is. */}
+      {row.image && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute right-0 top-1/2 hidden h-[13.5rem] w-[21.5rem] -translate-y-1/2 overflow-hidden rounded-sm opacity-0 shadow-[0_30px_70px_-40px_rgba(21,21,21,0.7)] ring-1 ring-inset ring-line/15 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 group-focus-visible:opacity-100 lg:block"
+        >
+          <img
+            src={row.image}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            /* The zoom is on the image, not the frame: scaling the frame moves
+               its shadow and edges too, which reads as the whole panel
+               breathing rather than the picture settling. */
+            className="h-full w-full scale-[1.06] object-cover object-top transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100 group-focus-visible:scale-100"
+          />
+        </span>
+      )}
+
+      <span className="absolute right-0 top-7 font-mono text-xs text-ink-5 transition-colors group-hover:text-ink md:top-9">
+        {`/0.${i + 1}`}
+      </span>
+
+      <h3
+        className={`font-display text-[clamp(1.9rem,5.5vw,3.75rem)] font-normal leading-[1.02] tracking-[-0.05em] text-ink transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5 ${
+          row.image ? "max-w-[85%] lg:max-w-[58%]" : "max-w-[85%]"
+        }`}
+      >
+        {row.role}
+      </h3>
+
+      <p
+        className={`mt-3 text-pretty leading-relaxed text-ink-3 ${
+          row.image ? "max-w-3xl lg:max-w-[58%]" : "max-w-3xl"
+        }`}
+      >
+        {row.blurb}
+      </p>
+
+      <span className="mt-3 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-5 transition-colors group-hover:text-accent">
+        {row.meta}
+        <ArrowUpRight aria-hidden size={12} />
+      </span>
+    </motion.a>
   );
 }
 
@@ -525,56 +545,8 @@ export function ResearchLedHome() {
           </div>
         </section>
 
-        {/* ───── 2. What we do: the business model, stated briefly ─────
-            The landing is Hero, What we do, Contact, in that order and
-            nothing else. WIGTN has no product of its own to advertise, so
-            the section a product would occupy holds the two lines of client
-            work instead. The title was "Services" for a day and gave way to
-            the name the About page had been holding: this section is the
-            site's one answer to what the team does, so it carries the plain
-            words for it. Sticky-left layout, same as the capability list
-            this slot held before the split. */}
-        <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
-          <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
-            <div className="md:sticky md:top-24 md:self-start">
-              <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-4">
-                Business · 01–02
-              </span>
-              <SectionTitle className="mt-4">What we do</SectionTitle>
-              <p className="mt-5 max-w-xs text-pretty leading-relaxed text-ink-3">
-                No product of our own to sell. What we offer is the team, on
-                your problem.
-              </p>
-            </div>
+        <Practices />
 
-            <div className="divide-y divide-line/[0.08] border-t border-line/[0.08]">
-              {SERVICES.map((s, i) => (
-                <motion.div
-                  key={s.title}
-                  variants={rise}
-                  custom={i}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={VIEWPORT}
-                  className="flex items-start gap-5 py-8 md:py-10"
-                >
-                  <span className="pt-1.5 font-mono text-sm text-accent">{`0${i + 1}`}</span>
-                  <div>
-                    <h3 className="font-display text-2xl font-semibold tracking-tight text-ink md:text-3xl">
-                      {s.title}
-                    </h3>
-                    <p className="mt-3 text-pretty leading-relaxed text-ink-2">{s.lead}</p>
-                    <Tags tags={s.tags} className="mt-4" />
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <Divider />
-
-        <Modules />
 
         <Divider />
 

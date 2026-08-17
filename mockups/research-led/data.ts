@@ -109,25 +109,6 @@ export const NAV: NavItem[] = [
   { label: "Tech", href: TECH_REPORT_INDEX },
 ];
 
-/* The homepage What-we-do section: the two lines of business, each in the
- * shape a client would engage it. WIGTN sells no product of its own; what it
- * offers is the team. Source copy is README.md's services list, folded from
- * four lines to two: AX Consulting and AI System Integration are one
- * engagement seen from its two ends, and AI R&D is the record, not a
- * service. No figures, because there are none published to cite. */
-export const SERVICES = [
-  {
-    title: "Web Agency",
-    lead: "Websites and web products, designed, built, and shipped end to end.",
-    tags: ["Design", "Build", "Deploy"],
-  },
-  {
-    title: "AX Agency",
-    lead: "We map where AI creates real leverage in your business, then build it into the products and workflows you already run.",
-    tags: ["Roadmap", "Integration", "AI systems"],
-  },
-];
-
 /* ── The module kit ─────────────────────────────────────────────────────────
  *
  * The homepage's answer to what Web Agency actually is. A portfolio says we
@@ -163,15 +144,20 @@ export const SERVICES = [
  * "the room your team works in" is the thing being bought. The descriptions are
  * the modules' own README and package descriptions put into English, with no
  * capability added on the way across. */
-export type ModuleItem = {
+export type PracticeRow = {
   slug: string;
   /* The plain-language name, and what the row is titled with. */
   role: string;
   /* The repository's own name for it, kept so the claim can be traced. */
   name: string;
   blurb: string;
-  /* The demo route this module runs on, so the row can be opened. */
-  route: string;
+  /* Where the row goes. Web rows open the running demo; AX rows open the
+   * report that carries the method and the limits. Both are checkable, which
+   * is the only thing the two halves have to have in common. */
+  href: string;
+  /* The small line under the blurb. It names the artifact and where it is, so
+   * the row says what it is offering evidence of before it is clicked. */
+  meta: string;
   /* The picture that appears when the row is pointed at. A composition, not a
    * screenshot: each was built as HTML at 1600x1000, rendered at 2x with
    * Playwright, and shipped at 1200px. Four of them share one stylesheet, so
@@ -183,17 +169,25 @@ export type ModuleItem = {
    *
    * Scene sources are in the session scratchpad as art/scene-*.html. To change
    * one, edit the scene and re-render rather than retouching the JPEG. */
-  image: string;
+  /* Optional. The four web modules have compositions; the AX rows do not,
+   * because nothing has been built for them and inventing a picture for a
+   * published paper would be dressing. A row without one simply shows no
+   * picture on hover. */
+  image?: string;
 };
 
-export const MODULES: ModuleItem[] = [
+/* Where the modules are running, so a row can be opened rather than believed. */
+const MODULE_DEMO = "https://portfolio-recruit-platform.vercel.app";
+
+const WEB_ROWS: PracticeRow[] = [
   {
     slug: "ui-kit",
     role: "The look, decided once",
     name: "ui-kit",
     blurb:
       "Semantic tokens for light and dark, a brand theme, and a form renderer driven by schema. Vendored into every scaffold, so a new site starts with the components already decided.",
-    route: "/",
+    href: `${MODULE_DEMO}/`,
+    meta: "ui-kit · running at /",
     image: "/images/modules/ui-kit.jpg",
   },
   {
@@ -202,7 +196,8 @@ export const MODULES: ModuleItem[] = [
     name: "backoffice-frame",
     blurb:
       "A tool registry, screen layout validation, an MCP metadata adapter and an outbox batch runner. The half of a product a client sees only after launch, built before it.",
-    route: "/admin",
+    href: `${MODULE_DEMO}/admin`,
+    meta: "backoffice-frame · running at /admin",
     image: "/images/modules/backoffice-frame.jpg",
   },
   {
@@ -211,7 +206,8 @@ export const MODULES: ModuleItem[] = [
     name: "ai-pipeline-sdk",
     blurb:
       "The shared contract and runner for an event-driven asynchronous answer pipeline. Safety strength, the rules that fired, and what was held back are operator settings rather than code changes.",
-    route: "/admin/ai",
+    href: `${MODULE_DEMO}/admin/ai`,
+    meta: "ai-pipeline-sdk · running at /admin/ai",
     image: "/images/modules/ai-pipeline-sdk.jpg",
   },
   {
@@ -220,13 +216,91 @@ export const MODULES: ModuleItem[] = [
     name: "notification-file",
     blurb:
       "Transactional mail, in-app notifications, recipient rules and presigned upload ports. The plumbing nobody specifies and everybody assumes.",
-    route: "/admin/inquiries",
+    href: `${MODULE_DEMO}/admin/inquiries`,
+    meta: "notification-file · running at /admin/inquiries",
     image: "/images/modules/notification-file.jpg",
   },
 ];
 
-/* Where the modules are running, so a row can be opened rather than believed. */
-export const MODULE_DEMO = "https://portfolio-recruit-platform.vercel.app";
+/* ── AX Agency ──────────────────────────────────────────────────────────────
+ *
+ * The second line of business, and it gets the same treatment as the first:
+ * rows that can be opened rather than adjectives.
+ *
+ * WHAT COUNTS AS EVIDENCE HERE IS DIFFERENT. A web module is evidence because
+ * it is running and a visitor can click into it. There is no client AX
+ * engagement to show, and there will not be one until a client says yes to
+ * being named. What there is instead is the AI this team has built and
+ * published on: four systems, each with a report on WIG-log that carries its
+ * method, its measurements and what it does not cover. A report is a weaker
+ * demo and a stronger claim, and it is the honest thing to put here.
+ *
+ * The two agent harnesses are one row, not two. They are the same argument
+ * seen twice, and splitting them would pad this list to four to match the one
+ * above it. The row names both and the reports are one hop from it.
+ *
+ * NOT CLAIMED: that any of this was delivered as a client engagement. Each row
+ * says what was built and where the report is, and stops. */
+const AX_ROWS: PracticeRow[] = [
+  {
+    slug: "wigvo",
+    role: "A phone call, translated as it happens",
+    name: "WIGVO",
+    blurb:
+      "Real-time bidirectional translation over an ordinary PSTN call, with nothing installed on the other person's phone. Accepted to ACL 2026 System Demonstrations and run as a live booth.",
+    href: techReportHref("wigvo"),
+    meta: "WIG-log · method, measurements, limits",
+  },
+  {
+    slug: "wigtnocr",
+    role: "Documents that arrive as data",
+    name: "WigtnOCR",
+    blurb:
+      "A LoRA adapter over Qwen3-VL-2B that turns Korean government PDFs into structured Markdown, with headings, tables and reading order kept in one pass. Weights, benchmark set and eval code are public.",
+    href: techReportHref("wigtnocr"),
+    meta: "WIG-log · method, measurements, limits",
+  },
+  {
+    slug: "harnesses",
+    role: "The harness the work runs inside",
+    name: "WIGTN Plugin v1 and v2",
+    blurb:
+      "Two agent harnesses, one for Claude Code and one for Codex, built from the same question: how much scaffolding a frontier model actually needs. The second one is smaller than the first, and the report says why.",
+    href: techReportHref("codex-selective-harness"),
+    meta: "WIG-log · what the evaluation showed, and did not",
+  },
+];
+
+/* ── The two lines of business ──────────────────────────────────────────────
+ *
+ * What we do used to state these as two cards with keyword tags, which is the
+ * shape every agency site uses and says nothing either of them could not say.
+ * They are practices with a body of work behind them, so each is now a heading
+ * over its own evidence, in the same row form.
+ *
+ * The leads are the old SERVICES copy, which came from README.md and was the
+ * one part of that section worth keeping. */
+export type Practice = {
+  index: string;
+  name: string;
+  lead: string;
+  rows: PracticeRow[];
+};
+
+export const PRACTICES: Practice[] = [
+  {
+    index: "01",
+    name: "Web Agency",
+    lead: "Websites and web products, designed, built, and shipped end to end. A client site is assembled from modules we own and keep under test.",
+    rows: WEB_ROWS,
+  },
+  {
+    index: "02",
+    name: "AX Agency",
+    lead: "We map where AI creates real leverage in your business, then build it into the products and workflows you already run. Here is the AI we have built and published on.",
+    rows: AX_ROWS,
+  },
+];
 
 /* CAPABILITIES, the four-pillar record list (published research, open models,
  * reports with their limits, hackathon placings), was deleted when /team went
