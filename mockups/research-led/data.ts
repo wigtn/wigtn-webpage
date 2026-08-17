@@ -156,10 +156,11 @@ export type PracticeRow = {
    * report or the demo behind it is where the detail lives. If it needs a
    * second sentence the row is doing the page's job for it. */
   line: string;
-  /* Where the row goes. Web rows open the running demo; AX rows open the
-   * report that carries the method and the limits. Both are checkable, which
-   * is the only thing the two halves have to have in common. */
-  href: string;
+  /* Where the row goes, when it goes anywhere. A web row opens the module
+   * running in the demo. An AX row is a stage of an engagement and has nothing
+   * to open, so it has no href and renders as text rather than pretending to
+   * be a link that does nothing. */
+  href?: string;
   /* The small line under the blurb. It names the artifact and where it is, so
    * the row says what it is offering evidence of before it is clicked. */
   meta: string;
@@ -264,65 +265,53 @@ const WEB_ROWS: PracticeRow[] = [
 
 /* ── AX Agency ──────────────────────────────────────────────────────────────
  *
- * The second line of business, and it gets the same treatment as the first:
- * rows that can be opened rather than adjectives.
+ * The second line of business, and its rows are stages of an engagement rather
+ * than things we shipped.
  *
- * WHAT COUNTS AS EVIDENCE HERE IS DIFFERENT. A web module is evidence because
- * it is running and a visitor can click into it. There is no client AX
- * engagement to show, and there will not be one until a client says yes to
- * being named. What there is instead is the AI this team has built and
- * published on: four systems, each with a report on WIG-log that carries its
- * method, its measurements and what it does not cover. A report is a weaker
- * demo and a stronger claim, and it is the honest thing to put here.
+ * They were four of our own AI systems for a while, each linking its report.
+ * That was evidence of something, but of the wrong thing: it described a lab,
+ * not a service, and a client reading it learned what we had made for
+ * ourselves instead of what we would do for them.
  *
- * The two agent harnesses are one row, not two. They are the same argument
- * seen twice, and splitting them would pad this list to four to match the one
- * above it. The row names both and the reports are one hop from it.
+ * NO CLIENT WORK IS NAMED because there is none to name yet, and there will
+ * not be until a client agrees to be named. So no row carries a case, a logo,
+ * or a number from an engagement. What each row carries instead is what the
+ * client ends up holding at the end of that stage, which is a promise we can
+ * keep on the first one.
  *
- * NOT CLAIMED: that any of this was delivered as a client engagement. Each row
- * says what was built and where the report is, and stops. */
+ * NO FIGURES HERE, and that is deliberate. The web rows show a running screen
+ * and these could have shown metrics from our own systems, but a number from
+ * WIGVO is not evidence about your project. The one claim this section makes
+ * about measurement is that we do it and publish the limits, and the place
+ * that is checkable is WIG-log, linked once from the lead rather than pinned
+ * to a stage it did not come from.
+ *
+ * THE THIRD STAGE SAYS WHAT GETS CUT. An AX pitch that only describes building
+ * is a pitch with no way to be wrong, and the harness report on WIG-log is us
+ * doing exactly this to our own work: same tasks resolved, half again the wall
+ * time, no repeatable quality lift, published. The row has to promise the same
+ * treatment or the report contradicts the page. */
 const AX_ROWS: PracticeRow[] = [
   {
-    slug: "wigvo",
-
-    name: "WIGVO",
+    slug: "ax-consulting",
+    name: "Consulting",
     line:
-      "Real-time translation over an ordinary phone call, with nothing installed on the other side. Peer reviewed at ACL 2026.",
-    href: techReportHref("wigvo"),
-    meta: "WIG-log · method, measurements, limits",
-    figures: [
-      { value: "555ms", label: "Caller → callee P50" },
-      { value: "0 / 147", label: "Echo-induced loops" },
-      { value: "$0.28", label: "Cost per minute" },
-    ],
+      "Where AI has leverage in the workflows you already run, and where it does not. We put both in writing, including the parts we advise against.",
+    meta: "You keep · a written map, and what we said no to",
   },
   {
-    slug: "wigtnocr",
-
-    name: "WigtnOCR",
+    slug: "ax-evaluation",
+    name: "Evaluation",
     line:
-      "Korean government documents into structured Markdown. Weights, benchmark set and evaluation code are public.",
-    href: techReportHref("wigtnocr"),
-    meta: "WIG-log · method, measurements, limits",
-    figures: [
-      { value: "0.739", label: "KoGovDoc Hit@1" },
-      { value: "0.649", label: "Table TEDS" },
-      { value: "2B", label: "Student parameters" },
-    ],
+      "The metric is agreed before anything is built, and measured on your own data rather than a public benchmark. A number nobody signed off on is not a result.",
+    meta: "You keep · an evaluation set and a baseline",
   },
   {
-    slug: "harnesses",
-
-    name: "WIGTN Plugins",
+    slug: "ax-feedback",
+    name: "Feedback",
     line:
-      "Two agent harnesses, and the evaluation that made the second one smaller than the first.",
-    href: techReportHref("codex-selective-harness"),
-    meta: "WIG-log · what the evaluation showed, and did not",
-    figures: [
-      { value: "4/4 = 4/4", label: "Resolved tasks" },
-      { value: "+151.7%", label: "Median wall time" },
-      { value: "0", label: "Repeatable quality lifts" },
-    ],
+      "What shipped is measured again against that baseline. What did not move the number gets cut, and we say plainly that it did not move.",
+    meta: "You keep · a measured before and after",
   },
 ];
 
@@ -352,7 +341,7 @@ export const PRACTICES: Practice[] = [
   {
     index: "02",
     name: "AX Agency",
-    lead: "We map where AI creates real leverage in your business, then build it into the products and workflows you already run. Here is the AI we have built and published on.",
+    lead: "We map where AI has leverage in your business, build it into the products and workflows you already run, and measure whether it moved anything. How we measure, applied to our own work and including the results that went nowhere, is on WIG-log.",
     rows: AX_ROWS,
   },
 ];

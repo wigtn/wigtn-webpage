@@ -315,15 +315,18 @@ function RowMedia({ row, on }: { row: PracticeRow; on: boolean }) {
 
 function PracticeRowView({ row, i }: { row: PracticeRow; i: number }) {
   const [on, setOn] = useState(false);
+  /* A row that has nowhere to go is not a link. The AX rows are stages of an
+   * engagement, and rendering them as anchors would put four dead entries in a
+   * screen reader's link list and give a pointer a hand cursor over text that
+   * does nothing. */
+  const Row = row.href ? motion.a : motion.div;
   return (
-    <motion.a
+    <Row
       onMouseEnter={() => setOn(true)}
       onMouseLeave={() => setOn(false)}
       onFocus={() => setOn(true)}
       onBlur={() => setOn(false)}
-      href={row.href}
-      target="_blank"
-      rel="noreferrer"
+      {...(row.href ? { href: row.href, target: "_blank", rel: "noreferrer" } : {})}
       variants={rise}
       custom={i}
       initial="hidden"
@@ -346,7 +349,7 @@ function PracticeRowView({ row, i }: { row: PracticeRow; i: number }) {
       <h3
         /* Bigger than before, because the names are short now. A sentence had
            to be clamped down to fit; "UI Kit" does not. */
-        className={`font-display text-[clamp(2.1rem,6.5vw,4.5rem)] font-normal leading-[1.0] tracking-[-0.05em] text-ink transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5 ${
+        className={`font-display text-[clamp(2.1rem,6.5vw,4.5rem)] font-normal leading-[1.0] tracking-[-0.05em] text-ink transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${row.href ? "group-hover:translate-x-1.5 " : ""}${
           row.image ? "max-w-[85%] lg:max-w-[58%]" : "max-w-[85%]"
         }`}
       >
@@ -386,11 +389,11 @@ function PracticeRowView({ row, i }: { row: PracticeRow; i: number }) {
         </dl>
       )}
 
-      <span className={`inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-5 transition-colors group-hover:text-accent ${row.figures ? "mt-6" : "mt-3"}`}>
+      <span className={`inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-5 transition-colors ${row.href ? "group-hover:text-accent" : ""} ${row.figures ? "mt-6" : "mt-3"}`}>
         {row.meta}
-        <ArrowUpRight aria-hidden size={12} />
+        {row.href && <ArrowUpRight aria-hidden size={12} />}
       </span>
-    </motion.a>
+    </Row>
   );
 }
 
