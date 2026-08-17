@@ -363,7 +363,30 @@ function PracticeRowView({ row, i }: { row: PracticeRow; i: number }) {
         {row.line}
       </p>
 
-      <span className="mt-3 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-5 transition-colors group-hover:text-accent">
+      {/* Figures where the web rows have a picture. A module is evidence
+          because you can open it; a published system is evidence because it
+          was measured, so this half of the page hands over numbers. Each is
+          copied from that system's report at the precision the report uses,
+          including the ones that are not flattering: the harness resolved the
+          same tasks, took 151.7 percent longer, and produced no repeatable
+          quality lift. Leaving that out would make the row an advert. */}
+      {row.figures && (
+        <dl className="mt-6 flex flex-wrap gap-x-12 gap-y-4">
+          {row.figures.map((f) => (
+            <div key={f.label}>
+              <dt className="sr-only">{f.label}</dt>
+              <dd className="font-display text-2xl font-normal tabular-nums tracking-tight text-ink md:text-[1.75rem]">
+                {f.value}
+              </dd>
+              <dd className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-5">
+                {f.label}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      )}
+
+      <span className={`inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-5 transition-colors group-hover:text-accent ${row.figures ? "mt-6" : "mt-3"}`}>
         {row.meta}
         <ArrowUpRight aria-hidden size={12} />
       </span>

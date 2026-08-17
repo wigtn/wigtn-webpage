@@ -201,6 +201,19 @@ export type PracticeRow = {
    * browser that cannot decode VP8 keeps, and it is what renders under
    * prefers-reduced-motion, where the clip never starts. */
   clip?: string;
+  /* AX rows carry figures where web rows carry a picture, and the difference
+   * is not decoration: a web module is evidence because you can open it and
+   * click, and a published system is evidence because it was measured and the
+   * measurement is checkable. Numbers are what that half of the business
+   * actually hands over.
+   *
+   * Every one is copied from that system's own report on WIG-log, at the
+   * precision the report uses, with the label the report gave it. Read on
+   * 2026-08-17. Do not round, and do not add one that is not in a report.
+   *
+   * Three per row, which is the most that fits without becoming a table. The
+   * report is one click away and has the rest. */
+  figures?: { value: string; label: string }[];
 };
 
 /* Where the modules are running, so a row can be opened rather than believed. */
@@ -271,27 +284,45 @@ const WEB_ROWS: PracticeRow[] = [
 const AX_ROWS: PracticeRow[] = [
   {
     slug: "wigvo",
+
     name: "WIGVO",
     line:
       "Real-time translation over an ordinary phone call, with nothing installed on the other side. Peer reviewed at ACL 2026.",
     href: techReportHref("wigvo"),
     meta: "WIG-log · method, measurements, limits",
+    figures: [
+      { value: "555ms", label: "Caller → callee P50" },
+      { value: "0 / 147", label: "Echo-induced loops" },
+      { value: "$0.28", label: "Cost per minute" },
+    ],
   },
   {
     slug: "wigtnocr",
+
     name: "WigtnOCR",
     line:
       "Korean government documents into structured Markdown. Weights, benchmark set and evaluation code are public.",
     href: techReportHref("wigtnocr"),
     meta: "WIG-log · method, measurements, limits",
+    figures: [
+      { value: "0.739", label: "KoGovDoc Hit@1" },
+      { value: "0.649", label: "Table TEDS" },
+      { value: "2B", label: "Student parameters" },
+    ],
   },
   {
     slug: "harnesses",
+
     name: "WIGTN Plugins",
     line:
       "Two agent harnesses, and the evaluation that made the second one smaller than the first.",
     href: techReportHref("codex-selective-harness"),
     meta: "WIG-log · what the evaluation showed, and did not",
+    figures: [
+      { value: "4/4 = 4/4", label: "Resolved tasks" },
+      { value: "+151.7%", label: "Median wall time" },
+      { value: "0", label: "Repeatable quality lifts" },
+    ],
   },
 ];
 
