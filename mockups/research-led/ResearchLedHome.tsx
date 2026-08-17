@@ -202,39 +202,55 @@ function Divider() {
  */
 function Practices() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
-      <SectionTitle className="max-w-3xl">What we do</SectionTitle>
-      <p className="mt-5 max-w-xl text-pretty leading-relaxed text-ink-3">
-        No product of our own to sell. What we offer is the team, on your problem.
-      </p>
+    <>
+      <section className="mx-auto max-w-6xl px-6 pt-24 md:pt-32">
+        <SectionTitle className="max-w-3xl">What we do</SectionTitle>
+        <p className="mt-5 max-w-xl text-pretty leading-relaxed text-ink-3">
+          No product of our own to sell. What we offer is the team, on your problem.
+        </p>
+      </section>
 
-      {PRACTICES.map((practice) => (
-        <div key={practice.index} className="mt-16 md:mt-24">
+      {/* Alternating ground, which is how the reference separates its own
+          sections. It says these are two things rather than one long list, and
+          it does it without touching the type: right-aligning the second
+          practice was tried and it split each block in half, left the rows
+          with a void down one side, and made a two-line name start somewhere
+          new on its second line.
+          The band is full-bleed rather than inset, because a tinted rectangle
+          with the page showing down both sides is a card, and this page does
+          not use cards. */}
+      {PRACTICES.map((practice, n) => (
+        <div
+          key={practice.index}
+          className={`${n % 2 === 1 ? "bg-paper-sunken" : ""} py-16 md:py-24`}
+        >
+          <div className="mx-auto max-w-6xl px-6">
           {/* The practice name is a heading, not a micro-label. It was set in
               the 11px mono the page uses for eyebrows, which is right for
               "01 Web Agency" as a marker beside something else and wrong for
               the thing that names half the business. The index keeps the mono
               and stays small; the name takes a heading size and the row
               weight, so the hierarchy runs title → practice → row. */}
-          <div className="flex items-baseline gap-4">
-            <span className="font-mono text-xs text-ink-5">{practice.index}</span>
-            <h3 className="font-display text-[clamp(1.5rem,3.2vw,2.25rem)] font-normal tracking-[-0.03em] text-ink">
-              {practice.name}
-            </h3>
-          </div>
-          <p className="mt-4 max-w-2xl text-pretty text-lg leading-relaxed text-ink-2">
-            {practice.lead}
-          </p>
+            <div className="flex items-baseline gap-4">
+              <span className="font-mono text-xs text-ink-5">{practice.index}</span>
+              <h3 className="font-display text-[clamp(1.5rem,3.2vw,2.25rem)] font-normal tracking-[-0.03em] text-ink">
+                {practice.name}
+              </h3>
+            </div>
+            <p className="mt-4 max-w-2xl text-pretty text-lg leading-relaxed text-ink-2">
+              {practice.lead}
+            </p>
 
-          <div className="mt-9 md:mt-12">
-            {practice.rows.map((row, i) => (
-              <PracticeRowView key={row.slug} row={row} i={i} />
-            ))}
-            <div className="border-t border-line/[0.14]" />
+            <div className="mt-9 md:mt-12">
+              {practice.rows.map((row, i) => (
+                <PracticeRowView key={row.slug} row={row} i={i} />
+              ))}
+              <div className="border-t border-line/[0.14]" />
+            </div>
           </div>
         </div>
       ))}
-    </section>
+    </>
   );
 }
 
