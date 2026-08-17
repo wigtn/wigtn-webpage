@@ -254,9 +254,73 @@ function Practices() {
   );
 }
 
+/* The picture a row shows when it is pointed at.
+ *
+ * The clip is fetched on the first hover and never before: `preload="none"`
+ * plus a src that is not set until then, so four videos are not pulled down by
+ * a reader who scrolls past. Until it has decoded, and for anyone whose
+ * browser cannot decode VP8 at all, the poster is what is on screen, which is
+ * the same frame the clip starts from.
+ *
+ * The zoom is on the media, not the frame: scaling the frame moves its shadow
+ * and edges too, which reads as the whole panel breathing rather than the
+ * picture settling.
+ *
+ * Under prefers-reduced-motion the clip is never loaded and the still stays.
+ * The row is a link, so it also has to work from the keyboard, which is what
+ * the focus handlers are for. */
+function RowMedia({ row, on }: { row: PracticeRow; on: boolean }) {
+  const video = useRef<HTMLVideoElement | null>(null);
+  const [still, setStill] = useState(true);
+
+  useEffect(() => {
+    const q = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setStill(q.matches);
+    sync();
+    q.addEventListener("change", sync);
+    return () => q.removeEventListener("change", sync);
+  }, []);
+
+  /* The parent owns the hover, because the panel itself is
+     `pointer-events-none` and would never see it. */
+  useEffect(() => {
+    const v = video.current;
+    if (!v || still || !row.clip) return;
+    if (on) {
+      if (!v.src) v.src = row.clip;
+      v.currentTime = 0;
+      void v.play().catch(() => {});
+    } else {
+      v.pause();
+    }
+  }, [on, still, row.clip]);
+
+  return (
+    <span
+      aria-hidden
+      className="pointer-events-none absolute right-0 top-1/2 hidden h-[13.5rem] w-[21.5rem] -translate-y-1/2 overflow-hidden rounded-sm opacity-0 shadow-[0_30px_70px_-40px_rgba(21,21,21,0.7)] ring-1 ring-inset ring-line/15 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 group-focus-visible:opacity-100 lg:block"
+    >
+      <video
+        ref={video}
+        poster={row.image}
+        muted
+        loop
+        playsInline
+        preload="none"
+        className="h-full w-full scale-[1.06] object-cover object-top transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100 group-focus-visible:scale-100"
+      />
+    </span>
+  );
+}
+
 function PracticeRowView({ row, i }: { row: PracticeRow; i: number }) {
+  const [on, setOn] = useState(false);
   return (
     <motion.a
+      onMouseEnter={() => setOn(true)}
+      onMouseLeave={() => setOn(false)}
+      onFocus={() => setOn(true)}
+      onBlur={() => setOn(false)}
       href={row.href}
       target="_blank"
       rel="noreferrer"
@@ -273,23 +337,7 @@ function PracticeRowView({ row, i }: { row: PracticeRow; i: number }) {
           below lg because at that width it would cover the sentence it is
           illustrating rather than sit beside it. The row has to read with the
           picture never shown, and on a phone it never is. */}
-      {row.image && (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute right-0 top-1/2 hidden h-[13.5rem] w-[21.5rem] -translate-y-1/2 overflow-hidden rounded-sm opacity-0 shadow-[0_30px_70px_-40px_rgba(21,21,21,0.7)] ring-1 ring-inset ring-line/15 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 group-focus-visible:opacity-100 lg:block"
-        >
-          <img
-            src={row.image}
-            alt=""
-            loading="lazy"
-            decoding="async"
-            /* The zoom is on the image, not the frame: scaling the frame moves
-               its shadow and edges too, which reads as the whole panel
-               breathing rather than the picture settling. */
-            className="h-full w-full scale-[1.06] object-cover object-top transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100 group-focus-visible:scale-100"
-          />
-        </span>
-      )}
+      {row.image && <RowMedia row={row} on={on} />}
 
       <span className="absolute right-0 top-7 font-mono text-xs text-ink-5 transition-colors group-hover:text-ink md:top-9">
         {`/0.${i + 1}`}

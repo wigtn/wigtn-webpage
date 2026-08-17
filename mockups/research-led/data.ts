@@ -190,6 +190,17 @@ export type PracticeRow = {
    * published paper would be dressing. A row without one simply shows no
    * picture on hover. */
   image?: string;
+  /* The same composition, moving. Five seconds, looped, VP8, one per module.
+   *
+   * It is the poster that runs rather than a different picture: the scene HTML
+   * gained a 5s animation and was recorded, so the still and the clip are the
+   * same frame set. Nothing new is drawn; what is already there arms, lands or
+   * resolves, which is the module doing its job rather than decoration.
+   *
+   * The JPEG stays and is the video's poster. It shows instantly, it is what a
+   * browser that cannot decode VP8 keeps, and it is what renders under
+   * prefers-reduced-motion, where the clip never starts. */
+  clip?: string;
 };
 
 /* Where the modules are running, so a row can be opened rather than believed. */
@@ -204,6 +215,7 @@ const WEB_ROWS: PracticeRow[] = [
     href: `${MODULE_DEMO}/`,
     meta: "ui-kit · running at /",
     image: "/images/modules/ui-kit.jpg",
+    clip: "/images/modules/ui-kit.webm",
   },
   {
     slug: "backoffice-frame",
@@ -213,6 +225,7 @@ const WEB_ROWS: PracticeRow[] = [
     href: `${MODULE_DEMO}/admin`,
     meta: "backoffice-frame · running at /admin",
     image: "/images/modules/backoffice-frame.jpg",
+    clip: "/images/modules/backoffice-frame.webm",
   },
   {
     slug: "ai-pipeline-sdk",
@@ -222,6 +235,7 @@ const WEB_ROWS: PracticeRow[] = [
     href: `${MODULE_DEMO}/admin/ai`,
     meta: "ai-pipeline-sdk · running at /admin/ai",
     image: "/images/modules/ai-pipeline-sdk.jpg",
+    clip: "/images/modules/ai-pipeline-sdk.webm",
   },
   {
     slug: "notification-file",
@@ -231,6 +245,7 @@ const WEB_ROWS: PracticeRow[] = [
     href: `${MODULE_DEMO}/admin/inquiries`,
     meta: "notification-file · running at /admin/inquiries",
     image: "/images/modules/notification-file.jpg",
+    clip: "/images/modules/notification-file.webm",
   },
 ];
 
