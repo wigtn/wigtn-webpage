@@ -210,9 +210,18 @@ function Practices() {
 
       {PRACTICES.map((practice) => (
         <div key={practice.index} className="mt-16 md:mt-24">
-          <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-4">
-            {`${practice.index} ${practice.name}`}
-          </span>
+          {/* The practice name is a heading, not a micro-label. It was set in
+              the 11px mono the page uses for eyebrows, which is right for
+              "01 Web Agency" as a marker beside something else and wrong for
+              the thing that names half the business. The index keeps the mono
+              and stays small; the name takes a heading size and the row
+              weight, so the hierarchy runs title → practice → row. */}
+          <div className="flex items-baseline gap-4">
+            <span className="font-mono text-xs text-ink-5">{practice.index}</span>
+            <h3 className="font-display text-[clamp(1.5rem,3.2vw,2.25rem)] font-normal tracking-[-0.03em] text-ink">
+              {practice.name}
+            </h3>
+          </div>
           <p className="mt-4 max-w-2xl text-pretty text-lg leading-relaxed text-ink-2">
             {practice.lead}
           </p>
