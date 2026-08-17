@@ -296,19 +296,23 @@ function PracticeRowView({ row, i }: { row: PracticeRow; i: number }) {
       </span>
 
       <h3
-        className={`font-display text-[clamp(1.9rem,5.5vw,3.75rem)] font-normal leading-[1.02] tracking-[-0.05em] text-ink transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5 ${
+        /* Bigger than before, because the names are short now. A sentence had
+           to be clamped down to fit; "UI Kit" does not. */
+        className={`font-display text-[clamp(2.1rem,6.5vw,4.5rem)] font-normal leading-[1.0] tracking-[-0.05em] text-ink transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1.5 ${
           row.image ? "max-w-[85%] lg:max-w-[58%]" : "max-w-[85%]"
         }`}
       >
-        {row.role}
+        {row.name}
       </h3>
 
+      {/* Small, and one line's worth. The name carries the row; this says what
+          it is for and hands off to the demo or the report. */}
       <p
-        className={`mt-3 text-pretty leading-relaxed text-ink-3 ${
-          row.image ? "max-w-3xl lg:max-w-[58%]" : "max-w-3xl"
+        className={`mt-3 text-pretty text-[15px] leading-relaxed text-ink-3 ${
+          row.image ? "max-w-2xl lg:max-w-[54%]" : "max-w-2xl"
         }`}
       >
-        {row.blurb}
+        {row.line}
       </p>
 
       <span className="mt-3 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-5 transition-colors group-hover:text-accent">

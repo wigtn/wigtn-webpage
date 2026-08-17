@@ -146,11 +146,16 @@ export const NAV: NavItem[] = [
  * capability added on the way across. */
 export type PracticeRow = {
   slug: string;
-  /* The plain-language name, and what the row is titled with. */
-  role: string;
-  /* The repository's own name for it, kept so the claim can be traced. */
+  /* The title, and it is the thing's own name. The rows were titled with a
+   * plain-language sentence for a while ("The look, decided once") and the
+   * name was demoted to a footnote, which read as four slogans with the
+   * products hidden under them. The reference titles its rows AIP, Gotham,
+   * Foundry: a name a reader can carry away and ask for. */
   name: string;
-  blurb: string;
+  /* One line. Not two, and not a paragraph: the row is an index entry, and the
+   * report or the demo behind it is where the detail lives. If it needs a
+   * second sentence the row is doing the page's job for it. */
+  line: string;
   /* Where the row goes. Web rows open the running demo; AX rows open the
    * report that carries the method and the limits. Both are checkable, which
    * is the only thing the two halves have to have in common. */
@@ -193,40 +198,36 @@ const MODULE_DEMO = "https://portfolio-recruit-platform.vercel.app";
 const WEB_ROWS: PracticeRow[] = [
   {
     slug: "ui-kit",
-    role: "The look, decided once",
-    name: "ui-kit",
-    blurb:
-      "Semantic tokens for light and dark, a brand theme, and a form renderer driven by schema. Vendored into every scaffold, so a new site starts with the components already decided.",
+    name: "UI Kit",
+    line:
+      "Tokens for light and dark, a brand theme, and a form renderer driven by schema, vendored into every scaffold.",
     href: `${MODULE_DEMO}/`,
     meta: "ui-kit · running at /",
     image: "/images/modules/ui-kit.jpg",
   },
   {
     slug: "backoffice-frame",
-    role: "The room your team works in",
-    name: "backoffice-frame",
-    blurb:
-      "A tool registry, screen layout validation, an MCP metadata adapter and an outbox batch runner. The half of a product a client sees only after launch, built before it.",
+    name: "Back office",
+    line:
+      "A tool registry, screen layout validation and an outbox batch runner, built before launch rather than after it.",
     href: `${MODULE_DEMO}/admin`,
     meta: "backoffice-frame · running at /admin",
     image: "/images/modules/backoffice-frame.jpg",
   },
   {
     slug: "ai-pipeline-sdk",
-    role: "Answers, with brakes on",
-    name: "ai-pipeline-sdk",
-    blurb:
-      "The shared contract and runner for an event-driven asynchronous answer pipeline. Safety strength, the rules that fired, and what was held back are operator settings rather than code changes.",
+    name: "AI pipeline",
+    line:
+      "Generated answers filtered, moderated, and held for a person, with the strength set by an operator rather than a deploy.",
     href: `${MODULE_DEMO}/admin/ai`,
     meta: "ai-pipeline-sdk · running at /admin/ai",
     image: "/images/modules/ai-pipeline-sdk.jpg",
   },
   {
     slug: "notification-file",
-    role: "What leaves the building",
-    name: "notification-file",
-    blurb:
-      "Transactional mail, in-app notifications, recipient rules and presigned upload ports. The plumbing nobody specifies and everybody assumes.",
+    name: "Notifications",
+    line:
+      "Transactional mail, in-app notifications, recipient rules and presigned upload ports. The plumbing nobody specifies.",
     href: `${MODULE_DEMO}/admin/inquiries`,
     meta: "notification-file · running at /admin/inquiries",
     image: "/images/modules/notification-file.jpg",
@@ -255,28 +256,25 @@ const WEB_ROWS: PracticeRow[] = [
 const AX_ROWS: PracticeRow[] = [
   {
     slug: "wigvo",
-    role: "A phone call, translated as it happens",
     name: "WIGVO",
-    blurb:
-      "Real-time bidirectional translation over an ordinary PSTN call, with nothing installed on the other person's phone. Accepted to ACL 2026 System Demonstrations and run as a live booth.",
+    line:
+      "Real-time translation over an ordinary phone call, with nothing installed on the other side. Peer reviewed at ACL 2026.",
     href: techReportHref("wigvo"),
     meta: "WIG-log · method, measurements, limits",
   },
   {
     slug: "wigtnocr",
-    role: "Documents that arrive as data",
     name: "WigtnOCR",
-    blurb:
-      "A LoRA adapter over Qwen3-VL-2B that turns Korean government PDFs into structured Markdown, with headings, tables and reading order kept in one pass. Weights, benchmark set and eval code are public.",
+    line:
+      "Korean government documents into structured Markdown. Weights, benchmark set and evaluation code are public.",
     href: techReportHref("wigtnocr"),
     meta: "WIG-log · method, measurements, limits",
   },
   {
     slug: "harnesses",
-    role: "The harness the work runs inside",
-    name: "WIGTN Plugin v1 and v2",
-    blurb:
-      "Two agent harnesses, one for Claude Code and one for Codex, built from the same question: how much scaffolding a frontier model actually needs. The second one is smaller than the first, and the report says why.",
+    name: "WIGTN Plugins",
+    line:
+      "Two agent harnesses, and the evaluation that made the second one smaller than the first.",
     href: techReportHref("codex-selective-harness"),
     meta: "WIG-log · what the evaluation showed, and did not",
   },
