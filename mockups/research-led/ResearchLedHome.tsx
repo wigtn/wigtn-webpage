@@ -21,7 +21,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { motion, useInView, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
 import { MILESTONES, PRACTICES, STORY_INDEX, type PracticeRow } from "./data";
 import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, rise, VIEWPORT } from "./chrome";
@@ -338,10 +338,43 @@ function RowMedia({ row, on }: { row: PracticeRow; on: boolean }) {
  * The counter is the one place a number belongs on this page: it says where you
  * are in something that has an order, which is what the /0.1 index on the rows
  * was pretending to do and could not.
+ *
+ * IT ADVANCES ON ITS OWN, under four conditions that all have to hold. The
+ * section is on screen, because a carousel that runs where nobody is looking
+ * only spends the reader's first stage before they arrive. The pointer is not on
+ * it and focus is not in it, because moving text out from under someone reading
+ * it is the whole failure mode of an auto-carousel. Nobody has taken the
+ * controls, because a reader who pressed next has said which stage they want and
+ * the machine should stop having opinions. And it stops at the last stage rather
+ * than wrapping, which is the same reason the arrows disable there: a sequence
+ * that loops is not a sequence, and Feedback is where the engagement ends.
+ *
+ * The dwell is not a timer. It is the fill on the active dot, and the fill
+ * finishing is what calls for the next slide, so the bar can never say one thing
+ * while the schedule does another, and a pause is exact rather than a
+ * calculation about time remaining. WCAG 2.2.2 wants a way to stop moving
+ * content that starts by itself, and the arrows and dots are it: they are
+ * keyboard reachable, and pressing one stops the motion for good.
  */
+const STAGE_MS = 7000;
+
 function PracticeCarousel({ rows }: { rows: PracticeRow[] }) {
   const track = useRef<HTMLDivElement | null>(null);
+  const frame = useRef<HTMLDivElement | null>(null);
+  const seen = useInView(frame, { amount: 0.45 });
   const [at, setAt] = useState(0);
+  const [held, setHeld] = useState(false);
+  const [taken, setTaken] = useState(false);
+  const [still, setStill] = useState(true);
+
+  /* Starts `true`, so nothing has moved before the query is read. */
+  useEffect(() => {
+    const q = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setStill(q.matches);
+    sync();
+    q.addEventListener("change", sync);
+    return () => q.removeEventListener("change", sync);
+  }, []);
 
   const onScroll = () => {
     const el = track.current;
@@ -351,20 +384,49 @@ function PracticeCarousel({ rows }: { rows: PracticeRow[] }) {
     setAt(Math.round(el.scrollLeft / el.clientWidth));
   };
 
-  const go = (n: number) => {
-    const el = track.current;
-    if (!el) return;
-    const next = Math.max(0, Math.min(rows.length - 1, n));
-    el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
+  const go = useCallback(
+    (n: number) => {
+      const el = track.current;
+      if (!el) return;
+      const next = Math.max(0, Math.min(rows.length - 1, n));
+      el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
+    },
+    [rows.length],
+  );
+
+  /* A deliberate move ends the automatic one. */
+  const take = (n: number) => {
+    setTaken(true);
+    go(n);
   };
 
+  const last = at === rows.length - 1;
+  const auto = !taken && !still && !last;
+  const running = auto && seen && !held;
+
   return (
-    <div className="mt-9 md:mt-12">
+    <div
+      ref={frame}
+      className="mt-9 md:mt-12"
+      /* Mouse only. A touch pointer enters and never leaves, which would park
+         the carousel for the rest of the visit; a touch is handled as a take
+         instead, on the track below. */
+      onPointerEnter={(e) => e.pointerType === "mouse" && setHeld(true)}
+      onPointerLeave={(e) => e.pointerType === "mouse" && setHeld(false)}
+      onFocusCapture={() => setHeld(true)}
+      onBlurCapture={() => setHeld(false)}
+    >
       <div className="border-t border-line/[0.14]" />
 
       <div
         ref={track}
         onScroll={onScroll}
+        /* Touching or arrowing the track is taking the controls, the same as
+           pressing a button. Not `onWheel`: a wheel event over the track fires
+           on the track even when the page is what scrolls, so a reader passing
+           by would silently switch the carousel off. */
+        onPointerDown={() => setTaken(true)}
+        onKeyDown={() => setTaken(true)}
         tabIndex={0}
         role="group"
         aria-label="AX Agency stages"
@@ -401,20 +463,37 @@ function PracticeCarousel({ rows }: { rows: PracticeRow[] }) {
             <button
               key={row.slug}
               type="button"
-              onClick={() => go(i)}
+              onClick={() => take(i)}
               aria-label={row.name}
               aria-current={i === at}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === at ? "w-6 bg-accent" : "w-1.5 bg-line/25 hover:bg-line/50"
+              className={`h-1.5 overflow-hidden rounded-full transition-all duration-300 ${
+                i === at ? "w-6 bg-line/20" : "w-1.5 bg-line/25 hover:bg-line/50"
               }`}
-            />
+            >
+              {i === at ? (
+                /* Keyed on the index so the fill restarts with the stage. When
+                   the carousel is not advancing itself the bar is simply full:
+                   a dwell indicator counting down to nothing would be a lie. */
+                <span
+                  key={at}
+                  aria-hidden
+                  onAnimationEnd={() => go(at + 1)}
+                  style={
+                    auto
+                      ? { animationDuration: `${STAGE_MS}ms`, animationPlayState: running ? "running" : "paused" }
+                      : undefined
+                  }
+                  className={`block h-full w-full rounded-full bg-accent ${auto ? "stage-fill" : ""}`}
+                />
+              ) : null}
+            </button>
           ))}
         </div>
 
         <div className="ml-auto flex items-center gap-1">
           <button
             type="button"
-            onClick={() => go(at - 1)}
+            onClick={() => take(at - 1)}
             disabled={at === 0}
             aria-label="Previous stage"
             className="grid h-9 w-9 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/[0.06] hover:text-ink disabled:pointer-events-none disabled:text-ink-5/40"
@@ -423,7 +502,7 @@ function PracticeCarousel({ rows }: { rows: PracticeRow[] }) {
           </button>
           <button
             type="button"
-            onClick={() => go(at + 1)}
+            onClick={() => take(at + 1)}
             disabled={at === rows.length - 1}
             aria-label="Next stage"
             className="grid h-9 w-9 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/[0.06] hover:text-ink disabled:pointer-events-none disabled:text-ink-5/40"
