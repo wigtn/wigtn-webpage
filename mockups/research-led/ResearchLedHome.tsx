@@ -313,6 +313,23 @@ function RowMedia({ row, on }: { row: PracticeRow; on: boolean }) {
   );
 }
 
+/* No index on the row.
+ *
+ * The reference numbers its five products /0.1 to /0.5, and that came across
+ * with the rest of the form. It did not survive the check every structural
+ * device has to pass, which is whether it encodes something true. The four web
+ * modules are a set, not a sequence: nothing about UI Kit makes it first. The
+ * numbering also restarted inside each practice, so one page carried two rows
+ * both labelled 0.1, which reads as a mistake rather than a system. And the
+ * `0.` prefix meant nothing here; it was a shape copied from a page that may
+ * have had a reason for it.
+ *
+ * The AX stages genuinely are ordered and an ordinal there would be
+ * information. It is left off anyway: numbers on one practice and not the other
+ * is a difference the reader has to decode, and the stages already read in
+ * order because they are stacked in it.
+ *
+ * `i` stays, and is only the stagger delay on the reveal. It is not rendered. */
 function PracticeRowView({ row, i }: { row: PracticeRow; i: number }) {
   const [on, setOn] = useState(false);
   /* A row that has nowhere to go is not a link. The AX rows are stages of an
@@ -341,10 +358,6 @@ function PracticeRowView({ row, i }: { row: PracticeRow; i: number }) {
           illustrating rather than sit beside it. The row has to read with the
           picture never shown, and on a phone it never is. */}
       {row.image && <RowMedia row={row} on={on} />}
-
-      <span className="absolute right-0 top-7 font-mono text-xs text-ink-5 transition-colors group-hover:text-ink md:top-9">
-        {`/0.${i + 1}`}
-      </span>
 
       <h3
         /* Bigger than before, because the names are short now. A sentence had
