@@ -202,19 +202,6 @@ export type PracticeRow = {
    * browser that cannot decode VP8 keeps, and it is what renders under
    * prefers-reduced-motion, where the clip never starts. */
   clip?: string;
-  /* AX rows carry figures where web rows carry a picture, and the difference
-   * is not decoration: a web module is evidence because you can open it and
-   * click, and a published system is evidence because it was measured and the
-   * measurement is checkable. Numbers are what that half of the business
-   * actually hands over.
-   *
-   * Every one is copied from that system's own report on WIG-log, at the
-   * precision the report uses, with the label the report gave it. Read on
-   * 2026-08-17. Do not round, and do not add one that is not in a report.
-   *
-   * Three per row, which is the most that fits without becoming a table. The
-   * report is one click away and has the rest. */
-  figures?: { value: string; label: string }[];
 };
 
 /* Where the modules are running, so a row can be opened rather than believed. */
@@ -319,35 +306,48 @@ const AX_ROWS: PracticeRow[] = [
  *
  * What we do used to state these as two cards with keyword tags, which is the
  * shape every agency site uses and says nothing either of them could not say.
- * They are practices with a body of work behind them, so each is now a heading
- * over its own evidence, in the same row form.
+ * Then they were two stacked bands, one practice each, which was honest but
+ * ran to about 1,800px of page for seven items. They are now two halves of one
+ * section that open when pointed at, so the whole business fits in 432px and
+ * the reader chooses which half spends it.
  *
- * The leads are the old SERVICES copy, which came from README.md and was the
- * one part of that section worth keeping. */
+ * The leads are the old SERVICES copy, cut to what fits a 240px column. The
+ * sentence about our own measurements being on WIG-log moved up to the section
+ * lead, where it belongs anyway: it is true of the team, not of one practice. */
 export type Practice = {
-  index: string;
-  name: string;
+  /* Identity for the open state, and the React key. */
+  slug: string;
+  /* The name of the line of business, set as a micro-label. It says which of
+   * the two this is; the heading has a harder job. */
+  kicker: string;
+  /* The heading, and it is a sentence with a verb in it. "Web Agency" and "AX
+   * Agency" are categories a reader has to already know; "We build it" and "We
+   * measure it" are what we do, and the pair reads as one claim across the
+   * divider. */
+  title: string;
   lead: string;
+  /* How much is behind this half, said before it opens. It is the closest thing
+   * the section has to an affordance: "4 modules" tells a reader there is
+   * something under the pointer without drawing a button that is not there. */
+  cue: string;
   rows: PracticeRow[];
-  /* How the rows are presented. The web modules are a set and read as a list.
-   * The AX rows are three stages in the order they happen, and a carousel puts
-   * the reader on one stage with the next one next, which a stacked list cannot
-   * say. It is the shape of the content deciding the shape of the control. */
-  carousel?: boolean;
 };
 
 export const PRACTICES: Practice[] = [
   {
-    index: "01",
-    name: "Web Agency",
-    lead: "Websites and web products, designed, built, and shipped end to end. A client site is assembled from modules we own and keep under test.",
+    slug: "web",
+    kicker: "Web Agency",
+    title: "We build it",
+    lead: "Websites and web products, shipped end to end. A client site is assembled from modules we own and keep under test.",
+    cue: "4 modules",
     rows: WEB_ROWS,
   },
   {
-    index: "02",
-    name: "AX Agency",
-    carousel: true,
-    lead: "We map where AI has leverage in your business, build it into the products and workflows you already run, and measure whether it moved anything. How we measure, applied to our own work and including the results that went nowhere, is on WIG-log.",
+    slug: "ax",
+    kicker: "AX Agency",
+    title: "We measure it",
+    lead: "We map where AI has leverage in your business, build it into what you already run, and measure whether it moved anything.",
+    cue: "3 stages",
     rows: AX_ROWS,
   },
 ];

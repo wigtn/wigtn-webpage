@@ -11,9 +11,9 @@
  *     leaning on `accent` for legibility on light)
  *   - Everything that is not a link out of the page is separated by a
  *     hairline, not boxed.
- * Sections: 1 Hero · 2 What we do (the services) · 3 Our modules · 4 CTA,
- * a Divider between each pair. Section 3 is evidence for section 2's first
- * line and sits between the claim and the request on purpose. The landing held the record's capability list, a Notices rail and
+ * Sections: 1 Hero · 2 WIGTN Service (the two lines of business, side by
+ * side) · 3 CTA, a Divider between each pair. The evidence for section 2 is
+ * inside it now, in the half that claims it. The landing held the record's capability list, a Notices rail and
  * a WIG-log rail until 2026-08-09; the release ledger is /notices, and the
  * stories live under /story. MilestoneTimeline is retained but currently
  * unrouted.
@@ -21,7 +21,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { motion, useInView, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
 import { MILESTONES, PRACTICES, STORY_INDEX, type PracticeRow } from "./data";
 import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, rise, VIEWPORT } from "./chrome";
@@ -32,7 +32,8 @@ import type { Theme } from "@/lib/theme";
  *
  * The four of them had drifted to four different sizes, from 3rem on Friends to
  * 6rem on Notices, which read as four unrelated pages stacked rather than one
- * page with four parts. This is the size "What we do" was already using, and it
+ * page with four parts. This is the size the services block was already using,
+ * and it
  * is the one that survives at the top of a viewport without pushing its own
  * content off it.
  *
@@ -169,446 +170,290 @@ function Divider() {
   );
 }
 
-/* ───── What we do ──────────────────────────────────────────────────────────
+/* ───── WIGTN Service ───────────────────────────────────────────────────────
  *
- * Two lines of business, each a heading over its own evidence.
+ * The two lines of business as two halves of one section. At rest they are
+ * 50/50 and each shows its names; point at one and it takes 78 percent of the
+ * width while the other folds to 22, where its name and label still read
+ * horizontally without any rotated-spine trick.
  *
- * It used to be a sticky left header beside two cards with keyword tags, which
- * is the shape every agency site uses and said nothing either line could not
- * have said. The tags in particular ("Design", "Build", "Deploy") are the sort
- * of thing that survives on a page precisely because nobody can disagree with
- * it. What replaced them is a row per thing we have actually built, and every
- * row opens: the web rows into the running demo, the AX rows into the report
- * that carries the method and the limits.
+ * WHY ONE SECTION. They were two stacked bands, one practice each, and that was
+ * honest but cost about 1,800px of page to say seven things. Side by side, the
+ * whole business is 432px and the reader decides which half spends it. It also
+ * puts the two claims on one line: we build it, we measure it.
  *
- * The form is palantir.com's "Our Software" block, measured off the live page
- * on 2026-08-16 rather than recalled: a small heading, rows separated by
- * full-width hairlines, an enormous name at weight 400 with roughly -0.05em
- * tracking, a `/0.1` index hard right, and one line under it.
+ * THE FORM IS ackerton.com's "Main Service Offerings", measured off the live
+ * page on 2026-08-21 rather than recalled: a small heading with all the weight
+ * on the right, four offerings in a screen third, a description that appears
+ * only when something is pointed at, and a giant wordmark drifting sideways
+ * behind it. What did not come across is their staircase of photographs. Our
+ * only images are UI crops that already carry their own text, so a label on top
+ * of one is text over text; the names live on the ground instead.
  *
- * WEIGHT 400 IS A DELIBERATE BREAK from the rest of this page, where every
- * heading is bold. At this size bold turns a row into a banner; the reference
- * is light at 80px and that is most of why it reads as an index of what a firm
- * can do rather than a stack of adverts.
+ * EACH HALF OPENS INTO ITS OWN SHAPE, because the two are not the same kind of
+ * thing. The web modules are a set with no order, so all four appear at once,
+ * each running. The AX stages happen in sequence, so they sit on one line under
+ * a rule with a dot per stage: the line says the order, which is the job the
+ * carousel it replaces was doing with arrows, a counter and a dwell timer.
  *
- * The picture is hover-only, which is the reference's behaviour rather than a
- * flourish added to it: each of their rows carries a clip sized to nothing
- * until the row is pointed at. Ours does the same with a still, and only the
- * web rows have one. An AX row is a published paper and inventing a picture
- * for it would be dressing.
+ * THE NAMES ARE VISIBLE AT REST. Without them this section says two headings
+ * and nothing else, and a reader who scrolls past without pointing learns
+ * nothing about what we make. Opening replaces the names with the evidence for
+ * them, which reads as the names growing rather than a panel arriving.
  *
- * No pin and no scroll machinery. Rows reveal on entry with the page's `rise`
- * and nothing else moves.
+ * PURPLE IS STATE, NOT DECORATION. The wordmark is brand at 8.5 percent, the
+ * labels are accent, the open half takes a 3.8 percent wash, and the thing
+ * under the pointer is the only text that turns. Every one of those is
+ * answering "which one is this" or "which one is live".
  */
+
+/* How wide the pointed-at half becomes, and the fixed parts of a half its items
+ * have to make room for. The items are laid out at a width computed from these
+ * rather than at whatever width the half has mid-animation: a four-column grid
+ * that re-solves every frame reflows its text the whole way open, which reads
+ * as the words settling rather than as the panel opening. */
+const OPEN_SHARE = 0.78;
+const NAME_COL = 240;
+const HALF_PAD = 28;
+const ITEMS_GAP = 40;
+
 function Practices() {
+  const frame = useRef<HTMLDivElement | null>(null);
+  const [open, setOpen] = useState<string | null>(null);
+  const [itemsW, setItemsW] = useState<number | null>(null);
+  const still = useReducedMotion();
+
+  /* The wordmark's one motion, and the reference's too: it slides as the
+   * section passes rather than sitting dead. Transform only, so it never
+   * lays out. */
+  const { scrollYProgress } = useScroll({ target: frame, offset: ["start end", "end start"] });
+  const drift = useTransform(scrollYProgress, [0, 1], [34, -34]);
+
+  useEffect(() => {
+    const el = frame.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      const w = entry.contentRect.width;
+      setItemsW(Math.max(0, Math.round(w * OPEN_SHARE - NAME_COL - HALF_PAD * 2 - ITEMS_GAP)));
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   return (
-    <>
-      <section className="mx-auto max-w-6xl px-6 pt-24 md:pt-32">
-        <SectionTitle className="max-w-3xl">What we do</SectionTitle>
+    <section className="pt-24 md:pt-32">
+      <div className="mx-auto max-w-6xl px-6">
+        <SectionTitle className="max-w-3xl">WIGTN Service</SectionTitle>
         <p className="mt-5 max-w-xl text-pretty leading-relaxed text-ink-3">
-          No product of our own to sell. What we offer is the team, on your problem.
+          One team, two things. We build the product end to end, and we measure whether the AI
+          inside it moved anything. How we measure, applied to our own work and including the
+          results that went nowhere, is on WIG-log.
         </p>
-      </section>
+      </div>
 
-      {/* Alternating ground, which is how the reference separates its own
-          sections. It says these are two things rather than one long list, and
-          it does it without touching the type: right-aligning the second
-          practice was tried and it split each block in half, left the rows
-          with a void down one side, and made a two-line name start somewhere
-          new on its second line.
-          The band is full-bleed rather than inset, because a tinted rectangle
-          with the page showing down both sides is a card, and this page does
-          not use cards. */}
-      {PRACTICES.map((practice, n) => (
-        <div
-          key={practice.index}
-          className={`${n % 2 === 1 ? "bg-paper-sunken" : ""} py-16 md:py-24`}
+      {/* Full bleed, because the reference's band runs to the edge and because a
+          tinted half with the page showing down both sides is a card. Closing
+          the pointer out of the whole band, not out of a half, is what returns
+          it to 50/50: leaving one half by crossing into the other must not
+          flicker through the resting state on the way. */}
+      <div
+        ref={frame}
+        onPointerLeave={() => setOpen(null)}
+        className="relative mt-12 overflow-hidden border-y border-line/[0.14] md:mt-16 md:flex md:h-[27rem]"
+      >
+        <motion.span
+          aria-hidden
+          style={still ? undefined : { x: drift }}
+          className={`pointer-events-none absolute -bottom-14 left-6 z-0 select-none font-display text-[9rem] font-bold leading-none tracking-[-0.05em] text-brand/[0.085] transition-opacity duration-500 md:-bottom-[7.4rem] md:left-10 md:text-[18.75rem] ${
+            open ? "opacity-40" : "opacity-100"
+          }`}
         >
-          <div className="mx-auto max-w-6xl px-6">
-          {/* The practice name is a heading, not a micro-label. It was set in
-              the 11px mono the page uses for eyebrows, which is right for
-              "01 Web Agency" as a marker beside something else and wrong for
-              the thing that names half the business. The index keeps the mono
-              and stays small; the name takes a heading size and the row
-              weight, so the hierarchy runs title → practice → row. */}
-            <div className="flex items-baseline gap-4">
-              <span className="font-mono text-xs text-ink-5">{practice.index}</span>
-              <h3 className="font-display text-[clamp(1.5rem,3.2vw,2.25rem)] font-normal tracking-[-0.03em] text-ink">
-                {practice.name}
-              </h3>
-            </div>
-            <p className="mt-4 max-w-2xl text-pretty text-lg leading-relaxed text-ink-2">
-              {practice.lead}
-            </p>
+          WIGTN.
+        </motion.span>
 
-              {practice.carousel ? (
-              <PracticeCarousel rows={practice.rows} />
-            ) : (
-              <div className="mt-9 md:mt-12">
-                {practice.rows.map((row, i) => (
-                  <PracticeRowView key={row.slug} row={row} i={i} />
-                ))}
-                <div className="border-t border-line/[0.14]" />
+        {PRACTICES.map((practice, i) => {
+          const isOpen = open === practice.slug;
+          const basis = open === null ? 50 : isOpen ? OPEN_SHARE * 100 : (1 - OPEN_SHARE) * 100;
+          return (
+            <div
+              key={practice.slug}
+              /* Mouse only. A touch pointer enters and never leaves, so on a
+                 phone this would latch one half open for the rest of the visit;
+                 there the layout is stacked and everything is open anyway. */
+              onPointerEnter={(e) => e.pointerType === "mouse" && setOpen(practice.slug)}
+              /* Tab into a module link and the half it belongs to opens, so the
+                 keyboard never lands on something invisible. */
+              onFocusCapture={() => setOpen(practice.slug)}
+              /* Tablets: a tap opens, because they have neither hover nor the
+                 stacked layout. */
+              onClick={() => setOpen(practice.slug)}
+              style={{ flexBasis: `${basis}%` }}
+              className={`relative overflow-hidden px-6 py-9 transition-[flex-basis,background-color] duration-[620ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none md:flex md:p-7 ${
+                i === 1 ? "border-t border-line/[0.14] md:border-t-0" : ""
+              } ${isOpen ? "bg-brand/[0.038]" : ""}`}
+            >
+              {/* The divider is brand in the middle and the page's own hairline
+                  at both ends, so the colour is at the point the two halves meet
+                  rather than along the whole edge. */}
+              {i === 1 && (
+                <span
+                  aria-hidden
+                  className="absolute inset-y-0 left-0 z-[2] hidden w-px bg-gradient-to-b from-rule via-brand/50 to-rule md:block"
+                />
+              )}
+
+              <div className="relative z-[1] flex flex-col md:w-60 md:shrink-0">
+                <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
+                  {practice.kicker}
+                </span>
+                <h3 className="mt-3.5 font-display text-[2rem] font-normal leading-[1.02] tracking-[-0.04em] text-ink">
+                  {practice.title}
+                </h3>
+                <p className="mt-4 max-w-[26ch] text-pretty text-sm leading-relaxed text-ink-3">
+                  {practice.lead}
+                </p>
+
+                {/* The names, and only until this half has something better to
+                    show. Hidden on a phone, where the items themselves are
+                    always on screen and a list of the same names above them
+                    would just be the same list twice. */}
+                <div
+                  className={`mt-7 hidden flex-col gap-2 transition-[opacity,transform] duration-300 md:flex ${
+                    isOpen ? "pointer-events-none -translate-y-1.5 opacity-0" : "opacity-100"
+                  }`}
+                >
+                  {practice.rows.map((row) => (
+                    <span
+                      key={row.slug}
+                      className="font-display text-base tracking-[-0.02em] text-ink-2"
+                    >
+                      {row.name}
+                    </span>
+                  ))}
+                </div>
+
+                <span
+                  className={`mt-auto hidden items-center gap-2.5 pt-8 font-mono text-[11px] uppercase tracking-[0.2em] transition-colors md:flex ${
+                    isOpen ? "text-accent" : "text-ink-4"
+                  }`}
+                >
+                  <i
+                    aria-hidden
+                    className={`h-px transition-all duration-500 ${
+                      isOpen ? "w-14 bg-accent" : "w-8 bg-rule"
+                    }`}
+                  />
+                  {practice.cue}
+                </span>
               </div>
-            )}
-          </div>
-        </div>
-      ))}
-    </>
+
+              <div
+                style={itemsW ? { width: itemsW } : undefined}
+                className={`relative z-[1] mt-9 w-full md:mt-0 md:ml-10 md:shrink-0 md:transition-[opacity,transform] md:duration-500 md:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:md:transition-none ${
+                  isOpen ? "md:translate-x-0 md:opacity-100" : "md:translate-x-4 md:opacity-0"
+                }`}
+              >
+                {practice.slug === "web" ? (
+                  <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 md:h-full md:grid-cols-4 md:gap-5">
+                    {practice.rows.map((row) => (
+                      <ModuleCard key={row.slug} row={row} live={isOpen && !still} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-[2.125rem]">
+                    {practice.rows.map((row, n) => (
+                      <StageCard key={row.slug} row={row} last={n === practice.rows.length - 1} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 
-/* The picture a row shows when it is pointed at.
+/* One module: the screen it is, then what it does.
  *
- * The clip is fetched on the first hover and never before: `preload="none"`
- * plus a src that is not set until then, so four videos are not pulled down by
- * a reader who scrolls past. Until it has decoded, and for anyone whose
- * browser cannot decode VP8 at all, the poster is what is on screen, which is
- * the same frame the clip starts from.
+ * The clip is fetched when its half first opens and never before. `preload
+ * ="none"` plus a src that is not set until then means four videos are not
+ * pulled down by a reader who scrolls past, and until one has decoded the
+ * poster is on screen, which is the frame the clip starts from. Under
+ * prefers-reduced-motion the clip is never loaded at all and the still stays.
  *
- * The zoom is on the media, not the frame: scaling the frame moves its shadow
- * and edges too, which reads as the whole panel breathing rather than the
- * picture settling.
- *
- * Under prefers-reduced-motion the clip is never loaded and the still stays.
- * The row is a link, so it also has to work from the keyboard, which is what
- * the focus handlers are for. */
-function RowMedia({ row, on }: { row: PracticeRow; on: boolean }) {
+ * The card is the whole link. The name reaching for accent on hover is the only
+ * signal it needs; a row of four arrows would be four arrows. */
+function ModuleCard({ row, live }: { row: PracticeRow; live: boolean }) {
   const video = useRef<HTMLVideoElement | null>(null);
-  const [still, setStill] = useState(true);
 
-  useEffect(() => {
-    const q = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setStill(q.matches);
-    sync();
-    q.addEventListener("change", sync);
-    return () => q.removeEventListener("change", sync);
-  }, []);
-
-  /* The parent owns the hover, because the panel itself is
-     `pointer-events-none` and would never see it. */
   useEffect(() => {
     const v = video.current;
-    if (!v || still || !row.clip) return;
-    if (on) {
+    if (!v || !row.clip) return;
+    if (live) {
       if (!v.src) v.src = row.clip;
-      v.currentTime = 0;
       void v.play().catch(() => {});
     } else {
       v.pause();
     }
-  }, [on, still, row.clip]);
+  }, [live, row.clip]);
 
   return (
-    <span
-      aria-hidden
-      className="pointer-events-none absolute right-0 top-1/2 hidden h-[13.5rem] w-[21.5rem] -translate-y-1/2 overflow-hidden rounded-sm opacity-0 shadow-[0_30px_70px_-40px_rgba(21,21,21,0.7)] ring-1 ring-inset ring-line/15 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 group-focus-visible:opacity-100 lg:block"
+    <a
+      href={row.href}
+      target="_blank"
+      rel="noreferrer"
+      className="group flex flex-col focus-visible:outline-none"
     >
-      <video
-        ref={video}
-        poster={row.image}
-        muted
-        loop
-        playsInline
-        preload="none"
-        className="h-full w-full scale-[1.06] object-cover object-top transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100 group-focus-visible:scale-100"
-      />
-    </span>
-  );
-}
-
-
-/* ───── The AX practice, one stage at a time ────────────────────────────────
- *
- * The web modules are a set and read as a list. These are three stages in the
- * order they happen, and a carousel enforces that order: you are on one stage,
- * and the next one is next.
- *
- * BUILT ON SCROLL SNAP, not on a drag implementation. The track is an ordinary
- * horizontal scroller with `snap-mandatory`, so touch swipe, trackpad, shift
- * plus wheel, and the arrow keys all work without a line of code, and the
- * buttons below only call `scrollTo`. A hand-written drag would have to
- * reimplement momentum, rubber-banding and every one of those inputs, and would
- * still be worse on a phone.
- *
- * The active index is read back off scroll position rather than held as the
- * source of truth, so a swipe and a button press cannot disagree about where
- * the track is.
- *
- * The counter is the one place a number belongs on this page: it says where you
- * are in something that has an order, which is what the /0.1 index on the rows
- * was pretending to do and could not.
- *
- * IT ADVANCES ON ITS OWN, under four conditions that all have to hold. The
- * section is on screen, because a carousel that runs where nobody is looking
- * only spends the reader's first stage before they arrive. The pointer is not on
- * it and focus is not in it, because moving text out from under someone reading
- * it is the whole failure mode of an auto-carousel. Nobody has taken the
- * controls, because a reader who pressed next has said which stage they want and
- * the machine should stop having opinions. And it stops at the last stage rather
- * than wrapping, which is the same reason the arrows disable there: a sequence
- * that loops is not a sequence, and Feedback is where the engagement ends.
- *
- * The dwell is not a timer. It is the fill on the active dot, and the fill
- * finishing is what calls for the next slide, so the bar can never say one thing
- * while the schedule does another, and a pause is exact rather than a
- * calculation about time remaining. WCAG 2.2.2 wants a way to stop moving
- * content that starts by itself, and the arrows and dots are it: they are
- * keyboard reachable, and pressing one stops the motion for good.
- */
-const STAGE_MS = 7000;
-
-function PracticeCarousel({ rows }: { rows: PracticeRow[] }) {
-  const track = useRef<HTMLDivElement | null>(null);
-  const frame = useRef<HTMLDivElement | null>(null);
-  const seen = useInView(frame, { amount: 0.45 });
-  const [at, setAt] = useState(0);
-  const [held, setHeld] = useState(false);
-  const [taken, setTaken] = useState(false);
-  const [still, setStill] = useState(true);
-
-  /* Starts `true`, so nothing has moved before the query is read. */
-  useEffect(() => {
-    const q = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setStill(q.matches);
-    sync();
-    q.addEventListener("change", sync);
-    return () => q.removeEventListener("change", sync);
-  }, []);
-
-  const onScroll = () => {
-    const el = track.current;
-    if (!el) return;
-    /* Round rather than floor: at rest the snap leaves scrollLeft within a
-     * pixel of a slide boundary, and floor puts the counter one behind. */
-    setAt(Math.round(el.scrollLeft / el.clientWidth));
-  };
-
-  const go = useCallback(
-    (n: number) => {
-      const el = track.current;
-      if (!el) return;
-      const next = Math.max(0, Math.min(rows.length - 1, n));
-      el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
-    },
-    [rows.length],
-  );
-
-  /* A deliberate move ends the automatic one. */
-  const take = (n: number) => {
-    setTaken(true);
-    go(n);
-  };
-
-  const last = at === rows.length - 1;
-  const auto = !taken && !still && !last;
-  const running = auto && seen && !held;
-
-  return (
-    <div
-      ref={frame}
-      className="mt-9 md:mt-12"
-      /* Mouse only. A touch pointer enters and never leaves, which would park
-         the carousel for the rest of the visit; a touch is handled as a take
-         instead, on the track below. */
-      onPointerEnter={(e) => e.pointerType === "mouse" && setHeld(true)}
-      onPointerLeave={(e) => e.pointerType === "mouse" && setHeld(false)}
-      onFocusCapture={() => setHeld(true)}
-      onBlurCapture={() => setHeld(false)}
-    >
-      <div className="border-t border-line/[0.14]" />
-
-      <div
-        ref={track}
-        onScroll={onScroll}
-        /* Touching or arrowing the track is taking the controls, the same as
-           pressing a button. Not `onWheel`: a wheel event over the track fires
-           on the track even when the page is what scrolls, so a reader passing
-           by would silently switch the carousel off. */
-        onPointerDown={() => setTaken(true)}
-        onKeyDown={() => setTaken(true)}
-        tabIndex={0}
-        role="group"
-        aria-label="AX Agency stages"
-        /* The scrollbar is hidden because the dots and the counter already say
-           how much there is; a native bar under three slides reads as a second,
-           contradicting control. */
-        className="flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
-        {rows.map((row) => (
-          <div key={row.slug} className="w-full shrink-0 snap-start py-10 pr-6 md:py-14">
-            <h3 className="font-display text-[clamp(2.1rem,6.5vw,4.5rem)] font-normal leading-[1.0] tracking-[-0.05em] text-ink">
-              {row.name}
-            </h3>
-            <p className="mt-4 max-w-2xl text-pretty text-[15px] leading-relaxed text-ink-3">
-              {row.line}
-            </p>
-            <span className="mt-6 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-5">
-              {row.meta}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      <div className="flex items-center gap-5 border-t border-line/[0.14] pt-5">
-        <span className="font-mono text-xs tabular-nums text-ink-4">
-          {`${at + 1} / ${rows.length}`}
-        </span>
-
-        {/* Dots are the destinations; the arrows are the neighbours. Both,
-            because three slides is few enough to jump between and a reader who
-            wants the next one should not have to aim. */}
-        <div className="flex items-center gap-2">
-          {rows.map((row, i) => (
-            <button
-              key={row.slug}
-              type="button"
-              onClick={() => take(i)}
-              aria-label={row.name}
-              aria-current={i === at}
-              className={`h-1.5 overflow-hidden rounded-full transition-all duration-300 ${
-                i === at ? "w-6 bg-line/20" : "w-1.5 bg-line/25 hover:bg-line/50"
-              }`}
-            >
-              {i === at ? (
-                /* Keyed on the index so the fill restarts with the stage. When
-                   the carousel is not advancing itself the bar is simply full:
-                   a dwell indicator counting down to nothing would be a lie. */
-                <span
-                  key={at}
-                  aria-hidden
-                  onAnimationEnd={() => go(at + 1)}
-                  style={
-                    auto
-                      ? { animationDuration: `${STAGE_MS}ms`, animationPlayState: running ? "running" : "paused" }
-                      : undefined
-                  }
-                  className={`block h-full w-full rounded-full bg-accent ${auto ? "stage-fill" : ""}`}
-                />
-              ) : null}
-            </button>
-          ))}
-        </div>
-
-        <div className="ml-auto flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => take(at - 1)}
-            disabled={at === 0}
-            aria-label="Previous stage"
-            className="grid h-9 w-9 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/[0.06] hover:text-ink disabled:pointer-events-none disabled:text-ink-5/40"
-          >
-            <ArrowRight aria-hidden size={16} className="rotate-180" />
-          </button>
-          <button
-            type="button"
-            onClick={() => take(at + 1)}
-            disabled={at === rows.length - 1}
-            aria-label="Next stage"
-            className="grid h-9 w-9 place-items-center rounded-full text-ink-3 transition-colors hover:bg-line/[0.06] hover:text-ink disabled:pointer-events-none disabled:text-ink-5/40"
-          >
-            <ArrowRight aria-hidden size={16} />
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* No index on the row.
- *
- * The reference numbers its five products /0.1 to /0.5, and that came across
- * with the rest of the form. It did not survive the check every structural
- * device has to pass, which is whether it encodes something true. The four web
- * modules are a set, not a sequence: nothing about UI Kit makes it first. The
- * numbering also restarted inside each practice, so one page carried two rows
- * both labelled 0.1, which reads as a mistake rather than a system. And the
- * `0.` prefix meant nothing here; it was a shape copied from a page that may
- * have had a reason for it.
- *
- * The AX stages genuinely are ordered and an ordinal there would be
- * information. It is left off anyway: numbers on one practice and not the other
- * is a difference the reader has to decode, and the stages already read in
- * order because they are stacked in it.
- *
- * `i` stays, and is only the stagger delay on the reveal. It is not rendered. */
-function PracticeRowView({ row, i }: { row: PracticeRow; i: number }) {
-  const [on, setOn] = useState(false);
-  /* A row that has nowhere to go is not a link. The AX rows are stages of an
-   * engagement, and rendering them as anchors would put four dead entries in a
-   * screen reader's link list and give a pointer a hand cursor over text that
-   * does nothing. */
-  const Row = row.href ? motion.a : motion.div;
-  return (
-    <Row
-      onMouseEnter={() => setOn(true)}
-      onMouseLeave={() => setOn(false)}
-      onFocus={() => setOn(true)}
-      onBlur={() => setOn(false)}
-      {...(row.href ? { href: row.href, target: "_blank", rel: "noreferrer" } : {})}
-      variants={rise}
-      custom={i}
-      initial="hidden"
-      whileInView="show"
-      viewport={VIEWPORT}
-      className="group relative block border-t border-line/[0.14] py-7 md:py-9"
-    >
-      {/* The receipt, on the rows that have one. It sits over the row's right
-          half, clipped, and arrives with a slow push in. `pointer-events-none`
-          so it never takes the cursor off the row that summoned it, and hidden
-          below lg because at that width it would cover the sentence it is
-          illustrating rather than sit beside it. The row has to read with the
-          picture never shown, and on a phone it never is. */}
-      {row.image && <RowMedia row={row} on={on} />}
-
-      <h3
-        /* Bigger than before, because the names are short now. A sentence had
-           to be clamped down to fit; "UI Kit" does not. */
-        className={`font-display text-[clamp(2.1rem,6.5vw,4.5rem)] font-normal leading-[1.0] tracking-[-0.05em] text-ink transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${row.href ? "group-hover:translate-x-1.5 " : ""}${
-          row.image ? "max-w-[85%] lg:max-w-[58%]" : "max-w-[85%]"
-        }`}
-      >
-        {row.name}
-      </h3>
-
-      {/* Small, and one line's worth. The name carries the row; this says what
-          it is for and hands off to the demo or the report. */}
-      <p
-        className={`mt-3 text-pretty text-[15px] leading-relaxed text-ink-3 ${
-          row.image ? "max-w-2xl lg:max-w-[54%]" : "max-w-2xl"
-        }`}
-      >
-        {row.line}
-      </p>
-
-      {/* Figures where the web rows have a picture. A module is evidence
-          because you can open it; a published system is evidence because it
-          was measured, so this half of the page hands over numbers. Each is
-          copied from that system's report at the precision the report uses,
-          including the ones that are not flattering: the harness resolved the
-          same tasks, took 151.7 percent longer, and produced no repeatable
-          quality lift. Leaving that out would make the row an advert. */}
-      {row.figures && (
-        <dl className="mt-6 flex flex-wrap gap-x-12 gap-y-4">
-          {row.figures.map((f) => (
-            <div key={f.label}>
-              <dt className="sr-only">{f.label}</dt>
-              <dd className="font-display text-2xl font-normal tabular-nums tracking-tight text-ink md:text-[1.75rem]">
-                {f.value}
-              </dd>
-              <dd className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-5">
-                {f.label}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      )}
-
-      <span className={`inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-5 transition-colors ${row.href ? "group-hover:text-accent" : ""} ${row.figures ? "mt-6" : "mt-3"}`}>
-        {row.meta}
-        {row.href && <ArrowUpRight aria-hidden size={12} />}
+      <span className="relative block h-44 overflow-hidden bg-paper-tint ring-1 ring-inset ring-line/10 group-focus-visible:ring-accent md:h-[9.375rem]">
+        <video
+          ref={video}
+          poster={row.image}
+          muted
+          loop
+          playsInline
+          preload="none"
+          className="h-full w-full scale-[1.06] object-cover object-top transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100"
+        />
       </span>
-    </Row>
+      <span className="mt-4 font-display text-lg tracking-[-0.03em] text-ink transition-colors group-hover:text-accent">
+        {row.name}
+      </span>
+      <span className="mt-2 text-pretty text-[12.5px] leading-relaxed text-ink-3">{row.line}</span>
+      <span className="mt-auto pt-3 font-mono text-[9.5px] uppercase tracking-[0.14em] text-ink-5">
+        {row.meta}
+      </span>
+    </a>
+  );
+}
+
+/* One stage of an engagement. Not a link, because there is nowhere to send
+ * anyone: what it promises is a thing the client ends up holding, not a page.
+ *
+ * The rule running out of the right edge is the sequence. It stops at the last
+ * stage rather than continuing, because Feedback is where the engagement ends. */
+function StageCard({ row, last }: { row: PracticeRow; last: boolean }) {
+  return (
+    <div className="group relative pt-6">
+      <span
+        aria-hidden
+        className={`absolute left-0 top-0 h-px bg-gradient-to-r from-brand/40 to-rule ${
+          last ? "right-0" : "-right-8 md:-right-[2.125rem]"
+        }`}
+      />
+      <span
+        aria-hidden
+        className="absolute -top-[3px] left-0 h-[7px] w-[7px] rounded-full bg-brand/60 transition-transform duration-300 group-hover:scale-[1.35] group-hover:bg-accent"
+      />
+      <h4 className="font-display text-2xl font-normal tracking-[-0.035em] text-ink transition-colors group-hover:text-accent">
+        {row.name}
+      </h4>
+      <p className="mt-3 text-pretty text-[13px] leading-relaxed text-ink-3">{row.line}</p>
+      <span className="mt-4 block font-mono text-[9.5px] uppercase tracking-[0.14em] text-ink-5">
+        {row.meta}
+      </span>
+    </div>
   );
 }
 

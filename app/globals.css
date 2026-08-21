@@ -195,23 +195,6 @@
   animation-play-state: paused;
 }
 
-/* AX carousel dwell (ResearchLedHome PracticeCarousel). The active dot fills
- * over the time the stage holds, and the fill reaching its end is what advances
- * the slide, so the bar and the schedule are the same object and cannot drift
- * apart. Pausing it therefore pauses the carousel exactly, with no arithmetic
- * about time remaining. Duration and play state come from the component. */
-@keyframes stage-fill {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
-}
-
-.stage-fill {
-  transform-origin: left;
-  animation-name: stage-fill;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards;
-}
-
 /* ───────────────────────────────────────────────────────────────────────────
  * Legacy landing animations (components/sections/*): retained but no longer
  * routed. Kept only because Crew/About still reference them; safe to drop if
