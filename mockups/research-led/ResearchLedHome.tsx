@@ -19,7 +19,7 @@
  * unrouted.
  */
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
@@ -214,13 +214,17 @@ function Divider() {
  * as the words settling rather than as the panel opening. */
 const OPEN_SHARE = 0.78;
 const NAME_COL = 240;
-const HALF_PAD = 28;
+const INNER_PAD = 28;
 const ITEMS_GAP = 40;
+/* The page's own measure: max-w-6xl plus its px-6 gutter. The band ignores it,
+ * the words in the band do not. */
+const PAGE_W = 1152;
+const PAGE_PAD = 24;
 
 function Practices() {
   const frame = useRef<HTMLDivElement | null>(null);
   const [open, setOpen] = useState<string | null>(null);
-  const [itemsW, setItemsW] = useState<number | null>(null);
+  const [box, setBox] = useState<{ gutter: number; items: number } | null>(null);
   const still = useReducedMotion();
 
   /* The wordmark's one motion, and the reference's too: it slides as the
@@ -229,12 +233,20 @@ function Practices() {
   const { scrollYProgress } = useScroll({ target: frame, offset: ["start end", "end start"] });
   const drift = useTransform(scrollYProgress, [0, 1], [34, -34]);
 
+  /* Two numbers come off the band's own width, and both exist for the same
+   * reason: the ground is full bleed and the words are not. The outer padding
+   * is whatever puts a half's text on the page's left or right margin, and the
+   * items get what is left of the open share after it. */
   useEffect(() => {
     const el = frame.current;
     if (!el) return;
     const ro = new ResizeObserver(([entry]) => {
       const w = entry.contentRect.width;
-      setItemsW(Math.max(0, Math.round(w * OPEN_SHARE - NAME_COL - HALF_PAD * 2 - ITEMS_GAP)));
+      const gutter = Math.max(PAGE_PAD, Math.round((w - PAGE_W) / 2) + PAGE_PAD);
+      setBox({
+        gutter,
+        items: Math.max(0, Math.round(w * OPEN_SHARE) - gutter - INNER_PAD - NAME_COL - ITEMS_GAP),
+      });
     });
     ro.observe(el);
     return () => ro.disconnect();
@@ -259,12 +271,17 @@ function Practices() {
       <div
         ref={frame}
         onPointerLeave={() => setOpen(null)}
-        className="relative mt-12 overflow-hidden border-y border-line/[0.14] md:mt-16 md:flex md:h-[27rem]"
+        style={
+          box
+            ? ({ "--gutter": `${box.gutter}px`, "--items-w": `${box.items}px` } as CSSProperties)
+            : undefined
+        }
+        className="relative mt-12 overflow-hidden border-y border-line/[0.14] md:mt-16 xl:flex xl:h-[27rem]"
       >
         <motion.span
           aria-hidden
           style={still ? undefined : { x: drift }}
-          className={`pointer-events-none absolute -bottom-14 left-6 z-0 select-none font-display text-[9rem] font-bold leading-none tracking-[-0.05em] text-brand/[0.085] transition-opacity duration-500 md:-bottom-[7.4rem] md:left-10 md:text-[18.75rem] ${
+          className={`pointer-events-none absolute -bottom-14 left-6 z-0 select-none font-display text-[9rem] font-bold leading-none tracking-[-0.05em] text-brand/[0.085] transition-opacity duration-500 xl:-bottom-[7.4rem] xl:text-[18.75rem] xl:[left:var(--gutter)] ${
             open ? "opacity-40" : "opacity-100"
           }`}
         >
@@ -288,8 +305,10 @@ function Practices() {
                  stacked layout. */
               onClick={() => setOpen(practice.slug)}
               style={{ flexBasis: `${basis}%` }}
-              className={`relative overflow-hidden px-6 py-9 transition-[flex-basis,background-color] duration-[620ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none md:flex md:p-7 ${
-                i === 1 ? "border-t border-line/[0.14] md:border-t-0" : ""
+              className={`relative overflow-hidden px-6 py-9 transition-[flex-basis,background-color] duration-[620ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none xl:flex xl:py-7 ${
+                i === 1
+                  ? "border-t border-line/[0.14] xl:border-t-0 xl:pl-7 xl:[padding-right:var(--gutter)]"
+                  : "xl:pr-7 xl:[padding-left:var(--gutter)]"
               } ${isOpen ? "bg-brand/[0.038]" : ""}`}
             >
               {/* The divider is brand in the middle and the page's own hairline
@@ -298,11 +317,11 @@ function Practices() {
               {i === 1 && (
                 <span
                   aria-hidden
-                  className="absolute inset-y-0 left-0 z-[2] hidden w-px bg-gradient-to-b from-rule via-brand/50 to-rule md:block"
+                  className="absolute inset-y-0 left-0 z-[2] hidden w-px bg-gradient-to-b from-rule via-brand/50 to-rule xl:block"
                 />
               )}
 
-              <div className="relative z-[1] flex flex-col md:w-60 md:shrink-0">
+              <div className="relative z-[1] flex flex-col xl:w-60 xl:shrink-0">
                 <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
                   {practice.kicker}
                 </span>
@@ -318,7 +337,7 @@ function Practices() {
                     always on screen and a list of the same names above them
                     would just be the same list twice. */}
                 <div
-                  className={`mt-7 hidden flex-col gap-2 transition-[opacity,transform] duration-300 md:flex ${
+                  className={`mt-7 hidden flex-col gap-2 transition-[opacity,transform] duration-300 xl:flex ${
                     isOpen ? "pointer-events-none -translate-y-1.5 opacity-0" : "opacity-100"
                   }`}
                 >
@@ -333,7 +352,7 @@ function Practices() {
                 </div>
 
                 <span
-                  className={`mt-auto hidden items-center gap-2.5 pt-8 font-mono text-[11px] uppercase tracking-[0.2em] transition-colors md:flex ${
+                  className={`mt-auto hidden items-center gap-2.5 pt-8 font-mono text-[11px] uppercase tracking-[0.2em] transition-colors xl:flex ${
                     isOpen ? "text-accent" : "text-ink-4"
                   }`}
                 >
@@ -348,19 +367,19 @@ function Practices() {
               </div>
 
               <div
-                style={itemsW ? { width: itemsW } : undefined}
-                className={`relative z-[1] mt-9 w-full md:mt-0 md:ml-10 md:shrink-0 md:transition-[opacity,transform] md:duration-500 md:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:md:transition-none ${
-                  isOpen ? "md:translate-x-0 md:opacity-100" : "md:translate-x-4 md:opacity-0"
+                
+                className={`relative z-[1] mt-9 w-full xl:mt-0 xl:ml-10 xl:shrink-0 xl:[width:var(--items-w)] xl:transition-[opacity,transform] xl:duration-500 xl:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:xl:transition-none ${
+                  isOpen ? "xl:translate-x-0 xl:opacity-100" : "xl:translate-x-4 xl:opacity-0"
                 }`}
               >
                 {practice.slug === "web" ? (
-                  <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 md:h-full md:grid-cols-4 md:gap-5">
+                  <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 xl:h-full xl:grid-cols-4 xl:gap-5">
                     {practice.rows.map((row) => (
                       <ModuleCard key={row.slug} row={row} live={isOpen && !still} />
                     ))}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-[2.125rem]">
+                  <div className="grid grid-cols-1 gap-8 md:grid-cols-3 xl:gap-[2.125rem]">
                     {practice.rows.map((row, n) => (
                       <StageCard key={row.slug} row={row} last={n === practice.rows.length - 1} />
                     ))}
@@ -406,7 +425,7 @@ function ModuleCard({ row, live }: { row: PracticeRow; live: boolean }) {
       rel="noreferrer"
       className="group flex flex-col focus-visible:outline-none"
     >
-      <span className="relative block h-44 overflow-hidden bg-paper-tint ring-1 ring-inset ring-line/10 group-focus-visible:ring-accent md:h-[9.375rem]">
+      <span className="relative block h-44 overflow-hidden bg-paper-tint ring-1 ring-inset ring-line/10 group-focus-visible:ring-accent xl:h-[9.375rem]">
         <video
           ref={video}
           poster={row.image}
@@ -439,7 +458,7 @@ function StageCard({ row, last }: { row: PracticeRow; last: boolean }) {
       <span
         aria-hidden
         className={`absolute left-0 top-0 h-px bg-gradient-to-r from-brand/40 to-rule ${
-          last ? "right-0" : "-right-8 md:-right-[2.125rem]"
+          last ? "right-0" : "-right-8 md:-right-6 xl:-right-[2.125rem]"
         }`}
       />
       <span
