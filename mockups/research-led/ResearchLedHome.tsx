@@ -290,7 +290,19 @@ function Practices() {
 
         {PRACTICES.map((practice, i) => {
           const isOpen = open === practice.slug;
+          const folded = open !== null && !isOpen;
           const basis = open === null ? 50 : isOpen ? OPEN_SHARE * 100 : (1 - OPEN_SHARE) * 100;
+          /* The outer padding is the page margin, until the half folds. At
+           * 1440 that margin is 168px and a folded half is 317px wide, so
+           * keeping it would leave 121px for a 240px name column and cut the
+           * heading off mid-word. Folded, the padding drops to the inner one
+           * and the block slides out to the wall it is being pushed against,
+           * which is also what it looks like: pushed aside, not sheared. */
+          const pad = folded
+            ? "xl:pl-7 xl:pr-7"
+            : i === 1
+              ? "xl:pl-7 xl:[padding-right:var(--gutter)]"
+              : "xl:pr-7 xl:[padding-left:var(--gutter)]";
           return (
             <div
               key={practice.slug}
@@ -305,10 +317,8 @@ function Practices() {
                  stacked layout. */
               onClick={() => setOpen(practice.slug)}
               style={{ flexBasis: `${basis}%` }}
-              className={`relative overflow-hidden px-6 py-9 transition-[flex-basis,background-color] duration-[620ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none xl:flex xl:py-7 ${
-                i === 1
-                  ? "border-t border-line/[0.14] xl:border-t-0 xl:pl-7 xl:[padding-right:var(--gutter)]"
-                  : "xl:pr-7 xl:[padding-left:var(--gutter)]"
+              className={`relative overflow-hidden px-6 py-9 transition-[flex-basis,background-color,padding] duration-[620ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none xl:flex xl:py-7 ${pad} ${
+                i === 1 ? "border-t border-line/[0.14] xl:border-t-0" : ""
               } ${isOpen ? "bg-brand/[0.038]" : ""}`}
             >
               {/* The divider is brand in the middle and the page's own hairline
