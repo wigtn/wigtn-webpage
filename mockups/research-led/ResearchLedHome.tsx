@@ -11,7 +11,7 @@
  *     leaning on `accent` for legibility on light)
  *   - Everything that is not a link out of the page is separated by a
  *     hairline, not boxed.
- * Sections: 1 Hero · 2 WIGTN Service (the two lines of business, side by
+ * Sections: 1 Hero · 2 Our Service (the two lines of business, side by
  * side) · 3 CTA, a Divider between each pair. The evidence for section 2 is
  * inside it now, in the half that claims it. The landing held the record's capability list, a Notices rail and
  * a WIG-log rail until 2026-08-09; the release ledger is /notices, and the
@@ -170,7 +170,7 @@ function Divider() {
   );
 }
 
-/* ───── WIGTN Service ───────────────────────────────────────────────────────
+/* ───── Our Service ─────────────────────────────────────────────────────────
  *
  * The two lines of business as two halves of one section. At rest they are
  * 50/50 and each shows its names; point at one and it takes 78 percent of the
@@ -255,7 +255,7 @@ function Practices() {
   return (
     <section className="pt-24 md:pt-32">
       <div className="mx-auto max-w-6xl px-6">
-        <SectionTitle className="max-w-3xl">WIGTN Service</SectionTitle>
+        <SectionTitle className="max-w-3xl">Our Service</SectionTitle>
         <p className="mt-5 max-w-xl text-pretty leading-relaxed text-ink-3">
           One team, two things. We build the product end to end, and we measure whether the AI
           inside it moved anything. How we measure, applied to our own work and including the

@@ -27,7 +27,7 @@ public/images/             team portraits, logos, one milestone photo. Nothing e
 
 The site has four nav destinations: **About** (/team), **Notice** (/notices),
 **Story** (/story), and **Tech**, which is an external link to WIG-log's
-report index. The landing page is three sections: Hero, WIGTN Service (the
+report index. The landing page is three sections: Hero, Our Service (the
 business model: Web Agency and AX Agency as two halves that open when
 pointed at), Contact. About is "Who we are.":
 the members and the partners, nothing else. A **Blog** section exists in the
