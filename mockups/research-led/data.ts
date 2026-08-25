@@ -685,15 +685,17 @@ export const RETIRED: {
    * free to export /news as a redirect the same way it does the rest. */
   { note: "The page is called Notice now, and its URL says so. It carries the release record; the event news moved to the Story page.",
     slug: "news", to: NOTICES, title: "WIGTN Notice" },
+  /* Removed here on 2026.08.08 and deliberately kept out of RETIRED while the
+   * paper sat in the EMNLP 2026 Industry Track anonymity period — the
+   * destination report was not public, so a redirect would have pointed at
+   * nothing. The paper was accepted and the report went live on 2026.08.26
+   * under the slug `rcps`, which is why the old slug and the target differ. */
+  {
+    note: "Technical write-ups moved to the WIGTN tech-report site, where each one carries its method, its measurements and its limitations. This site now covers what the team does: events, releases and news.",
+    slug: "wigtnocr-radp",
+    to: techReportHref("rcps"),
+    title: "RCPS",
+  },
 ];
-
-/* `wigtnocr-radp` (RCPS) was removed here on 2026.08.08 and is deliberately NOT
- * in RETIRED. The paper is under review at EMNLP 2026 Industry Track and the
- * anonymity period is still running, so the destination report is not public
- * yet and a redirect would point at nothing. /wigtnocr-radp 404s on purpose
- * until then.
- *
- * When the notification lands and the report goes live on the tech-report site,
- * add it to RETIRED pointing at techReportHref("wigtnocr-radp"). */
 
 export const getRetired = (slug: string) => RETIRED.find((r) => r.slug === slug);
