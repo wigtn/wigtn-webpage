@@ -1,30 +1,36 @@
 /**
- * Release record: WIGTN Plugin v2 for Codex, current through v0.4.0.
+ * Release record: WIGTN Plugin v2 for Codex, current through v0.5.1.
  *
  * Follows updates/_template/announcement/STRUCTURE.md. This is one product
  * record with a newest-first versions array, not one post per version.
  *
  * Sources, in order of authority:
- *  - https://github.com/wigtn/wigtn-plugins-codex at annotated tag v0.4.0,
- *    created 2026-08-12. Commit 92175ff adds the opt-in knowledge-wiki skill,
- *    its Stop hook, safety gates, examples and regression checks.
- *  - README.md and .codex-plugin/plugin.json at v0.4.0. They support the
- *    ten-skill count, the two install commands, the opt-in boundary and the
- *    per-user-only automatic publishing boundary.
- *  - LICENSE at v0.4.0, Apache 2.0.
+ *  - https://github.com/wigtn/wigtn-plugins-codex releases v0.5.0 and v0.5.1,
+ *    published 2026-08-24 and 2026-08-25. Their target commits are 48ca387
+ *    and 75dc8a0.
+ *  - README.md and .codex-plugin/plugin.json at v0.5.1. They support the
+ *    nine-skill Core count, the Core install commands, the separate optional
+ *    knowledge-wiki install and the current invocation boundaries.
+ *  - Commit 48ca387 and its diff from v0.4.0. It splits Knowledge Wiki into
+ *    its own plugin and narrows the Core PRD, screen, planning, acceptance and
+ *    verified-delivery contracts.
+ *  - Commit 75dc8a0 and its diff from v0.5.0. It adds structural and visual
+ *    checks for diagrams, presentations and responsive screen wireframes.
+ *  - LICENSE at v0.5.1, Apache 2.0.
  *  - The Codex tech report, "Running a harness on frontier models, part 2",
  *    for the evaluation behind the earlier selective lifecycle design. There
- *    is no separate report for knowledge-wiki, so this notice makes no
- *    performance or effectiveness claim about it.
+ *    is no separate report for the v0.5 visual-delivery changes, so this
+ *    notice makes no performance or effectiveness claim about them.
  *
  * Editorial decisions:
  * 1. No cover. Neither repository contains a product screenshot that carries
  *    a fact the prose cannot, and the announcement template has a zero-photo
  *    default.
- * 2. The v0.4.0 change is the lead. The skill count is package inventory, not
- *    an achievement claim.
- * 3. The install remains a two-command list copied from the v0.4.0 README.
- * 4. The original v0.1.0 through v0.3.0 rows remain unchanged because their
+ * 2. The two v0.5 releases are the lead. Skill and validator counts are
+ *    package inventory, not achievement claims.
+ * 3. The Core install remains a two-command list copied from the v0.5.1
+ *    README. The optional Knowledge Wiki command is labelled separately.
+ * 4. The original v0.1.0 through v0.4.0 rows remain unchanged because their
  *    source history has not changed.
  */
 
@@ -41,10 +47,10 @@ export const wigtnCodexRelease: Article = {
   releaseType: "plugin",
   tag: "RELEASE",
   title: "WIGTN Plugin v2: Codex",
-  version: "v0.4.0",
+  version: "v0.5.1",
   summary:
-    "v0.4.0 adds an opt-in Knowledge Wiki that turns reusable Codex session learning into gated per-user notes. Installation alone captures nothing.",
-  date: "2026.08.12",
+    "v0.5.0 moved Knowledge Wiki out of Core and cut back the PRD, screen and delivery workflows. v0.5.1 adds checks for diagrams, decks and wireframes.",
+  date: "2026.08.25",
   author: "WIGTN Engineering",
   readTime: "2 min",
   links: [
@@ -53,15 +59,24 @@ export const wigtnCodexRelease: Article = {
   ],
   /* Full version history. v0.1.0 through v0.3.0 were sourced from `gh api
    * repos/wigtn/wigtn-plugins-codex/releases` on 2026-08-09. v0.4.0 is sourced
-   * from its annotated tag and release commit on 2026-08-12.
+   * from its annotated tag and release commit on 2026-08-12. v0.5.0 and
+   * v0.5.1 are sourced from their GitHub release objects and target commits
+   * on 2026-08-27.
    *
    * THE NOTES COME FROM COMMITS, NOT FROM RELEASE NOTES, and that is a weaker
-   * source than the one the Claude Code plugin's list uses. The first three
+   * source than the one the Claude Code plugin's list uses. All six
    * release objects contain a "Full Changelog" compare link and nothing else.
    * Their lines come from the release commits and files they touched, read
    * through `gh api repos/wigtn/wigtn-plugins-codex/compare/<prev>...<tag>` and
    * `.../commits/<sha>` on 2026-08-09. The v0.4.0 line comes from its annotated
-   * tag and commit diff on 2026-08-12:
+   * tag and commit diff on 2026-08-12. The two v0.5 lines come from their
+   * target commits and README sections:
+   *   - v0.5.1, 75dc8a03 "feat: harden visual delivery for v0.5.1", which
+   *     adds diagram and HTML-deck verifiers, makes the responsive wireframe
+   *     self-contained and adds resource-integrity and visual contracts.
+   *   - v0.5.0, 48ca3875 "feat: slim Codex harness for v0.5", which moves
+   *     Knowledge Wiki into a separate plugin and narrows PRD, screen,
+   *     WorkGraph, acceptance and verified-delivery invocation contracts.
    *   - v0.4.0, 92175ff6 "feat: add opt-in Codex knowledge wiki", which adds
    *     the knowledge-wiki skill, Stop hook, gated worker and regression test.
    *   - v0.3.0, 14ac417c "feat: release selective lifecycle plugin v0.3.0",
@@ -80,6 +95,16 @@ export const wigtnCodexRelease: Article = {
    * code and deciding what mattered. The real fix is still to write release
    * notes in the plugin repo, and when they exist, re-source from those. */
   versions: [
+    {
+      version: "v0.5.1",
+      date: "2026.08.25",
+      note: "Checks Mermaid source, SVG and PNG output, HTML decks, responsive wireframes and bundled resources.",
+    },
+    {
+      version: "v0.5.0",
+      date: "2026.08.24",
+      note: "Moves Knowledge Wiki out of Core, starts PRDs in Compact mode, and narrows when Screen Spec, Work Planner and Verified Delivery step in.",
+    },
     {
       version: "v0.4.0",
       date: "2026.08.12",
@@ -103,18 +128,18 @@ export const wigtnCodexRelease: Article = {
   ],
   body: [
     p(
-      "WIGTN Plugin v2 for Codex reached v0.4.0 on 12 August 2026. The release adds an opt-in Knowledge Wiki that can turn reusable session learning into a Markdown note under a personal wiki path. Installing the plugin does not turn capture on.",
+      "WIGTN Plugin v2 for Codex reached v0.5.1 on 25 August 2026. v0.5.0 moved session knowledge capture into a separate optional plugin and left nine skills in Core. v0.5.1 added checks for the diagrams, decks and wireframes those skills produce.",
     ),
-    { t: "h", text: "What changed since v0.3.0" },
+    { t: "h", text: "What changed since v0.4.0" },
     p(
-      "Knowledge Wiki is the tenth skill. It runs only after a separate configuration sets enabled to true and names a narrow repository scope. A completed Codex turn first passes a scope check and a deterministic secret scan. A detached worker then generalises reusable knowledge, runs a separate semantic audit and scans the output again before it can write a note.",
+      "v0.5.0 moved Knowledge Wiki out of Core. Product Spec now starts with the Compact format. Screen Spec writes only the requested files and the files they depend on. Work Planner steps in only when a plan must be saved or resumed. Verified Delivery still requires an explicit call and asks for only the evidence the change needs.",
     ),
     p(
-      "Automatic publishing stops at per-user paths. The shared area still requires human review, and remote push stays off unless it is enabled separately. If a gate cannot decide, the pipeline discards the note rather than publishing it.",
+      "v0.5.1 added checks for Mermaid source, SVG and PNG output before visual review. WIGTN Presentation now leaves file generation to Codex and applies the WIGTN brand. HTML decks are built only when requested. Screen wireframes no longer use a CDN, and the validator checks their viewport setting, internal links and remote resources.",
     ),
 
     { t: "h", text: "Get it" },
-    p("Two lines, verbatim from the v0.4.0 README:"),
+    p("Two lines, verbatim from the v0.5.1 README:"),
     {
       t: "list",
       items: [
@@ -123,28 +148,33 @@ export const wigtnCodexRelease: Article = {
       ],
     },
     p(
-      "The existing product workflow skills are still chosen from plain requests. Knowledge capture is different: installation makes the skill available, but a separate local configuration must enable the hook and define what repositories and personal wiki path it may touch.",
+      "The Core package contains no lifecycle hook. Session knowledge capture is available as a separate optional install:",
+    ),
+    { t: "quote", text: "codex plugin add wigtn-knowledge-wiki@wigtn" },
+    p(
+      "Installing that plugin still captures nothing until a local configuration enables it and defines the allowed repositories and personal wiki path.",
     ),
 
     { t: "h", text: "What shipped" },
     p(
-      "The release adds a Stop hook, a private one-shot queue and Python workers alongside the existing skill definitions and schemas.",
+      "Core and Knowledge Wiki now ship as two plugins in the same marketplace. Core contains the skills and validators for product and release work. Knowledge Wiki remains optional.",
     ),
     {
       t: "list",
       items: [
-        "Ten skills at v0.4.0. Knowledge-wiki joins the nine skills shipped in v0.3.0.",
-        "Four knowledge export gates: repository scope, deterministic secret blocking, a separate semantic audit and a deterministic output scan.",
-        "Automatic wiki writes are limited to per-user paths. The shared path remains a human-reviewed promotion step.",
-        "The v0.3.0 WorkGraph, evidence and release-authority contracts remain in the package.",
+        "Core ships nine skills for PRDs, screen files, saved plans, acceptance checks, design direction, verified delivery, Git releases, diagrams and WIGTN decks.",
+        "Knowledge Wiki stays outside Core. Its repository, secret, semantic-audit and output checks still apply when it is installed.",
+        "Product Spec starts with Compact, Screen Spec writes only the requested files, and Verified Delivery runs only when called by name.",
+        "v0.5.1 checks diagram files, decks, wireframes and bundled resources before they are handed off.",
+        "WorkGraph, evidence and Git-authority contracts remain in Core.",
         "Apache 2.0.",
-        "Not included: a claim that Knowledge Wiki improves productivity or captures every useful session. No evaluation supporting either claim has been published.",
+        "This release does not claim that the plugin improves coding quality or efficiency. The published evaluation does not show a general improvement.",
       ],
     },
 
     { t: "h", text: "Read the report" },
     p(
-      "The Codex tech report explains the selective lifecycle design that preceded this release. The v0.4.0 implementation, safety policy and full version history are in the repository. Both are linked at the top of this page.",
+      "The Codex tech report explains why these workflows stay selective. The repository contains the v0.5.1 code, its validators and the full release history. Both links are at the top of this page.",
     ),
   ],
 };

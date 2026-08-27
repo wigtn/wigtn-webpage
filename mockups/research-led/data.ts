@@ -386,8 +386,8 @@ export const ARTICLES: Article[] = [
   /* ───────── Newsroom · Releases (real), newest first ─────────
    * One entry per product, not per version. NEWSROOM_FEED sorts by date, so
    * this order is for a reader of the file; the page does not depend on it. */
+  wigtnCodexRelease, // 2026.08.25, v0.5.1
   wigtnCodingRelease, // 2026.08.04, v0.1.16
-  wigtnCodexRelease, // 2026.08.12, v0.4.0
   wigssNpmRelease, // 2026.04.03, v0.1.4
   wigtnocrOpenSource, // 2026.04.03, no version
 
