@@ -185,8 +185,9 @@ function Divider() {
  * THE FORM IS ackerton.com's "Main Service Offerings", measured off the live
  * page on 2026-08-21 rather than recalled: a small heading with all the weight
  * on the right, four offerings in a screen third, a description that appears
- * only when something is pointed at, and a giant wordmark drifting sideways
- * behind it. What did not come across is their staircase of photographs. Our
+ * only when something is pointed at, and a drawing drifting sideways behind it.
+ * Theirs is their own wordmark; ours was too, until a wordmark under a header
+ * that already carries it read as saying the name twice. It is Seoul now. What did not come across is their staircase of photographs. Our
  * only images are UI crops that already carry their own text, so a label on top
  * of one is text over text; the names live on the ground instead.
  *
@@ -278,15 +279,19 @@ function Practices() {
         }
         className="relative mt-12 overflow-hidden border-y border-line/[0.14] md:mt-16 xl:flex xl:h-[27rem]"
       >
-        <motion.span
+        <motion.div
           aria-hidden
           style={still ? undefined : { x: drift }}
-          className={`pointer-events-none absolute -bottom-14 left-6 z-0 select-none font-display text-[9rem] font-bold leading-none tracking-[-0.05em] text-brand/[0.085] transition-opacity duration-500 xl:-bottom-[7.4rem] xl:text-[18.75rem] xl:[left:var(--gutter)] ${
+          /* Only where the band is a band. Below xl the halves stack into a
+             column about three thousand pixels tall, and a skyline pinned to
+             the bottom of that is not a ground, it is an ornament at the end of
+             a list. */
+          className={`pointer-events-none absolute inset-x-0 bottom-0 z-0 hidden transition-opacity duration-500 xl:block ${
             open ? "opacity-40" : "opacity-100"
           }`}
         >
-          WIGTN.
-        </motion.span>
+          <SeoulSkyline />
+        </motion.div>
 
         {PRACTICES.map((practice, i) => {
           const isOpen = open === practice.slug;
@@ -401,6 +406,95 @@ function Practices() {
         })}
       </div>
     </section>
+  );
+}
+
+/* The ground of the band: Seoul, drawn as one skyline.
+ *
+ * It replaced a WIGTN wordmark. The wordmark filled the space and said nothing
+ * the header does not already say twice; this says where the team works, which
+ * is a fact about the business the section is describing.
+ *
+ * FOUR LANDMARKS, WEST TO EAST, in the order the city puts them: Gwanghwamun,
+ * N Seoul Tower on Namsan, a Han river bridge, Lotte World Tower. The order is
+ * geography rather than composition, which is why the river sits between the
+ * two halves of the city and not wherever it balanced best.
+ *
+ * NOT TO SCALE, and it cannot be: Lotte World Tower is 555m and Gwanghwamun is
+ * about 20m, so a true elevation would draw the gate four pixels tall. Each is
+ * sized to be recognisable, which is what a pictogram set is for.
+ *
+ * Strokes, not fills, because everything else on this page that is not a
+ * photograph is a hairline. That changes what the alpha has to be: a filled
+ * letterform disappears behind text at 8 percent and a 1.5px line does not, so
+ * this sits at 20, which is where it stopped competing with the four names it
+ * passes behind. `non-scaling-stroke` keeps that line 1.5px at every width;
+ * without it the drawing thins out as the band narrows and is gone on a phone.
+ *
+ * It is 208px of a 432px band, not the full height, so it starts below the
+ * leads rather than through them.
+ *
+ * A hanok roof is a straight ridge, two nearly straight slopes and a long eave
+ * that flicks up at the tips. The first draft curved the slopes and produced a
+ * mushroom. */
+function SeoulSkyline() {
+  return (
+    <svg
+      viewBox="0 0 1440 260"
+      preserveAspectRatio="xMidYMax meet"
+      aria-hidden
+      className="h-[13rem] w-full stroke-brand/[0.2] dark:stroke-brand/[0.3]"
+      fill="none"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {/* On the group, so every path inherits it. */}
+      <g style={{ vectorEffect: "non-scaling-stroke" } as CSSProperties}>
+        {/* Gwanghwamun: three gates in a stone base, two tiers of roof */}
+        <path d="M76 232 H288" />
+        <path d="M88 232 V190 H276 V232" />
+        <path d="M112 232 V214 a18 18 0 0 1 36 0 V232" />
+        <path d="M160 232 V206 a22 22 0 0 1 44 0 V232" />
+        <path d="M216 232 V214 a18 18 0 0 1 36 0 V232" />
+        <path d="M44 190 H320" />
+        <path d="M44 190 l -15 -11 M320 190 l 15 -11" />
+        <path d="M46 189 C 62 181 98 161 120 154 M318 189 C 302 181 266 161 244 154" />
+        <path d="M120 154 H244" />
+        <path d="M122 154 V144 M242 154 V144" />
+        <path d="M86 144 H278" />
+        <path d="M86 144 l -12 -9 M278 144 l 12 -9" />
+        <path d="M88 143 C 100 137 126 119 138 113 M276 143 C 264 137 238 119 226 113" />
+        <path d="M138 113 H226" />
+
+        {/* N Seoul Tower, standing on Namsan */}
+        <path d="M318 232 C 400 229 442 212 470 198 C 486 191 518 191 534 198 C 564 212 606 229 686 232" />
+        <path d="M488 192 L 492 142 M516 192 L 512 142" />
+        <path d="M492 142 L 494 104 M512 142 L 510 104" />
+        <path d="M474 104 H530 L 520 82 H484 Z" />
+        <path d="M490 82 L 492 58 M514 82 L 512 58" />
+        <path d="M502 58 V 6" />
+        <path d="M494 34 H510" />
+
+        {/* A Han river bridge, two arch spans over the water */}
+        <path d="M694 198 H1026" />
+        <path d="M694 206 H1026" />
+        <path d="M718 198 C 718 170 740 158 760 158 C 780 158 802 170 802 198" />
+        <path d="M760 158 V198 M739 163 V198 M781 163 V198" />
+        <path d="M840 198 C 840 170 862 158 882 158 C 902 158 924 170 924 198" />
+        <path d="M882 158 V198 M861 163 V198 M903 163 V198" />
+        <path d="M700 206 V236 M780 206 V236 M862 206 V236 M942 206 V236 M1020 206 V236" />
+        <path d="M646 246 H1076" />
+        <path d="M684 256 H1038" />
+
+        {/* Lotte World Tower, east of the river, sides pulling in as they rise */}
+        <path d="M1271 232 C 1277 150 1285 84 1290 24" />
+        <path d="M1309 232 C 1303 150 1295 84 1290 24" />
+        <path d="M1290 24 V 6" />
+        <path d="M1280 120 C 1285 118 1296 118 1301 120" />
+        <path d="M1276 176 C 1283 174 1298 174 1305 176" />
+      </g>
+    </svg>
   );
 }
 
