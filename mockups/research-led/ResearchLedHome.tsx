@@ -286,7 +286,11 @@ function Practices() {
              column about three thousand pixels tall, and a skyline pinned to
              the bottom of that is not a ground, it is an ornament at the end of
              a list. */
-          className={`pointer-events-none absolute inset-x-0 bottom-0 z-0 hidden transition-opacity duration-500 xl:block ${
+          /* Pushed below the band's edge by the ground line's own depth, so
+             the drawing sits lower behind the text. What that costs is the
+             water under the bridge, which is the one part of it that reads the
+             same cut off as it does whole. */
+          className={`pointer-events-none absolute inset-x-0 -bottom-9 z-0 hidden transition-opacity duration-500 xl:block ${
             open ? "opacity-40" : "opacity-100"
           }`}
         >
@@ -443,7 +447,7 @@ function SeoulSkyline() {
   return (
     <div
       aria-hidden
-      className="h-[25rem] w-full bg-brand/[0.15] dark:bg-brand/[0.24]"
+      className="h-[25rem] w-full bg-brand/[0.11] dark:bg-brand/[0.18]"
       style={{
         WebkitMaskImage: mask,
         maskImage: mask,
