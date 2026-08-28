@@ -409,144 +409,52 @@ function Practices() {
   );
 }
 
-/* The ground of the band: Seoul, drawn as one skyline.
+/* The ground of the band: Seoul.
  *
  * It replaced a WIGTN wordmark, which filled the space and said nothing the
  * header does not already say twice. This says where the team works, which is a
  * fact about the business the section describes and one the page states nowhere
  * else.
  *
- * WEST TO EAST, in the order the city puts them: a corner pavilion, the palace
- * behind its wall, Sungnyemun, the river with a stone bridge, Namsan carrying
- * the tower and its cable car, Lotte World Tower, DDP. The order is geography
- * rather than composition, which is why the river sits between the old city and
- * the new one instead of wherever it balanced best.
+ * THE DRAWING IS THE ARTWORK ITSELF, not a redraw of it. Two hand-authored SVG
+ * versions came before this and neither held up next to the reference: a line
+ * set of this kind lives on hundreds of small decisions about weight, spacing
+ * and where a roof stops, and reproducing those by hand from a picture gets you
+ * something that reads as a copy.
  *
- * ONE WEIGHT, ROUNDED JOINS, AND EVERYTHING ON A SINGLE GROUND LINE that steps
- * up for the palace terrace and cuts down for the river. An earlier version
- * drew this in three weights to fake depth; a flat line set with props in it,
- * trees and clouds and a cable car, reads as drawn rather than as generated,
- * which is the difference the reference has.
+ * WHAT IT SHIPS AS IS A MASK, not a picture. The source is black ink on white,
+ * which would have been a black rectangle of a watermark that could not follow
+ * the theme. Ink was turned into alpha (crop the card and its title away, then
+ * a = 255 - luminance with a little gain so the antialiased edges survive being
+ * painted at 22 percent), so the file carries shape only and the colour comes
+ * from the brand token underneath it. That is what lets it be purple at 22
+ * percent on paper and at 30 on ink without a second asset.
  *
- * NOT TO SCALE, and it cannot be: Lotte World Tower is 555m and a palace gate
- * is about 20m, so a true elevation would draw the gate four pixels tall. Each
- * is sized to be recognisable, which is what a pictogram set is for.
+ * 1900px wide and 320KB, which is roughly twice the size it is drawn at and
+ * about what the four module clips weigh together. It is webp because a mask
+ * needs its alpha channel and nothing else, and png kept every antialiased grey
+ * at four times the weight.
  *
- * Strokes, not fills, because everything else on this page that is not a
- * photograph is a hairline. That sets the alpha: a filled letterform disappears
- * behind text at 8 percent and a 1.5px line does not, so this sits near 20,
- * which is where it stopped competing with the names it passes behind.
- * `non-scaling-stroke` holds the line at 1.5px however the band scales.
- *
- * The viewBox is 32 units taller than the art and the group is pulled up by the
- * same amount, so the drawing fills the band's width instead of being
- * letterboxed inside it: with `meet`, a box wider in ratio than its art leaves
- * the sides empty, and this band is much wider than it is tall.
- *
- * Things the drawing got wrong on the way here, so they do not come back. A
- * hanok roof is a straight ridge, two nearly straight slopes and a long eave
- * that flicks up only at the tips; curving the slope makes a mushroom. A cable
- * strung the width of the hill reads as a tent, so it is short and its pylon
- * stands on the slope where a pylon stands. Three parallel horizontals for a
- * river read as ruled lines, so the ground line is the bank and the water is
- * two waves. */
+ * `contain` with a bottom-centre position, so the art keeps its own proportions
+ * and stands on the band's bottom edge at every width instead of stretching
+ * with the window. */
 function SeoulSkyline() {
+  const mask = "url(/images/seoul-landmarks.webp)";
   return (
-    <svg
-      viewBox="0 0 1440 250"
-      preserveAspectRatio="xMidYMax meet"
+    <div
       aria-hidden
-      fill="none"
-      strokeWidth={1.5}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-[250px] w-full stroke-brand/[0.22] dark:stroke-brand/[0.32] [&_path]:[vector-effect:non-scaling-stroke]"
-    >
-      <g transform="translate(0,-32)">
-        {/* ground: one line, stepped, with the river cut into it */}
-        <path d="M0 250 H196 V236 H470 V250 H556 V232 H700 V250 H1120 V244 H1440" />
-        <path d="M560 268 H700 M746 268 H900" />
-        {/* clouds */}
-        <path d="M236 74 h30 a9 9 0 0 0 -7 -14 a13 13 0 0 0 -24 5 a8 8 0 0 0 1 9 z" />
-        <path d="M654 52 h26 a8 8 0 0 0 -6 -12 a11 11 0 0 0 -21 4 a7 7 0 0 0 1 8 z" />
-        <path d="M1338 92 h24 a7 7 0 0 0 -6 -11 a10 10 0 0 0 -19 4 a6 6 0 0 0 1 7 z" />
-        {/* corner pavilion */}
-        <path d="M52 236 V206 H166 V236" />
-        <path d="M72 236 V220 a13 13 0 0 1 26 0 V236" />
-        <path d="M120 236 V220 a13 13 0 0 1 26 0 V236" />
-        <path d="M36 206 H182" />
-        <path d="M36 206 l -11 -8 M182 206 l 11 -8" />
-        <path d="M38 205 C 52 198 80 182 96 176 M180 205 C 166 198 138 182 122 176" />
-        <path d="M96 176 H122" />
-        <path d="M96 176 l 0 -5 M122 176 l 0 -5" />
-        {/* Geunjeongjeon on its terrace, and the palace wall */}
-        <path d="M232 236 V212 H408 V236" />
-        <path d="M254 236 V218 h20 v18 M306 236 V216 h28 v20 M366 236 V218 h20 v18" />
-        <path d="M216 212 H424" />
-        <path d="M216 212 l -12 -9 M424 212 l 12 -9" />
-        <path d="M218 211 C 234 204 262 188 278 182 M422 211 C 406 204 378 188 362 182" />
-        <path d="M278 182 H362" />
-        <path d="M282 177 H358" />
-        <path d="M252 178 H388" />
-        <path d="M252 178 l -11 -8 M388 178 l 11 -8" />
-        <path d="M254 177 C 266 171 288 157 300 152 M386 177 C 374 171 352 157 340 152" />
-        <path d="M300 152 H340" />
-        <path d="M300 152 l 0 -6 M340 152 l 0 -6" />
-        <path d="M470 236 V218 H424" />
-        <path d="M470 218 h18 v-8 h18 v8 h18 v-8 h18 v8 h18" />
-        {/* Sungnyemun */}
-        <path d="M566 232 V196 H690 V232" />
-        <path d="M604 232 V210 a24 24 0 0 1 48 0 V232" />
-        <path d="M552 196 H704" />
-        <path d="M552 196 l -12 -9 M704 196 l 12 -9" />
-        <path d="M554 195 C 568 188 594 172 610 166 M702 195 C 688 188 662 172 646 166" />
-        <path d="M610 166 H646" />
-        <path d="M584 160 H672" />
-        <path d="M584 160 l -11 -8 M672 160 l 11 -8" />
-        <path d="M586 159 C 598 152 614 140 624 134 M670 159 C 658 152 642 140 632 134" />
-        <path d="M624 134 H632" />
-        <path d="M610 166 V160 M646 166 V160" />
-        {/* the river, cut below the ground line, with a stone bridge */}
-        <path d="M712 268 c 10 -6 20 -6 30 0 c 10 6 20 6 30 0" />
-        <path d="M868 268 c 10 -6 20 -6 30 0 c 10 6 20 6 30 0" />
-        <path d="M786 250 H882" />
-        <path d="M786 250 V258 M882 250 V258" />
-        <path d="M792 258 a 14 10 0 0 1 28 0 M848 258 a 14 10 0 0 1 28 0" />
-        <path d="M820 250 V258 M848 250 V258" />
-        <path d="M786 258 H882" />
-        {/* Namsan, the tower, and the cable car */}
-        <path d="M846 232 C 900 228 926 206 952 186 C 966 175 984 175 998 186 C 1024 206 1058 228 1120 232" />
-        <path d="M958 186 H996" />
-        <path d="M964 186 L 968 158 M990 186 L 986 158" />
-        <path d="M968 158 L 970 128 M986 158 L 984 128" />
-        <path d="M956 128 H998 L 992 114 H962 Z" />
-        <path d="M962 114 H992 L 988 102 H966 Z" />
-        <path d="M971 102 L 972 88 M983 102 L 982 88" />
-        <path d="M977 88 V 40" />
-        <path d="M972 56 H982 M973 48 H981" />
-        <path d="M1000 120 C 1026 132 1048 146 1070 162" />
-        <path d="M1070 162 L 1064 210 M1070 162 L 1078 210" />
-        <path d="M1066 186 H1075" />
-        <path d="M1030 136 V146 M1024 146 H1036 V158 H1024 Z" />
-        {/* Lotte World Tower: two edges that almost meet */}
-        <path d="M1168 244 C 1176 160 1188 96 1195 44" />
-        <path d="M1216 244 C 1212 160 1208 96 1205 34" />
-        <path d="M1195 44 L 1205 34" />
-        <path d="M1176 196 H1212 M1180 158 H1210 M1186 118 H1204" />
-        {/* DDP */}
-        <path d="M1258 244 C 1266 216 1300 202 1342 202 C 1386 202 1416 218 1420 244" />
-        <path d="M1276 228 C 1304 214 1358 212 1398 224" />
-        <path d="M1298 244 C 1306 230 1340 222 1372 228" />
-        {/* trees */}
-        <path d="M206 236 V220 M206 220 c -10 0 -15 -7 -15 -15 c 0 -8 7 -15 15 -15 c 8 0 15 7 15 15 c 0 8 -5 15 -15 15 z" />
-        <path d="M444 236 V222 M444 222 c -9 0 -13 -6 -13 -13 c 0 -7 6 -13 13 -13 c 7 0 13 6 13 13 c 0 7 -4 13 -13 13 z" />
-        <path d="M528 250 V234 M528 234 c -10 0 -15 -7 -15 -15 c 0 -8 7 -15 15 -15 c 8 0 15 7 15 15 c 0 8 -5 15 -15 15 z" />
-        <path d="M722 250 V236 M722 236 c -9 0 -13 -6 -13 -13 c 0 -7 6 -13 13 -13 c 7 0 13 6 13 13 c 0 7 -4 13 -13 13 z" />
-        <path d="M984 250 V236 M984 236 c -9 0 -13 -6 -13 -13 c 0 -7 6 -13 13 -13 c 7 0 13 6 13 13 c 0 7 -4 13 -13 13 z" />
-        <path d="M1240 244 V230 M1240 230 c -9 0 -13 -6 -13 -13 c 0 -7 6 -13 13 -13 c 7 0 13 6 13 13 c 0 7 -4 13 -13 13 z" />
-        <path d="M1430 244 V230 M1430 230 c -9 0 -13 -6 -13 -13 c 0 -7 6 -13 13 -13 c 7 0 13 6 13 13 c 0 7 -4 13 -13 13 z" />
-      </g>
-    </svg>
+      className="h-[25rem] w-full bg-brand/[0.15] dark:bg-brand/[0.24]"
+      style={{
+        WebkitMaskImage: mask,
+        maskImage: mask,
+        WebkitMaskSize: "contain",
+        maskSize: "contain",
+        WebkitMaskPosition: "bottom center",
+        maskPosition: "bottom center",
+        WebkitMaskRepeat: "no-repeat",
+        maskRepeat: "no-repeat",
+      }}
+    />
   );
 }
 
