@@ -202,9 +202,9 @@ function Divider() {
  * nothing about what we make. Opening replaces the names with the evidence for
  * them, which reads as the names growing rather than a panel arriving.
  *
- * PURPLE IS STATE, NOT DECORATION. The wordmark is brand at 8.5 percent, the
- * labels are accent, the open half takes a 3.8 percent wash, and the thing
- * under the pointer is the only text that turns. Every one of those is
+ * PURPLE IS STATE, NOT DECORATION. The labels are accent, the open half takes a
+ * 3.8 percent wash, the divider is brand only where the halves meet, and the
+ * thing under the pointer is the only text that turns. Every one of those is
  * answering "which one is this" or "which one is live".
  */
 
@@ -250,7 +250,12 @@ function Practices() {
   /* Two numbers come off the band's own width, and both exist for the same
    * reason: the ground is full bleed and the words are not. The outer padding
    * is whatever puts a half's text on the page's left or right margin, and the
-   * items get what is left of the open share after it. */
+   * items get what is left of the open share after it.
+   *
+   * Both are read with a fallback where they are used, because neither exists
+   * in the exported HTML and an observer cannot run before the first paint:
+   * without one the words start hard against the window edge and jump inward
+   * a frame later. */
   useEffect(() => {
     const el = frame.current;
     if (!el) return;
@@ -327,8 +332,8 @@ function Practices() {
           const pad = folded
             ? "xl:pl-7 xl:pr-7"
             : i === 1
-              ? "xl:pl-7 xl:[padding-right:var(--gutter)]"
-              : "xl:pr-7 xl:[padding-left:var(--gutter)]";
+              ? "xl:pl-7 xl:[padding-right:var(--gutter,1.5rem)]"
+              : "xl:pr-7 xl:[padding-left:var(--gutter,1.5rem)]";
           return (
             <div
               key={practice.slug}
@@ -336,9 +341,12 @@ function Practices() {
                  phone this would latch one half open for the rest of the visit;
                  there the layout is stacked and everything is open anyway. */
               onPointerEnter={(e) => e.pointerType === "mouse" && setOpen(practice.slug)}
-              /* Tablets: a tap opens, because they have neither hover nor the
-                 stacked layout. The keyboard has the cue button below. */
-              onClick={() => setOpen(practice.slug)}
+              /* Only where the split is in force. A touch device wide enough
+                 for it has no hover and needs the tap; a phone does not have
+                 the split at all, and there a tap used to open a half that has
+                 no visible way back, since the cue button it would close from
+                 only exists at xl. The four clips came down with it. */
+              onClick={() => split && setOpen(practice.slug)}
               style={{ flexBasis: `${basis}%` }}
               className={`relative overflow-hidden px-6 py-9 transition-[flex-basis,background-color,padding] duration-[620ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none xl:flex xl:py-7 ${pad} ${
                 i === 1 ? "border-t border-line/[0.14] xl:border-t-0" : ""
@@ -399,7 +407,7 @@ function Practices() {
                   }}
                   aria-expanded={isOpen}
                   aria-label={`${practice.kicker}: ${practice.cue}`}
-                  className={`mt-auto hidden items-center gap-2.5 pt-8 font-mono text-[11px] uppercase tracking-[0.2em] transition-colors focus-visible:outline-none focus-visible:text-accent xl:flex ${
+                  className={`mt-auto hidden items-center gap-2.5 pt-8 font-mono text-[11px] uppercase tracking-[0.2em] underline-offset-[6px] transition-colors focus-visible:text-accent focus-visible:underline focus-visible:outline-none xl:flex ${
                     isOpen ? "text-accent" : "text-ink-4 hover:text-ink-2"
                   }`}
                 >
@@ -420,7 +428,7 @@ function Practices() {
                   stay readable, and the cue button opens this. */}
               <div
                 inert={split && !isOpen}
-                className={`relative z-[1] mt-9 w-full xl:mt-0 xl:ml-10 xl:shrink-0 xl:[width:var(--items-w)] xl:transition-[opacity,transform] xl:duration-500 xl:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:xl:transition-none ${
+                className={`relative z-[1] mt-9 w-full xl:mt-0 xl:ml-10 xl:shrink-0 xl:[width:var(--items-w,0px)] xl:transition-[opacity,transform] xl:duration-500 xl:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:xl:transition-none ${
                   isOpen ? "xl:translate-x-0 xl:opacity-100" : "xl:translate-x-4 xl:opacity-0"
                 }`}
               >
@@ -529,6 +537,7 @@ function ModuleCard({ row, live }: { row: PracticeRow; live: boolean }) {
       <span className="relative block h-44 overflow-hidden bg-paper-tint ring-1 ring-inset ring-line/10 group-focus-visible:ring-accent xl:h-[9.375rem]">
         <video
           ref={video}
+          aria-hidden
           poster={row.image}
           muted
           loop
@@ -833,7 +842,7 @@ export function ResearchLedHome() {
 
         <Divider />
 
-        {/* ───── 4. CTA: text layout; only the contact link is boxed in purple ───── */}
+        {/* ───── 3. CTA: text layout; only the contact link is boxed in purple ───── */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
           <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-accent">
             Work with us
