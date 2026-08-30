@@ -226,7 +226,20 @@ function Practices() {
   const frame = useRef<HTMLDivElement | null>(null);
   const [open, setOpen] = useState<string | null>(null);
   const [box, setBox] = useState<{ gutter: number; items: number } | null>(null);
+  const [split, setSplit] = useState(false);
   const still = useReducedMotion();
+
+  /* Whether the two halves are side by side at all. `inert` is an attribute,
+   * not a style, so it cannot be applied at a breakpoint the way the layout is:
+   * below xl everything is stacked and open, and marking it inert there would
+   * hide the whole section from a phone. */
+  useEffect(() => {
+    const q = window.matchMedia("(min-width: 1280px)");
+    const sync = () => setSplit(q.matches);
+    sync();
+    q.addEventListener("change", sync);
+    return () => q.removeEventListener("change", sync);
+  }, []);
 
   /* The wordmark's one motion, and the reference's too: it slides as the
    * section passes rather than sitting dead. Transform only, so it never
@@ -270,7 +283,12 @@ function Practices() {
           flicker through the resting state on the way. */}
       <div
         ref={frame}
-        onPointerLeave={() => setOpen(null)}
+        /* Not while the keyboard is in there. Closing a half under a focused
+           link would make that link inert and drop focus to the body. */
+        onPointerLeave={() => {
+          if (frame.current?.contains(document.activeElement)) return;
+          setOpen(null);
+        }}
         style={
           box
             ? ({ "--gutter": `${box.gutter}px`, "--items-w": `${box.items}px` } as CSSProperties)
@@ -318,11 +336,8 @@ function Practices() {
                  phone this would latch one half open for the rest of the visit;
                  there the layout is stacked and everything is open anyway. */
               onPointerEnter={(e) => e.pointerType === "mouse" && setOpen(practice.slug)}
-              /* Tab into a module link and the half it belongs to opens, so the
-                 keyboard never lands on something invisible. */
-              onFocusCapture={() => setOpen(practice.slug)}
               /* Tablets: a tap opens, because they have neither hover nor the
-                 stacked layout. */
+                 stacked layout. The keyboard has the cue button below. */
               onClick={() => setOpen(practice.slug)}
               style={{ flexBasis: `${basis}%` }}
               className={`relative overflow-hidden px-6 py-9 transition-[flex-basis,background-color,padding] duration-[620ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none xl:flex xl:py-7 ${pad} ${
@@ -355,6 +370,7 @@ function Practices() {
                     always on screen and a list of the same names above them
                     would just be the same list twice. */}
                 <div
+                  aria-hidden={split && isOpen}
                   className={`mt-7 hidden flex-col gap-2 transition-[opacity,transform] duration-300 xl:flex ${
                     isOpen ? "pointer-events-none -translate-y-1.5 opacity-0" : "opacity-100"
                   }`}
@@ -369,9 +385,22 @@ function Practices() {
                   ))}
                 </div>
 
-                <span
-                  className={`mt-auto hidden items-center gap-2.5 pt-8 font-mono text-[11px] uppercase tracking-[0.2em] transition-colors xl:flex ${
-                    isOpen ? "text-accent" : "text-ink-4"
+                {/* The cue is the keyboard's way in. It was a label saying how
+                    much was behind the half, which is exactly what a disclosure
+                    button says, so it is one: a pointer opens the half by
+                    hovering and a keyboard opens it by pressing this. Without
+                    it the AX half could not be opened from a keyboard at all,
+                    because nothing inside it is focusable. */}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpen(isOpen ? null : practice.slug);
+                  }}
+                  aria-expanded={isOpen}
+                  aria-label={`${practice.kicker}: ${practice.cue}`}
+                  className={`mt-auto hidden items-center gap-2.5 pt-8 font-mono text-[11px] uppercase tracking-[0.2em] transition-colors focus-visible:outline-none focus-visible:text-accent xl:flex ${
+                    isOpen ? "text-accent" : "text-ink-4 hover:text-ink-2"
                   }`}
                 >
                   <i
@@ -381,11 +410,16 @@ function Practices() {
                     }`}
                   />
                   {practice.cue}
-                </span>
+                </button>
               </div>
 
+              {/* Folded, this is not just invisible: `inert` takes its four
+                  links out of the tab order and the whole block out of the
+                  accessibility tree, so nothing here can be focused or read
+                  while it cannot be seen. The names in the column beside it
+                  stay readable, and the cue button opens this. */}
               <div
-                
+                inert={split && !isOpen}
                 className={`relative z-[1] mt-9 w-full xl:mt-0 xl:ml-10 xl:shrink-0 xl:[width:var(--items-w)] xl:transition-[opacity,transform] xl:duration-500 xl:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:xl:transition-none ${
                   isOpen ? "xl:translate-x-0 xl:opacity-100" : "xl:translate-x-4 xl:opacity-0"
                 }`}
