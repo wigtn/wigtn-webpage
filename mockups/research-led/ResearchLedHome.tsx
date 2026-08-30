@@ -258,9 +258,8 @@ function Practices() {
       <div className="mx-auto max-w-6xl px-6">
         <SectionTitle className="max-w-3xl">Our Service</SectionTitle>
         <p className="mt-5 max-w-xl text-pretty leading-relaxed text-ink-3">
-          One team, two things. We build the product end to end, and we measure whether the AI
-          inside it moved anything. How we measure, applied to our own work and including the
-          results that went nowhere, is on WIG-log.
+          We build the product, and we measure whether the AI inside it moved anything. Our own
+          measurements, including the ones that went nowhere, are on WIG-log.
         </p>
       </div>
 
