@@ -396,7 +396,7 @@ export const TEAM: TeamMember[] = [
     credential: "Ex-Hyundai E&C",
     bio: "Builds agent systems for enterprise clients at an AX (AI transformation) company, covering development, consulting and solution delivery, after a decade of large-scale project management at Hyundai E&C.",
     image: "/images/team/hyeongseob_kim.jpg",
-    imagePosition: "center 15%",
+    imagePosition: "center top",
     github: "https://github.com/Hyeongseob91",
     linkedin: "https://linkedin.com/in/harrison-hyeongseob-kim",
     expertise: ["AI Modeling", "GPU Computing", "Applied Research"],
