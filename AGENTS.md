@@ -18,7 +18,9 @@ mockups/research-led/
   ArticleDetail.tsx        renders an Article's Block[]
   updates/<slug>/          one folder per post, notice or story: index.ts + images
   updates/_template/       four post templates + the shared rules
-public/images/             team portraits, logos, one milestone photo. Nothing else.
+public/images/             team portraits, logos, one milestone photo, the four
+                           module scenes the homepage plays, and the Seoul mask
+                           under Our Service. Nothing else.
 ```
 
 `updates/` keeps its folder name through every rename above it, the same way
@@ -27,8 +29,9 @@ public/images/             team portraits, logos, one milestone photo. Nothing e
 
 The site has four nav destinations: **About** (/team), **Notice** (/notices),
 **Story** (/story), and **Tech**, which is an external link to WIG-log's
-report index. The landing page is three sections: Hero, What we do (the
-business model: Web Agency and AX Agency), Contact. About is "Who we are.":
+report index. The landing page is three sections: Hero, Our Service (the
+business model: Web Agency and AX Agency as two halves that open when
+pointed at), Contact. About is "Who we are.":
 the members and the partners, nothing else. A **Blog** section exists in the
 source (BlogPage.tsx, the "blog" channel) but is closed and unrouted: it is
 reserved for business-track news (a signed subcontract, a program selection,
@@ -160,7 +163,7 @@ In:
 
 ```bash
 npx tsc --noEmit     # types; cannot see missing images (see below)
-npm run build        # 34 static pages; this is what catches a missing image
+npm run build        # 35 static pages; this is what catches a missing image
 ```
 
 `next-env.d.ts` declares `*.jpg` as a wildcard module, so a typecheck will

@@ -109,22 +109,246 @@ export const NAV: NavItem[] = [
   { label: "Tech", href: TECH_REPORT_INDEX },
 ];
 
-/* The homepage What-we-do section: the two lines of business, each in the
- * shape a client would engage it. WIGTN sells no product of its own; what it
- * offers is the team. Source copy is README.md's services list, folded from
- * four lines to two: AX Consulting and AI System Integration are one
- * engagement seen from its two ends, and AI R&D is the record, not a
- * service. No figures, because there are none published to cite. */
-export const SERVICES = [
+/* ── The module kit ─────────────────────────────────────────────────────────
+ *
+ * The homepage's answer to what Web Agency actually is. A portfolio says we
+ * finished some jobs; a kit says the next one starts from something already
+ * built and already under test, which is nearer to what a client is buying.
+ *
+ * FOUR MODULES, AND THE OTHER SIX ARE LEFT OUT AFTER COUNTING. The `module/`
+ * directory in wigtn/web-agency holds ten, and on 2026-08-16 they were counted
+ * rather than assumed:
+ *
+ *     ui-kit                   69 source files, 31 test files
+ *     backoffice-frame         20              5
+ *     ai-pipeline-sdk          18             14
+ *     notification-file        14              7
+ *     api-contracts             7              5   README: "v0 skeleton"
+ *     auth-membership           2              2
+ *     content-engine            2              2
+ *     portfolio-showcase        2              1
+ *     project-scaffold-deploy   0             10
+ *     company-review            0              0
+ *
+ * The four here are the four with a body of code behind them and a running
+ * surface a visitor can open. `api-contracts` says in its own README that it is
+ * a scaffold skeleton awaiting a contract, and `company-review` is empty.
+ * Putting either on a homepage would be the overclaim the web-agency brief
+ * spends a section banning. When one fills out, it earns a row.
+ *
+ * NO TOTAL IS QUOTED for the same reason. "Ten modules" is true of the folder
+ * and false about what is ready, and a client who counted would find two of the
+ * ten empty.
+ *
+ * `role` leads and `name` follows, because "backoffice-frame" is a folder and
+ * "the room your team works in" is the thing being bought. The descriptions are
+ * the modules' own README and package descriptions put into English, with no
+ * capability added on the way across. */
+export type PracticeRow = {
+  slug: string;
+  /* The title, and it is the thing's own name. The rows were titled with a
+   * plain-language sentence for a while ("The look, decided once") and the
+   * name was demoted to a footnote, which read as four slogans with the
+   * products hidden under them. The reference titles its rows AIP, Gotham,
+   * Foundry: a name a reader can carry away and ask for. */
+  name: string;
+  /* One line. Not two, and not a paragraph: the row is an index entry, and the
+   * report or the demo behind it is where the detail lives. If it needs a
+   * second sentence the row is doing the page's job for it. */
+  line: string;
+  /* Where the row goes, when it goes anywhere. A web row opens the module
+   * running in the demo. An AX row is a stage of an engagement and has nothing
+   * to open, so it has no href and renders as text rather than pretending to
+   * be a link that does nothing. */
+  href?: string;
+  /* The small line under the blurb. It names the artifact and where it is, so
+   * the row says what it is offering evidence of before it is clicked. */
+  meta: string;
+  /* The picture that appears when the row is pointed at. A composition, not a
+   * screenshot: built as HTML, rendered at 2x with Playwright, shipped at
+   * 1000px. Four of them share one stylesheet, so the lighting and the
+   * component set are identical across the set.
+   *
+   * EACH ONE IS A CROP, NOT A SCREEN. The first pass drew the whole product
+   * for every module and all four came out as the same dark admin page with a
+   * sidebar; at the 344px the hover frame gives them, nothing told them apart
+   * and none of them said which module it belonged to. Each now shows the one
+   * thing that makes that module that module and nothing else: the token ramp
+   * beside the same card in both themes, the operator queue with its counts,
+   * the three safety gates with the number they held, the mail that went out
+   * beside the rule that stopped one. Legible at thumbnail size is the whole
+   * requirement; if a new one needs a caption to be understood, it is drawing
+   * too much.
+   *
+   * Hover-only on purpose. The row has to read without it, because a phone has
+   * no hover and a keyboard arrives through focus rather than a pointer.
+   * Nothing in the copy depends on the picture being seen.
+   *
+   * Scene sources are in the session scratchpad as art/scene-*.html. To change
+   * one, edit the scene and re-render rather than retouching the JPEG. */
+  /* Optional. The four web modules have compositions; the AX rows do not,
+   * because nothing has been built for them and inventing a picture for a
+   * published paper would be dressing. A row without one simply shows no
+   * picture on hover. */
+  image?: string;
+  /* The same composition, moving. Five seconds, looped, VP8, one per module.
+   *
+   * It is the poster that runs rather than a different picture: the scene HTML
+   * gained a 5s animation and was recorded, so the still and the clip are the
+   * same frame set. Nothing new is drawn; what is already there arms, lands or
+   * resolves, which is the module doing its job rather than decoration.
+   *
+   * The JPEG stays and is the video's poster. It shows instantly, it is what a
+   * browser that cannot decode VP8 keeps, and it is what renders under
+   * prefers-reduced-motion, where the clip never starts. */
+  clip?: string;
+};
+
+/* Where the modules are running, so a row can be opened rather than believed. */
+const MODULE_DEMO = "https://portfolio-recruit-platform.vercel.app";
+
+const WEB_ROWS: PracticeRow[] = [
   {
-    title: "Web Agency",
-    lead: "Websites and web products, designed, built, and shipped end to end.",
-    tags: ["Design", "Build", "Deploy"],
+    slug: "ui-kit",
+    name: "UI Kit",
+    line:
+      "Tokens for light and dark, a brand theme, a schema-driven form renderer.",
+    href: `${MODULE_DEMO}/`,
+    meta: "Live at /",
+    image: "/images/modules/ui-kit.jpg",
+    clip: "/images/modules/ui-kit.webm",
   },
   {
-    title: "AX Agency",
-    lead: "We map where AI creates real leverage in your business, then build it into the products and workflows you already run.",
-    tags: ["Roadmap", "Integration", "AI systems"],
+    slug: "backoffice-frame",
+    name: "Back office",
+    line:
+      "A tool registry, screen layout validation, an outbox batch runner.",
+    href: `${MODULE_DEMO}/admin`,
+    meta: "Live at /admin",
+    image: "/images/modules/backoffice-frame.jpg",
+    clip: "/images/modules/backoffice-frame.webm",
+  },
+  {
+    slug: "ai-pipeline-sdk",
+    name: "AI pipeline",
+    line:
+      "Answers filtered, moderated, held for a person. Strength is an operator setting.",
+    href: `${MODULE_DEMO}/admin/ai`,
+    meta: "Live at /admin/ai",
+    image: "/images/modules/ai-pipeline-sdk.jpg",
+    clip: "/images/modules/ai-pipeline-sdk.webm",
+  },
+  {
+    slug: "notification-file",
+    name: "Notifications",
+    line:
+      "Mail, in-app notices, recipient rules, expiring upload ports.",
+    href: `${MODULE_DEMO}/admin/inquiries`,
+    meta: "Live at /admin/inquiries",
+    image: "/images/modules/notification-file.jpg",
+    clip: "/images/modules/notification-file.webm",
+  },
+];
+
+/* ── AX Agency ──────────────────────────────────────────────────────────────
+ *
+ * The second line of business, and its rows are stages of an engagement rather
+ * than things we shipped.
+ *
+ * They were four of our own AI systems for a while, each linking its report.
+ * That was evidence of something, but of the wrong thing: it described a lab,
+ * not a service, and a client reading it learned what we had made for
+ * ourselves instead of what we would do for them.
+ *
+ * NO CLIENT WORK IS NAMED because there is none to name yet, and there will
+ * not be until a client agrees to be named. So no row carries a case, a logo,
+ * or a number from an engagement. What each row carries instead is what the
+ * client ends up holding at the end of that stage, which is a promise we can
+ * keep on the first one.
+ *
+ * NO FIGURES HERE, and that is deliberate. The web rows show a running screen
+ * and these could have shown metrics from our own systems, but a number from
+ * WIGVO is not evidence about your project. The one claim this section makes
+ * about measurement is that we do it and publish the limits, and the place
+ * that is checkable is WIG-log, linked once from the lead rather than pinned
+ * to a stage it did not come from.
+ *
+ * THE THIRD STAGE SAYS WHAT GETS CUT. An AX pitch that only describes building
+ * is a pitch with no way to be wrong, and the harness report on WIG-log is us
+ * doing exactly this to our own work: same tasks resolved, half again the wall
+ * time, no repeatable quality lift, published. The row has to promise the same
+ * treatment or the report contradicts the page. */
+const AX_ROWS: PracticeRow[] = [
+  {
+    slug: "ax-consulting",
+    name: "Consulting",
+    line:
+      "Where AI has leverage in your workflows, and where it does not. Both in writing.",
+    meta: "You keep · a written map",
+  },
+  {
+    slug: "ax-evaluation",
+    name: "Evaluation",
+    line:
+      "The metric is agreed before anything is built, and measured on your own data.",
+    meta: "You keep · an evaluation set and a baseline",
+  },
+  {
+    slug: "ax-feedback",
+    name: "Feedback",
+    line:
+      "Measured again against that baseline. What did not move the number gets cut.",
+    meta: "You keep · a measured before and after",
+  },
+];
+
+/* ── The two lines of business ──────────────────────────────────────────────
+ *
+ * What we do used to state these as two cards with keyword tags, which is the
+ * shape every agency site uses and says nothing either of them could not say.
+ * Then they were two stacked bands, one practice each, which was honest but
+ * ran to about 1,800px of page for seven items. They are now two halves of one
+ * section that open when pointed at, so the whole business fits in 432px and
+ * the reader chooses which half spends it.
+ *
+ * The leads are the old SERVICES copy, cut to what fits a 240px column. The
+ * sentence about our own measurements being on WIG-log moved up to the section
+ * lead, where it belongs anyway: it is true of the team, not of one practice. */
+export type Practice = {
+  /* Identity for the open state, and the React key. */
+  slug: string;
+  /* The name of the line of business, set as a micro-label. It says which of
+   * the two this is; the heading has a harder job. */
+  kicker: string;
+  /* The heading, and it is a sentence with a verb in it. "Web Agency" and "AX
+   * Agency" are categories a reader has to already know; "We build it" and "We
+   * measure it" are what we do, and the pair reads as one claim across the
+   * divider. */
+  title: string;
+  lead: string;
+  /* How much is behind this half, said before it opens. It is the closest thing
+   * the section has to an affordance: "4 modules" tells a reader there is
+   * something under the pointer without drawing a button that is not there. */
+  cue: string;
+  rows: PracticeRow[];
+};
+
+export const PRACTICES: Practice[] = [
+  {
+    slug: "web",
+    kicker: "Web Agency",
+    title: "We build it",
+    lead: "Websites and web products, built from modules we own and keep under test.",
+    cue: "4 modules",
+    rows: WEB_ROWS,
+  },
+  {
+    slug: "ax",
+    kicker: "AX Agency",
+    title: "We measure it",
+    lead: "We find where AI has leverage, build it in, and measure whether it moved anything.",
+    cue: "3 stages",
+    rows: AX_ROWS,
   },
 ];
 

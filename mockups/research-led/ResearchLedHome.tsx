@@ -11,19 +11,20 @@
  *     leaning on `accent` for legibility on light)
  *   - Everything that is not a link out of the page is separated by a
  *     hairline, not boxed.
- * Sections: 1 Hero · 2 What we do (the services) · 3 CTA, a Divider between
- * 2 and 3. The landing held the record's capability list, a Notices rail and
+ * Sections: 1 Hero · 2 Our Service (the two lines of business, side by
+ * side) · 3 CTA, a Divider between each pair. The evidence for section 2 is
+ * inside it now, in the half that claims it. The landing held the record's capability list, a Notices rail and
  * a WIG-log rail until 2026-08-09; the release ledger is /notices, and the
  * stories live under /story. MilestoneTimeline is retained but currently
  * unrouted.
  */
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
-import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { ArrowUpRight, ArrowRight, X, Expand } from "lucide-react";
-import { MILESTONES, SERVICES, STORY_INDEX } from "./data";
-import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, Tags, rise, VIEWPORT } from "./chrome";
+import { MILESTONES, PRACTICES, STORY_INDEX, type PracticeRow } from "./data";
+import { SiteHeader, SiteFooter, BackdropDecor, IndexRule, rise, VIEWPORT } from "./chrome";
 import { CONTACT_EMAIL, CONTACT_HREF } from "@/lib/brand";
 import type { Theme } from "@/lib/theme";
 
@@ -31,7 +32,8 @@ import type { Theme } from "@/lib/theme";
  *
  * The four of them had drifted to four different sizes, from 3rem on Friends to
  * 6rem on Notices, which read as four unrelated pages stacked rather than one
- * page with four parts. This is the size "What we do" was already using, and it
+ * page with four parts. This is the size the services block was already using,
+ * and it
  * is the one that survives at the top of a viewport without pushing its own
  * content off it.
  *
@@ -164,6 +166,422 @@ function Divider() {
   return (
     <div className="max-w-6xl mx-auto px-6">
       <div className="border-t border-line/[0.08]" />
+    </div>
+  );
+}
+
+/* ───── Our Service ─────────────────────────────────────────────────────────
+ *
+ * The two lines of business as two halves of one section. At rest they are
+ * 50/50 and each shows its names; point at one and it takes 78 percent of the
+ * width while the other folds to 22, where its name and label still read
+ * horizontally without any rotated-spine trick.
+ *
+ * WHY ONE SECTION. They were two stacked bands, one practice each, and that was
+ * honest but cost about 1,800px of page to say seven things. Side by side, the
+ * whole business is 432px and the reader decides which half spends it. It also
+ * puts the two claims on one line: we build it, we measure it.
+ *
+ * THE FORM IS ackerton.com's "Main Service Offerings", measured off the live
+ * page on 2026-08-21 rather than recalled: a small heading with all the weight
+ * on the right, four offerings in a screen third, a description that appears
+ * only when something is pointed at, and a drawing drifting sideways behind it.
+ * Theirs is their own wordmark; ours was too, until a wordmark under a header
+ * that already carries it read as saying the name twice. It is Seoul now. What did not come across is their staircase of photographs. Our
+ * only images are UI crops that already carry their own text, so a label on top
+ * of one is text over text; the names live on the ground instead.
+ *
+ * EACH HALF OPENS INTO ITS OWN SHAPE, because the two are not the same kind of
+ * thing. The web modules are a set with no order, so all four appear at once,
+ * each running. The AX stages happen in sequence, so they sit on one line under
+ * a rule with a dot per stage: the line says the order, which is the job the
+ * carousel it replaces was doing with arrows, a counter and a dwell timer.
+ *
+ * THE NAMES ARE VISIBLE AT REST. Without them this section says two headings
+ * and nothing else, and a reader who scrolls past without pointing learns
+ * nothing about what we make. Opening replaces the names with the evidence for
+ * them, which reads as the names growing rather than a panel arriving.
+ *
+ * PURPLE IS STATE, NOT DECORATION. The labels are accent, the open half takes a
+ * 3.8 percent wash, the divider is brand only where the halves meet, and the
+ * thing under the pointer is the only text that turns. Every one of those is
+ * answering "which one is this" or "which one is live".
+ */
+
+/* How wide the pointed-at half becomes, and the fixed parts of a half its items
+ * have to make room for. The items are laid out at a width computed from these
+ * rather than at whatever width the half has mid-animation: a four-column grid
+ * that re-solves every frame reflows its text the whole way open, which reads
+ * as the words settling rather than as the panel opening. */
+const OPEN_SHARE = 0.78;
+const NAME_COL = 240;
+const INNER_PAD = 28;
+const ITEMS_GAP = 40;
+/* The page's own measure: max-w-6xl plus its px-6 gutter. The band ignores it,
+ * the words in the band do not. */
+const PAGE_W = 1152;
+const PAGE_PAD = 24;
+
+function Practices() {
+  const frame = useRef<HTMLDivElement | null>(null);
+  const [open, setOpen] = useState<string | null>(null);
+  const [box, setBox] = useState<{ gutter: number; items: number } | null>(null);
+  const [split, setSplit] = useState(false);
+  const still = useReducedMotion();
+
+  /* Whether the two halves are side by side at all. `inert` is an attribute,
+   * not a style, so it cannot be applied at a breakpoint the way the layout is:
+   * below xl everything is stacked and open, and marking it inert there would
+   * hide the whole section from a phone. */
+  useEffect(() => {
+    const q = window.matchMedia("(min-width: 1280px)");
+    const sync = () => setSplit(q.matches);
+    sync();
+    q.addEventListener("change", sync);
+    return () => q.removeEventListener("change", sync);
+  }, []);
+
+  /* The wordmark's one motion, and the reference's too: it slides as the
+   * section passes rather than sitting dead. Transform only, so it never
+   * lays out. */
+  const { scrollYProgress } = useScroll({ target: frame, offset: ["start end", "end start"] });
+  const drift = useTransform(scrollYProgress, [0, 1], [34, -34]);
+
+  /* Two numbers come off the band's own width, and both exist for the same
+   * reason: the ground is full bleed and the words are not. The outer padding
+   * is whatever puts a half's text on the page's left or right margin, and the
+   * items get what is left of the open share after it.
+   *
+   * Both are read with a fallback where they are used, because neither exists
+   * in the exported HTML and an observer cannot run before the first paint:
+   * without one the words start hard against the window edge and jump inward
+   * a frame later. */
+  useEffect(() => {
+    const el = frame.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      const w = entry.contentRect.width;
+      const gutter = Math.max(PAGE_PAD, Math.round((w - PAGE_W) / 2) + PAGE_PAD);
+      setBox({
+        gutter,
+        items: Math.max(0, Math.round(w * OPEN_SHARE) - gutter - INNER_PAD - NAME_COL - ITEMS_GAP),
+      });
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  return (
+    <section className="pt-24 md:pt-32">
+      <div className="mx-auto max-w-6xl px-6">
+        <SectionTitle className="max-w-3xl">Our Service</SectionTitle>
+        <p className="mt-5 max-w-xl text-pretty leading-relaxed text-ink-3">
+          We build the product, and we measure whether the AI inside it moved anything. Our own
+          measurements, including the ones that went nowhere, are on WIG-log.
+        </p>
+      </div>
+
+      {/* Full bleed, because the reference's band runs to the edge and because a
+          tinted half with the page showing down both sides is a card. Closing
+          the pointer out of the whole band, not out of a half, is what returns
+          it to 50/50: leaving one half by crossing into the other must not
+          flicker through the resting state on the way. */}
+      <div
+        ref={frame}
+        /* Not while the keyboard is in there. Closing a half under a focused
+           link would make that link inert and drop focus to the body. */
+        onPointerLeave={() => {
+          if (frame.current?.contains(document.activeElement)) return;
+          setOpen(null);
+        }}
+        style={
+          box
+            ? ({ "--gutter": `${box.gutter}px`, "--items-w": `${box.items}px` } as CSSProperties)
+            : undefined
+        }
+        className="relative mt-12 overflow-hidden border-y border-line/[0.14] md:mt-16 xl:flex xl:h-[27rem]"
+      >
+        <motion.div
+          aria-hidden
+          style={still ? undefined : { x: drift }}
+          /* Only where the band is a band. Below xl the halves stack into a
+             column about three thousand pixels tall, and a skyline pinned to
+             the bottom of that is not a ground, it is an ornament at the end of
+             a list. */
+          /* Pushed below the band's edge by the ground line's own depth, so
+             the drawing sits lower behind the text. What that costs is the
+             water under the bridge, which is the one part of it that reads the
+             same cut off as it does whole. */
+          className={`pointer-events-none absolute inset-x-0 -bottom-9 z-0 hidden transition-opacity duration-500 xl:block ${
+            open ? "opacity-40" : "opacity-100"
+          }`}
+        >
+          <SeoulSkyline />
+        </motion.div>
+
+        {PRACTICES.map((practice, i) => {
+          const isOpen = open === practice.slug;
+          const folded = open !== null && !isOpen;
+          const basis = open === null ? 50 : isOpen ? OPEN_SHARE * 100 : (1 - OPEN_SHARE) * 100;
+          /* The outer padding is the page margin, until the half folds. At
+           * 1440 that margin is 168px and a folded half is 317px wide, so
+           * keeping it would leave 121px for a 240px name column and cut the
+           * heading off mid-word. Folded, the padding drops to the inner one
+           * and the block slides out to the wall it is being pushed against,
+           * which is also what it looks like: pushed aside, not sheared. */
+          const pad = folded
+            ? "xl:pl-7 xl:pr-7"
+            : i === 1
+              ? "xl:pl-7 xl:[padding-right:var(--gutter,1.5rem)]"
+              : "xl:pr-7 xl:[padding-left:var(--gutter,1.5rem)]";
+          return (
+            <div
+              key={practice.slug}
+              /* Mouse only. A touch pointer enters and never leaves, so on a
+                 phone this would latch one half open for the rest of the visit;
+                 there the layout is stacked and everything is open anyway. */
+              onPointerEnter={(e) => e.pointerType === "mouse" && setOpen(practice.slug)}
+              /* Only where the split is in force. A touch device wide enough
+                 for it has no hover and needs the tap; a phone does not have
+                 the split at all, and there a tap used to open a half that has
+                 no visible way back, since the cue button it would close from
+                 only exists at xl. The four clips came down with it. */
+              onClick={() => split && setOpen(practice.slug)}
+              style={{ flexBasis: `${basis}%` }}
+              className={`relative overflow-hidden px-6 py-9 transition-[flex-basis,background-color,padding] duration-[620ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none xl:flex xl:py-7 ${pad} ${
+                i === 1 ? "border-t border-line/[0.14] xl:border-t-0" : ""
+              } ${isOpen ? "bg-brand/[0.038]" : ""}`}
+            >
+              {/* The divider is brand in the middle and the page's own hairline
+                  at both ends, so the colour is at the point the two halves meet
+                  rather than along the whole edge. */}
+              {i === 1 && (
+                <span
+                  aria-hidden
+                  className="absolute inset-y-0 left-0 z-[2] hidden w-px bg-gradient-to-b from-rule via-brand/50 to-rule xl:block"
+                />
+              )}
+
+              <div className="relative z-[1] flex flex-col xl:w-60 xl:shrink-0">
+                <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
+                  {practice.kicker}
+                </span>
+                <h3 className="mt-3.5 font-display text-[2rem] font-normal leading-[1.02] tracking-[-0.04em] text-ink">
+                  {practice.title}
+                </h3>
+                <p className="mt-4 max-w-[26ch] text-pretty text-sm leading-relaxed text-ink-3">
+                  {practice.lead}
+                </p>
+
+                {/* The names, and only until this half has something better to
+                    show. Hidden on a phone, where the items themselves are
+                    always on screen and a list of the same names above them
+                    would just be the same list twice. */}
+                <div
+                  aria-hidden={split && isOpen}
+                  className={`mt-7 hidden flex-col gap-2 transition-[opacity,transform] duration-300 xl:flex ${
+                    isOpen ? "pointer-events-none -translate-y-1.5 opacity-0" : "opacity-100"
+                  }`}
+                >
+                  {practice.rows.map((row) => (
+                    <span
+                      key={row.slug}
+                      className="font-display text-base tracking-[-0.02em] text-ink-2"
+                    >
+                      {row.name}
+                    </span>
+                  ))}
+                </div>
+
+                {/* The cue is the keyboard's way in. It was a label saying how
+                    much was behind the half, which is exactly what a disclosure
+                    button says, so it is one: a pointer opens the half by
+                    hovering and a keyboard opens it by pressing this. Without
+                    it the AX half could not be opened from a keyboard at all,
+                    because nothing inside it is focusable. */}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpen(isOpen ? null : practice.slug);
+                  }}
+                  aria-expanded={isOpen}
+                  aria-label={`${practice.kicker}: ${practice.cue}`}
+                  className={`mt-auto hidden items-center gap-2.5 pt-8 font-mono text-[11px] uppercase tracking-[0.2em] underline-offset-[6px] transition-colors focus-visible:text-accent focus-visible:underline focus-visible:outline-none xl:flex ${
+                    isOpen ? "text-accent" : "text-ink-4 hover:text-ink-2"
+                  }`}
+                >
+                  <i
+                    aria-hidden
+                    className={`h-px transition-all duration-500 ${
+                      isOpen ? "w-14 bg-accent" : "w-8 bg-rule"
+                    }`}
+                  />
+                  {practice.cue}
+                </button>
+              </div>
+
+              {/* Folded, this is not just invisible: `inert` takes its four
+                  links out of the tab order and the whole block out of the
+                  accessibility tree, so nothing here can be focused or read
+                  while it cannot be seen. The names in the column beside it
+                  stay readable, and the cue button opens this. */}
+              <div
+                inert={split && !isOpen}
+                className={`relative z-[1] mt-9 w-full xl:mt-0 xl:ml-10 xl:shrink-0 xl:[width:var(--items-w,0px)] xl:transition-[opacity,transform] xl:duration-500 xl:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:xl:transition-none ${
+                  isOpen ? "xl:translate-x-0 xl:opacity-100" : "xl:translate-x-4 xl:opacity-0"
+                }`}
+              >
+                {practice.slug === "web" ? (
+                  <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 xl:h-full xl:grid-cols-4 xl:gap-5">
+                    {practice.rows.map((row) => (
+                      <ModuleCard key={row.slug} row={row} live={isOpen && !still} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 gap-8 md:grid-cols-3 xl:gap-[2.125rem]">
+                    {practice.rows.map((row, n) => (
+                      <StageCard key={row.slug} row={row} last={n === practice.rows.length - 1} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+/* The ground of the band: Seoul.
+ *
+ * It replaced a WIGTN wordmark, which filled the space and said nothing the
+ * header does not already say twice. This says where the team works, which is a
+ * fact about the business the section describes and one the page states nowhere
+ * else.
+ *
+ * THE DRAWING IS THE ARTWORK ITSELF, not a redraw of it. Two hand-authored SVG
+ * versions came before this and neither held up next to the reference: a line
+ * set of this kind lives on hundreds of small decisions about weight, spacing
+ * and where a roof stops, and reproducing those by hand from a picture gets you
+ * something that reads as a copy.
+ *
+ * WHAT IT SHIPS AS IS A MASK, not a picture. The source is black ink on white,
+ * which would have been a black rectangle of a watermark that could not follow
+ * the theme. Ink was turned into alpha (crop the card and its title away, then
+ * a = 255 - luminance with a little gain so the antialiased edges survive being
+ * painted at 22 percent), so the file carries shape only and the colour comes
+ * from the brand token underneath it. That is what lets it be purple at 22
+ * percent on paper and at 30 on ink without a second asset.
+ *
+ * 1900px wide and 320KB, which is roughly twice the size it is drawn at and
+ * about what the four module clips weigh together. It is webp because a mask
+ * needs its alpha channel and nothing else, and png kept every antialiased grey
+ * at four times the weight.
+ *
+ * `contain` with a bottom-centre position, so the art keeps its own proportions
+ * and stands on the band's bottom edge at every width instead of stretching
+ * with the window. */
+function SeoulSkyline() {
+  const mask = "url(/images/seoul-landmarks.webp)";
+  return (
+    <div
+      aria-hidden
+      className="h-[25rem] w-full bg-brand/[0.11] dark:bg-brand/[0.18]"
+      style={{
+        WebkitMaskImage: mask,
+        maskImage: mask,
+        WebkitMaskSize: "contain",
+        maskSize: "contain",
+        WebkitMaskPosition: "bottom center",
+        maskPosition: "bottom center",
+        WebkitMaskRepeat: "no-repeat",
+        maskRepeat: "no-repeat",
+      }}
+    />
+  );
+}
+
+/* One module: the screen it is, then what it does.
+ *
+ * The clip is fetched when its half first opens and never before. `preload
+ * ="none"` plus a src that is not set until then means four videos are not
+ * pulled down by a reader who scrolls past, and until one has decoded the
+ * poster is on screen, which is the frame the clip starts from. Under
+ * prefers-reduced-motion the clip is never loaded at all and the still stays.
+ *
+ * The card is the whole link. The name reaching for accent on hover is the only
+ * signal it needs; a row of four arrows would be four arrows. */
+function ModuleCard({ row, live }: { row: PracticeRow; live: boolean }) {
+  const video = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    const v = video.current;
+    if (!v || !row.clip) return;
+    if (live) {
+      if (!v.src) v.src = row.clip;
+      void v.play().catch(() => {});
+    } else {
+      v.pause();
+    }
+  }, [live, row.clip]);
+
+  return (
+    <a
+      href={row.href}
+      target="_blank"
+      rel="noreferrer"
+      className="group flex flex-col focus-visible:outline-none"
+    >
+      <span className="relative block h-44 overflow-hidden bg-paper-tint ring-1 ring-inset ring-line/10 group-focus-visible:ring-accent xl:h-[9.375rem]">
+        <video
+          ref={video}
+          aria-hidden
+          poster={row.image}
+          muted
+          loop
+          playsInline
+          preload="none"
+          className="h-full w-full scale-[1.06] object-cover object-top transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100"
+        />
+      </span>
+      <span className="mt-4 font-display text-lg tracking-[-0.03em] text-ink transition-colors group-hover:text-accent">
+        {row.name}
+      </span>
+      <span className="mt-2 text-pretty text-[12.5px] leading-relaxed text-ink-3">{row.line}</span>
+      <span className="mt-auto pt-3 font-mono text-[9.5px] uppercase tracking-[0.14em] text-ink-5">
+        {row.meta}
+      </span>
+    </a>
+  );
+}
+
+/* One stage of an engagement. Not a link, because there is nowhere to send
+ * anyone: what it promises is a thing the client ends up holding, not a page.
+ *
+ * The rule running out of the right edge is the sequence. It stops at the last
+ * stage rather than continuing, because Feedback is where the engagement ends. */
+function StageCard({ row, last }: { row: PracticeRow; last: boolean }) {
+  return (
+    <div className="group relative pt-6">
+      <span
+        aria-hidden
+        className={`absolute left-0 top-0 h-px bg-gradient-to-r from-brand/40 to-rule ${
+          last ? "right-0" : "-right-8 md:-right-6 xl:-right-[2.125rem]"
+        }`}
+      />
+      <span
+        aria-hidden
+        className="absolute -top-[3px] left-0 h-[7px] w-[7px] rounded-full bg-brand/60 transition-transform duration-300 group-hover:scale-[1.35] group-hover:bg-accent"
+      />
+      <h4 className="font-display text-2xl font-normal tracking-[-0.035em] text-ink transition-colors group-hover:text-accent">
+        {row.name}
+      </h4>
+      <p className="mt-3 text-pretty text-[13px] leading-relaxed text-ink-3">{row.line}</p>
+      <span className="mt-4 block font-mono text-[9.5px] uppercase tracking-[0.14em] text-ink-5">
+        {row.meta}
+      </span>
     </div>
   );
 }
@@ -419,52 +837,8 @@ export function ResearchLedHome() {
           </div>
         </section>
 
-        {/* ───── 2. What we do: the business model, stated briefly ─────
-            The landing is Hero, What we do, Contact, in that order and
-            nothing else. WIGTN has no product of its own to advertise, so
-            the section a product would occupy holds the two lines of client
-            work instead. The title was "Services" for a day and gave way to
-            the name the About page had been holding: this section is the
-            site's one answer to what the team does, so it carries the plain
-            words for it. Sticky-left layout, same as the capability list
-            this slot held before the split. */}
-        <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-40 md:pb-40">
-          <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
-            <div className="md:sticky md:top-24 md:self-start">
-              <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-4">
-                Business · 01–02
-              </span>
-              <SectionTitle className="mt-4">What we do</SectionTitle>
-              <p className="mt-5 max-w-xs text-pretty leading-relaxed text-ink-3">
-                No product of our own to sell. What we offer is the team, on
-                your problem.
-              </p>
-            </div>
+        <Practices />
 
-            <div className="divide-y divide-line/[0.08] border-t border-line/[0.08]">
-              {SERVICES.map((s, i) => (
-                <motion.div
-                  key={s.title}
-                  variants={rise}
-                  custom={i}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={VIEWPORT}
-                  className="flex items-start gap-5 py-8 md:py-10"
-                >
-                  <span className="pt-1.5 font-mono text-sm text-accent">{`0${i + 1}`}</span>
-                  <div>
-                    <h3 className="font-display text-2xl font-semibold tracking-tight text-ink md:text-3xl">
-                      {s.title}
-                    </h3>
-                    <p className="mt-3 text-pretty leading-relaxed text-ink-2">{s.lead}</p>
-                    <Tags tags={s.tags} className="mt-4" />
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         <Divider />
 
