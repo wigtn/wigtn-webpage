@@ -60,3 +60,8 @@ export const storyHref = (slug: string) => `${STORY_INDEX}/${slug}`;
  * stay in the source, unrouted, waiting for the first real post. */
 export const BLOG_INDEX = "/blog";
 export const blogHref = (slug: string) => `${BLOG_INDEX}/${slug}`;
+
+// Released Codex artifacts referenced by the v0.5.5 notice.
+export const CODEX_PLUGIN_REPOSITORY = "https://github.com/wigtn/wigtn-plugins-codex";
+export const CODEX_PLUGIN_RELEASE = `${CODEX_PLUGIN_REPOSITORY}/releases/tag/v0.5.5`;
+export const CODEX_SCOPED_INSPECT_EVIDENCE = `${CODEX_PLUGIN_REPOSITORY}/tree/a038c7dac606ab5ab0e9ffa47f874a62339264ac/docs/scoped-inspect-2026-09-08`;
