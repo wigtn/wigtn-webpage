@@ -65,3 +65,6 @@ export const blogHref = (slug: string) => `${BLOG_INDEX}/${slug}`;
 export const CODEX_PLUGIN_REPOSITORY = "https://github.com/wigtn/wigtn-plugins-codex";
 export const CODEX_PLUGIN_RELEASE = `${CODEX_PLUGIN_REPOSITORY}/releases/tag/v0.5.5`;
 export const CODEX_SCOPED_INSPECT_EVIDENCE = `${CODEX_PLUGIN_REPOSITORY}/tree/a038c7dac606ab5ab0e9ffa47f874a62339264ac/docs/scoped-inspect-2026-09-08`;
+
+// Published Korean study; the English site report is a separate publication.
+export const CODEX_SCOPED_INSPECT_REPORT = `${CODEX_PLUGIN_REPOSITORY}/blob/a038c7dac606ab5ab0e9ffa47f874a62339264ac/docs/scoped-inspect-2026-09-08/report.ko.md`;

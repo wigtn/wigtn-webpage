@@ -8,14 +8,14 @@
  * and RELEASE-v0.5.5-KO.md support the install commands and behavior changes.
  * No benchmark table or cover: methods, numbers and limits belong in the
  * linked report. Retained invocation boundaries are not advertised as new.
- * Publish the companion /codex-scoped-inspect/ report before this notice.
+ * Link the published Korean study until the English site report is live.
  */
 import type { Article } from "../../data";
 import {
   CODEX_PLUGIN_REPOSITORY,
   CODEX_PLUGIN_RELEASE,
   CODEX_SCOPED_INSPECT_EVIDENCE,
-  techReportHref,
+  CODEX_SCOPED_INSPECT_REPORT,
 } from "../../links";
 
 export const wigtnCodexRelease: Article = {
@@ -34,7 +34,7 @@ export const wigtnCodexRelease: Article = {
   links: [
     { label: "GitHub", href: CODEX_PLUGIN_REPOSITORY },
     { label: "v0.5.5 release", href: CODEX_PLUGIN_RELEASE },
-    { label: "Tech report", href: techReportHref("codex-scoped-inspect") },
+    { label: "Tech report (Korean)", href: CODEX_SCOPED_INSPECT_REPORT },
     { label: "Execution records", href: CODEX_SCOPED_INSPECT_EVIDENCE },
   ],
   versions: [
