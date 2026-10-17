@@ -358,11 +358,11 @@ export const PRACTICES: Practice[] = [
  * still live where they are checkable: the posts, MILESTONES, and the report
  * site. It is in the git history if a surface wants the list back. */
 
-export const PARTNERS = ["Mind AI", "MEGA Code", "Tripla", "Arustay"];
+export const WORKED_WITH = ["Braincrew", "SK hynix", "Mind AI", "Arustay"];
 
 /* The /team roster renders one row per person: portrait + name on the left,
  * `position` / `role` / `bio` on the right. `position` is the WIGTN title and
- * is intentionally set on the team lead only; everyone else shows `role`
+ * is intentionally set on the founder only; everyone else shows `role`
  * (their discipline) alone. `bio` is a single career-shaped sentence.
  *
  * `currentRole`, `credential`, `expertise`, `github` and `linkedin` are read by
@@ -371,7 +371,7 @@ export const PARTNERS = ["Mind AI", "MEGA Code", "Tripla", "Arustay"];
  * does not, and they still ship inside the client bundle. */
 export type TeamMember = {
   name: string;
-  position?: string; // WIGTN title; team lead only
+  position?: string; // WIGTN title; founder only
   role: string; // discipline
   currentRole: string;
   credential?: string;
@@ -386,12 +386,12 @@ export type TeamMember = {
 export const TEAM: TeamMember[] = [
   {
     name: "Harrison Kim 김형섭",
-    position: "Team Lead",
+    position: "Founder & CEO",
     role: "AI Research Engineer",
     /* The employer is described, not named. It was named here and in the bio
-     * until now, which put a company that has nothing to do with WIGTN on
-     * WIGTN's own roster page. What the reader needs is the kind of work, and
-     * that is what both fields carry now. */
+     * until now, which put a member's outside employer on WIGTN's own roster
+     * page. What the reader needs is the kind of work, and that is what both
+     * fields carry now. */
     currentRole: "AI Research Engineer, enterprise agent development and consulting",
     credential: "Ex-Hyundai E&C",
     bio: "Builds agent systems for enterprise clients at an AX (AI transformation) company, covering development, consulting and solution delivery, after a decade of large-scale project management at Hyundai E&C.",

@@ -31,11 +31,11 @@ The site has four nav destinations: **About** (/team), **Notice** (/notices),
 **Story** (/story), and **Tech**, which is an external link to WIG-log's
 report index. The landing page is three sections: Hero, Our Service (the
 business model: Web Agency and AX Agency as two halves that open when
-pointed at), Contact. About is "Who we are.":
-the members and the partners, nothing else. A **Blog** section exists in the
-source (BlogPage.tsx, the "blog" channel) but is closed and unrouted: it is
-reserved for business-track news (a signed subcontract, a program selection,
-a partnership), and it opens with its first qualifying post, not before.
+pointed at), Contact. About is "Who we are.": the members and the companies
+we have worked with, nothing else. A **Blog** section exists in the source
+(BlogPage.tsx, the "blog" channel) but is closed and unrouted: it is reserved
+for business-track news (a signed subcontract, a program selection, a
+partnership), and it opens with its first qualifying post, not before.
 **The gate and the reopening steps are in [`docs/blog-section.md`](docs/blog-section.md)**;
 read it before writing anything for the blog or reviving the routes.
 
