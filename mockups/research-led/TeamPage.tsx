@@ -1,7 +1,7 @@
 "use client";
 
-/** /team, labelled "About" in the nav: the crew roster and the partners
- * wall, under one title and nothing else.
+/** /team, labelled "About" in the nav: the crew roster and the "Worked
+ * with" wall, under one title and nothing else.
  *
  * The page is "Who we are." and then the people. It briefly opened with the
  * record's capability list after the 2026-08-09 restructure; that duplicated
@@ -15,7 +15,7 @@
 import { Fragment } from "react";
 import { motion } from "framer-motion";
 import { PageShell, PageHero, rise, VIEWPORT } from "./chrome";
-import { TEAM, MILESTONES, PARTNERS } from "./data";
+import { TEAM, MILESTONES, WORKED_WITH } from "./data";
 
 /* Prefer wrapping at commas. Each clause is an inline-block, so the browser
  * takes the break between clauses before it breaks inside one; a clause too
@@ -110,17 +110,20 @@ export function TeamPage() {
 
       <Divider />
 
-      {/* ── Partners: logo wall (text stand-ins until assets land) ──
+      {/* ── Worked with: logo wall (text stand-ins until assets land) ──
+           Clients and collaborators share one wall under a neutral title,
+           because WIGTN is the contractor to some of them and "Partners"
+           would overstate that relationship.
            Moved here from the homepage. This page answers who we are, and who
            we work with is part of that answer; the homepage is a teaser whose
            sections all hand off to a page, and this one had nowhere to hand off
            to. It closes the page now that History is unrendered. */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
         <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
-          Partners
+          Worked with
         </h2>
         <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 md:mt-16">
-          {PARTNERS.map((name) => (
+          {WORKED_WITH.map((name) => (
             <motion.div
               key={name}
               variants={rise}
@@ -129,7 +132,7 @@ export function TeamPage() {
               viewport={VIEWPORT}
               className="flex items-center justify-start"
             >
-              {/* TODO: replace with <img> partner logo once assets exist */}
+              {/* TODO: replace with <img> company logo once assets exist */}
               <span className="text-xl font-semibold tracking-tight text-ink-2 md:text-2xl">
                 {name}
               </span>
@@ -145,10 +148,10 @@ export function TeamPage() {
  *
  * The alternating timeline this page carried until 2026-08-09. It came out of
  * the render by decision, not by neglect: the About page is What we do,
- * Members, Partners now, and the month-by-month record was retired from the
+ * Members, Worked with now, and the month-by-month record was retired from the
  * deployed site while MILESTONES itself stays in data.ts (the homepage's
  * retained MilestoneTimeline reads it too). Mount it again by rendering
- * <HistoryTimeline /> after Partners, with a Divider between them. */
+ * <HistoryTimeline /> after Worked with, with a Divider between them. */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function HistoryTimeline() {
   // Newest at the top, founding (2026.01) at the bottom; drop placeholder entries.
