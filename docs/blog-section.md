@@ -42,7 +42,7 @@ already made public or put in writing.
 
 - Hackathons, conference trips, event write-ups: Story (`channel: "story"`).
 - Releases and short announcements: Notice (/notices, `channel: "newsroom"`).
-- Findings with a method and limitations: WIG-log, in the sibling repo.
+- Findings with a method and limitations: WIGTN Tech, in the sibling repo.
 - Anything prospective. A meeting on the calendar, a deal in negotiation, an
   application submitted: none of these is a post. The post is the outcome,
   dated to it, with a source, which is the same sourcing rule every post on

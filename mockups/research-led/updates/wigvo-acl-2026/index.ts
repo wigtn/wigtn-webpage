@@ -32,7 +32,7 @@
  * be a second source for an image whose first source is one link away.
  *
  * WHERE EVERY FACT COMES FROM:
- *   - The WIGVO tech report on WIG-log (wigtn-tech-report,
+ *   - The WIGVO tech report on WIGTN Tech (wigtn-tech-report,
  *     components/technical-reports/data.ts, slug "wigvo"): the venue string
  *     "ACL 2026 System Demonstrations, pp. 336-344", the peer-reviewed status,
  *     the ACL Anthology and demo-video URLs, the five-name author list, and

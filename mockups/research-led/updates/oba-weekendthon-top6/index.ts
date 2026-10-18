@@ -55,7 +55,7 @@
  * the picture, and every company named in the prose is named there because a
  * source says so, not because it can be made out in the photo.
  *
- * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09
+ * Left this repo for the WIGTN Tech feed in 6aeb84b and came back on 2026-08-09
  * as a long-form story, rendered at /story/<slug> (briefly /blog, which
  * closed the same day, before launch). The return changed `channel` only.
  * The em-dashes the prose carried from before the rule came out on
