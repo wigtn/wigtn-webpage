@@ -28,7 +28,7 @@ public/images/             team portraits, logos, one milestone photo, the four
 `channel` field on the post, not the folder, is what routes them.
 
 The site has four nav destinations: **About** (/team), **Notice** (/notices),
-**Story** (/story), and **Tech**, which is an external link to WIG-log's
+**Story** (/story), and **Tech**, which is an external link to WIGTN Tech's
 report index. The landing page is three sections: Hero, Our Service (the
 business model: Web Agency and AX Agency as two halves that open when
 pointed at), Contact. About is "Who we are.": the members and the companies
@@ -47,19 +47,19 @@ length.
 | | Subject | The question it answers |
 | --- | --- | --- |
 | **wigtn.com** (this repo) | the team | What did we **do**? |
-| **[WIG-log](https://tech.wigtn.com/)** (`wigtn-tech-report`) | the work | What did we **find**? |
+| **[WIGTN Tech](https://tech.wigtn.com/)** (`wigtn-tech-report`) | the work | What did we **find**? |
 
 Two tests, in order.
 
 **Is it a report?** If it has a method and a limitations section, yes.
 Benchmarks, ablations, architecture decisions, what did not transfer: findings,
-and they go on WIG-log under `components/technical-reports/`. The nav's Tech
+and they go on WIGTN Tech under `components/technical-reports/`. The nav's Tech
 item is the pointer.
 
 **Is it a story?** A conference trip, a hackathon, a weekend with a scene to
 describe and photographs to carry it. Stories are `channel: "story"` posts
 here, rendered at `/story/<slug>` under the /story rows that summarize them.
-(They spent 2026-08-09 on the WIG-log feed and came back the same day; the
+(They spent 2026-08-09 on the WIGTN Tech feed and came back the same day; the
 feed's copies still exist but nothing here links them.)
 
 Everything else is a **notice**: announcements and releases, `channel:

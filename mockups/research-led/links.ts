@@ -8,7 +8,7 @@
  * is in its temporal dead zone. Importing a *type* is fine, because types are
  * erased, which is why posts still do `import type`.
  *
- * Most of what lives here is off-site (the WIG-log halves), but the rule is
+ * Most of what lives here is off-site (the WIGTN Tech halves), but the rule is
  * about the import graph, not about origins: STORY_INDEX and BLOG_INDEX below
  * are local routes, and they are here because posts link each other's pages.
  * BLOG_INDEX has no caller but `hrefFor` while the blog is closed; it stays
@@ -18,7 +18,7 @@
  * the cycle entirely, so the single-point-of-change promise below survives.
  */
 
-/* External research / tech-report site, named WIG-log, live on its custom
+/* External research / tech-report site, named WIGTN Tech, live on its custom
  * domain since 2026-08. If the domain ever moves again, change ONLY this
  * constant.
  *

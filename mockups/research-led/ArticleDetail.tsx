@@ -293,7 +293,7 @@ export function ArticleDetail({ slug }: { slug: string }) {
               a release has no picture but a story does, and a story's
               photograph is half the point. Both halves were true and the
               second one stopped being true here: the stories moved to the
-              WIG-log feed, and every post left on this site is a release or a
+              WIGTN Tech feed, and every post left on this site is a release or a
               short notice. So the topic test only ever fired for a post with
               no picture, and drew the thing it was written to prevent, a
               gradient panel standing in for a photograph and pushing the first

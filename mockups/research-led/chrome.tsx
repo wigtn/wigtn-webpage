@@ -16,7 +16,7 @@ import { ThemeToggle } from "@/components/theme";
 import { CONTACT_EMAIL, CONTACT_HREF, TAGLINE } from "@/lib/brand";
 import { HOME, NAV, type NavItem } from "./data";
 
-/* NavDropdown lived here while the nav carried a WIG-log menu with Tech and
+/* NavDropdown lived here while the nav carried a WIGTN Tech menu with Tech and
  * Feed under it. The stories came back on-site, the menu had one
  * destination left, and a menu of one is a link, so the dropdown and the
  * `children` shape in NAV went together. It is in the git history if a nav
@@ -72,7 +72,7 @@ export function IndexRule({ n, label }: { n: string; label: string }) {
 /* One nav destination, shared by all three surfaces so they cannot drift.
  *
  * Two shapes. An absolute URL is an off-site plain anchor that opens a new
- * tab (today: Tech, to WIG-log), everything else is a client-side Link.
+ * tab (today: Tech, to WIGTN Tech), everything else is a client-side Link.
  * There used to be a third, `disabled`, written out in all three surfaces
  * while no NAV entry ever set it; it went with the field.
  *

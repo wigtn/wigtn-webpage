@@ -27,7 +27,7 @@
  * Templates live in updates/_template/, one per kind of post: conference,
  * hackathon, release, community. Read its README before starting a new one:
  * the outline that suits a hackathon is not the one that suits a release. */
-/* The four conference and hackathon posts left for the WIG-log feed on
+/* The four conference and hackathon posts left for the WIGTN Tech feed on
  * 2026-08-09 and came back the same day. They carry channel: "story" and
  * render at /story/<slug>, under the rows that summarize them; their covers
  * ship from the post folders again, which is why ./milestones is gone. */
@@ -82,8 +82,8 @@ export {
  * a short teaser; depth lives on these sub-pages. Nav points to pages, not
  * in-page anchors.
  *
- * Tech is the one external item: it hands the reader to WIG-log's report
- * index, that site's front door for findings. The nav carried a WIG-log
+ * Tech is the one external item: it hands the reader to WIGTN Tech's report
+ * index, that site's front door for findings. The nav carried a WIGTN Tech
  * dropdown with Tech and Feed under it while the stories lived on the feed;
  * the stories came back on-site, which left the menu one destination, and a
  * menu of one is a link. The `children` machinery went with it.
@@ -270,11 +270,11 @@ const WEB_ROWS: PracticeRow[] = [
  * and these could have shown metrics from our own systems, but a number from
  * WIGVO is not evidence about your project. The one claim this section makes
  * about measurement is that we do it and publish the limits, and the place
- * that is checkable is WIG-log, linked once from the lead rather than pinned
+ * that is checkable is WIGTN Tech, linked once from the lead rather than pinned
  * to a stage it did not come from.
  *
  * THE THIRD STAGE SAYS WHAT GETS CUT. An AX pitch that only describes building
- * is a pitch with no way to be wrong, and the harness report on WIG-log is us
+ * is a pitch with no way to be wrong, and the harness report on WIGTN Tech is us
  * doing exactly this to our own work: same tasks resolved, half again the wall
  * time, no repeatable quality lift, published. The row has to promise the same
  * treatment or the report contradicts the page. */
@@ -312,7 +312,7 @@ const AX_ROWS: PracticeRow[] = [
  * the reader chooses which half spends it.
  *
  * The leads are the old SERVICES copy, cut to what fits a 240px column. The
- * sentence about our own measurements being on WIG-log moved up to the section
+ * sentence about our own measurements being on WIGTN Tech moved up to the section
  * lead, where it belongs anyway: it is true of the team, not of one practice. */
 export type Practice = {
   /* Identity for the open state, and the React key. */
@@ -455,7 +455,7 @@ export type Kind = "report" | "event" | "community" | "insight";
 /* Channel split: "newsroom" = in-site news feed (awards, releases,
  * announcements; short posts); "story" = long-form event stories rendered at
  * /story/<slug> (conference trips, hackathon write-ups, photographs and
- * all); "report" = deep tech content that lives on the external WIG-log
+ * all); "report" = deep tech content that lives on the external WIGTN Tech
  * site. "blog" belongs to the closed blog section and no post carries it
  * today; it stays in the union so BlogPage and the machinery it will need
  * compile while they wait. Untagged articles are treated as
@@ -672,7 +672,7 @@ export const STORIES: Story[] = [
 /* The homepage report rail (TECH_REPORTS, a hand-kept mirror of three report
  * cards from the sibling wigtn-tech-report repo) went with the landing
  * slimming of 2026-08-09: the landing is Hero, Services, Contact now, and the
- * nav's Tech item is the pointer to WIG-log. If a rail like it comes back,
+ * nav's Tech item is the pointer to WIGTN Tech. If a rail like it comes back,
  * read that mirror's rules in the git history first; they were earned. */
 
 /* ── Research & Tech Assets (homepage centerpiece) ── */
@@ -890,7 +890,7 @@ export const RETIRED: {
     title: "WigtnOCR",
   },
   /* These four URLs served the stories when they were root-level articles,
-   * then redirected to the WIG-log feed for the day the stories lived there.
+   * then redirected to the WIGTN Tech feed for the day the stories lived there.
    * The posts are back on this site under /story now, and the URLs are in
    * sitemaps that were already crawled, so each one forwards to the same
    * post at its story address rather than 404ing. */

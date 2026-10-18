@@ -14,7 +14,7 @@
  * Sections: 1 Hero · 2 Our Service (the two lines of business, side by
  * side) · 3 CTA, a Divider between each pair. The evidence for section 2 is
  * inside it now, in the half that claims it. The landing held the record's capability list, a Notices rail and
- * a WIG-log rail until 2026-08-09; the release ledger is /notices, and the
+ * a WIGTN Tech rail until 2026-08-09; the release ledger is /notices, and the
  * stories live under /story. MilestoneTimeline is retained but currently
  * unrouted.
  */
@@ -277,7 +277,7 @@ function Practices() {
         <SectionTitle className="max-w-3xl">Our Service</SectionTitle>
         <p className="mt-5 max-w-xl text-pretty leading-relaxed text-ink-3">
           We build the product, and we measure whether the AI inside it moved anything. Our own
-          measurements, including the ones that went nowhere, are on WIG-log.
+          measurements, including the ones that went nowhere, are on WIGTN Tech.
         </p>
       </div>
 

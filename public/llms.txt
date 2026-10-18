@@ -48,7 +48,7 @@ describes work that has not been published.
   from the registry that serves it
 - [Story](https://wigtn.com/story): one row per event, each opening the full
   story with its photographs
-- [WIG-log](https://tech.wigtn.com/): technical reports
+- [WIGTN Tech](https://tech.wigtn.com/): technical reports
 - [GitHub](https://github.com/wigtn)
 - [HuggingFace](https://huggingface.co/Wigtn)
 - [npm](https://www.npmjs.com/org/wigtn)

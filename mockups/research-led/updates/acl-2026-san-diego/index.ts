@@ -25,7 +25,7 @@
  * follows. They go in a gallery instead, where `aspect: "3/4"` caps a lone
  * portrait at 460px.
  *
- * Left this repo for the WIG-log feed in 6aeb84b and came back on 2026-08-09
+ * Left this repo for the WIGTN Tech feed in 6aeb84b and came back on 2026-08-09
  * as a long-form story, rendered at /story/<slug> (briefly /blog, which
  * closed the same day, before launch). The return changed `channel` and
  * dropped the unread `externalUrl`. The em-dashes the prose carried from
