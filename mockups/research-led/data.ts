@@ -732,10 +732,14 @@ export const STORIES: Story[] = [
  * what the team did in public. Every paper entry is sourced from the org
  * profile's Papers list (github.com/wigtn/.github, profile/README.md).
  *
- * Each entry is a date and a title that says the whole thing. `text` is
- * optional and kept for a fact the title cannot carry: today only the
- * project under the Braincrew partnership. Description sentences were cut
- * on 2026-10-19 as noise on a record this short.
+ * Each entry is a date and a title that says the whole thing. `text` is an
+ * optional one-line sub-title for what the title cannot carry: the work
+ * under a partnership (Braincrew's project, Mind AI's product test) and the
+ * paper behind a venue. Description sentences were cut on 2026-10-19 as
+ * noise on a record this short. Each `text` is kept short enough to stay on
+ * one line in the desktop columns; paper titles are cut at the colon's
+ * second clause where the full one would wrap (the full titles are in the
+ * org profile's Papers list).
  *
  * Dates are the month the event happened, not a cadence. The ACL acceptance
  * once sat in February with the wrong date on it: the acceptance email
@@ -776,20 +780,23 @@ export const MILESTONES: Milestone[] = [
     date: "2026.04",
     label: "ACL 2026",
     title: "ACL 2026 System Demonstrations: Paper Accepted",
+    text: "WIGVO: Real-Time Speech Translation over PSTN Calls",
     railTitle: "ACL 2026 System Demos",
     image: "/images/projects/wigvo_screenshot_call.png",
   },
   {
     month: "Jun",
     date: "2026.06",
-    label: "Mind AI",
-    title: "Mind AI: Closed Beta Test Partner",
+    label: "Partnership",
+    title: "Mind AI: Partnership",
+    text: "MEGA Code Closed Beta Test",
   },
   {
     month: "Jul",
     date: "2026.07",
     label: "IWSLT 2026",
     title: "IWSLT 2026: Oral Presentation, San Diego",
+    text: "WIGVO: Real-Time Speech Translation over PSTN Calls",
     railTitle: "IWSLT 2026 Oral",
     image: iwsltTalk.src,
   },
@@ -798,12 +805,14 @@ export const MILESTONES: Milestone[] = [
     date: "2026.08",
     label: "EMNLP 2026",
     title: "EMNLP 2026 Industry Track: Paper Accepted",
+    text: "RCPS: Choosing Document Parsers by Retrieval",
   },
   {
     month: "Sep",
     date: "2026.09",
     label: "NeurIPS 2026",
     title: "NeurIPS 2026 Workshop: Paper Accepted",
+    text: "MDI: The Minimum Detectable Improvement of an LLM Judge",
   },
   {
     month: "Oct",

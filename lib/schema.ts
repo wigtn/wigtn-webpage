@@ -22,6 +22,7 @@ export const organizationSchema = {
     "https://github.com/wigtn",
     "https://huggingface.co/Wigtn",
     "https://www.npmjs.com/org/wigtn",
+    "https://www.linkedin.com/company/wigtn",
   ],
   "knowsAbout": [
     "Document Intelligence",

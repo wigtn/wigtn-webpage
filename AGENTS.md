@@ -18,7 +18,7 @@ mockups/research-led/
   ArticleDetail.tsx        renders an Article's Block[]
   updates/<slug>/          one folder per post, notice or story: index.ts + images
   updates/_template/       four post templates + the shared rules
-public/images/             logos (partners/ for the Partners & Clients wall and
+public/images/             logos (partners/ for the Partners wall and
                            the Solutions panel, venues/ for the R&D panel),
                            products/ (WIGTN Tech cover art for the Product
                            panel), one milestone photo, the four module scenes
@@ -38,7 +38,7 @@ Service (the three teams as three panels that open when pointed at:
 Solutions shows its enterprise projects by logo, Product its open-source
 releases by cover art, and Research, headed R&D, its accepted papers by
 venue logo), Contact. About has no visible title: a short introduction
-signed "Harrison Kim, Founder & CEO", the Partners & Clients logo wall,
+signed "Harrison Kim, Founder & CEO", the Partners logo wall,
 then the company's History (papers accepted and business relationships,
 from `MILESTONES`), nothing else. It does not introduce members
 individually. A **Blog** section exists in the source

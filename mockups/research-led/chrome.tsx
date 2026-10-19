@@ -241,6 +241,7 @@ export function SiteFooter() {
                 {[
                   { label: "GitHub", href: "https://github.com/wigtn" },
                   { label: "Hugging Face", href: "https://huggingface.co/Wigtn" },
+                  { label: "LinkedIn", href: "https://www.linkedin.com/company/wigtn" },
                 ].map((l) => (
                   <li key={l.label}>
                     <a
