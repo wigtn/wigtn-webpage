@@ -75,9 +75,10 @@ export function TeamPage() {
             below. One logo height per breakpoint, set as the li's font-size
             so the logos (h-[1em]) and the type stand-in (0.94em) scale
             together.
-            Each step is sized to fit its column: 28px at sm, where three
-            columns are narrowest, 44px from lg. */}
-        <ul className="mt-14 grid grid-cols-1 gap-x-8 gap-y-12 text-[36px] sm:grid-cols-3 sm:text-[28px] md:mt-16 md:text-[36px] lg:text-[44px]">
+            Each step is the largest that fits its narrowest column: 28px at
+            sm, 36px at md, 48px at lg, 56px from xl (a 322px-wide logo in a
+            346px column). One stacked column below sm takes 44px. */}
+        <ul className="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 text-[44px] sm:grid-cols-3 sm:text-[28px] md:mt-16 md:text-[36px] lg:text-[48px] xl:text-[56px]">
           {PARTNERS_AND_CLIENTS.map((c) => (
             <motion.li
               key={c.name}
@@ -168,9 +169,11 @@ function HistoryTimeline() {
                       </span>
                     )}
                   </h3>
-                  <p className="mt-1 text-pretty text-sm leading-relaxed text-ink-3 [word-break:keep-all]">
-                    <Clauses text={m.text} />
-                  </p>
+                  {m.text && (
+                    <p className="mt-1 text-pretty text-sm leading-relaxed text-ink-3 [word-break:keep-all]">
+                      <Clauses text={m.text} />
+                    </p>
+                  )}
                 </div>
               </motion.li>
             );
