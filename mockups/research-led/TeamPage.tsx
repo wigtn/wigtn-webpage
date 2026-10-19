@@ -1,20 +1,23 @@
 "use client";
 
-/** /team, labelled "About" in the nav: the company's History and the
- * Partners & Clients wall, under one title and nothing else.
+/** /team, labelled "About" in the nav: the Partners & Clients wall, then the
+ * company's History, and nothing else.
  *
- * The page is "Who we are." answered as a company: what WIGTN has done, in
- * order, and who it works with. It carried a member roster (portrait, role,
+ * The page answers who WIGTN is as a company: who it works with, then what
+ * it has done, in order. It carried a member roster (portrait, role,
  * one-line bio per person) until 2026-10-19. That came off when the site
  * started presenting WIGTN as a company: the roster described individuals
  * and their careers outside WIGTN, which is not what a client reading this
  * page needs. Papers still name their authors where they are published.
  *
- * No lead under the hero: History starts straight under it. */
+ * No visible hero either. The "Who we are." title came off the same day, so
+ * the logo wall opens the page; the h1 stays for the document outline and
+ * screen readers, visually hidden. */
 
 import { Fragment } from "react";
 import { motion } from "framer-motion";
-import { PageShell, PageHero, rise, VIEWPORT } from "./chrome";
+import { ORG_NAME } from "@/lib/brand";
+import { PageShell, rise, VIEWPORT } from "./chrome";
 import { MILESTONES, PARTNERS_AND_CLIENTS } from "./data";
 
 /* Prefer wrapping at commas. Each clause is an inline-block, so the browser
@@ -52,11 +55,7 @@ function Divider() {
 export function TeamPage() {
   return (
     <PageShell>
-      <PageHero title="Who we are." titleClassName="text-accent" />
-
-      <HistoryTimeline />
-
-      <Divider />
+      <h1 className="sr-only">About {ORG_NAME}</h1>
 
       {/* ── Partners & Clients: logo wall ──
            The title names both relationships at once, so no logo has to say
@@ -65,12 +64,21 @@ export function TeamPage() {
            Moved here from the homepage. This page answers who we are, and who
            we work with is part of that answer; the homepage is a teaser whose
            sections all hand off to a page, and this one had nowhere to hand off
-           to. It closes the page. */}
+           to. It opens the page; the top padding is PageHero's, which clears
+           the sticky header. */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
         <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
           Partners &amp; Clients
         </h2>
-        <ul className="mt-14 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3 md:mt-16">
+        {/* Equal columns, each logo centred in its own: the row is centred on
+            the page, and the middle logo sits on the History centre line
+            below. One logo height per breakpoint, set as the li's font-size
+            so the logos (h-[1em]) and the type stand-in (0.94em) scale
+            together.
+            Each step is the largest that fits its narrowest column: 28px at
+            sm, 36px at md, 48px at lg, 56px from xl (a 322px-wide logo in a
+            346px column). One stacked column below sm takes 44px. */}
+        <ul className="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 text-[44px] sm:grid-cols-3 sm:text-[28px] md:mt-16 md:text-[36px] lg:text-[48px] xl:text-[56px]">
           {PARTNERS_AND_CLIENTS.map((c) => (
             <motion.li
               key={c.name}
@@ -78,19 +86,19 @@ export function TeamPage() {
               initial="hidden"
               whileInView="show"
               viewport={VIEWPORT}
-              className="flex h-6 items-center md:h-8"
+              className="flex h-[1em] items-center justify-center"
             >
               {c.logo ? (
                 /* The artwork is near-black, so dark mode turns it white.
-                   object-contain keeps the aspect when a narrow column caps
-                   the width below the height-derived one. */
+                   Each SVG's viewBox is trimmed to its artwork, so centring
+                   the box centres the logo. */
                 <img
                   src={c.logo}
                   alt={c.name}
-                  className="h-full w-auto max-w-full object-contain object-left dark:brightness-0 dark:invert"
+                  className="h-full w-auto max-w-full object-contain dark:brightness-0 dark:invert"
                 />
               ) : (
-                <span className="font-display text-2xl font-bold leading-none tracking-tight text-ink md:text-3xl">
+                <span className="font-display text-[0.94em] font-bold leading-none tracking-tight text-ink">
                   {c.name}
                 </span>
               )}
@@ -98,6 +106,10 @@ export function TeamPage() {
           ))}
         </ul>
       </section>
+
+      <Divider />
+
+      <HistoryTimeline />
     </PageShell>
   );
 }
@@ -107,7 +119,8 @@ export function TeamPage() {
  * The vertical timeline, newest at the top and founding (2026.01) at the
  * bottom. Retired from the render on 2026-08-09 and mounted again on
  * 2026-10-19 in place of the roster, with MILESTONES narrowed to papers and
- * business relationships (see the comment there).
+ * business relationships (see the comment there). It closes the page, under
+ * Partners & Clients.
  *
  * From md up the entries alternate around a centre line. Below md there is
  * one column, so the line and its nodes move to the left edge and the text
@@ -116,7 +129,7 @@ function HistoryTimeline() {
   const history = MILESTONES.filter((m) => !m.placeholder).slice().reverse();
 
   return (
-    <section className="max-w-6xl mx-auto px-6 pt-2 pb-28 md:pt-4 md:pb-36">
+    <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
       <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">History</h2>
 
       {/* max-w-5xl, not 3xl: each side of the centre line is half of this,
@@ -156,9 +169,11 @@ function HistoryTimeline() {
                       </span>
                     )}
                   </h3>
-                  <p className="mt-1 text-pretty text-sm leading-relaxed text-ink-3 [word-break:keep-all]">
-                    <Clauses text={m.text} />
-                  </p>
+                  {m.text && (
+                    <p className="mt-1 text-pretty text-sm leading-relaxed text-ink-3 [word-break:keep-all]">
+                      <Clauses text={m.text} />
+                    </p>
+                  )}
                 </div>
               </motion.li>
             );

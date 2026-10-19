@@ -614,6 +614,11 @@ export const STORIES: Story[] = [
  * what the team did in public. Every paper entry is sourced from the org
  * profile's Papers list (github.com/wigtn/.github, profile/README.md).
  *
+ * Each entry is a date and a title that says the whole thing. `text` is
+ * optional and kept for a fact the title cannot carry: today only the
+ * project under the Braincrew partnership. Description sentences were cut
+ * on 2026-10-19 as noise on a record this short.
+ *
  * Dates are the month the event happened, not a cadence. The ACL acceptance
  * once sat in February with the wrong date on it: the acceptance email
  * arrived in April (the trip report says so in its lede,
@@ -624,7 +629,7 @@ export type Milestone = {
   date: string; // "2026.01"
   label: string; // chip
   title: string; // short headline
-  text: string; // one-liner
+  text?: string; // optional sub-line, only for a fact the title cannot carry
   /* The homepage rail card is only 208px of text and clamps the title to one
    * line and the body to two. Entries whose full copy overflows that supply a
    * teaser here; /team History always renders the full `title`/`text`. */
@@ -640,22 +645,19 @@ export const MILESTONES: Milestone[] = [
     month: "Jan",
     date: "2026.01",
     label: "Founded",
-    title: "WIGTN founded",
-    text: "Five engineers start publishing research and shipping open source together, without a lab behind them.",
+    title: "WIGTN Founded",
   },
   {
     month: "Feb",
     date: "2026.02",
     label: "Web Agency",
-    title: "Arustay: Website Build",
-    text: "Built the Arustay website as a Web Agency client project.",
+    title: "Arustay: Website Development",
   },
   {
     month: "Apr",
     date: "2026.04",
     label: "ACL 2026",
-    title: "ACL 2026 System Demonstrations",
-    text: "Paper accepted: WIGVO, real-time bidirectional speech translation over standard phone calls.",
+    title: "ACL 2026 System Demonstrations: Paper Accepted",
     railTitle: "ACL 2026 System Demos",
     image: "/images/projects/wigvo_screenshot_call.png",
   },
@@ -663,15 +665,13 @@ export const MILESTONES: Milestone[] = [
     month: "Jun",
     date: "2026.06",
     label: "Mind AI",
-    title: "Mind AI: Closed Beta Partner",
-    text: "Joined the closed beta of MEGA Code, Mind AI's product, as a test partner in Korea.",
+    title: "Mind AI: Closed Beta Test Partner",
   },
   {
     month: "Jul",
     date: "2026.07",
     label: "IWSLT 2026",
-    title: "IWSLT 2026 Oral Presentation, San Diego",
-    text: "WIGVO presented in an invited oral session at IWSLT 2026, held inside ACL 2026.",
+    title: "IWSLT 2026: Oral Presentation, San Diego",
     railTitle: "IWSLT 2026 Oral",
     image: ACL_2026_COVER,
   },
@@ -679,15 +679,13 @@ export const MILESTONES: Milestone[] = [
     month: "Aug",
     date: "2026.08",
     label: "EMNLP 2026",
-    title: "EMNLP 2026 Industry Track",
-    text: "Paper accepted: RCPS, choosing document parsers by retrieval, not by appearance.",
+    title: "EMNLP 2026 Industry Track: Paper Accepted",
   },
   {
     month: "Sep",
     date: "2026.09",
     label: "NeurIPS 2026",
-    title: "NeurIPS 2026 Workshop",
-    text: "Paper accepted to the TAE workshop: MDI, the minimum detectable improvement of an LLM judge.",
+    title: "NeurIPS 2026 Workshop: Paper Accepted",
   },
   {
     month: "Oct",
@@ -696,9 +694,8 @@ export const MILESTONES: Milestone[] = [
     title: "Braincrew: AX Project Partnership",
     /* "i\u2011ERP" spells the hyphen as U+2011 (non-breaking) so a narrow
      * column never splits the product name at it. */
-    text: "Signed an AX project partner agreement with Braincrew. The work under it includes the SK hynix Global One ERP (i\u2011ERP) Platform development project.",
+    text: "SK hynix Global One ERP (i\u2011ERP) Platform Development Project",
     railTitle: "Braincrew Partnership",
-    railText: "AX project partner, including SK hynix's i\u2011ERP platform.",
   },
 ];
 /* There is no announcements feed, and that is deliberate.
