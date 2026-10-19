@@ -6,7 +6,7 @@ import { NoticesPage } from "@/mockups/research-led/NoticesPage";
  * homepage's canonical and og:url. See the comment there.
  *
  * This route was /news until 2026-08-09. The old URL still exports, as a
- * redirect whose canonical points here: see the "news" entry in RETIRED. */
+ * redirect to /story since 2026-10-20: see the "news" entry in RETIRED. */
 const DESCRIPTION =
   "The release record: every version of everything WIGTN has shipped, dated from the registry that serves it.";
 

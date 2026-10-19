@@ -953,13 +953,25 @@ export const RETIRED: {
    * exists, the events and the awards, is on /story now. */
   { note: "The page that used to be here grouped work that has since moved. What is left of it, the events and the awards, is on the Story page.",
     slug: "work", to: STORY_INDEX, title: "WIGTN Story" },
-  /* /news was this site's own route until 2026.08.09, when the page took the
-   * name the nav had been using for it and became /notices. It is the only
-   * entry here that retires a static route rather than an article, which is
-   * why it is a slug at all: `app/news/page.tsx` is gone, so `app/[slug]` is
-   * free to export /news as a redirect the same way it does the rest. */
-  { note: "The page is called Notice now, and its URL says so. It carries the release record; the event news moved to the Story page.",
-    slug: "news", to: NOTICES, title: "WIGTN Notice" },
+  /* /news was this site's own route until 2026.08.09, labelled "Updates".
+   * It forwarded to /notices while that page kept the name Notice; since
+   * 2026-10-20 it forwards to /story, because /notices is the Products ledger
+   * now and what /news carried, the team's news, is what Story holds.
+   * `app/news/page.tsx` is gone, so `app/[slug]` is free to export /news as a
+   * redirect the same way it does the rest. */
+  { note: "The news this page carried, the conferences, awards and launches, is on the Story page now.",
+    slug: "news", to: STORY_INDEX, title: "WIGTN Story" },
+  /* Three index routes deleted before this list covered static routes:
+   * /projects on 2026.08.08, /research and /tech-reports on 2026.07.31. They
+   * 404'd from then until 2026-10-20. /projects listed the products, which
+   * the Products ledger at /notices records now; the other two listed the
+   * reports, which WIGTN Tech's index lists now. */
+  { note: "The project list is now the Products page, which records every release with its version and date.",
+    slug: "projects", to: NOTICES, title: "WIGTN Products" },
+  { note: "Research write-ups moved to WIGTN Tech, where each report carries its method, its measurements and its limitations.",
+    slug: "research", to: TECH_REPORT_INDEX, title: "WIGTN Tech" },
+  { note: "The technical reports moved to WIGTN Tech, where each one carries its method, its measurements and its limitations.",
+    slug: "tech-reports", to: TECH_REPORT_INDEX, title: "WIGTN Tech" },
   /* Removed here on 2026.08.08 and deliberately kept out of RETIRED while the
    * paper sat in the EMNLP 2026 Industry Track anonymity period — the
    * destination report was not public, so a redirect would have pointed at

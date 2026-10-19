@@ -106,9 +106,9 @@ The two on-site surfaces split the content by shape:
 
 The page at /notices was /news, labelled "Updates", until 2026-08-09, and held
 News and Releases tabs until the Story/Blog split. Retired URLs, including
-/news, /work, and the story posts' old root slugs, are listed in `RETIRED` in
-`data.ts` and still resolve as redirects. Read the comment there before
-touching them.
+/news (to /story), /work, /projects, /research, /tech-reports, and the story
+posts' old root slugs, are listed in `RETIRED` in `data.ts` and still resolve
+as redirects. Read the comment there before touching them.
 
 ## Writing an update post
 

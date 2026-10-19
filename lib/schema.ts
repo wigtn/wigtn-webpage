@@ -12,7 +12,7 @@ export const organizationSchema = {
   "@type": "Organization",
   "name": ORG_NAME,
   "url": SITE_URL,
-  "logo": `${SITE_URL}/wigtn_logo.png`,
+  "logo": `${SITE_URL}/wigtn_mark_purple.png`,
   "description": DESCRIPTION,
   "address": {
     "@type": "PostalAddress",
