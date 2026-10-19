@@ -32,6 +32,10 @@
  * render at /story/<slug>, under the rows that summarize them; their covers
  * ship from the post folders again, which is why ./milestones is gone. */
 import { ACL_2026_COVER, acl2026SanDiego } from "./updates/acl-2026-san-diego";
+/* A photo the History card needs and the post does not export. Importing the
+ * file is safe in this direction: data.ts may read a post folder, a post may
+ * never read data.ts (see AGENTS.md, Hard rules). */
+import iwsltTalk from "./updates/acl-2026-san-diego/iwslt-talk.jpg";
 import { OBA_WEEKENDTHON_COVER, obaWeekendthonTop6 } from "./updates/oba-weekendthon-top6";
 import { obaWeekendthon2026Top6 } from "./updates/oba-weekendthon-2026-top6";
 import { SNOWFLAKE_2026_COVER, snowflakeKorea2026 } from "./updates/snowflake-korea-2026";
@@ -635,7 +639,13 @@ export type Milestone = {
    * teaser here; /team History always renders the full `title`/`text`. */
   railTitle?: string;
   railText?: string;
-  image?: string; // optional photo; blank frame when absent
+  /* What the History card shows beside the title, in this order: `image`, a
+   * photo cropped to fill; `logo`, artwork contained on a white tile; and
+   * with neither, `label` set in type. Only real photos and real logos go
+   * here. A venue has no picture of an acceptance, so a paper entry falls
+   * through to its label rather than borrowing a conference logo. */
+  image?: string; // optional photo; the homepage rail leaves its frame blank without one
+  logo?: string;
   upcoming?: boolean; // future / roadmap entry
   placeholder?: boolean; // copy not finalized yet
 };
@@ -646,11 +656,12 @@ export const MILESTONES: Milestone[] = [
     date: "2026.01",
     label: "Founded",
     title: "WIGTN Founded",
+    logo: "/images/wigtn_mark_purple.png",
   },
   {
     month: "Feb",
     date: "2026.02",
-    label: "Web Agency",
+    label: "Arustay",
     title: "Arustay: Website Development",
   },
   {
@@ -666,6 +677,7 @@ export const MILESTONES: Milestone[] = [
     date: "2026.06",
     label: "Mind AI",
     title: "Mind AI: Closed Beta Test Partner",
+    logo: "/images/partners/mind-ai.svg",
   },
   {
     month: "Jul",
@@ -673,7 +685,7 @@ export const MILESTONES: Milestone[] = [
     label: "IWSLT 2026",
     title: "IWSLT 2026: Oral Presentation, San Diego",
     railTitle: "IWSLT 2026 Oral",
-    image: ACL_2026_COVER,
+    image: iwsltTalk.src,
   },
   {
     month: "Aug",
@@ -696,6 +708,7 @@ export const MILESTONES: Milestone[] = [
      * column never splits the product name at it. */
     text: "SK hynix Global One ERP (i\u2011ERP) Platform Development Project",
     railTitle: "Braincrew Partnership",
+    logo: "/images/partners/braincrew.svg",
   },
 ];
 /* There is no announcements feed, and that is deliberate.
