@@ -18,10 +18,11 @@ mockups/research-led/
   ArticleDetail.tsx        renders an Article's Block[]
   updates/<slug>/          one folder per post, notice or story: index.ts + images
   updates/_template/       four post templates + the shared rules
-public/images/             logos (partners/ holds the Partners & Clients wall),
-                           one milestone photo, the four module scenes the
-                           homepage plays, and the Seoul mask under Our
-                           Service. Nothing else.
+public/images/             logos (partners/ for the Partners & Clients wall and
+                           the Solutions panel, venues/ for the R&D panel), one
+                           milestone photo, the four module scenes (retained,
+                           unrendered), and the Seoul mask under Our Service.
+                           Nothing else.
 ```
 
 `updates/` keeps its folder name through every rename above it, the same way
@@ -31,8 +32,9 @@ public/images/             logos (partners/ holds the Partners & Clients wall),
 The site has four nav destinations: **About** (/team), **Notice** (/notices),
 **Story** (/story), and **Tech**, which is an external link to WIGTN Tech's
 report index. The landing page is three sections: Hero, Our Service (the
-three teams, Solutions, Product and Research, as three panels that open
-when pointed at; Product reads "Coming soon"), Contact. About has no visible title: the Partners & Clients
+three teams as three panels that open when pointed at: Solutions shows its
+enterprise projects by logo, Product reads "Coming soon", and Research,
+headed R&D, shows its accepted papers by venue logo), Contact. About has no visible title: the Partners & Clients
 logo wall, then the company's History (papers accepted and business
 relationships, from `MILESTONES`), nothing else. It does not introduce
 members individually. A **Blog** section exists in the source
