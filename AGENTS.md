@@ -168,11 +168,30 @@ In:
 5. **Name people only in their published role**, and visitors by company, never
    by individual.
 
+## Metadata, structured data, llms.txt
+
+All three are built from the data the pages render, so a new post, release
+or paper reaches them without a second edit, with two exceptions.
+
+- **Page metadata** goes through `pageMetadata()` in `lib/metadata.ts`:
+  title, canonical, Open Graph and the Twitter card in one call. The default
+  card is `public/og/default.png`, rendered from `docs/og/default.html`.
+- **JSON-LD** is `lib/schema.ts`. Mark up only what the page shows. A new
+  paper on the R&D panel needs its row in `PAPERS` (full title, authors in
+  published order, venue, URL once public); a new open-source release on the
+  Product panel needs its row in `SOFTWARE` (repository, language, licence).
+  Without the row the item is simply left out of the markup.
+- **`/llms.txt` and `/llms-full.txt`** are routes (`app/llms*.txt/route.ts`,
+  text from `lib/llms.ts`). The only hand-written part is
+  `RESEARCH_DETAILS`, the figures the WIGTN Tech reports publish.
+- **`robots.txt`, `sitemap.xml`, `manifest.webmanifest`** are `app/robots.ts`,
+  `app/sitemap.ts` and `app/manifest.ts`. AI crawlers are allowed by name.
+
 ## Verifying
 
 ```bash
 npx tsc --noEmit     # types; cannot see missing images (see below)
-npm run build        # 42 static pages; this is what catches a missing image
+npm run build        # 44 static pages; this is what catches a missing image
 ```
 
 `next-env.d.ts` declares `*.jpg` as a wildcard module, so a typecheck will

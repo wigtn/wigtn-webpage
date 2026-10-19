@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/metadata";
+import { postSchema } from "@/lib/schema";
+import { JsonLd } from "@/components/JsonLd";
 import { ArticleDetail } from "@/mockups/research-led/ArticleDetail";
 import { RetiredPage } from "@/mockups/research-led/RetiredPage";
 import {
@@ -105,5 +107,11 @@ export default async function ArticlePage({
   if (retired) {
     return <RetiredPage to={retired.to} title={retired.title} note={retired.note} />;
   }
-  return <ArticleDetail slug={slug} />;
+  const article = getArticle(slug);
+  return (
+    <>
+      {article && <JsonLd data={postSchema(article)} />}
+      <ArticleDetail slug={slug} />
+    </>
+  );
 }

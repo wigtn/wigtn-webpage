@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { ScrollRestore } from "@/components/ScrollRestore";
 import { DESCRIPTION, ORG_NAME, SITE_URL } from "@/lib/brand";
 import { DEFAULT_SOCIAL_IMAGE } from "@/lib/metadata";
-import { organizationSchema } from "@/lib/schema";
+import { siteSchema } from "@/lib/schema";
+import { JsonLd } from "@/components/JsonLd";
 import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
@@ -61,10 +62,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
         />
         <link rel="alternate" href="/llms.txt" type="text/plain" title="LLMs.txt" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-        />
+        <JsonLd data={siteSchema} />
       </head>
       <body className="font-sans antialiased bg-paper text-ink">
         <ScrollRestore />

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/metadata";
+import { productsListSchema } from "@/lib/schema";
+import { JsonLd } from "@/components/JsonLd";
 import { NoticesPage } from "@/mockups/research-led/NoticesPage";
 
 /* Same fix as /team: without its own metadata this page advertised the
@@ -17,5 +19,10 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <NoticesPage />;
+  return (
+    <>
+      <JsonLd data={productsListSchema()} />
+      <NoticesPage />
+    </>
+  );
 }

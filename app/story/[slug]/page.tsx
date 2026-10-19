@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/metadata";
+import { postSchema } from "@/lib/schema";
+import { JsonLd } from "@/components/JsonLd";
 import { ArticleDetail } from "@/mockups/research-led/ArticleDetail";
 import { STORY_FEED, getArticle, getStory } from "@/mockups/research-led/data";
 
@@ -49,5 +51,11 @@ export default async function StoryPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  return <ArticleDetail slug={slug} />;
+  const article = getArticle(slug);
+  return (
+    <>
+      {article && <JsonLd data={postSchema(article)} />}
+      <ArticleDetail slug={slug} />
+    </>
+  );
 }

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/metadata";
+import { storyListSchema } from "@/lib/schema";
+import { JsonLd } from "@/components/JsonLd";
 import { StoryPage } from "@/mockups/research-led/StoryPage";
 
 const DESCRIPTION =
@@ -12,5 +14,10 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function Page() {
-  return <StoryPage />;
+  return (
+    <>
+      <JsonLd data={storyListSchema()} />
+      <StoryPage />
+    </>
+  );
 }

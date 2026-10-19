@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { DESCRIPTION, ORG_NAME } from "@/lib/brand";
 import { pageMetadata } from "@/lib/metadata";
+import { homeSchema } from "@/lib/schema";
+import { JsonLd } from "@/components/JsonLd";
 import { ResearchLedHome } from "@/mockups/research-led/ResearchLedHome";
 
 /* The homepage's metadata is its own rather than the layout's, so a page that
@@ -15,5 +17,10 @@ export const metadata: Metadata = pageMetadata({
  * Homepage: the research-led company site (promoted from the mockup).
  */
 export default function Home() {
-  return <ResearchLedHome />;
+  return (
+    <>
+      <JsonLd data={homeSchema()} />
+      <ResearchLedHome />
+    </>
+  );
 }
