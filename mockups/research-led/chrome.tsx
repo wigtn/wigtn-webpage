@@ -41,9 +41,14 @@ export const VIEWPORT = { once: true, margin: "-12% 0px" } as const;
 function Wordmark({ className = "h-7 md:h-8" }: { className?: string }) {
   return (
     <>
+      {/* width and height give the box its 2:1 ratio before the file
+          arrives, so the header does not reflow when it does. The CSS
+          height decides the rendered size. */}
       <img
         src="/images/WIGTN_LOGO_NAVY.png"
         alt="WIGTN"
+        width={1600}
+        height={800}
         className={`${className} w-auto dark:hidden`}
       />
       {/* Exactly one of the two is `display: none` per theme, and hidden
@@ -51,6 +56,8 @@ function Wordmark({ className = "h-7 md:h-8" }: { className?: string }) {
       <img
         src="/images/WIGTN_LOGO_WHITE.png"
         alt="WIGTN"
+        width={1600}
+        height={800}
         className={`${className} w-auto hidden dark:block`}
       />
     </>

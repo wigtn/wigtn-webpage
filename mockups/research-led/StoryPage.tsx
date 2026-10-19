@@ -93,9 +93,12 @@ export function StoryPage() {
               tabIndex={-1}
               className="relative order-1 aspect-[16/10] overflow-hidden rounded-xl bg-ink/[0.04] md:order-2"
             >
+              {/* The feature cover is the page's largest paint, so it is
+                  fetched first. */}
               <img
                 src={latest.cover.src}
-                alt=""
+                alt={latest.article.title}
+                fetchPriority="high"
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.03]"
               />
             </Link>
@@ -119,10 +122,11 @@ export function StoryPage() {
                   viewport={VIEWPORT}
                 >
                   <div className="group flex flex-col gap-5 py-8 sm:flex-row sm:items-start sm:gap-8">
-                    {/* aria-hidden with tabIndex -1: the picture is decorative
-                        (alt="") and goes to the same place as the title beside
-                        it, so exposing it doubles every row in the tab order
-                        and reads as an unnamed link to a screen reader. */}
+                    {/* aria-hidden with tabIndex -1: the picture goes to the
+                        same place as the title beside it, so exposing it
+                        doubles every row in the tab order. Its alt is for
+                        image search and text-only readers; assistive tech
+                        skips it with the link. */}
                     <Link
                       href={storyHref(s.storySlug)}
                       aria-hidden
@@ -131,7 +135,9 @@ export function StoryPage() {
                     >
                       <img
                         src={s.cover.src}
-                        alt=""
+                        alt={s.article.title}
+                        loading="lazy"
+                        decoding="async"
                         className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.04]"
                       />
                     </Link>

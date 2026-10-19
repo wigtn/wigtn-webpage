@@ -172,7 +172,7 @@ In:
 
 ```bash
 npx tsc --noEmit     # types; cannot see missing images (see below)
-npm run build        # 35 static pages; this is what catches a missing image
+npm run build        # 42 static pages; this is what catches a missing image
 ```
 
 `next-env.d.ts` declares `*.jpg` as a wildcard module, so a typecheck will

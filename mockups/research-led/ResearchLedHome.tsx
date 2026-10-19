@@ -669,6 +669,10 @@ function ModuleCard({ row, live }: { row: PracticeRow; live: boolean }) {
  * dark-mode inversion would turn them into different logos. Wide wordmarks
  * and the near-square SK hynix mark share one box, so object-contain lets each
  * fill whichever side it reaches first and the set reads at a similar weight. */
+/* The picture names what it shows ("SK hynix logo", "WIGSS cover art") even
+ * though the name is printed under it: these logos are the evidence the
+ * panel offers, and an empty alt left them invisible to image search and to
+ * anything reading the page without its pixels. */
 function TeamCard({ row }: { row: PracticeRow }) {
   const body = (
     <>
@@ -680,7 +684,9 @@ function TeamCard({ row }: { row: PracticeRow }) {
         <span className="relative block aspect-[16/9] overflow-hidden bg-paper-tint ring-1 ring-inset ring-line/10 group-focus-visible:ring-accent sm:aspect-auto sm:h-24 xl:h-20">
           <img
             src={row.image}
-            alt=""
+            alt={`${row.name} cover art`}
+            loading="lazy"
+            decoding="async"
             className="h-full w-full scale-[1.04] object-cover transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100"
           />
         </span>
@@ -697,7 +703,9 @@ function TeamCard({ row }: { row: PracticeRow }) {
           {row.logo && (
             <img
               src={row.logo}
-              alt=""
+              alt={`${row.name} logo`}
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 h-full w-full object-contain px-16 py-5 sm:px-5 sm:py-6 xl:px-4 xl:py-5"
             />
           )}
@@ -937,8 +945,8 @@ export function ResearchLedHome() {
             {/* Lightweight first-paint fallback while the single active video
                 hydrates and decodes its first frame. */}
             <div aria-hidden className="absolute inset-0 grid place-items-center bg-paper">
-              <img src="/images/WIGTN_LOGO_NAVY.png" alt="" className="h-auto w-44 dark:hidden md:w-56" />
-              <img src="/images/WIGTN_LOGO_WHITE.png" alt="" className="hidden h-auto w-44 dark:block md:w-56" />
+              <img src="/images/WIGTN_LOGO_NAVY.png" alt="" width={1600} height={800} className="h-auto w-44 dark:hidden md:w-56" />
+              <img src="/images/WIGTN_LOGO_WHITE.png" alt="" width={1600} height={800} className="hidden h-auto w-44 dark:block md:w-56" />
             </div>
             <IntroVideo />
             {/* fade the video's bottom edge into the page */}
@@ -988,9 +996,12 @@ export function ResearchLedHome() {
           <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-accent">
             Work with us
           </span>
-          <h3 className="mt-5 font-display max-w-3xl text-pretty text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.15]">
+          {/* h2, not h3: this is the page's third section, not a part of
+              Our Service. The classes set the whole look, so the level is
+              invisible. */}
+          <h2 className="mt-5 font-display max-w-3xl text-pretty text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.15]">
             Have a problem AI hasn’t solved for you yet?
-          </h3>
+          </h2>
           <p className="mt-6 max-w-2xl text-pretty text-ink-3 leading-relaxed">
             Tell us where it fails today. We measure it before we build anything, bring the fix
             into the systems you already run, and say where the fix stops. A report you think is
