@@ -476,12 +476,21 @@ export const PRACTICES: Practice[] = [
 export type Company = {
   name: string;
   logo?: string;
+  /* How tall the logo sits, in multiples of the row's logo height. The row
+   * height suits wordmarks about six times wider than tall; a stacked logo at
+   * that height would be a sliver, so it is given more height to read at a
+   * similar weight. */
+  height?: number;
 };
 
+/* Arustay's logo is a stacked mark (an arch over ARU / STAY). It was supplied
+ * as a raster with a baked-in checkerboard and an image generator's sparkle in
+ * the corner; arustay.svg is a potrace of the brown ink alone, so neither came
+ * across, in the ink's own colour (#644e41). */
 export const PARTNERS_AND_CLIENTS: Company[] = [
   { name: "Braincrew", logo: "/images/partners/braincrew.svg" },
   { name: "Mind AI", logo: "/images/partners/mind-ai.svg" },
-  { name: "Arustay" },
+  { name: "Arustay", logo: "/images/partners/arustay.svg", height: 2 },
 ];
 
 export type Kind = "report" | "event" | "community" | "insight";

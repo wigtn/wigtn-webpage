@@ -38,7 +38,7 @@ Service (the three teams as three panels that open when pointed at:
 Solutions shows its enterprise projects by logo, Product its open-source
 releases by cover art, and Research, headed R&D, its accepted papers by
 venue logo), Contact. About has no visible title: a short introduction
-signed "Founder & CEO, Harrison Kim", the Partners & Clients logo wall,
+signed "Harrison Kim, Founder & CEO", the Partners & Clients logo wall,
 then the company's History (papers accepted and business relationships,
 from `MILESTONES`), nothing else. It does not introduce members
 individually. A **Blog** section exists in the source
