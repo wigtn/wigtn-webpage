@@ -32,9 +32,10 @@ The site has four nav destinations: **About** (/team), **Notice** (/notices),
 **Story** (/story), and **Tech**, which is an external link to WIGTN Tech's
 report index. The landing page is three sections: Hero, Our Service (the
 business model: Web Agency and AX Agency as two halves that open when
-pointed at), Contact. About is "Who we are.": the company's History (papers
-accepted and business relationships, from `MILESTONES`) and the partners and
-clients, nothing else. It does not introduce members individually. A **Blog** section exists in the source
+pointed at), Contact. About has no visible title: the Partners & Clients
+logo wall, then the company's History (papers accepted and business
+relationships, from `MILESTONES`), nothing else. It does not introduce
+members individually. A **Blog** section exists in the source
 (BlogPage.tsx, the "blog" channel) but is closed and unrouted: it is reserved
 for business-track news (a signed subcontract, a program selection, a
 partnership), and it opens with its first qualifying post, not before.
