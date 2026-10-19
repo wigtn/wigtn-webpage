@@ -509,6 +509,26 @@ export const PARTNERS_AND_CLIENTS: Company[] = [
   { name: "Arustay", logo: "/images/partners/arustay.svg", height: 2 },
 ];
 
+/* The /team Sponsor row, under Partners: AWS, through its startup programme,
+ * since 2026-10-20. Not on the Partners wall, which holds direct partners and
+ * clients; WIGTN is not an AWS Partner Network member. Use of the logo was
+ * cleared by the AWS Startups team (confirmed by the founder, 2026-10-20).
+ *
+ * aws-startups.svg is the AWS Startups lockup ("aws" mark, "startups"), built
+ * from the 300x79 white PNG of it supplied with that clearance. The aws mark
+ * is AWS's own vector, the one aws.amazon.com's header draws, placed where
+ * the PNG draws it (scale 1.215, fitted to within 0.025 mean error per
+ * pixel). Only "startups" is traced: a 16x Lanczos upscale, a 6px blur to
+ * take out the pixel steps, a 0.52 threshold that keeps the strokes' weight,
+ * then potrace. One colour, squid ink #232F3E, so the row's dark-mode invert
+ * turns it white like the provided file. */
+export const SPONSORS: Company[] = [
+  /* The lockup is about 3.8 times wider than tall and its letters fill the
+   * top half, so at 1.7 the "aws" letters stand as tall as the 0.85
+   * Partners wordmarks. */
+  { name: "AWS Startups", logo: "/images/sponsors/aws-startups.svg", height: 1.7 },
+];
+
 export type Kind = "report" | "event" | "community" | "insight";
 
 /* Channel split: "newsroom" = in-site news feed (awards, releases,

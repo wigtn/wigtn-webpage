@@ -2,6 +2,7 @@ import {
   ARTICLES,
   PRACTICES,
   RELEASE_ROWS,
+  SPONSORS,
   STORIES,
   STORY_INDEX,
   NOTICES,
@@ -72,6 +73,8 @@ export const siteSchema = {
         "name": "Harrison Kim",
         "jobTitle": "Founder & CEO",
       },
+      /* The /team Sponsor row. */
+      "sponsor": SPONSORS.map((s) => ({ "@type": "Organization", "name": s.name })),
       "sameAs": [
         "https://github.com/wigtn",
         "https://huggingface.co/Wigtn",
