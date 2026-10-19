@@ -122,9 +122,17 @@ export function TeamPage() {
  * business relationships (see the comment there). It closes the page, under
  * Partners & Clients.
  *
- * From md up the entries alternate around a centre line. Below md there is
- * one column, so the line and its nodes move to the left edge and the text
- * sits to their right; a centred line would run through the text. */
+ * Each entry is a card: a thumbnail (photo, logo, or the label in type; see
+ * Milestone.image) beside the date and title. A short connector runs from
+ * the node on the line to the card, so the node reads as the card's anchor
+ * rather than a dot floating beside text. Both sit at the card's vertical
+ * middle.
+ *
+ * From md up the cards alternate around a centre line and mirror, so the
+ * thumbnails face the line, and each card rises 40px into the one before it:
+ * they sit on opposite sides, so the overlap only closes the gap a strict
+ * one-row-per-card layout leaves. Below md there is one column: the line and
+ * its nodes move to the left edge and every card sits to their right. */
 function HistoryTimeline() {
   const history = MILESTONES.filter((m) => !m.placeholder).slice().reverse();
 
@@ -132,16 +140,14 @@ function HistoryTimeline() {
     <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
       <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">History</h2>
 
-      {/* max-w-5xl, not 3xl: each side of the centre line is half of this,
-          so a narrower rail chops titles and one-liners into three-word
-          fragments. This keeps ~430px of measure per side. */}
       <div className="relative mx-auto mt-14 max-w-5xl md:mt-20">
-        {/* the line: left edge on mobile, centre from md */}
+        {/* the line: left edge on mobile, centre from md. It runs past the
+            first and last nodes, so both ends fade out instead of stopping. */}
         <span
           aria-hidden
-          className="absolute inset-y-0 left-[7px] w-px bg-brand/30 md:left-1/2 md:-translate-x-1/2"
+          className="absolute inset-y-0 left-[7px] w-px bg-gradient-to-b from-transparent via-brand/50 to-transparent md:left-1/2 md:-translate-x-1/2"
         />
-        <ul className="space-y-12 md:space-y-16">
+        <ul className="space-y-8 md:-space-y-10">
           {history.map((m, i) => {
             const left = i % 2 === 0;
             return (
@@ -152,28 +158,42 @@ function HistoryTimeline() {
                 initial="hidden"
                 whileInView="show"
                 viewport={VIEWPORT}
-                className="relative grid pl-9 md:grid-cols-2 md:gap-16 md:pl-0"
+                className="relative grid pl-10 md:grid-cols-2 md:gap-20 md:pl-0"
               >
-                {/* node on the line */}
+                {/* connector, from the line to the card edge (40px either way) */}
                 <span
                   aria-hidden
-                  className="absolute left-0 top-1.5 h-3.5 w-3.5 rounded-full bg-brand ring-4 ring-paper md:left-1/2 md:-translate-x-1/2"
+                  className={`absolute left-[7px] top-1/2 h-px w-[33px] bg-brand/50 md:w-10 ${
+                    left ? "md:left-[calc(50%-40px)]" : "md:left-1/2"
+                  }`}
                 />
-                <div className={left ? "md:pr-12 md:text-right" : "md:col-start-2 md:pl-12"}>
-                  <div className="font-mono text-sm text-accent">{m.date}</div>
-                  <h3 className="mt-1 text-pretty text-lg font-semibold tracking-tight text-ink [word-break:keep-all]">
-                    {m.title}
-                    {m.upcoming && (
-                      <span className="ml-2 whitespace-nowrap text-sm font-normal text-ink-4">
-                        (Upcoming)
-                      </span>
+                {/* node on the line, at the card's middle */}
+                <span
+                  aria-hidden
+                  className="absolute left-0 top-1/2 h-3.5 w-3.5 -translate-y-1/2 rounded-full bg-brand ring-4 ring-paper md:left-1/2 md:-translate-x-1/2"
+                />
+                <div
+                  className={`flex items-center gap-4 rounded-2xl border border-line/10 bg-paper-raised p-3 md:gap-5 ${
+                    left ? "md:flex-row-reverse md:text-right" : "md:col-start-2"
+                  }`}
+                >
+                  <Thumb m={m} />
+                  <div className="min-w-0 flex-1">
+                    <div className="font-mono text-sm text-accent">{m.date}</div>
+                    <h3 className="mt-1 text-pretty text-base font-semibold tracking-tight text-ink [word-break:keep-all] md:text-lg">
+                      {m.title}
+                      {m.upcoming && (
+                        <span className="ml-2 whitespace-nowrap text-sm font-normal text-ink-4">
+                          (Upcoming)
+                        </span>
+                      )}
+                    </h3>
+                    {m.text && (
+                      <p className="mt-1 text-pretty text-sm leading-relaxed text-ink-3 [word-break:keep-all]">
+                        <Clauses text={m.text} />
+                      </p>
                     )}
-                  </h3>
-                  {m.text && (
-                    <p className="mt-1 text-pretty text-sm leading-relaxed text-ink-3 [word-break:keep-all]">
-                      <Clauses text={m.text} />
-                    </p>
-                  )}
+                  </div>
                 </div>
               </motion.li>
             );
@@ -181,5 +201,37 @@ function HistoryTimeline() {
         </ul>
       </div>
     </section>
+  );
+}
+
+/* The card's picture, one fixed 4:3 box whatever fills it, so every card in
+ * the column is the same height. Decorative: the title beside it names the
+ * same thing. Logos keep their own colours on white in both themes; a logo
+ * turned white for dark mode would need a second rule per file, and the tile
+ * is small enough not to glare. */
+function Thumb({ m }: { m: (typeof MILESTONES)[number] }) {
+  const box =
+    "grid h-[72px] w-24 shrink-0 place-items-center overflow-hidden rounded-xl ring-1 ring-inset ring-line/10 md:h-24 md:w-32";
+
+  if (m.image) {
+    return (
+      <div className={box}>
+        <img src={m.image} alt="" className="h-full w-full object-cover" />
+      </div>
+    );
+  }
+  if (m.logo) {
+    return (
+      <div className={`${box} bg-white p-3 md:p-4`}>
+        <img src={m.logo} alt="" className="h-full w-full object-contain" />
+      </div>
+    );
+  }
+  return (
+    <div className={`${box} bg-brand/10 px-2`}>
+      <span className="text-center font-display text-sm font-bold leading-tight tracking-tight text-accent md:text-base">
+        {m.label}
+      </span>
+    </div>
   );
 }
