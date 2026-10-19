@@ -358,7 +358,22 @@ export const PRACTICES: Practice[] = [
  * still live where they are checkable: the posts, MILESTONES, and the report
  * site. It is in the git history if a surface wants the list back. */
 
-export const WORKED_WITH = ["Braincrew", "SK hynix", "Mind AI", "Arustay"];
+/* The /team logo wall. Only companies WIGTN holds a direct relationship with:
+ * a partner, or a client that contracted WIGTN itself. An end client reached
+ * through someone else's contract is neither, so it stays off this list.
+ * `logo` is a file under public/images/partners/ whose viewBox is trimmed to
+ * the artwork, so every logo renders at the same height; without one the
+ * name is set in type at that height. */
+export type Company = {
+  name: string;
+  logo?: string;
+};
+
+export const PARTNERS_AND_CLIENTS: Company[] = [
+  { name: "Braincrew", logo: "/images/partners/braincrew.svg" },
+  { name: "Mind AI", logo: "/images/partners/mind-ai.svg" },
+  { name: "Arustay" },
+];
 
 /* The /team roster renders one row per person: portrait + name on the left,
  * `position` / `role` / `bio` on the right. `position` is the WIGTN title and

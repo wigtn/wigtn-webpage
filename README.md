@@ -52,9 +52,9 @@
 | **WIGTN Coding** | A Claude Code plugin ecosystem: 12 agents, 3 skills, 17 design styles | [Code](https://github.com/wigtn/wigtn-plugins-with-claude-code) |
 | **TimeLens** | Real-time AI museum curator via Gemini Live | [Live](https://timelens-852253134165.asia-northeast3.run.app/) · [Code](https://github.com/wigtn/wigtn-timelens) |
 
-## Worked with
+## Partners & Clients
 
-Braincrew · SK hynix · Mind AI · Arustay
+Braincrew · Mind AI · Arustay
 
 ## Team
 
