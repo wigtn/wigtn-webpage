@@ -19,25 +19,29 @@ mockups/research-led/
   updates/<slug>/          one folder per post, notice or story: index.ts + images
   updates/_template/       four post templates + the shared rules
 public/images/             logos (partners/ for the Partners & Clients wall and
-                           the Solutions panel, venues/ for the R&D panel), one
-                           milestone photo, the four module scenes (retained,
-                           unrendered), and the Seoul mask under Our Service.
-                           Nothing else.
+                           the Solutions panel, venues/ for the R&D panel),
+                           products/ (WIGTN Tech cover art for the Product
+                           panel), one milestone photo, the four module scenes
+                           (retained, unrendered), and the Seoul mask under Our
+                           Service. Nothing else.
 ```
 
 `updates/` keeps its folder name through every rename above it, the same way
 `research-led/` kept its. Notice posts and story posts both live there; the
 `channel` field on the post, not the folder, is what routes them.
 
-The site has four nav destinations: **About** (/team), **Notice** (/notices),
-**Story** (/story), and **Tech**, which is an external link to WIGTN Tech's
-report index. The landing page is three sections: Hero, Our Service (the
-three teams as three panels that open when pointed at: Solutions shows its
-enterprise projects by logo, Product reads "Coming soon", and Research,
-headed R&D, shows its accepted papers by venue logo), Contact. About has no visible title: the Partners & Clients
-logo wall, then the company's History (papers accepted and business
-relationships, from `MILESTONES`), nothing else. It does not introduce
-members individually. A **Blog** section exists in the source
+The site has four nav destinations: **About** (/team), **Products**
+(/notices, still the release ledger; it was labelled Notice until
+2026-10-19), **Story** (/story), and **Tech**, which is an external link to
+WIGTN Tech's report index. The landing page is three sections: Hero, Our
+Service (the three teams as three panels that open when pointed at:
+Solutions shows its enterprise projects by logo, Product its open-source
+releases by cover art, and Research, headed R&D, its accepted papers by
+venue logo), Contact. About has no visible title: a short introduction
+signed "Founder & CEO, Harrison Kim", the Partners & Clients logo wall,
+then the company's History (papers accepted and business relationships,
+from `MILESTONES`), nothing else. It does not introduce members
+individually. A **Blog** section exists in the source
 (BlogPage.tsx, the "blog" channel) but is closed and unrouted: it is reserved
 for business-track news (a signed subcontract, a program selection, a
 partnership), and it opens with its first qualifying post, not before.

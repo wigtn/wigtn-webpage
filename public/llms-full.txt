@@ -3,8 +3,8 @@
 > An independent AI team that builds web products and AI systems for clients,
 > and publishes what it learns in the open: peer-reviewed work, released
 > models, and reports that say what they do not show. Korea-based. Teams:
-> Solutions (AX consulting and enterprise systems), R&D (research on LLMs,
-> evaluation, and speech); a Product team is coming.
+> Solutions (AX consulting and enterprise systems), Product (open-source
+> developer tools), and R&D (research on LLMs, evaluation, and speech).
 
 Every figure below comes from a published paper, a public model card, or a
 technical report at https://tech.wigtn.com/. Work that has

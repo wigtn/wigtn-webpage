@@ -31,7 +31,7 @@
 Three teams:
 
 - **Solutions**: AX consulting and system integration for enterprises. Projects with SK hynix (through Braincrew), Braincrew and Mind AI.
-- **Product**: our own products. Coming soon.
+- **Product**: open-source tools we build and use ourselves: WIGSS and the WIGTN plugins for Claude Code and Codex.
 - **Research (R&D)**: peer-reviewed research on LLMs, their evaluation, and speech (STT and TTS), at ACL, EMNLP and NeurIPS.
 
 ## Proof

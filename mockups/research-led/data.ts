@@ -107,7 +107,10 @@ export type NavItem = { label: string; href: string };
 
 export const NAV: NavItem[] = [
   { label: "About", href: TEAM_PAGE },
-  { label: "Notice", href: NOTICES },
+  /* "Products" since 2026-10-19 (it was "Notice"). The page is still the
+   * release ledger at /notices; WIGTN's own products will be promoted from
+   * the homepage when they launch, and this page changes with them. */
+  { label: "Products", href: NOTICES },
   { label: "Story", href: STORY_INDEX },
   /* Trailing slash on purpose: the report site builds with trailingSlash, so
    * the bare URL 301s. Linking the final URL saves that round trip. */
@@ -197,9 +200,10 @@ export type PracticeRow = {
    *
    * Scene sources are in the session scratchpad as art/scene-*.html. To change
    * one, edit the scene and re-render rather than retouching the JPEG. */
-  /* Optional. The four web modules have compositions; project and paper rows
-   * do not, because inventing a picture for an engagement or a published
-   * paper would be dressing. They carry a `logo` instead. */
+  /* Optional. The four web modules have compositions and the open-source rows
+   * have their WIGTN Tech cover art; project and paper rows do not, because
+   * inventing a picture for an engagement or a published paper would be
+   * dressing. They carry a `logo` instead. */
   image?: string;
   /* The same composition, moving. Five seconds, looped, VP8, one per module.
    *
@@ -343,6 +347,46 @@ const PAPER_ROWS: PracticeRow[] = [
   },
 ];
 
+/* ── Product: open-source releases ──────────────────────────────────────────
+ *
+ * The three tools on the /notices ledger that are not a model: WIGSS and the
+ * two WIGTN plugins. Product showed "Coming soon" until 2026-10-19; these are
+ * what the team has shipped so far, and WIGTN's own product will take the
+ * panel's lead when it launches.
+ *
+ * Each row opens its release post, which carries every version. The lines are
+ * cut from those posts and from the WIGTN Tech reports, adding nothing. The
+ * pictures are the reports' cover art, copied from wigtn-tech-report
+ * (public/images/projects/) at 960px: WIGSS's own banner, and the Claude Code
+ * and Codex brand images the plugin reports use to name the tool each plugin
+ * runs in. */
+const OPEN_SOURCE_ROWS: PracticeRow[] = [
+  {
+    slug: "wigss",
+    name: "WIGSS",
+    line: "Drag a component on your dev server and the source file rewrites itself.",
+    href: articleHref(wigssNpmRelease.slug),
+    meta: "npm · Open source",
+    image: "/images/products/wigss.jpg",
+  },
+  {
+    slug: "wigtn-plugin-claude-code",
+    name: "WIGTN Plugin for Claude Code",
+    line: "Product workflows for Claude Code, with a gate on what leaves the machine.",
+    href: articleHref(wigtnCodingRelease.slug),
+    meta: "Claude Code · Open source",
+    image: "/images/products/wigtn-plugin-claude-code.jpg",
+  },
+  {
+    slug: "wigtn-plugin-codex",
+    name: "WIGTN Plugin for Codex",
+    line: "Requirements, verification and release decisions, reusable in Codex.",
+    href: articleHref(wigtnCodexRelease.slug),
+    meta: "Codex · Open source",
+    image: "/images/products/wigtn-plugin-codex.jpg",
+  },
+];
+
 /* ── The three teams ─────────────────────────────────────────────────────────
  *
  * What we do used to state the lines of business as two cards with keyword
@@ -356,8 +400,8 @@ const PAPER_ROWS: PracticeRow[] = [
  * company names them: Solutions, Product, Research. Solutions shows its
  * enterprise projects and Research its accepted papers, each row with a logo
  * (the kickers were "Web Agency" and "AX Agency"; the slugs stay "web" and
- * "ax" as identities). Product has nothing to show yet, so it carries a title
- * and no rows, and opens onto nothing rather than onto invented content.
+ * "ax" as identities). Product shows the open-source tools, each with its
+ * cover art, and links them to their release posts.
  *
  * Leads are cut to what fits a 240px column. */
 export type Practice = {
@@ -368,7 +412,7 @@ export type Practice = {
   kicker: string;
   /* The heading. "We build it" says what Solutions does; R&D is the
    * Research team's own name for its work, with what it does in `subtitle`.
-   * Product's is "Coming soon" until it has something to show. */
+   * Product's is "We ship it". */
   title: string;
   /* A second line under the heading that appears only when the panel opens,
    * so the resting panels stay one heading each. */
@@ -399,8 +443,11 @@ export const PRACTICES: Practice[] = [
   {
     slug: "product",
     kicker: "Product",
-    title: "Coming soon",
-    rows: [],
+    title: "We ship it",
+    lead: "Open-source tools we build and use ourselves.",
+    keywords: ["Open Source", "Coding Agents"],
+    cue: "3 releases",
+    rows: OPEN_SOURCE_ROWS,
   },
   {
     slug: "ax",

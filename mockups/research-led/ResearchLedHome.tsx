@@ -194,12 +194,13 @@ function Divider() {
  * only images are UI crops that already carry their own text, so a label on top
  * of one is text over text; the names live on the ground instead.
  *
- * AN OPEN PANEL SHOWS WHO OR WHERE, BY LOGO. Solutions opens onto the
+ * AN OPEN PANEL SHOWS WHO, WHAT OR WHERE. Solutions opens onto the
  * organisations its projects are for and with, R&D onto the venues that
- * accepted its papers: one card each, the logo on a white tile, a line, and
- * the relationship or the track. Product opens onto nothing until it has
- * something. (Solutions opened onto four running web modules, and the AX
- * half onto three engagement stages on a rule, until 2026-10-19.)
+ * accepted its papers, each card a logo on a white tile, a line, and the
+ * relationship or the track. Product opens onto its open-source releases,
+ * each card the release's cover art and a link to its release post.
+ * (Solutions opened onto four running web modules, and the AX half onto
+ * three engagement stages on a rule, until 2026-10-19.)
  *
  * THE NAMES ARE VISIBLE AT REST. Without them this section says two headings
  * and nothing else, and a reader who scrolls past without pointing learns
@@ -495,8 +496,8 @@ function Practices() {
                     much was behind the half, which is exactly what a disclosure
                     button says, so it is one: a pointer opens the half by
                     hovering and a keyboard opens it by pressing this. Without
-                    it no panel could be opened from a keyboard at all, because
-                    nothing inside the logo cards is focusable. */}
+                    it Solutions and R&D could not be opened from a keyboard at
+                    all, because nothing inside their cards is focusable. */}
                 <button
                   type="button"
                   onClick={(e) => {
@@ -519,12 +520,13 @@ function Practices() {
                 </button>
               </div>
 
-              {/* Folded, this is not just invisible: `inert` takes the whole
-                  block out of the accessibility tree, so nothing here can be
+              {/* Folded, this is not just invisible: `inert` takes Product's
+                  three links out of the tab order and the whole block out of
+                  the accessibility tree, so nothing here can be focused or
                   read while it cannot be seen. The names in the column beside
                   it stay readable, and the cue button opens this. A panel with
-                  no rows (Product) has nothing here at all; it still opens,
-                  and the heading is what it shows. */}
+                  no rows would have nothing here at all; it still opens, and
+                  its heading is what it shows. */}
               {!empty && (
                 <div
                   inert={split && !isOpen}
@@ -534,7 +536,7 @@ function Practices() {
                 >
                   <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 xl:gap-5">
                     {practice.rows.map((row) => (
-                      <LogoCard key={row.slug} row={row} />
+                      <TeamCard key={row.slug} row={row} />
                     ))}
                   </div>
                 </div>
@@ -652,34 +654,50 @@ function ModuleCard({ row, live }: { row: PracticeRow; live: boolean }) {
   );
 }
 
-/* One project or one paper: whose logo, then what, then the relationship or
- * the track. Not a link, because there is no public page to send anyone to.
+/* One project, paper or release: its picture, then what, then the
+ * relationship, the track or the channel.
  *
- * The tile is white in both themes so every logo keeps its own colours (SK
- * hynix's red and orange, the venues' marks); a dark-mode inversion would turn
- * them into different logos. Wide wordmarks and the near-square SK hynix mark
- * share one box, so object-contain lets each fill whichever side it reaches
- * first and the set reads at a similar weight. */
-function LogoCard({ row }: { row: PracticeRow }) {
-  return (
-    <div className="group flex flex-col">
-      {/* The logo fills the tile and is padded inside itself: object-fit
-          works on the content box, so the padding is the margin, and an
-          absolutely placed image has a definite box to be contained in. A
-          grid-centred image did not, and drew the near-square SK hynix mark
-          at its natural height, past the tile. */}
-      {/* Stacked on a phone the tile spans the column, so the wide wordmarks
-          get a wider margin there; otherwise they would run the full width
-          while the near-square SK hynix mark stops at the tile's height. */}
-      <span className="relative block h-20 bg-white ring-1 ring-inset ring-line/10 sm:h-24 xl:h-20">
-        {row.logo && (
+ * A release has a page to open (its release post), so its card is the link;
+ * the name reaching for accent on hover is the only signal it needs. A
+ * project or a paper has no public page, so its card is not a link rather
+ * than one that goes nowhere.
+ *
+ * A release's picture is its cover art, cropped to 16:9 to fill. A project's
+ * or a paper's is a logo on a white tile, white in both themes so every logo
+ * keeps its own colours (SK hynix's red and orange, the venues' marks); a
+ * dark-mode inversion would turn them into different logos. Wide wordmarks
+ * and the near-square SK hynix mark share one box, so object-contain lets each
+ * fill whichever side it reaches first and the set reads at a similar weight. */
+function TeamCard({ row }: { row: PracticeRow }) {
+  const body = (
+    <>
+      {row.image ? (
+        <span className="relative block aspect-[16/9] overflow-hidden bg-paper-tint ring-1 ring-inset ring-line/10 group-focus-visible:ring-accent">
           <img
-            src={row.logo}
+            src={row.image}
             alt=""
-            className="absolute inset-0 h-full w-full object-contain px-16 py-5 sm:px-5 sm:py-6 xl:px-4 xl:py-5"
+            className="h-full w-full scale-[1.04] object-cover transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100"
           />
-        )}
-      </span>
+        </span>
+      ) : (
+        /* The logo fills the tile and is padded inside itself: object-fit
+           works on the content box, so the padding is the margin, and an
+           absolutely placed image has a definite box to be contained in. A
+           grid-centred image did not, and drew the near-square SK hynix mark
+           at its natural height, past the tile. Stacked on a phone the tile
+           spans the column, so the wide wordmarks get a wider margin there;
+           otherwise they would run the full width while the SK hynix mark
+           stops at the tile's height. */
+        <span className="relative block h-20 bg-white ring-1 ring-inset ring-line/10 sm:h-24 xl:h-20">
+          {row.logo && (
+            <img
+              src={row.logo}
+              alt=""
+              className="absolute inset-0 h-full w-full object-contain px-16 py-5 sm:px-5 sm:py-6 xl:px-4 xl:py-5"
+            />
+          )}
+        </span>
+      )}
       <span className="mt-4 font-display text-lg tracking-[-0.03em] text-ink transition-colors group-hover:text-accent">
         {row.name}
       </span>
@@ -687,7 +705,15 @@ function LogoCard({ row }: { row: PracticeRow }) {
       <span className="mt-auto pt-3 font-mono text-[9.5px] uppercase tracking-[0.14em] text-ink-5">
         {row.meta}
       </span>
-    </div>
+    </>
+  );
+
+  return row.href ? (
+    <Link href={row.href} className="group flex flex-col focus-visible:outline-none">
+      {body}
+    </Link>
+  ) : (
+    <div className="group flex flex-col">{body}</div>
   );
 }
 
