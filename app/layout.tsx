@@ -37,9 +37,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // suppressHydrationWarning: themeInitScript stamps `dark` on <html> before
-    // React hydrates, so the class list legitimately differs from the SSR HTML.
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    // Dark is the default, so the SSR HTML ships with `dark` on <html>.
+    // suppressHydrationWarning: themeInitScript takes it off before React
+    // hydrates for a visitor who chose light, so the class list can
+    // legitimately differ from the SSR HTML.
+    <html lang="en" className="scroll-smooth dark" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />

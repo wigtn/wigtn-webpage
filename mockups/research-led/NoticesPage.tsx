@@ -85,7 +85,9 @@
  *
  * THE HERO IS `PageHero`, the same one /team uses: the nav has no active
  * state, no `aria-current` and no pathname check, so the accent sentence is
- * what tells a reader arriving on a shared link which page they are on.
+ * what tells a reader arriving on a shared link which page they are on. It is
+ * "Shipped in the open.", the homepage hero's "in the open" applied to the
+ * ledger; it read "What shipped." until 2026-10-20.
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -378,7 +380,7 @@ export function NoticesPage() {
   return (
     <PageShell>
       <PageHero
-        title="What shipped."
+        title="Shipped in the open."
         lead={
           <>
             Every version of everything we have released, dated from the

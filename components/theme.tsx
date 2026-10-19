@@ -7,7 +7,7 @@
  * app/globals.css under `:root` (light) and `.dark`. Flipping the theme is
  * therefore a single class toggle on <html>; nothing re-renders.
  *
- * Resolution order: explicit choice in localStorage → light. The OS
+ * Resolution order: explicit choice in localStorage → dark. The OS
  * preference is not consulted (see themeInitScript in lib/theme.ts).
  */
 
@@ -34,17 +34,17 @@ function applyTheme(theme: Theme) {
 }
 
 export function useTheme() {
-  // Start "light" to match the server-rendered markup, then reconcile in the
+  // Start "dark" to match the server-rendered markup, then reconcile in the
   // effect below. The pre-paint script has already set the real class, so
   // this never causes a visible flash.
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     // Re-resolve here as a CSP/storage-safe fallback. The pre-paint script is
     // still the fast path, but the hydrated control must not blindly trust a
     // missing class if that script or localStorage access was blocked.
-    const initial = storedTheme() ?? "light";
+    const initial = storedTheme() ?? "dark";
     document.documentElement.classList.toggle("dark", initial === "dark");
     setTheme(initial);
     setMounted(true);

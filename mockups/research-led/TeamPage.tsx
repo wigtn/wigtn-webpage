@@ -16,7 +16,7 @@
  * screen readers, visually hidden. */
 
 import { Fragment } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ORG_NAME } from "@/lib/brand";
 import { PageShell, rise, VIEWPORT } from "./chrome";
 import { MILESTONES, PARTNERS_AND_CLIENTS } from "./data";
@@ -170,62 +170,116 @@ export function TeamPage() {
  *
  * From md up the entries alternate around a centre line. Below md there is
  * one column, so the line and its nodes move to the left edge and the text
- * sits to their right; a centred line would run through the text. */
+ * sits to their right; a centred line would run through the text.
+ *
+ * Behind it, InkWash: the brand purple bleeding faintly into the page. The
+ * nodes carry a soft halo of the same purple, so they read as drops on that
+ * wash rather than as dots on a line. The layout and the copy are unchanged. */
 function HistoryTimeline() {
   const history = MILESTONES.filter((m) => !m.placeholder).slice().reverse();
 
   return (
-    <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
-      <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">History</h2>
+    /* Full bleed so the wash can spread past the page measure; overflow is
+       clipped here so the displaced edges never add a horizontal scroll. */
+    <div className="relative overflow-hidden">
+      <InkWash />
+      <section className="relative max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
+        <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">History</h2>
 
-      {/* max-w-5xl, not 3xl: each side of the centre line is half of this,
-          so a narrower rail chops titles and one-liners into three-word
-          fragments. This keeps ~430px of measure per side. */}
-      <div className="relative mx-auto mt-14 max-w-5xl md:mt-20">
-        {/* the line: left edge on mobile, centre from md */}
-        <span
-          aria-hidden
-          className="absolute inset-y-0 left-[7px] w-px bg-brand/30 md:left-1/2 md:-translate-x-1/2"
-        />
-        <ul className="space-y-12 md:space-y-16">
-          {history.map((m, i) => {
-            const left = i % 2 === 0;
-            return (
-              <motion.li
-                key={`${m.date} ${m.title}`}
-                variants={rise}
-                custom={i}
-                initial="hidden"
-                whileInView="show"
-                viewport={VIEWPORT}
-                className="relative grid pl-9 md:grid-cols-2 md:gap-16 md:pl-0"
-              >
-                {/* node on the line */}
-                <span
-                  aria-hidden
-                  className="absolute left-0 top-1.5 h-3.5 w-3.5 rounded-full bg-brand ring-4 ring-paper md:left-1/2 md:-translate-x-1/2"
-                />
-                <div className={left ? "md:pr-12 md:text-right" : "md:col-start-2 md:pl-12"}>
-                  <div className="font-mono text-sm text-accent">{m.date}</div>
-                  <h3 className="mt-1 text-pretty text-lg font-semibold tracking-tight text-ink [word-break:keep-all]">
-                    {m.title}
-                    {m.upcoming && (
-                      <span className="ml-2 whitespace-nowrap text-sm font-normal text-ink-4">
-                        (Upcoming)
-                      </span>
+        {/* max-w-5xl, not 3xl: each side of the centre line is half of this,
+            so a narrower rail chops titles and one-liners into three-word
+            fragments. This keeps ~430px of measure per side. */}
+        <div className="relative mx-auto mt-14 max-w-5xl md:mt-20">
+          {/* the line: left edge on mobile, centre from md */}
+          <span
+            aria-hidden
+            className="absolute inset-y-0 left-[7px] w-px bg-brand/30 md:left-1/2 md:-translate-x-1/2"
+          />
+          <ul className="space-y-12 md:space-y-16">
+            {history.map((m, i) => {
+              const left = i % 2 === 0;
+              return (
+                <motion.li
+                  key={`${m.date} ${m.title}`}
+                  variants={rise}
+                  custom={i}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={VIEWPORT}
+                  className="relative grid pl-9 md:grid-cols-2 md:gap-16 md:pl-0"
+                >
+                  {/* node on the line */}
+                  <span
+                    aria-hidden
+                    className="absolute left-0 top-1.5 h-3.5 w-3.5 rounded-full bg-brand shadow-[0_0_0_3px_rgb(var(--paper)),0_0_0_9px_rgb(var(--brand)/0.12)] md:left-1/2 md:-translate-x-1/2"
+                  />
+                  <div className={left ? "md:pr-12 md:text-right" : "md:col-start-2 md:pl-12"}>
+                    <div className="font-mono text-sm text-accent">{m.date}</div>
+                    <h3 className="mt-1 text-pretty text-lg font-semibold tracking-tight text-ink [word-break:keep-all]">
+                      {m.title}
+                      {m.upcoming && (
+                        <span className="ml-2 whitespace-nowrap text-sm font-normal text-ink-4">
+                          (Upcoming)
+                        </span>
+                      )}
+                    </h3>
+                    {m.text && (
+                      <p className="mt-1 text-pretty text-sm leading-relaxed text-ink-3 [word-break:keep-all]">
+                        <Clauses text={m.text} />
+                      </p>
                     )}
-                  </h3>
-                  {m.text && (
-                    <p className="mt-1 text-pretty text-sm leading-relaxed text-ink-3 [word-break:keep-all]">
-                      <Clauses text={m.text} />
-                    </p>
-                  )}
-                </div>
-              </motion.li>
-            );
-          })}
-        </ul>
-      </div>
-    </section>
+                  </div>
+                </motion.li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* Purple ink in water, behind the History timeline.
+ *
+ * Four soft ellipses of the brand tones, run through one SVG filter: fractal
+ * noise displaces their edges so they bleed unevenly the way pigment spreads
+ * in water, and a blur softens what the displacement leaves. They sit where
+ * the timeline does (upper left, middle right, lower left, a small one at
+ * the foot), so the wash follows the eye down the record instead of tinting
+ * the page evenly. Kept at 6 to 8 percent on paper and about twice that on
+ * ink: a tint you notice is decoration, one you feel is atmosphere.
+ *
+ * It spreads once, when the section first comes into view: opacity and a
+ * slight scale over 2.4 seconds, transform and opacity only, so the filtered
+ * SVG is rasterised once and composited after. Under reduced motion it is
+ * simply there. preserveAspectRatio="none" stretches the 1000-unit box to
+ * whatever height the timeline has at each width. */
+function InkWash() {
+  const still = useReducedMotion();
+  return (
+    <motion.div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 will-change-transform"
+      initial={still ? false : { opacity: 0, scale: 0.94 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "-15% 0px" }}
+      transition={{ duration: 2.4, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <svg className="h-full w-full" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+        <defs>
+          <filter id="history-ink" x="-25%" y="-25%" width="150%" height="150%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3" seed="11" />
+            <feDisplacementMap in="SourceGraphic" scale="110" xChannelSelector="R" yChannelSelector="G" />
+            <feGaussianBlur stdDeviation="26" />
+          </filter>
+        </defs>
+        <g filter="url(#history-ink)">
+          <ellipse cx="270" cy="230" rx="240" ry="120" className="fill-brand/[0.07] dark:fill-brand/[0.14]" />
+          <ellipse cx="740" cy="470" rx="250" ry="130" className="fill-brand-light/[0.08] dark:fill-brand-light/[0.12]" />
+          <ellipse cx="300" cy="720" rx="260" ry="120" className="fill-brand/[0.06] dark:fill-brand/[0.12]" />
+          <ellipse cx="640" cy="900" rx="170" ry="70" className="fill-brand-light/[0.07] dark:fill-brand-light/[0.11]" />
+        </g>
+      </svg>
+    </motion.div>
   );
 }
