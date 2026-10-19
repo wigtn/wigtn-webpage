@@ -59,31 +59,38 @@ export function TeamPage() {
       <h1 className="sr-only">About {ORG_NAME}</h1>
 
       {/* ── Introduction, signed ──
-           What WIGTN is, in the founder's voice, then the signature. The
-           three teams are the ones the homepage's Our Service shows, and
-           every claim here is one the page below or the homepage carries:
-           the venues are History's, the founding line is MILESTONES'. The
-           rule before the signature stands in for the dashes a printed
-           letter would use, which the house voice does not. It opens the
-           page; the top padding is PageHero's, which clears the sticky
-           header. */}
+           The founder's letter, in his words (supplied 2026-10-20), then
+           the signature. Centred, as a letter's opening page is. The three
+           failures it names are the three papers: a parser that looks
+           clean and retrieves badly (RCPS, EMNLP), speech recognition that
+           writes words into silence (WIGVO, ACL), and a judge's
+           improvement inside its own noise (MDI, NeurIPS). The rule before
+           the signature stands in for the dash a printed letter would use,
+           which the house voice does not. It opens the page; the top
+           padding is PageHero's, which clears the sticky header. */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-24 md:pt-36 md:pb-28">
-        <div className="max-w-3xl space-y-6 text-pretty text-xl leading-relaxed text-ink-2 md:text-2xl md:leading-relaxed">
+        <div className="mx-auto max-w-3xl space-y-6 text-center text-pretty text-lg leading-relaxed text-ink-2 md:text-xl md:leading-relaxed">
           <p>
-            WIGTN is an AI company in Seoul, organised as three teams. Solutions brings AI into
-            the systems enterprises already run, from consulting to integration. Product builds
-            tools of our own and releases them as open source. Research publishes what we find at
-            ACL, EMNLP and NeurIPS.
+            WIGTN started in January 2026 as five engineers who kept running into the same
+            problem in industry. AI could do much of what companies asked of it, and then it
+            would fail in ways nobody had measured. A document parser whose output looked fine
+            would quietly hurt retrieval. A voice system would invent words out of silence. An
+            LLM judge would report an improvement that was only noise.
           </p>
           <p>
-            We started in January 2026 as five engineers publishing research without a lab
-            behind us. We have kept the habit from that start: measure before we claim, and say
-            where the claim stops.
+            So we worked on those problems, without a lab behind us. This year that work became
+            a system demo at ACL, an industry paper at EMNLP, and a workshop paper at NeurIPS.
+          </p>
+          <p>
+            Now we take it into enterprise systems, where a wrong answer costs more. We bring
+            the same habit we started with: measure before we claim, and say where the claim
+            stops. If you have a problem AI hasn’t solved for you yet, we’d like to hear about
+            it.
           </p>
         </div>
-        <p className="mt-10 flex items-center gap-3 text-sm font-medium tracking-tight text-ink-3 md:text-base">
+        <p className="mt-10 flex items-center justify-center gap-3 text-sm font-medium tracking-tight text-ink-3 md:text-base">
           <span aria-hidden className="h-px w-8 bg-ink-4" />
-          Founder &amp; CEO, Harrison Kim
+          Harrison Kim, Founder &amp; CEO
         </p>
       </section>
 
@@ -122,11 +129,12 @@ export function TeamPage() {
               whileInView="show"
               viewport={VIEWPORT}
               className="flex h-[1em] items-center"
+              style={c.height ? { height: `${c.height}em` } : undefined}
             >
               {c.logo ? (
-                /* The artwork is near-black, so dark mode turns it white.
-                   Each SVG's viewBox is trimmed to its artwork, so the gap
-                   is measured from the ink, not from built-in margin. */
+                /* The artwork is dark, so dark mode turns it white. Each
+                   SVG's viewBox is trimmed to its artwork, so the gap is
+                   measured from the ink, not from built-in margin. */
                 <img
                   src={c.logo}
                   alt={c.name}
