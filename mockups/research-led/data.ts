@@ -32,6 +32,11 @@
  * render at /story/<slug>, under the rows that summarize them; their covers
  * ship from the post folders again, which is why ./milestones is gone. */
 import { ACL_2026_COVER, acl2026SanDiego } from "./updates/acl-2026-san-diego";
+/* The IWSLT talk photo, which the homepage milestone rail shows for IWSLT 2026.
+ * The post exports only its cover, so the file is imported directly. Importing
+ * a post folder's file is safe here: data.ts may read a post folder, a post may
+ * never read data.ts (see AGENTS.md, Hard rules). */
+import iwsltTalk from "./updates/acl-2026-san-diego/iwslt-talk.jpg";
 import { OBA_WEEKENDTHON_COVER, obaWeekendthonTop6 } from "./updates/oba-weekendthon-top6";
 import { obaWeekendthon2026Top6 } from "./updates/oba-weekendthon-2026-top6";
 import { SNOWFLAKE_2026_COVER, snowflakeKorea2026 } from "./updates/snowflake-korea-2026";
@@ -676,7 +681,7 @@ export const MILESTONES: Milestone[] = [
     label: "IWSLT 2026",
     title: "IWSLT 2026: Oral Presentation, San Diego",
     railTitle: "IWSLT 2026 Oral",
-    image: ACL_2026_COVER,
+    image: iwsltTalk.src,
   },
   {
     month: "Aug",
