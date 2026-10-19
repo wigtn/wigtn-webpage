@@ -70,6 +70,7 @@ import {
   STORY_INDEX,
   TECH_REPORT_INDEX,
   TECH_REPORT_SITE,
+  TIMELENS_REPO,
   blogHref,
   storyHref,
   techReportHref,
@@ -921,7 +922,7 @@ export const RELEASE_ROWS: ReleaseRow[] = ARTICLES.filter(
  * Do not remove an entry to tidy up. The only safe time to drop one is when
  * the old URL has stopped receiving traffic, which is a decision with data
  * behind it rather than a cleanup. */
-export const RETIRED: {
+export type Retired = {
   slug: string;
   to: string;
   title: string;
@@ -931,7 +932,9 @@ export const RETIRED: {
    * its content had moved to the report site, which is where it had just been
    * deleted from. Write the sentence per entry instead of inferring it. */
   note: string;
-}[] = [
+};
+
+export const RETIRED: Retired[] = [
   { slug: "wigtnocr", note: "Technical write-ups moved to the WIGTN tech-report site, where each one carries its method, its measurements and its limitations. This site now covers what the team does: events, releases and news.", to: techReportHref("wigtnocr"), title: "WigtnOCR" },
   { slug: "wigvo", note: "Technical write-ups moved to the WIGTN tech-report site, where each one carries its method, its measurements and its limitations. This site now covers what the team does: events, releases and news.", to: techReportHref("wigvo"), title: "WIGVO" },
   { slug: "wigss", note: "Technical write-ups moved to the WIGTN tech-report site, where each one carries its method, its measurements and its limitations. This site now covers what the team does: events, releases and news.", to: techReportHref("wigss"), title: "WIGSS" },
@@ -979,6 +982,13 @@ export const RETIRED: {
    * redirect the same way it does the rest. */
   { note: "The news this page carried, the conferences, awards and launches, is on the Story page now.",
     slug: "news", to: STORY_INDEX, title: "WIGTN Story" },
+  /* The TimeLens post (the Google Gemini Live Agent Challenge entry) was a
+   * root article from 2026.06.20 to 2026.07.25 and has no page here since.
+   * The project's public repository is the nearest thing left. Its Cloud Run
+   * demo no longer answers (checked 2026-10-20), so the note does not
+   * promise one. */
+  { note: "The TimeLens write-up is no longer on this site. The project and its code are on GitHub.",
+    slug: "gemini-live-challenge", to: TIMELENS_REPO, title: "TimeLens on GitHub" },
   /* Three index routes deleted before this list covered static routes:
    * /projects on 2026.08.08, /research and /tech-reports on 2026.07.31. They
    * 404'd from then until 2026-10-20. /projects listed the products, which
@@ -1004,3 +1014,64 @@ export const RETIRED: {
 ];
 
 export const getRetired = (slug: string) => RETIRED.find((r) => r.slug === slug);
+
+/* ── Retired URLs one level down ────────────────────────────────────────────
+ *
+ * Detail pages under index routes that are gone: /projects/<slug> (2026.04.05
+ * to 2026.08.08, the longest-lived), /research/<slug> (2026.07.25 to
+ * 2026.07.31) and the two /products pages that /projects replaced on
+ * 2026.04.05. They 404'd from their deletion until 2026-10-20. Each prefix
+ * has a route folder, app/<prefix>/[slug], that exports these pages and
+ * nothing else; the redirect page is the same one RETIRED uses.
+ *
+ * A project with a retired root slug forwards where that slug does, so the
+ * two addresses for one project cannot disagree. WIGVU and WIGEX were
+ * consumer apps; their repositories are private and the site lists neither,
+ * so they forward to the Products page with a sentence that says so.
+ *
+ * Left out on purpose: /ko/* (live for hours on 2026.07.31 and 2026.08.08,
+ * reverted both times) and /mockups/research-led/* (a three-day preview in
+ * June whose articles were partly mock content). */
+const sameAs = (rootSlug: string, slug = rootSlug): Retired => ({
+  ...RETIRED.find((r) => r.slug === rootSlug)!,
+  slug,
+});
+
+const UNLISTED_APP = (slug: string, name: string): Retired => ({
+  slug,
+  to: NOTICES,
+  title: "WIGTN Products",
+  note: `${name} was an early consumer app and is no longer on this site. The Products page lists what WIGTN ships now.`,
+});
+
+const WIGENT: Retired = {
+  slug: "wigent",
+  to: storyHref("trae-seoul-grand-prize"),
+  title: "the TRAE Seoul story",
+  note: "WIGENT's project page is gone. How it was built, and the Grand Prize it won at Build with TRAE Seoul, is on the Story page.",
+};
+
+export const RETIRED_NESTED: Record<string, Retired[]> = {
+  projects: [
+    sameAs("wigvo"),
+    sameAs("wigtnocr"),
+    sameAs("wigss"),
+    sameAs("wigtn-coding"),
+    sameAs("wigtn-flake-cortex-debate-video", "wigtn-flake"),
+    sameAs("gemini-live-challenge", "timelens"),
+    WIGENT,
+    UNLISTED_APP("wigvu", "WIGVU"),
+    UNLISTED_APP("wigex", "WIGEX"),
+  ],
+  research: [
+    sameAs("wigvo"),
+    sameAs("wigtnocr"),
+    sameAs("wigss"),
+    sameAs("wigtn-coding"),
+    sameAs("wigtn-flake-cortex-debate-video", "wigtn-flake"),
+  ],
+  products: [sameAs("wigvo"), UNLISTED_APP("wigvu", "WIGVU")],
+};
+
+export const getRetiredNested = (prefix: string, slug: string) =>
+  RETIRED_NESTED[prefix]?.find((r) => r.slug === slug);

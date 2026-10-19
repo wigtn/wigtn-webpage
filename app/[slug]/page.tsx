@@ -3,7 +3,7 @@ import { pageMetadata } from "@/lib/metadata";
 import { postSchema } from "@/lib/schema";
 import { JsonLd } from "@/components/JsonLd";
 import { ArticleDetail } from "@/mockups/research-led/ArticleDetail";
-import { RetiredPage } from "@/mockups/research-led/RetiredPage";
+import { RetiredPage, retiredMetadata } from "@/mockups/research-led/RetiredPage";
 import {
   ARTICLES,
   RETIRED,
@@ -54,22 +54,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
 
-  /* Canonical points at the destination, and nothing else does. An earlier
-   * version also set robots noindex, which contradicts it: canonical asks a
-   * crawler to fold this URL's signal into the destination, noindex asks it to
-   * drop the URL, and noindex wins. Dropping it loses the consolidation this
-   * page exists to get.
-   *
-   * og:url points at the destination as well. Without it a redirect page
-   * inherited the layout's, and a shared link to /news previewed as the
-   * homepage. */
   const retired = getRetired(slug);
   if (retired) {
-    return pageMetadata({
-      title: `Moved: ${retired.title}`,
-      description: `This page has moved to ${retired.to}`,
-      path: retired.to,
-    });
+    return retiredMetadata(retired);
   }
 
   const article = getArticle(slug);

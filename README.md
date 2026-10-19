@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="public/images/wigtn_logo_banner.jpg" alt="WIGTN" width="380" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/images/WIGTN_LOGO_WHITE.png" />
+    <img src="public/images/WIGTN_LOGO_NAVY.png" alt="WIGTN" width="380" />
+  </picture>
 </p>
 
 <h3 align="center">Your partner for enterprise AI transformation.</h3>
@@ -47,11 +50,11 @@ Three teams:
 
 | Project | What it is | Links |
 |---------|------------|-------|
-| **WIGVO** | Real-time bidirectional voice translation over standard phone lines | [Demo](https://www.youtube.com/watch?v=jK1CDOQExLw) · [Code](https://github.com/wigtn/wigvo-v2) |
+| **WIGVO** | Real-time bidirectional voice translation over standard phone lines | [Demo](https://www.youtube.com/watch?v=jK1CDOQExLw) · [Code](https://github.com/wigtn/wigvo) |
 | **WigtnOCR** | 2B Korean document parser distilled from a 30B teacher | [Model](https://huggingface.co/Wigtn/Qwen3-VL-2B-WigtnOCR) · [Code](https://github.com/wigtn/wigtnOCR-v1) |
 | **WIGSS** | Drag UI in the browser and watch the source rewrite itself | [npm](https://npmjs.com/package/wigss) · [Code](https://github.com/wigtn/wigss) |
-| **WIGTN Coding** | A Claude Code plugin ecosystem: 12 agents, 3 skills, 17 design styles | [Code](https://github.com/wigtn/wigtn-plugins-with-claude-code) |
-| **TimeLens** | Real-time AI museum curator via Gemini Live | [Live](https://timelens-852253134165.asia-northeast3.run.app/) · [Code](https://github.com/wigtn/wigtn-timelens) |
+| **WIGTN Coding** | A Claude Code plugin ecosystem: 12 agents, 3 skills, 17 design styles | [Code](https://github.com/wigtn/wigtn-plugins) |
+| **TimeLens** | Real-time AI museum curator via Gemini Live | [Code](https://github.com/wigtn/wigtn-timelens) |
 
 ## Partners
 
