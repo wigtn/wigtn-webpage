@@ -19,7 +19,8 @@ mockups/research-led/
   updates/<slug>/          one folder per post, notice or story: index.ts + images
   updates/_template/       four post templates + the shared rules
 public/images/             logos (partners/ for the Partners wall and
-                           the Solutions panel, venues/ for the R&D panel),
+                           the Solutions panel, sponsors/ for the Sponsor
+                           row, venues/ for the R&D panel),
                            products/ (WIGTN Tech cover art for the Product
                            panel), one milestone photo, the four module scenes
                            (retained, unrendered), and the Seoul mask under Our
@@ -39,7 +40,7 @@ Solutions shows its enterprise projects by logo, Product its open-source
 releases by cover art, and Research, headed R&D, its accepted papers by
 venue logo), Contact. About has no visible title: a short introduction
 signed "Harrison Kim, Founder & CEO", the Partners logo wall,
-then the company's History (papers accepted and business relationships,
+the Sponsor row (AWS, captioned "AWS Startups"), then the company's History (papers accepted and business relationships,
 from `MILESTONES`), nothing else. It does not introduce members
 individually. A **Blog** section exists in the source
 (BlogPage.tsx, the "blog" channel) but is closed and unrouted: it is reserved

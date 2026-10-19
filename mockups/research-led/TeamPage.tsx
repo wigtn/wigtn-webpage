@@ -1,8 +1,8 @@
 "use client";
 
 /** /team, labelled "About" in the nav: a short introduction signed by the
- * founder, the Partners wall, then the company's History, and
- * nothing else.
+ * founder, the Partners wall, the Sponsor row, then the company's History,
+ * and nothing else.
  *
  * The page answers who WIGTN is as a company: what it is, who it works with,
  * then what it has done, in order. It carried a member roster (portrait, role,
@@ -19,7 +19,7 @@ import { Fragment } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ORG_NAME } from "@/lib/brand";
 import { PageShell, rise, VIEWPORT } from "./chrome";
-import { MILESTONES, PARTNERS_AND_CLIENTS } from "./data";
+import { MILESTONES, PARTNERS_AND_CLIENTS, SPONSORS } from "./data";
 
 /* Prefer wrapping at commas. Each clause is an inline-block, so the browser
  * takes the break between clauses before it breaks inside one; a clause too
@@ -156,6 +156,52 @@ export function TeamPage() {
                   {c.name}
                 </span>
               )}
+            </motion.li>
+          ))}
+        </ul>
+      </section>
+
+      <Divider />
+
+      {/* ── Sponsor ──
+           Under Partners, in the same section shape: title, then one centred
+           row in the same type-scaled unit. Unlike the partner logos, AWS's
+           keeps its colours in both themes (the orange smile is the mark), so
+           each theme gets its own file rather than the wall's invert. The
+           caption names the programme in the page's micro-label type. */}
+      <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
+        <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
+          Sponsor
+        </h2>
+        <ul className="mt-14 flex flex-col items-center gap-y-[1.25em] text-[44px] sm:flex-row sm:justify-center sm:gap-x-[1.75em] sm:text-[28px] md:mt-16 md:text-[36px] lg:text-[48px] xl:text-[56px]">
+          {SPONSORS.map((s) => (
+            <motion.li
+              key={s.name}
+              variants={rise}
+              initial="hidden"
+              whileInView="show"
+              viewport={VIEWPORT}
+              className="flex flex-col items-center"
+            >
+              <span className="flex items-center" style={{ height: `${s.height}em` }}>
+                <img
+                  src={s.logo}
+                  alt={`${s.name} logo`}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-auto dark:hidden"
+                />
+                <img
+                  src={s.logoDark}
+                  alt={`${s.name} logo`}
+                  loading="lazy"
+                  decoding="async"
+                  className="hidden h-full w-auto dark:block"
+                />
+              </span>
+              <span className="mt-6 font-mono text-xs uppercase tracking-[0.22em] text-ink-3">
+                {s.caption}
+              </span>
             </motion.li>
           ))}
         </ul>
