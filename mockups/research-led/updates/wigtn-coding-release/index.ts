@@ -1,5 +1,7 @@
 /**
- * Update: WIGTN Plugin v1 for Claude Code, v0.1.16 - announcement.
+ * Update: WIGTN Plugin v1 for Claude Code, v0.1.16 - announcement. The
+ * versions array runs to v0.1.24 (2026-10-18); the prose and `version` are
+ * still sourced at v0.1.16, and re-sourcing them is a separate edit.
  *
  * Follows updates/_template/announcement/STRUCTURE.md: lede -> get it -> what
  * shipped -> read the report.
@@ -109,8 +111,9 @@ export const wigtnCodingRelease: Article = {
     { label: "Tech report", href: techReportHref("wigtn-coding") },
   ],
   /* Full tag history, from `gh api repos/wigtn/wigtn-plugins/releases` on
-   * 2026-08-09. Nine releases, v0.1.7 to v0.1.16. Dates are `published_at`,
-   * converted from UTC to YYYY.MM.DD and nothing else.
+   * 2026-08-09 (nine releases, v0.1.7 to v0.1.16) and again on 2026-10-20
+   * (seven more, v0.1.17 to v0.1.24). Dates are `published_at`, converted
+   * from UTC to YYYY.MM.DD and nothing else.
    *
    * Each note is one line taken from that release's own body, which for this
    * repo is a generated "What's Changed" list of merged pull requests. Where
@@ -122,8 +125,47 @@ export const wigtnCodingRelease: Article = {
    * v0.1.8 IS NOT IN THIS LIST and its absence is a fact rather than a gap.
    * The v0.1.9 release says it was a manifest-only bump that never got a
    * release of its own, so the API returns nine tags and not ten. Do not
-   * "restore" it; its changes are in the v0.1.9 line. */
+   * "restore" it; its changes are in the v0.1.9 line.
+   *
+   * v0.1.18 is absent the same way. There is no such tag, and v0.1.19's
+   * release compares against v0.1.17. Its notes (PR #45) are in the v0.1.19
+   * line. v0.1.17 carries two PRs (#41, #44), so its line names both. */
   versions: [
+    {
+      version: "v0.1.24",
+      date: "2026.10.18",
+      note: "Documentation brought in line with current behaviour, and the ouroboros/ area removed from knowledge-wiki's push targets.",
+    },
+    {
+      version: "v0.1.23",
+      date: "2026.10.18",
+      note: "knowledge-wiki: each note takes one field from a fixed legend as its frontmatter type.",
+    },
+    {
+      version: "v0.1.22",
+      date: "2026.10.18",
+      note: "knowledge-wiki does nothing outside WIGTN repositories, and reuses the wiki's existing tags.",
+    },
+    {
+      version: "v0.1.21",
+      date: "2026.10.18",
+      note: "knowledge-wiki brings saved notes back into prompts, and syncs pushes from several teammates.",
+    },
+    {
+      version: "v0.1.20",
+      date: "2026.10.18",
+      note: "knowledge-wiki sends work in WIGTN organisation repositories to the team wiki, wherever the folder is.",
+    },
+    {
+      version: "v0.1.19",
+      date: "2026.09.29",
+      note: "The harness trimmed for Opus 5.5, a hand-drawn diagram skill, and a corrected wordmark.",
+    },
+    {
+      version: "v0.1.17",
+      date: "2026.09.08",
+      note: "Six knowledge-wiki follow-up fixes, and status lookups gathered into one script call per command.",
+    },
     {
       version: "v0.1.16",
       date: "2026.08.04",

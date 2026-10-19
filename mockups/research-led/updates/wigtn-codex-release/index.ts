@@ -1,5 +1,7 @@
 /**
- * Release record: WIGTN Plugin v2 for Codex, current through v0.5.1.
+ * Release record: WIGTN Plugin v2 for Codex. The versions array runs to
+ * v0.5.7 (2026-09-22); the prose and `version` are still sourced at v0.5.1,
+ * and re-sourcing them is a separate edit.
  *
  * Follows updates/_template/announcement/STRUCTURE.md. This is one product
  * record with a newest-first versions array, not one post per version.
@@ -61,11 +63,18 @@ export const wigtnCodexRelease: Article = {
    * repos/wigtn/wigtn-plugins-codex/releases` on 2026-08-09. v0.4.0 is sourced
    * from its annotated tag and release commit on 2026-08-12. v0.5.0 and
    * v0.5.1 are sourced from their GitHub release objects and target commits
-   * on 2026-08-27.
+   * on 2026-08-27. v0.5.2 to v0.5.7 are sourced on 2026-10-20: from v0.5.3
+   * the release bodies list one pull request each (#1 to #5), and each line
+   * comes from that PR's title and description. v0.5.2's body is a compare
+   * link only, so its line comes from commit 093d2f0b "fix: harden plugin
+   * delivery for v0.5.2" and the files it touched (it adds a Knowledge Wiki
+   * doctor script and changes the repository, screen-spec, deck and diagram
+   * checks).
    *
-   * THE NOTES COME FROM COMMITS, NOT FROM RELEASE NOTES, and that is a weaker
-   * source than the one the Claude Code plugin's list uses. All six
-   * release objects contain a "Full Changelog" compare link and nothing else.
+   * THE NOTES UP TO v0.5.2 COME FROM COMMITS, NOT FROM RELEASE NOTES, and
+   * that is a weaker source than the one the Claude Code plugin's list uses.
+   * Those seven release objects contain a "Full Changelog" compare link and
+   * nothing else.
    * Their lines come from the release commits and files they touched, read
    * through `gh api repos/wigtn/wigtn-plugins-codex/compare/<prev>...<tag>` and
    * `.../commits/<sha>` on 2026-08-09. The v0.4.0 line comes from its annotated
@@ -95,6 +104,36 @@ export const wigtnCodexRelease: Article = {
    * code and deciding what mattered. The real fix is still to write release
    * notes in the plugin repo, and when they exist, re-source from those. */
   versions: [
+    {
+      version: "v0.5.7",
+      date: "2026.09.22",
+      note: "Adds Visual Craft, a tenth Core skill for frontend UI and written documents, with source and rendered-page checks.",
+    },
+    {
+      version: "v0.5.6",
+      date: "2026.09.21",
+      note: "Keeps imported requirement text literal, and a standalone screen spec or handoff no longer requires files nobody asked for.",
+    },
+    {
+      version: "v0.5.5",
+      date: "2026.09.08",
+      note: "WorkGraph inspect can return chosen tasks with their prerequisites instead of the whole graph.",
+    },
+    {
+      version: "v0.5.4",
+      date: "2026.09.07",
+      note: "Locks WorkGraph's read, revision check and save so concurrent saves keep their changes, and trims the contracts for GPT-6 Astra.",
+    },
+    {
+      version: "v0.5.3",
+      date: "2026.09.01",
+      note: "Shorter Core skill descriptions, Screen Spec detail loaded only on request, and unsourced stack and layout assumptions removed.",
+    },
+    {
+      version: "v0.5.2",
+      date: "2026.08.30",
+      note: "Adds a Knowledge Wiki doctor script and changes the repository, screen-spec, deck and diagram checks.",
+    },
     {
       version: "v0.5.1",
       date: "2026.08.25",
