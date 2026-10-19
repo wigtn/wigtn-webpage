@@ -114,11 +114,17 @@ export const NAV: NavItem[] = [
   { label: "Tech", href: TECH_REPORT_INDEX },
 ];
 
-/* ── The module kit ─────────────────────────────────────────────────────────
+/* ── The module kit (retained, unrendered) ──────────────────────────────────
  *
- * The homepage's answer to what Solutions actually is. A portfolio says we
- * finished some jobs; a kit says the next one starts from something already
- * built and already under test, which is nearer to what a client is buying.
+ * The homepage's answer to what the web half of the business was, until
+ * 2026-10-19, when the Solutions panel moved to enterprise projects
+ * (PROJECT_ROWS below). WEB_ROWS, ModuleCard in ResearchLedHome.tsx and the
+ * eight files in public/images/modules/ are kept by decision for a surface
+ * that wants the kit back; nothing renders them today.
+ *
+ * Why a kit: a portfolio says we finished some jobs; a kit says the next one
+ * starts from something already built and already under test, which is
+ * nearer to what a client is buying.
  *
  * FOUR MODULES, AND THE OTHER SIX ARE LEFT OUT AFTER COUNTING. The `module/`
  * directory in wigtn/web-agency holds ten, and on 2026-08-16 they were counted
@@ -162,9 +168,9 @@ export type PracticeRow = {
    * second sentence the row is doing the page's job for it. */
   line: string;
   /* Where the row goes, when it goes anywhere. A web row opens the module
-   * running in the demo. An AX row is a stage of an engagement and has nothing
-   * to open, so it has no href and renders as text rather than pretending to
-   * be a link that does nothing. */
+   * running in the demo. A project or a paper row has nothing public to open,
+   * so it has no href and renders as text rather than pretending to be a link
+   * that does nothing. */
   href?: string;
   /* The small line under the blurb. It names the artifact and where it is, so
    * the row says what it is offering evidence of before it is clicked. */
@@ -191,10 +197,9 @@ export type PracticeRow = {
    *
    * Scene sources are in the session scratchpad as art/scene-*.html. To change
    * one, edit the scene and re-render rather than retouching the JPEG. */
-  /* Optional. The four web modules have compositions; the AX rows do not,
-   * because nothing has been built for them and inventing a picture for a
-   * published paper would be dressing. A row without one simply shows no
-   * picture on hover. */
+  /* Optional. The four web modules have compositions; project and paper rows
+   * do not, because inventing a picture for an engagement or a published
+   * paper would be dressing. They carry a `logo` instead. */
   image?: string;
   /* The same composition, moving. Five seconds, looped, VP8, one per module.
    *
@@ -207,11 +212,17 @@ export type PracticeRow = {
    * browser that cannot decode VP8 keeps, and it is what renders under
    * prefers-reduced-motion, where the clip never starts. */
   clip?: string;
+  /* The organisation's own logo, for a project or a paper row: the client or
+   * partner, or the venue. Shown contained on a white tile so it keeps its own
+   * colours in both themes. Only an official or public-domain file goes here
+   * (sources are listed beside PROJECT_ROWS and PAPER_ROWS). */
+  logo?: string;
 };
 
 /* Where the modules are running, so a row can be opened rather than believed. */
 const MODULE_DEMO = "https://portfolio-recruit-platform.vercel.app";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const WEB_ROWS: PracticeRow[] = [
   {
     slug: "ui-kit",
@@ -255,55 +266,80 @@ const WEB_ROWS: PracticeRow[] = [
   },
 ];
 
-/* ── AX Agency ──────────────────────────────────────────────────────────────
+/* ── Solutions: enterprise projects ─────────────────────────────────────────
  *
- * The second line of business, and its rows are stages of an engagement rather
- * than things we shipped.
+ * What the Solutions team has delivered or is delivering, one row per
+ * organisation, each with its logo. They replaced the web module kit on
+ * 2026-10-19, and the AX stages that sat under the other half (Consulting,
+ * Evaluation, Feedback) went with that change; consulting is now one of the
+ * panel's keywords rather than a row.
  *
- * They were four of our own AI systems for a while, each linking its report.
- * That was evidence of something, but of the wrong thing: it described a lab,
- * not a service, and a client reading it learned what we had made for
- * ourselves instead of what we would do for them.
+ * EACH ROW STATES THE RELATIONSHIP AS IT IS. SK hynix is an end client reached
+ * through Braincrew, so its row says "With Braincrew" and the Braincrew row is
+ * the partnership itself; a row that read as a direct SK hynix contract would
+ * overstate it. The /team wall (PARTNERS_AND_CLIENTS) keeps its stricter rule
+ * of direct relationships only, which is why SK hynix is here and not there.
  *
- * NO CLIENT WORK IS NAMED because there is none to name yet, and there will
- * not be until a client agrees to be named. So no row carries a case, a logo,
- * or a number from an engagement. What each row carries instead is what the
- * client ends up holding at the end of that stage, which is a promise we can
- * keep on the first one.
- *
- * NO FIGURES HERE, and that is deliberate. The web rows show a running screen
- * and these could have shown metrics from our own systems, but a number from
- * WIGVO is not evidence about your project. The one claim this section makes
- * about measurement is that we do it and publish the limits, and the place
- * that is checkable is WIGTN Tech, linked once from the lead rather than pinned
- * to a stage it did not come from.
- *
- * THE THIRD STAGE SAYS WHAT GETS CUT. An AX pitch that only describes building
- * is a pitch with no way to be wrong, and the harness report on WIGTN Tech is us
- * doing exactly this to our own work: same tasks resolved, half again the wall
- * time, no repeatable quality lift, published. The row has to promise the same
- * treatment or the report contradicts the page. */
-const AX_ROWS: PracticeRow[] = [
+ * Logos: Braincrew and Mind AI are the files the wall uses. SK hynix is
+ * Wikimedia Commons "File:SK_Hynix.svg" (public domain as a simple logo,
+ * author SK Hynix Inc., trademarked); the company's own site serves it only
+ * as a 92x48 PNG. Dates match MILESTONES. */
+const PROJECT_ROWS: PracticeRow[] = [
   {
-    slug: "ax-consulting",
-    name: "Consulting",
-    line:
-      "Where AI has leverage in your workflows, and where it does not. Both in writing.",
-    meta: "You keep · a written map",
+    slug: "sk-hynix",
+    name: "SK hynix",
+    line: "Global One ERP (i\u2011ERP) Platform development.",
+    meta: "With Braincrew · 2026.10",
+    logo: "/images/partners/sk-hynix.svg",
   },
   {
-    slug: "ax-evaluation",
-    name: "Evaluation",
-    line:
-      "The metric is agreed before anything is built, and measured on your own data.",
-    meta: "You keep · an evaluation set and a baseline",
+    slug: "braincrew",
+    name: "Braincrew",
+    line: "AX project partnership.",
+    meta: "Partner · 2026.10",
+    logo: "/images/partners/braincrew.svg",
   },
   {
-    slug: "ax-feedback",
-    name: "Feedback",
-    line:
-      "Measured again against that baseline. What did not move the number gets cut.",
-    meta: "You keep · a measured before and after",
+    slug: "mind-ai",
+    name: "Mind AI",
+    line: "Closed beta test partner for MEGA Code.",
+    meta: "Partner · 2026.06",
+    logo: "/images/partners/mind-ai.svg",
+  },
+];
+
+/* ── R&D: accepted papers ────────────────────────────────────────────────────
+ *
+ * One row per venue, sourced like MILESTONES from the org profile's Papers
+ * list (github.com/wigtn/.github, profile/README.md). The meta pairs the
+ * track with the panel keyword the paper stands for: WIGVO is speech in and
+ * speech out (STT-TTS), RCPS is an evaluation protocol, MDI measures an LLM
+ * judge (LLM).
+ *
+ * Logos are the venues' own files: ACL 2026 and EMNLP 2026 from their
+ * conference sites (the EMNLP file is 8703px wide at source and is shipped at
+ * 1200), NeurIPS from neurips.cc with a viewBox added so it scales. */
+const PAPER_ROWS: PracticeRow[] = [
+  {
+    slug: "acl-2026",
+    name: "ACL 2026",
+    line: "WIGVO: real-time speech translation over phone calls.",
+    meta: "System Demonstrations · STT-TTS",
+    logo: "/images/venues/acl-2026.png",
+  },
+  {
+    slug: "emnlp-2026",
+    name: "EMNLP 2026",
+    line: "RCPS: choosing document parsers by retrieval.",
+    meta: "Industry Track · Evaluation",
+    logo: "/images/venues/emnlp-2026.png",
+  },
+  {
+    slug: "neurips-2026",
+    name: "NeurIPS 2026",
+    line: "MDI: the minimum detectable improvement of an LLM judge.",
+    meta: "TAE Workshop · LLM",
+    logo: "/images/venues/neurips.svg",
   },
 ];
 
@@ -317,27 +353,30 @@ const AX_ROWS: PracticeRow[] = [
  * in 432px and the reader chose which half spent it.
  *
  * Since 2026-10-19 the panels are WIGTN's three teams, in the order the
- * company names them: Solutions, Product, Research. Solutions keeps the web
- * modules and Research keeps the AX stages (the kickers were "Web Agency" and
- * "AX Agency"; the slugs stay "web" and "ax" as identities). Product has
- * nothing to show yet, so it carries a title and no rows, and opens onto an
- * empty frame rather than onto invented content.
+ * company names them: Solutions, Product, Research. Solutions shows its
+ * enterprise projects and Research its accepted papers, each row with a logo
+ * (the kickers were "Web Agency" and "AX Agency"; the slugs stay "web" and
+ * "ax" as identities). Product has nothing to show yet, so it carries a title
+ * and no rows, and opens onto nothing rather than onto invented content.
  *
- * The leads are the old SERVICES copy, cut to what fits a 240px column. The
- * sentence about our own measurements being on WIGTN Tech moved up to the section
- * lead, where it belongs anyway: it is true of the team, not of one practice. */
+ * Leads are cut to what fits a 240px column. */
 export type Practice = {
   /* Identity for the open state, and the React key. */
   slug: string;
   /* The team's name, set as a micro-label. It says which of the three this
    * is; the heading has a harder job. */
   kicker: string;
-  /* The heading, and it is a sentence with a verb in it. Team names are
-   * categories a reader has to already know; "We build it" and "We
-   * measure it" are what we do. Product's is "Coming soon" until it has
-   * something to show. */
+  /* The heading. "We build it" says what Solutions does; R&D is the
+   * Research team's own name for its work, with what it does in `subtitle`.
+   * Product's is "Coming soon" until it has something to show. */
   title: string;
+  /* A second line under the heading that appears only when the panel opens,
+   * so the resting panels stay one heading each. */
+  subtitle?: string;
   lead?: string; // absent while a team has nothing to describe
+  /* The team's areas, set as small chips under the lead. Hidden on a folded
+   * panel with the lead. */
+  keywords?: string[];
   /* How much is behind this panel, said before it opens. It is the closest
    * thing the section has to an affordance: "4 modules" tells a reader there
    * is something under the pointer without drawing a button that is not
@@ -352,9 +391,10 @@ export const PRACTICES: Practice[] = [
     slug: "web",
     kicker: "Solutions",
     title: "We build it",
-    lead: "Websites and web products, built from modules we own and keep under test.",
-    cue: "4 modules",
-    rows: WEB_ROWS,
+    lead: "AX for enterprises, from consulting to the systems that run it.",
+    keywords: ["AX Consulting", "System Integration"],
+    cue: "3 projects",
+    rows: PROJECT_ROWS,
   },
   {
     slug: "product",
@@ -365,10 +405,12 @@ export const PRACTICES: Practice[] = [
   {
     slug: "ax",
     kicker: "Research",
-    title: "We measure it",
-    lead: "We find where AI has leverage, build it in, and measure whether it moved anything.",
-    cue: "3 stages",
-    rows: AX_ROWS,
+    title: "R&D",
+    subtitle: "We publish it",
+    lead: "Peer-reviewed research on LLMs, their evaluation, and speech.",
+    keywords: ["LLM", "Evaluation", "STT-TTS"],
+    cue: "3 papers",
+    rows: PAPER_ROWS,
   },
 ];
 

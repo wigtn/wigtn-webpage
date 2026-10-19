@@ -173,8 +173,9 @@ function Divider() {
 /* ───── Our Service ─────────────────────────────────────────────────────────
  *
  * The three teams (Solutions, Product, Research) as three panels of one
- * section. At rest they share the width equally and each shows its names;
- * point at one and it takes 70 percent while the other two fold to 15 each,
+ * section. At rest their text columns are equal (see restBasis) and each shows
+ * its names; point at one and it takes 70 percent while the other two fold to
+ * 15 each,
  * where the label and the heading still read horizontally without any
  * rotated-spine trick. It was two halves (Web Agency, AX Agency) at 50/50
  * opening to 78/22 until 2026-10-19.
@@ -193,11 +194,12 @@ function Divider() {
  * only images are UI crops that already carry their own text, so a label on top
  * of one is text over text; the names live on the ground instead.
  *
- * EACH HALF OPENS INTO ITS OWN SHAPE, because the two are not the same kind of
- * thing. The web modules are a set with no order, so all four appear at once,
- * each running. The AX stages happen in sequence, so they sit on one line under
- * a rule with a dot per stage: the line says the order, which is the job the
- * carousel it replaces was doing with arrows, a counter and a dwell timer.
+ * AN OPEN PANEL SHOWS WHO OR WHERE, BY LOGO. Solutions opens onto the
+ * organisations its projects are for and with, R&D onto the venues that
+ * accepted its papers: one card each, the logo on a white tile, a line, and
+ * the relationship or the track. Product opens onto nothing until it has
+ * something. (Solutions opened onto four running web modules, and the AX
+ * half onto three engagement stages on a rule, until 2026-10-19.)
  *
  * THE NAMES ARE VISIBLE AT REST. Without them this section says two headings
  * and nothing else, and a reader who scrolls past without pointing learns
@@ -219,8 +221,8 @@ function Divider() {
  * 0.7 with three panels leaves each folded one 15 percent: 216px at 1440,
  * 192px at 1280. That holds the label and the heading over two lines, not the
  * lead or the names, so a folded panel drops those. Opening wider would push
- * the heading to three lines; narrower would squeeze the four web modules
- * below about 110px each. */
+ * the heading to three lines; narrower would squeeze the three logo cards
+ * below about 150px each. */
 const OPEN_SHARE = 0.7;
 const NAME_COL = 240;
 const INNER_PAD = 28;
@@ -229,6 +231,26 @@ const ITEMS_GAP = 40;
  * the words in the band do not. */
 const PAGE_W = 1152;
 const PAGE_PAD = 24;
+
+/* The resting widths, set so the three text columns are the same width rather
+ * than the three panels. Equal thirds of the window made the middle column the
+ * widest by a long way: the end panels give up the page margin to their outer
+ * padding and the middle one does not, so at 1440 the text measured 284, 424
+ * and 284px. With every column at c, an end panel is c + G + INNER_PAD and the
+ * middle one c + 2 * INNER_PAD, where G is the page margin. At 1440 that is
+ * 527 / 387 / 527px, the text starts at 168, 555 and 941, and the last column
+ * ends on the page's right margin at 1272.
+ *
+ * Plain CSS on the panel's own flex-basis, where 100% is the band's width, so
+ * it holds from the first paint; the measured --gutter only exists a frame
+ * later. Open and folded panels keep their percentages. */
+function restBasis(i: number, count: number): string {
+  const g = `max(${PAGE_PAD}px, (100% - ${PAGE_W}px) / 2 + ${PAGE_PAD}px)`;
+  const column = `(100% - 2 * ${g} - ${2 * (count - 1) * INNER_PAD}px) / ${count}`;
+  return i === 0 || i === count - 1
+    ? `calc(${column} + ${g} + ${INNER_PAD}px)`
+    : `calc(${column} + ${2 * INNER_PAD}px)`;
+}
 
 function Practices() {
   const frame = useRef<HTMLDivElement | null>(null);
@@ -296,16 +318,16 @@ function Practices() {
       <div className="mx-auto max-w-6xl px-6">
         <SectionTitle className="max-w-3xl">Our Service</SectionTitle>
         <p className="mt-5 max-w-xl text-pretty leading-relaxed text-ink-3">
-          We build the product, and we measure whether the AI inside it moved anything. Our own
-          measurements, including the ones that went nowhere, are on WIGTN Tech.
+          Three teams: Solutions builds AI into enterprise systems, Product ships our own, and
+          Research publishes what we find, including what went nowhere, on WIGTN Tech.
         </p>
       </div>
 
       {/* Full bleed, because the reference's band runs to the edge and because a
           tinted half with the page showing down both sides is a card. Closing
           the pointer out of the whole band, not out of a panel, is what returns
-          it to equal thirds: leaving one panel by crossing into another must
-          not flicker through the resting state on the way. */}
+          it to rest: leaving one panel by crossing into another must not
+          flicker through the resting state on the way. */}
       <div
         ref={frame}
         /* Not while the keyboard is in there. Closing a half under a focused
@@ -349,7 +371,9 @@ function Practices() {
           const isOpen = open === practice.slug;
           const folded = open !== null && !isOpen;
           const basis =
-            open === null ? 100 / PRACTICES.length : isOpen ? OPEN_SHARE * 100 : ((1 - OPEN_SHARE) / last) * 100;
+            open === null
+              ? restBasis(i, PRACTICES.length)
+              : `${isOpen ? OPEN_SHARE * 100 : ((1 - OPEN_SHARE) / last) * 100}%`;
           /* An end panel's outer padding is the page margin, until it folds.
            * At 1440 that margin is 168px and a folded panel is 216px wide, so
            * keeping it would leave no room for the heading. Folded, the
@@ -378,7 +402,7 @@ function Practices() {
                  no visible way back, since the cue button it would close from
                  only exists at xl. The four clips came down with it. */
               onClick={() => split && setOpen(practice.slug)}
-              style={{ flexBasis: `${basis}%` }}
+              style={{ flexBasis: basis }}
               className={`relative overflow-hidden px-6 py-9 transition-[flex-basis,background-color,padding] duration-[620ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none xl:flex xl:py-7 ${pad} ${
                 i > 0 ? "border-t border-line/[0.14] xl:border-t-0" : ""
               } ${isOpen ? "bg-brand/[0.038]" : ""}`}
@@ -404,9 +428,27 @@ function Practices() {
                 <h3 className="mt-3.5 font-display text-[2rem] font-normal leading-[1.02] tracking-[-0.04em] text-ink">
                   {practice.title}
                 </h3>
-                {/* Folded, the column is too narrow for the lead and the names,
-                    so both leave; the label and the heading are what a folded
-                    panel has to say. */}
+                {/* The subtitle arrives with the open panel and takes no room
+                    until then: the 0fr to 1fr row is what grows its height,
+                    the fade and the rise are what make it read as arriving.
+                    Stacked below xl every panel is open, so it always shows. */}
+                {practice.subtitle && (
+                  <div
+                    aria-hidden={split && !isOpen}
+                    className={`grid transition-[grid-template-rows,opacity,transform] duration-300 ease-out motion-reduce:transition-none ${
+                      isOpen || !split
+                        ? "grid-rows-[1fr] translate-y-0 opacity-100"
+                        : "grid-rows-[0fr] translate-y-1.5 opacity-0"
+                    }`}
+                  >
+                    <span className="overflow-hidden pt-2 font-display text-xl tracking-[-0.03em] text-ink-2">
+                      {practice.subtitle}
+                    </span>
+                  </div>
+                )}
+                {/* Folded, the column is too narrow for the lead, the keywords
+                    and the names, so all three leave; the label and the heading
+                    are what a folded panel has to say. */}
                 {practice.lead && (
                   <p
                     className={`mt-4 max-w-[26ch] text-pretty text-sm leading-relaxed text-ink-3 ${
@@ -415,6 +457,18 @@ function Practices() {
                   >
                     {practice.lead}
                   </p>
+                )}
+                {practice.keywords && (
+                  <ul className={`mt-4 flex flex-wrap gap-1.5 ${folded ? "xl:hidden" : ""}`}>
+                    {practice.keywords.map((k) => (
+                      <li
+                        key={k}
+                        className="whitespace-nowrap border border-line/15 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-3"
+                      >
+                        {k}
+                      </li>
+                    ))}
+                  </ul>
                 )}
 
                 {/* The names, and only until this panel has something better to
@@ -441,8 +495,8 @@ function Practices() {
                     much was behind the half, which is exactly what a disclosure
                     button says, so it is one: a pointer opens the half by
                     hovering and a keyboard opens it by pressing this. Without
-                    it the AX half could not be opened from a keyboard at all,
-                    because nothing inside it is focusable. */}
+                    it no panel could be opened from a keyboard at all, because
+                    nothing inside the logo cards is focusable. */}
                 <button
                   type="button"
                   onClick={(e) => {
@@ -465,38 +519,26 @@ function Practices() {
                 </button>
               </div>
 
-              {/* Folded, this is not just invisible: `inert` takes its four
-                  links out of the tab order and the whole block out of the
-                  accessibility tree, so nothing here can be focused or read
-                  while it cannot be seen. The names in the column beside it
-                  stay readable, and the cue button opens this. */}
-              <div
-                inert={split && !isOpen}
-                className={`relative z-[1] mt-9 w-full xl:mt-0 xl:ml-10 xl:shrink-0 xl:transition-[opacity,transform] xl:duration-500 xl:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:xl:transition-none ${
-                  i === 0 || i === last ? "xl:[width:var(--items-edge,0px)]" : "xl:[width:var(--items-mid,0px)]"
-                } ${empty ? "hidden xl:block" : ""} ${
-                  isOpen ? "xl:translate-x-0 xl:opacity-100" : "xl:translate-x-4 xl:opacity-0"
-                }`}
-              >
-                {empty ? (
-                  /* Nothing to show yet, and nothing invented to fill the
-                     space: an empty frame says it is reserved. Desktop only;
-                     stacked, the heading already says "Coming soon". */
-                  <div aria-hidden className="h-full border border-dashed border-line/20" />
-                ) : practice.slug === "web" ? (
-                  <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 xl:h-full xl:grid-cols-4 xl:gap-5">
+              {/* Folded, this is not just invisible: `inert` takes the whole
+                  block out of the accessibility tree, so nothing here can be
+                  read while it cannot be seen. The names in the column beside
+                  it stay readable, and the cue button opens this. A panel with
+                  no rows (Product) has nothing here at all; it still opens,
+                  and the heading is what it shows. */}
+              {!empty && (
+                <div
+                  inert={split && !isOpen}
+                  className={`relative z-[1] mt-9 w-full xl:mt-0 xl:ml-10 xl:shrink-0 xl:transition-[opacity,transform] xl:duration-500 xl:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:xl:transition-none ${
+                    i === 0 || i === last ? "xl:[width:var(--items-edge,0px)]" : "xl:[width:var(--items-mid,0px)]"
+                  } ${isOpen ? "xl:translate-x-0 xl:opacity-100" : "xl:translate-x-4 xl:opacity-0"}`}
+                >
+                  <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 xl:gap-5">
                     {practice.rows.map((row) => (
-                      <ModuleCard key={row.slug} row={row} live={isOpen && !still} />
+                      <LogoCard key={row.slug} row={row} />
                     ))}
                   </div>
-                ) : (
-                  <div className="grid grid-cols-1 gap-8 md:grid-cols-3 xl:gap-[2.125rem]">
-                    {practice.rows.map((row, n) => (
-                      <StageCard key={row.slug} row={row} last={n === practice.rows.length - 1} />
-                    ))}
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           );
         })}
@@ -564,6 +606,8 @@ function SeoulSkyline() {
  *
  * The card is the whole link. The name reaching for accent on hover is the only
  * signal it needs; a row of four arrows would be four arrows. */
+// Retained with WEB_ROWS in data.ts; nothing renders the module kit today.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ModuleCard({ row, live }: { row: PracticeRow; live: boolean }) {
   const video = useRef<HTMLVideoElement | null>(null);
 
@@ -608,29 +652,39 @@ function ModuleCard({ row, live }: { row: PracticeRow; live: boolean }) {
   );
 }
 
-/* One stage of an engagement. Not a link, because there is nowhere to send
- * anyone: what it promises is a thing the client ends up holding, not a page.
+/* One project or one paper: whose logo, then what, then the relationship or
+ * the track. Not a link, because there is no public page to send anyone to.
  *
- * The rule running out of the right edge is the sequence. It stops at the last
- * stage rather than continuing, because Feedback is where the engagement ends. */
-function StageCard({ row, last }: { row: PracticeRow; last: boolean }) {
+ * The tile is white in both themes so every logo keeps its own colours (SK
+ * hynix's red and orange, the venues' marks); a dark-mode inversion would turn
+ * them into different logos. Wide wordmarks and the near-square SK hynix mark
+ * share one box, so object-contain lets each fill whichever side it reaches
+ * first and the set reads at a similar weight. */
+function LogoCard({ row }: { row: PracticeRow }) {
   return (
-    <div className="group relative pt-6">
-      <span
-        aria-hidden
-        className={`absolute left-0 top-0 h-px bg-gradient-to-r from-brand/40 to-rule ${
-          last ? "right-0" : "-right-8 md:-right-6 xl:-right-[2.125rem]"
-        }`}
-      />
-      <span
-        aria-hidden
-        className="absolute -top-[3px] left-0 h-[7px] w-[7px] rounded-full bg-brand/60 transition-transform duration-300 group-hover:scale-[1.35] group-hover:bg-accent"
-      />
-      <h4 className="font-display text-2xl font-normal tracking-[-0.035em] text-ink transition-colors group-hover:text-accent">
+    <div className="group flex flex-col">
+      {/* The logo fills the tile and is padded inside itself: object-fit
+          works on the content box, so the padding is the margin, and an
+          absolutely placed image has a definite box to be contained in. A
+          grid-centred image did not, and drew the near-square SK hynix mark
+          at its natural height, past the tile. */}
+      {/* Stacked on a phone the tile spans the column, so the wide wordmarks
+          get a wider margin there; otherwise they would run the full width
+          while the near-square SK hynix mark stops at the tile's height. */}
+      <span className="relative block h-20 bg-white ring-1 ring-inset ring-line/10 sm:h-24 xl:h-20">
+        {row.logo && (
+          <img
+            src={row.logo}
+            alt=""
+            className="absolute inset-0 h-full w-full object-contain px-16 py-5 sm:px-5 sm:py-6 xl:px-4 xl:py-5"
+          />
+        )}
+      </span>
+      <span className="mt-4 font-display text-lg tracking-[-0.03em] text-ink transition-colors group-hover:text-accent">
         {row.name}
-      </h4>
-      <p className="mt-3 text-pretty text-[13px] leading-relaxed text-ink-3">{row.line}</p>
-      <span className="mt-4 block font-mono text-[9.5px] uppercase tracking-[0.14em] text-ink-5">
+      </span>
+      <span className="mt-2 text-pretty text-[12.5px] leading-relaxed text-ink-3">{row.line}</span>
+      <span className="mt-auto pt-3 font-mono text-[9.5px] uppercase tracking-[0.14em] text-ink-5">
         {row.meta}
       </span>
     </div>
