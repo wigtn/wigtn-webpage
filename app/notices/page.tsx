@@ -11,13 +11,13 @@ const DESCRIPTION =
   "The release record: every version of everything WIGTN has shipped, dated from the registry that serves it.";
 
 export const metadata: Metadata = {
-  title: `Notice | ${ORG_NAME}`,
+  title: `Products | ${ORG_NAME}`,
   description: DESCRIPTION,
   alternates: {
     canonical: "/notices",
   },
   openGraph: {
-    title: `Notice | ${ORG_NAME}`,
+    title: `Products | ${ORG_NAME}`,
     description: DESCRIPTION,
     url: `${SITE_URL}/notices`,
     siteName: ORG_NAME,

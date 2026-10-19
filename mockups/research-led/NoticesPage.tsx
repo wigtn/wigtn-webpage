@@ -1,8 +1,9 @@
 "use client";
 
 /**
- * /notices, labelled "Notice" in the nav. It was /news, labelled "Updates",
- * until 2026-08-09; the old URL redirects here through RETIRED in data.ts.
+ * /notices, labelled "Products" in the nav (it was "Notice" until 2026-10-19).
+ * It was /news, labelled "Updates", until 2026-08-09; the old URL redirects
+ * here through RETIRED in data.ts.
  *
  * ONE FLAT LIST, AND ONLY RELEASES. This page held News and Releases as
  * stacked sections, then as two levels of tabs, while it was the site's

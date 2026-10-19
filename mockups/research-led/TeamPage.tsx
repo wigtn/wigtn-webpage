@@ -1,17 +1,18 @@
 "use client";
 
-/** /team, labelled "About" in the nav: the Partners & Clients wall, then the
- * company's History, and nothing else.
+/** /team, labelled "About" in the nav: a short introduction signed by the
+ * founder, the Partners & Clients wall, then the company's History, and
+ * nothing else.
  *
- * The page answers who WIGTN is as a company: who it works with, then what
- * it has done, in order. It carried a member roster (portrait, role,
+ * The page answers who WIGTN is as a company: what it is, who it works with,
+ * then what it has done, in order. It carried a member roster (portrait, role,
  * one-line bio per person) until 2026-10-19. That came off when the site
  * started presenting WIGTN as a company: the roster described individuals
  * and their careers outside WIGTN, which is not what a client reading this
  * page needs. Papers still name their authors where they are published.
  *
- * No visible hero either. The "Who we are." title came off the same day, so
- * the logo wall opens the page; the h1 stays for the document outline and
+ * No visible hero either. The "Who we are." title came off the same day; the
+ * introduction opens the page, and the h1 stays for the document outline and
  * screen readers, visually hidden. */
 
 import { Fragment } from "react";
@@ -57,6 +58,37 @@ export function TeamPage() {
     <PageShell>
       <h1 className="sr-only">About {ORG_NAME}</h1>
 
+      {/* ── Introduction, signed ──
+           What WIGTN is, in the founder's voice, then the signature. The
+           three teams are the ones the homepage's Our Service shows, and
+           every claim here is one the page below or the homepage carries:
+           the venues are History's, the founding line is MILESTONES'. The
+           rule before the signature stands in for the dashes a printed
+           letter would use, which the house voice does not. It opens the
+           page; the top padding is PageHero's, which clears the sticky
+           header. */}
+      <section className="max-w-6xl mx-auto px-6 pt-28 pb-24 md:pt-36 md:pb-28">
+        <div className="max-w-3xl space-y-6 text-pretty text-xl leading-relaxed text-ink-2 md:text-2xl md:leading-relaxed">
+          <p>
+            WIGTN is an AI company in Seoul, organised as three teams. Solutions brings AI into
+            the systems enterprises already run, from consulting to integration. Product builds
+            tools of our own and releases them as open source. Research publishes what we find at
+            ACL, EMNLP and NeurIPS.
+          </p>
+          <p>
+            We started in January 2026 as five engineers publishing research without a lab
+            behind us. We have kept the habit from that start: measure before we claim, and say
+            where the claim stops.
+          </p>
+        </div>
+        <p className="mt-10 flex items-center gap-3 text-sm font-medium tracking-tight text-ink-3 md:text-base">
+          <span aria-hidden className="h-px w-8 bg-ink-4" />
+          Founder &amp; CEO, Harrison Kim
+        </p>
+      </section>
+
+      <Divider />
+
       {/* ── Partners & Clients: logo wall ──
            The title names both relationships at once, so no logo has to say
            which one it is. The list holds direct relationships only (see
@@ -64,8 +96,7 @@ export function TeamPage() {
            Moved here from the homepage. This page answers who we are, and who
            we work with is part of that answer; the homepage is a teaser whose
            sections all hand off to a page, and this one had nowhere to hand off
-           to. It opens the page; the top padding is PageHero's, which clears
-           the sticky header. */}
+           to. */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
         {/* The ampersand is Pretendard's. Space Grotesk draws a stylised one
             that reads as a stray symbol at heading size. */}
