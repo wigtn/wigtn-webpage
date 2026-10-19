@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ORG_NAME, SITE_URL } from "@/lib/brand";
+import { pageMetadata } from "@/lib/metadata";
 import { NoticesPage } from "@/mockups/research-led/NoticesPage";
 
 /* Same fix as /team: without its own metadata this page advertised the
@@ -10,21 +10,11 @@ import { NoticesPage } from "@/mockups/research-led/NoticesPage";
 const DESCRIPTION =
   "The release record: every version of everything WIGTN has shipped, dated from the registry that serves it.";
 
-export const metadata: Metadata = {
-  title: `Products | ${ORG_NAME}`,
+export const metadata: Metadata = pageMetadata({
+  title: "Products",
   description: DESCRIPTION,
-  alternates: {
-    canonical: "/notices",
-  },
-  openGraph: {
-    title: `Products | ${ORG_NAME}`,
-    description: DESCRIPTION,
-    url: `${SITE_URL}/notices`,
-    siteName: ORG_NAME,
-    type: "website",
-    locale: "en_US",
-  },
-};
+  path: "/notices",
+});
 
 export default function Page() {
   return <NoticesPage />;

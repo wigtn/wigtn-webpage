@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { ScrollRestore } from "@/components/ScrollRestore";
 import { DESCRIPTION, ORG_NAME, SITE_URL } from "@/lib/brand";
+import { DEFAULT_SOCIAL_IMAGE } from "@/lib/metadata";
 import { organizationSchema } from "@/lib/schema";
 import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
@@ -10,24 +11,26 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-/* Sub-pages override `title`, `description`, `alternates` and `openGraph.url`.
- * Anything a page leaves unset is inherited from here, which is why /team and
- * /notices used to advertise og:url = https://wigtn.com: they set no metadata at
- * all, so a shared link to either resolved to the homepage card. */
+/* What every page inherits. Each route sets its own title, description,
+ * canonical and cards through pageMetadata (lib/metadata.ts); the layout sets
+ * no canonical or og:url, because a page that inherited one (the 404, and
+ * /team and /notices before they had metadata) claimed to be the homepage. */
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: ORG_NAME,
-  description: DESCRIPTION,
-  alternates: {
-    canonical: "/",
+  title: {
+    default: ORG_NAME,
+    template: `%s | ${ORG_NAME}`,
   },
+  description: DESCRIPTION,
   openGraph: {
-    title: ORG_NAME,
-    description: DESCRIPTION,
-    url: SITE_URL,
     siteName: ORG_NAME,
     type: "website",
     locale: "en_US",
+    images: [DEFAULT_SOCIAL_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [{ url: DEFAULT_SOCIAL_IMAGE.url, alt: DEFAULT_SOCIAL_IMAGE.alt }],
   },
 };
 

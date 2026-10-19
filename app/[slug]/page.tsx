@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { ArticleDetail } from "@/mockups/research-led/ArticleDetail";
 import { RetiredPage } from "@/mockups/research-led/RetiredPage";
 import {
@@ -8,6 +9,7 @@ import {
   getArticle,
   getRetired,
   hrefFor,
+  releaseCoverFor,
 } from "@/mockups/research-led/data";
 
 /**
@@ -54,14 +56,18 @@ export async function generateMetadata({
    * version also set robots noindex, which contradicts it: canonical asks a
    * crawler to fold this URL's signal into the destination, noindex asks it to
    * drop the URL, and noindex wins. Dropping it loses the consolidation this
-   * page exists to get. */
+   * page exists to get.
+   *
+   * og:url points at the destination as well. Without it a redirect page
+   * inherited the layout's, and a shared link to /news previewed as the
+   * homepage. */
   const retired = getRetired(slug);
   if (retired) {
-    return {
-      title: `Moved: ${retired.title} | WIGTN`,
+    return pageMetadata({
+      title: `Moved: ${retired.title}`,
       description: `This page has moved to ${retired.to}`,
-      alternates: { canonical: retired.to },
-    };
+      path: retired.to,
+    });
   }
 
   const article = getArticle(slug);
@@ -70,22 +76,23 @@ export async function generateMetadata({
     return {};
   }
 
-  return {
-    title: `${article.title} | WIGTN`,
+  /* A release page's card is its product's cover art from the Product panel;
+   * a notice, and WigtnOCR, which has no panel row, share the default. No
+   * trailing slash on the path: the Pages build exports flat files, so
+   * `/slug` resolves and `/slug/` 404s. */
+  const cover = releaseCoverFor(article.slug);
+  return pageMetadata({
+    title: article.title,
     description: article.summary,
-    /* No trailing slash. The Pages build exports flat files, so `/slug` is the
-     * URL that resolves and `/slug/` 404s. Both of these used to carry one,
-     * which pointed every article's canonical and og:url at a dead URL. */
-    alternates: {
-      canonical: `/${article.slug}`,
+    path: `/${article.slug}`,
+    type: "article",
+    image: cover && {
+      url: cover.src,
+      width: cover.width,
+      height: cover.height,
+      alt: `${cover.name} cover art`,
     },
-    openGraph: {
-      title: article.title,
-      description: article.summary,
-      url: `https://wigtn.com/${article.slug}`,
-      type: "article",
-    },
-  };
+  });
 }
 
 export default async function ArticlePage({

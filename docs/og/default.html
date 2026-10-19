@@ -1,0 +1,54 @@
+<!doctype html>
+<!--
+  Source of public/og/default.png, the 1200x630 card every page shares unless
+  it has a picture of its own (a story's cover, a product's art).
+
+  Only the wordmark and the homepage headline, in the dark theme's tokens
+  (app/globals.css .dark): paper #0E0E10 under the same backdrop glow, ink
+  #F0EFEA, accent #C5ACFA on the phrase the hero colours. The wordmark is
+  WIGTN_LOGO_WHITE.png cropped to its artwork (1387x304 at +109+253).
+
+  To re-render, from the repo root:
+    chrome-headless-shell --headless --hide-scrollbars --window-size=1200,630 \
+      --virtual-time-budget=5000 --screenshot=public/og/default.png \
+      "file://$PWD/docs/og/default.html"
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=block" />
+<style>
+  html, body { margin: 0; }
+  body {
+    width: 1200px;
+    height: 630px;
+    box-sizing: border-box;
+    padding: 84px 88px 92px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background:
+      radial-gradient(55% 45% at 50% -5%, rgba(155, 110, 240, 0.16), transparent 70%),
+      #0e0e10;
+    font-family: "Space Grotesk", sans-serif;
+  }
+  .mark { position: relative; width: 291px; height: 64px; overflow: hidden; }
+  .mark img { position: absolute; left: -23px; top: -53px; width: 336px; }
+  h1 {
+    margin: 0;
+    max-width: 1000px;
+    color: #f0efea;
+    font-size: 84px;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+  h1 span { color: #c5acfa; }
+</style>
+</head>
+<body>
+  <div class="mark"><img src="../../public/images/WIGTN_LOGO_WHITE.png" alt="" /></div>
+  <h1>We learn, build, and <span>share AI in the open</span>.</h1>
+</body>
+</html>

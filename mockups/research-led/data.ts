@@ -31,6 +31,7 @@
  * 2026-08-09 and came back the same day. They carry channel: "story" and
  * render at /story/<slug>, under the rows that summarize them; their covers
  * ship from the post folders again, which is why ./milestones is gone. */
+import type { StaticImageData } from "next/image";
 import { ACL_2026_COVER, acl2026SanDiego } from "./updates/acl-2026-san-diego";
 /* The IWSLT talk photo, which the homepage milestone rail shows for IWSLT 2026.
  * The post exports only its cover, so the file is imported directly. Importing
@@ -205,6 +206,9 @@ export type PracticeRow = {
    * inventing a picture for an engagement or a published paper would be
    * dressing. They carry a `logo` instead. */
   image?: string;
+  /* The image file's own size. Set on the open-source rows, whose cover art
+   * is also the social card of the release page the row opens. */
+  imageSize?: { width: number; height: number };
   /* The same composition, moving. Five seconds, looped, VP8, one per module.
    *
    * It is the poster that runs rather than a different picture: the scene HTML
@@ -368,6 +372,7 @@ const OPEN_SOURCE_ROWS: PracticeRow[] = [
     href: articleHref(wigssNpmRelease.slug),
     meta: "npm · Open source",
     image: "/images/products/wigss.jpg",
+    imageSize: { width: 960, height: 640 },
   },
   {
     slug: "wigtn-plugin-claude-code",
@@ -376,6 +381,7 @@ const OPEN_SOURCE_ROWS: PracticeRow[] = [
     href: articleHref(wigtnCodingRelease.slug),
     meta: "Claude Code · Open source",
     image: "/images/products/wigtn-plugin-claude-code.jpg",
+    imageSize: { width: 960, height: 540 },
   },
   {
     slug: "wigtn-plugin-codex",
@@ -384,8 +390,17 @@ const OPEN_SOURCE_ROWS: PracticeRow[] = [
     href: articleHref(wigtnCodexRelease.slug),
     meta: "Codex · Open source",
     image: "/images/products/wigtn-plugin-codex.jpg",
+    imageSize: { width: 960, height: 540 },
   },
 ];
+
+/* The cover art a release page shares as its social card: the Product
+ * panel's picture for the product that page releases. WigtnOCR has no row
+ * there, so its page uses the site's default card. */
+export function releaseCoverFor(slug: string) {
+  const row = OPEN_SOURCE_ROWS.find((r) => r.href === articleHref(slug));
+  return row?.image && row.imageSize ? { src: row.image, ...row.imageSize, name: row.name } : undefined;
+}
 
 /* ── The three teams ─────────────────────────────────────────────────────────
  *
@@ -701,17 +716,20 @@ export const BLOG_FEED = ARTICLES.filter(
  * is knowledge about two posts at once, and the thumbnail needs the story
  * post's cover, which only this module already imports. The note supplies
  * the words (title, summary, date were written for exactly this kind of
- * row); the story post supplies the picture and the destination.
+ * row); the story post supplies the picture and the destination. `cover` is
+ * the image import itself, so the story page's social card can give its size.
  *
  * Newest first, like every other list on the site. wigvo-acl-2026 pairs with
  * the trip report: the acceptance is the notice, the trip is the story. */
-export type Story = { article: Article; image: string; storySlug: string };
+export type Story = { article: Article; cover: StaticImageData; storySlug: string };
 export const STORIES: Story[] = [
-  { article: wigvoAcl2026, image: ACL_2026_COVER, storySlug: "acl-2026-san-diego" },
-  { article: obaWeekendthon2026Top6, image: OBA_WEEKENDTHON_COVER, storySlug: "oba-weekendthon-top6" },
-  { article: snowflakeKorea2026TechTrack, image: SNOWFLAKE_2026_COVER, storySlug: "snowflake-korea-2026" },
-  { article: traeSeoul2026GrandPrize, image: TRAE_SEOUL_COVER, storySlug: "trae-seoul-grand-prize" },
+  { article: wigvoAcl2026, cover: ACL_2026_COVER, storySlug: "acl-2026-san-diego" },
+  { article: obaWeekendthon2026Top6, cover: OBA_WEEKENDTHON_COVER, storySlug: "oba-weekendthon-top6" },
+  { article: snowflakeKorea2026TechTrack, cover: SNOWFLAKE_2026_COVER, storySlug: "snowflake-korea-2026" },
+  { article: traeSeoul2026GrandPrize, cover: TRAE_SEOUL_COVER, storySlug: "trae-seoul-grand-prize" },
 ];
+
+export const getStory = (storySlug: string) => STORIES.find((s) => s.storySlug === storySlug);
 
 /* The homepage report rail (TECH_REPORTS, a hand-kept mirror of three report
  * cards from the sibling wigtn-tech-report repo) went with the landing

@@ -67,10 +67,11 @@ import stageDemo from "./stage-demo.jpg";
 
 const p = (text: string): Block => ({ t: "p", text });
 
-/* Exported because MILESTONES in ../../data.ts renders this post's card on the
- * homepage rail and reuses the same file the body does. That is the only
- * consumer; do not add the export to a post without one. */
-export const TRAE_SEOUL_COVER = certificate.src;
+/* Exported because STORIES in ../../data.ts shows this cover on the /story
+ * row and the story page's social card uses it. The whole image import, not
+ * its `src`, so the card can state the width and height. Those are the only
+ * consumers; do not add the export to a post without one. */
+export const TRAE_SEOUL_COVER = certificate;
 
 export const traeSeoulGrandPrize: Article = {
   slug: "trae-seoul-grand-prize",

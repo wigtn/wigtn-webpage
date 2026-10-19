@@ -94,7 +94,7 @@ export function StoryPage() {
               className="relative order-1 aspect-[16/10] overflow-hidden rounded-xl bg-ink/[0.04] md:order-2"
             >
               <img
-                src={latest.image}
+                src={latest.cover.src}
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.03]"
               />
@@ -130,7 +130,7 @@ export function StoryPage() {
                       className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl bg-ink/[0.04] sm:w-52 md:w-64"
                     >
                       <img
-                        src={s.image}
+                        src={s.cover.src}
                         alt=""
                         className="absolute inset-0 h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.04]"
                       />
