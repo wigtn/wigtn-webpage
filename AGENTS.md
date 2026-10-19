@@ -106,12 +106,12 @@ The two on-site surfaces split the content by shape:
 
 The page at /notices was /news, labelled "Updates", until 2026-08-09, and held
 News and Releases tabs until the Story/Blog split. Retired URLs, including
-/news (to /story), /work, /projects, /research, /tech-reports, and the story
-posts' old root slugs, are listed in `RETIRED` in `data.ts` and still resolve
-as redirects. The old detail pages one level down (/projects/<slug>,
-/research/<slug>, /products/<slug>) are `RETIRED_NESTED`, each prefix with
-its own `app/<prefix>/[slug]` route. Read the comments there before touching
-them.
+/news (to /story), /work, and the story posts' old root slugs, are listed in
+`RETIRED` in `data.ts` and still resolve as redirects. Read the comment there
+before touching them. URLs that were already 404 (/projects, /research,
+/tech-reports and the detail pages under them) stay 404. They had been gone
+for two to six months by 2026-10-20, so a redirect would recover little, and
+the 404 page carries the site's shell.
 
 ## Writing an update post
 
@@ -194,7 +194,7 @@ or paper reaches them without a second edit, with two exceptions.
 
 ```bash
 npx tsc --noEmit     # types; cannot see missing images (see below)
-npm run build        # 61 static pages; this is what catches a missing image
+npm run build        # 41 static pages; this is what catches a missing image
 ```
 
 `next-env.d.ts` declares `*.jpg` as a wildcard module, so a typecheck will
