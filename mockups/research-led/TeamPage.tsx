@@ -64,12 +64,13 @@ export function TeamPage() {
            failures it names are the three papers: a parser that looks
            clean and retrieves badly (RCPS, EMNLP), speech recognition that
            writes words into silence (WIGVO, ACL), and a judge's
-           improvement inside its own noise (MDI, NeurIPS). The rule before
-           the signature stands in for the dash a printed letter would use,
-           which the house voice does not. It opens the page; the top
+           improvement inside its own noise (MDI, NeurIPS). The signature
+           carries no dash or rule in front of it. The measure is max-w-4xl:
+           at 3xl the paragraphs ran long and narrow, and the second one left
+           "at NeurIPS." alone on its last line. It opens the page; the top
            padding is PageHero's, which clears the sticky header. */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-24 md:pt-36 md:pb-28">
-        <div className="mx-auto max-w-3xl space-y-6 text-center text-pretty text-lg leading-relaxed text-ink-2 md:text-xl md:leading-relaxed">
+        <div className="mx-auto max-w-4xl space-y-6 text-center text-pretty text-lg leading-relaxed text-ink-2 md:text-xl md:leading-relaxed">
           <p>
             WIGTN started in January 2026 as five engineers who kept running into the same
             problem in industry. AI could do much of what companies asked of it, and then it
@@ -88,8 +89,7 @@ export function TeamPage() {
             it.
           </p>
         </div>
-        <p className="mt-10 flex items-center justify-center gap-3 text-sm font-medium tracking-tight text-ink-3 md:text-base">
-          <span aria-hidden className="h-px w-8 bg-ink-4" />
+        <p className="mt-10 text-center text-sm font-medium tracking-tight text-ink-3 md:text-base">
           Harrison Kim, Founder &amp; CEO
         </p>
       </section>
@@ -112,15 +112,15 @@ export function TeamPage() {
         </h2>
         {/* One centred row with the same gap between every pair of
             neighbours, so the spacing is symmetric whatever each logo's
-            width. Equal columns centred each logo in its own cell instead,
-            which put the two wide logos close together and left the narrow
-            one apart.
-            One logo height per breakpoint, set as the list's font-size so
-            the logos (h-[1em]) and the type stand-in scale together. Each
-            step keeps the row inside the container: 28px at sm, 36px at md,
-            48px at lg, 56px from xl. Below sm the logos stack in one
-            centred column at 44px. */}
-        <ul className="mt-14 flex flex-col items-center gap-y-14 text-[44px] sm:flex-row sm:justify-center sm:gap-x-12 sm:text-[28px] md:mt-16 md:text-[36px] lg:gap-x-24 lg:text-[48px] xl:text-[56px]">
+            width and the row sits on the page's centre. Equal columns
+            centred each logo in its own cell instead, which put the two wide
+            logos close together and left the narrow one apart.
+            One unit per breakpoint, set as the list's font-size: 28px at
+            sm, 36px at md, 48px at lg, 56px from xl, and 44px in the single
+            stacked column below sm. Logo heights (Company.height) and the
+            gap are both in that unit, so the spacing keeps its proportion to
+            the logos at every width instead of jumping at a breakpoint. */}
+        <ul className="mt-14 flex flex-col items-center gap-y-[1.25em] text-[44px] sm:flex-row sm:justify-center sm:gap-x-[1.75em] sm:text-[28px] md:mt-16 md:text-[36px] lg:text-[48px] xl:text-[56px]">
           {PARTNERS_AND_CLIENTS.map((c) => (
             <motion.li
               key={c.name}
@@ -128,8 +128,8 @@ export function TeamPage() {
               initial="hidden"
               whileInView="show"
               viewport={VIEWPORT}
-              className="flex h-[1em] items-center"
-              style={c.height ? { height: `${c.height}em` } : undefined}
+              className="flex items-center"
+              style={{ height: `${c.height ?? 1}em` }}
             >
               {c.logo ? (
                 /* The artwork is dark, so dark mode turns it white. Each
