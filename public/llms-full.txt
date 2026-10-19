@@ -3,7 +3,8 @@
 > An independent AI team that builds web products and AI systems for clients,
 > and publishes what it learns in the open: peer-reviewed work, released
 > models, and reports that say what they do not show. Korea-based. Services:
-> web development (Solutions) and AI transformation (AX Agency).
+> web development (Solutions) and AI transformation (Research); a Product
+> team is coming.
 
 Every figure below comes from a published paper, a public model card, or a
 technical report at https://tech.wigtn.com/. Work that has

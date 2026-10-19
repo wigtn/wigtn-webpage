@@ -31,8 +31,8 @@ public/images/             logos (partners/ holds the Partners & Clients wall),
 The site has four nav destinations: **About** (/team), **Notice** (/notices),
 **Story** (/story), and **Tech**, which is an external link to WIGTN Tech's
 report index. The landing page is three sections: Hero, Our Service (the
-business model: Solutions and AX Agency as two halves that open when
-pointed at), Contact. About has no visible title: the Partners & Clients
+three teams, Solutions, Product and Research, as three panels that open
+when pointed at; Product reads "Coming soon"), Contact. About has no visible title: the Partners & Clients
 logo wall, then the company's History (papers accepted and business
 relationships, from `MILESTONES`), nothing else. It does not introduce
 members individually. A **Blog** section exists in the source
