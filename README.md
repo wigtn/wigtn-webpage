@@ -56,16 +56,6 @@
 
 Braincrew · Mind AI · Arustay
 
-## Team
-
-| Name | Role | GitHub |
-|------|------|--------|
-| Harrison Kim | Founder & CEO | [@Hyeongseob91](https://github.com/Hyeongseob91) |
-| Diego Son | AI Engineer | [@wigtn](https://github.com/wigtn) |
-| Eric Kim | MLOps Engineer | [@moriroKim](https://github.com/moriroKim) |
-| Maximus Kim | AI Product Engineer | [@HyeonsangKim](https://github.com/HyeonsangKim) |
-| David Cho | AI Product Engineer | [@starz-woo](https://github.com/starz-woo) |
-
 ## Contact
 
 PoC, joint research, or a production system your team can run. Proposals are always welcome.

@@ -375,96 +375,6 @@ export const PARTNERS_AND_CLIENTS: Company[] = [
   { name: "Arustay" },
 ];
 
-/* The /team roster renders one row per person: portrait + name on the left,
- * `position` / `role` / `bio` on the right. `position` is the WIGTN title and
- * is intentionally set on the founder only; everyone else shows `role`
- * (their discipline) alone. `bio` is a single career-shaped sentence.
- *
- * `currentRole`, `credential`, `expertise`, `github` and `linkedin` are read by
- * nothing. They are kept in step with the rendered fields anyway, because a
- * shadow copy that disagrees with what the page says is worse than one that
- * does not, and they still ship inside the client bundle. */
-export type TeamMember = {
-  name: string;
-  position?: string; // WIGTN title; founder only
-  role: string; // discipline
-  currentRole: string;
-  credential?: string;
-  bio: string;
-  image: string;
-  imagePosition?: string;
-  github?: string;
-  linkedin?: string;
-  expertise: string[];
-};
-
-export const TEAM: TeamMember[] = [
-  {
-    name: "Harrison Kim 김형섭",
-    position: "Founder & CEO",
-    role: "AI Research Engineer",
-    /* The employer is described, not named. It was named here and in the bio
-     * until now, which put a member's outside employer on WIGTN's own roster
-     * page. What the reader needs is the kind of work, and that is what both
-     * fields carry now. */
-    currentRole: "AI Research Engineer, enterprise agent development and consulting",
-    credential: "Ex-Hyundai E&C",
-    bio: "Builds agent systems for enterprise clients at an AX (AI transformation) company, covering development, consulting and solution delivery, after a decade of large-scale project management at Hyundai E&C.",
-    image: "/images/team/hyeongseob_kim.jpg",
-    imagePosition: "center top",
-    github: "https://github.com/Hyeongseob91",
-    linkedin: "https://linkedin.com/in/harrison-hyeongseob-kim",
-    expertise: ["AI Modeling", "GPU Computing", "Applied Research"],
-  },
-  {
-    name: "Diego Son 손상우",
-    role: "AI Research Engineer",
-    currentRole: "AI Research Engineer & AX Team Lead",
-    bio: "AX Team Lead building LLM-powered applications and autonomous agent systems, focused on multi-agent orchestration and workflow automation.",
-    image: "/images/team/sangwoo_son.png",
-    imagePosition: "left top",
-    github: "https://github.com/wigtn",
-    linkedin: "https://linkedin.com/in/sangwooson",
-    expertise: ["Multi-Agent Systems", "Agent Orchestration", "LLM Apps"],
-  },
-  {
-    name: "Eric Kim 김진모",
-    /* Was "MLOps Engineer" here while `currentRole` right below said DevOps.
-     * DevOps is the one that was right, and the bio no longer opens by
-     * repeating the line directly above it. */
-    role: "DevOps Engineer",
-    currentRole: "DevOps Engineer",
-    bio: "Runs the crew's deployment pipelines on Docker, Kubernetes and CI/CD, and leads its DBA and UI/UX direction.",
-    image: "/images/team/jinmo_kim.png",
-    imagePosition: "center 30%",
-    github: "https://github.com/moriroKim",
-    linkedin: "https://www.linkedin.com/in/jinmo-kim-62878533b/",
-    expertise: ["DevOps", "Infra (Docker/K8s)", "CI/CD · DBA"],
-  },
-  {
-    name: "Maximus Kim 김현상",
-    role: "AI Product Engineer",
-    currentRole: "Full-Stack Developer & MX Team Lead",
-    bio: "MX Team Lead and mobile-first full-stack developer, covering the entire 3-tier stack with React Native.",
-    image: "/images/team/hyeonsang_kim.jpeg",
-    imagePosition: "center 35%",
-    github: "https://github.com/HyeonsangKim",
-    linkedin: "https://www.linkedin.com/in/hyeonsang-kim-5a7a67260/",
-    expertise: ["Full-Stack", "React Native", "Mobile"],
-  },
-  {
-    name: "David Cho 조현우",
-    role: "AI Product Engineer",
-    currentRole: "Full-Stack Developer",
-    bio: "Full-stack developer working across web and React Native, using AI-native tooling to ship quickly.",
-    image: "/images/team/hyunwoo_cho.png",
-    imagePosition: "center 20%",
-    github: "https://github.com/starz-woo",
-    linkedin: "https://www.linkedin.com/in/%ED%98%84%EC%9A%B0-%EC%A1%B0-8a6800393/",
-    expertise: ["Full-Stack", "Web", "AI-native Tooling"],
-  },
-];
-
 export type Kind = "report" | "event" | "community" | "insight";
 
 /* Channel split: "newsroom" = in-site news feed (awards, releases,
@@ -692,19 +602,23 @@ export const STORIES: Story[] = [
 
 /* ── Research & Tech Assets (homepage centerpiece) ── */
 
-/* Milestones: the build-in-public track record, oldest → newest. Horizontal
- * swipe rail on the homepage; each card's photo rises into view on scroll.
- * Items without a real photo yet leave the frame blank; entries whose copy is
- * not final carry placeholder: true, which also keeps them out of the /team
- * History timeline.
+/* Milestones: the company record, oldest → newest. /team renders it as the
+ * History timeline; the homepage's retained (unrendered) MilestoneTimeline
+ * reads it too. Entries whose copy is not final carry placeholder: true,
+ * which keeps them out of History.
  *
- * It was one entry per month since founding, and it is not any more. The ACL
- * acceptance sat in the February slot with the wrong date on it: the
- * acceptance email arrived in April (the trip report says so in its lede,
- * ../updates/acl-2026-san-diego, and camera-ready was May). Correcting it put
- * two entries in April and left February empty, which is the honest shape.
- * Do not fill February back in to restore the cadence, and do not redate this
- * entry to do it either. */
+ * Two kinds of entry, by decision of 2026-10-19: paper acceptances (plus the
+ * IWSLT invited oral, which came with the ACL acceptance) and business
+ * relationships WIGTN entered (a client project, a partnership). Hackathon
+ * placings came off; they stay on /story, which is where a reader looks for
+ * what the team did in public. Every paper entry is sourced from the org
+ * profile's Papers list (github.com/wigtn/.github, profile/README.md).
+ *
+ * Dates are the month the event happened, not a cadence. The ACL acceptance
+ * once sat in February with the wrong date on it: the acceptance email
+ * arrived in April (the trip report says so in its lede,
+ * ../updates/acl-2026-san-diego, and camera-ready was May). Do not redate an
+ * entry to fill a month. */
 export type Milestone = {
   month: string; // short month label, e.g. "Jan"
   date: string; // "2026.01"
@@ -730,63 +644,61 @@ export const MILESTONES: Milestone[] = [
     text: "Five engineers start publishing research and shipping open source together, without a lab behind them.",
   },
   {
-    month: "Mar",
-    date: "2026.03",
-    label: "Grand Prize",
-    title: "Build with TRAE Seoul",
-    text: "WIGENT, a multi-agent debate arena, wins the Grand Prize (ByteDance).",
-    image: TRAE_SEOUL_COVER,
+    month: "Feb",
+    date: "2026.02",
+    label: "Web Agency",
+    title: "Arustay: Website Build",
+    text: "Built the Arustay website as a Web Agency client project.",
   },
   {
     month: "Apr",
     date: "2026.04",
     label: "ACL 2026",
-    title: "WIGVO accepted to ACL",
-    text: "Real-time phone-call translation accepted to ACL 2026, System Demonstrations.",
+    title: "ACL 2026 System Demonstrations",
+    text: "Paper accepted: WIGVO, real-time bidirectional speech translation over standard phone calls.",
+    railTitle: "ACL 2026 System Demos",
     image: "/images/projects/wigvo_screenshot_call.png",
-  },
-  {
-    month: "Apr",
-    date: "2026.04",
-    label: "2nd Place",
-    title: "Snowflake AI & Data Hackathon",
-    text: "WIGTN Flake takes 2nd in the Tech Track, built on Snowflake Cortex.",
-    image: SNOWFLAKE_2026_COVER,
-  },
-  {
-    month: "May",
-    date: "2026.05",
-    label: "Top 6",
-    title: "OBA Weekendthon",
-    text: "MyunZy, an AI interviewer built in two days, finishes in the Top 6.",
-    image: OBA_WEEKENDTHON_COVER,
   },
   {
     month: "Jun",
     date: "2026.06",
     label: "Mind AI",
-    title: "Mind AI: Technical Collaboration",
-    text: "Domestic test partner for MEGA Code.",
+    title: "Mind AI: Closed Beta Partner",
+    text: "Joined the closed beta of MEGA Code, Mind AI's product, as a test partner in Korea.",
   },
   {
     month: "Jul",
     date: "2026.07",
-    label: "ACL · IWSLT",
-    title: "ACL 2026 Poster & IWSLT 2026 Invited talk",
-    text: "WIGVO ran a live demo booth at ACL System Demonstrations, followed by an invited oral talk and poster at IWSLT 2026.",
-    railTitle: "ACL 2026 & IWSLT 2026",
-    railText: "A live demo booth at ACL, then an invited talk at IWSLT.",
+    label: "IWSLT 2026",
+    title: "IWSLT 2026 Oral Presentation, San Diego",
+    text: "WIGVO presented in an invited oral session at IWSLT 2026, held inside ACL 2026.",
+    railTitle: "IWSLT 2026 Oral",
     image: ACL_2026_COVER,
   },
   {
     month: "Aug",
     date: "2026.08",
-    label: "Research PoC",
-    title: "KineticFlow: e-sports 경기분석 PoC",
-    text: "A study of what actually moves a pro player's win rate, measured from in-game behavior data.",
-    railTitle: "KineticFlow PoC",
-    railText: "What actually moves a pro player's win rate.",
-    upcoming: true,
+    label: "EMNLP 2026",
+    title: "EMNLP 2026 Industry Track",
+    text: "Paper accepted: RCPS, choosing document parsers by retrieval, not by appearance.",
+  },
+  {
+    month: "Sep",
+    date: "2026.09",
+    label: "NeurIPS 2026",
+    title: "NeurIPS 2026 Workshop",
+    text: "Paper accepted to the TAE workshop: MDI, the minimum detectable improvement of an LLM judge.",
+  },
+  {
+    month: "Oct",
+    date: "2026.10",
+    label: "Partnership",
+    title: "Braincrew: AX Project Partnership",
+    /* "i\u2011ERP" spells the hyphen as U+2011 (non-breaking) so a narrow
+     * column never splits the product name at it. */
+    text: "Signed an AX project partner agreement with Braincrew. The work under it includes the SK hynix Global One ERP (i\u2011ERP) Platform development project.",
+    railTitle: "Braincrew Partnership",
+    railText: "AX project partner, including SK hynix's i\u2011ERP platform.",
   },
 ];
 /* There is no announcements feed, and that is deliberate.
@@ -806,8 +718,7 @@ export const MILESTONES: Milestone[] = [
  * The one-line impact each row carries is versions[].note, unchanged. Those
  * notes were derived from the release bodies (or, where bodies are empty, the
  * release commits) when the changelogs were sourced; a second hand-written
- * string per version would be a shadow copy that drifts, which is the same
- * argument the TeamMember comment above makes about dead fields. A row whose
+ * string per version would be a shadow copy that drifts. A row whose
  * version has no note renders without one, and for those versions that is the
  * whole truth. WigtnOCR has no versions array at all (the HuggingFace repo
  * carries no tags), so its post contributes one row from its own date and
