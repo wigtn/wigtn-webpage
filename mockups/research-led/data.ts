@@ -476,10 +476,11 @@ export const PRACTICES: Practice[] = [
 export type Company = {
   name: string;
   logo?: string;
-  /* How tall the logo sits, in multiples of the row's logo height. The row
-   * height suits wordmarks about six times wider than tall; a stacked logo at
-   * that height would be a sliver, so it is given more height to read at a
-   * similar weight. */
+  /* How tall the logo sits, in the row's unit (its font-size; 56px from xl).
+   * Wordmarks about six times wider than tall sit at 0.85; the stacked
+   * Arustay mark would be a sliver at that height, so it sits at 2 to read
+   * at a similar weight. The wordmarks were at 1 until 2026-10-20, which
+   * made Arustay look small beside them. */
   height?: number;
 };
 
@@ -488,8 +489,8 @@ export type Company = {
  * the corner; arustay.svg is a potrace of the brown ink alone, so neither came
  * across, in the ink's own colour (#644e41). */
 export const PARTNERS_AND_CLIENTS: Company[] = [
-  { name: "Braincrew", logo: "/images/partners/braincrew.svg" },
-  { name: "Mind AI", logo: "/images/partners/mind-ai.svg" },
+  { name: "Braincrew", logo: "/images/partners/braincrew.svg", height: 0.85 },
+  { name: "Mind AI", logo: "/images/partners/mind-ai.svg", height: 0.85 },
   { name: "Arustay", logo: "/images/partners/arustay.svg", height: 2 },
 ];
 
