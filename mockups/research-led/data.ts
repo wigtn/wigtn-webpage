@@ -511,35 +511,22 @@ export const PARTNERS_AND_CLIENTS: Company[] = [
 
 /* The /team Sponsor row, under Partners: AWS, through its startup programme,
  * since 2026-10-20. Not on the Partners wall, which holds direct partners and
- * clients; WIGTN is not an AWS Partner Network member.
+ * clients; WIGTN is not an AWS Partner Network member. Use of the logo was
+ * cleared by the AWS Startups team (confirmed by the founder, 2026-10-20).
  *
- * AWS publishes no separate "AWS Startups" logo; its startup pages carry the
- * AWS logo and say "Startups" in text. So the logo is AWS's own and the
- * programme name is printed under it as a caption, apart from the mark
- * rather than set beside it as a lockup AWS never drew. The artwork is the
- * logo aws.amazon.com's header draws (taken from /startups on 2026-10-20),
- * filled in AWS's brand colours: squid ink #232F3E and smile orange #FF9900,
- * with white letters for the dark theme, the way AWS reverses it. Both files
- * keep the header's 109x64 viewBox, which is already the artwork's edge. */
-export type Sponsor = {
-  name: string;
-  caption: string;
-  logo: string;
-  logoDark: string;
-  /* In the row's unit, as Company.height. The letters fill only the top
-   * half of the AWS mark (the smile is the rest), so at 1.8 they stand about
-   * as tall as the 0.85 wordmarks on the Partners wall. */
-  height: number;
-};
-
-export const SPONSORS: Sponsor[] = [
-  {
-    name: "Amazon Web Services",
-    caption: "AWS Startups",
-    logo: "/images/sponsors/aws.svg",
-    logoDark: "/images/sponsors/aws-white.svg",
-    height: 1.8,
-  },
+ * aws-startups.svg is the AWS Startups lockup ("aws" mark, "startups"), built
+ * from the 300x79 white PNG of it supplied with that clearance. The aws mark
+ * is AWS's own vector, the one aws.amazon.com's header draws, placed where
+ * the PNG draws it (scale 1.215, fitted to within 0.025 mean error per
+ * pixel). Only "startups" is traced: a 16x Lanczos upscale, a 6px blur to
+ * take out the pixel steps, a 0.52 threshold that keeps the strokes' weight,
+ * then potrace. One colour, squid ink #232F3E, so the row's dark-mode invert
+ * turns it white like the provided file. */
+export const SPONSORS: Company[] = [
+  /* The lockup is about 3.8 times wider than tall and its letters fill the
+   * top half, so at 1.7 the "aws" letters stand as tall as the 0.85
+   * Partners wordmarks. */
+  { name: "AWS Startups", logo: "/images/sponsors/aws-startups.svg", height: 1.7 },
 ];
 
 export type Kind = "report" | "event" | "community" | "insight";

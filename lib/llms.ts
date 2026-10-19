@@ -96,7 +96,7 @@ ${stories.join("\n")}
 ## Pages
 
 - [Home](${SITE_URL}/): the three teams and their projects, releases and papers
-- [About](${SITE_URL}/team): the founder's introduction, partners, sponsor (${SPONSORS.map((s) => `${s.name}, ${s.caption}`).join("; ")}), and history
+- [About](${SITE_URL}/team): the founder's introduction, partners, sponsor (${SPONSORS.map((s) => s.name).join(", ")}), and history
 - [Products](${SITE_URL}/notices): every released version, dated from the registry that serves it
 - [Story](${SITE_URL}/story): one entry per event, each with the full account
 - [WIGTN Tech](https://tech.wigtn.com/): technical reports, each with its method, measurements and limitations

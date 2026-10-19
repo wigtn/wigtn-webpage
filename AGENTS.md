@@ -40,7 +40,7 @@ Solutions shows its enterprise projects by logo, Product its open-source
 releases by cover art, and Research, headed R&D, its accepted papers by
 venue logo), Contact. About has no visible title: a short introduction
 signed "Harrison Kim, Founder & CEO", the Partners logo wall,
-the Sponsor row (AWS, captioned "AWS Startups"), then the company's History (papers accepted and business relationships,
+the Sponsor row (the AWS Startups logo), then the company's History (papers accepted and business relationships,
 from `MILESTONES`), nothing else. It does not introduce members
 individually. A **Blog** section exists in the source
 (BlogPage.tsx, the "blog" channel) but is closed and unrouted: it is reserved

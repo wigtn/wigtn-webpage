@@ -19,7 +19,7 @@ import { Fragment } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ORG_NAME } from "@/lib/brand";
 import { PageShell, rise, VIEWPORT } from "./chrome";
-import { MILESTONES, PARTNERS_AND_CLIENTS, SPONSORS } from "./data";
+import { MILESTONES, PARTNERS_AND_CLIENTS, SPONSORS, type Company } from "./data";
 
 /* Prefer wrapping at commas. Each clause is an inline-block, so the browser
  * takes the break between clauses before it breaks inside one; a clause too
@@ -50,6 +50,57 @@ function Divider() {
     <div className="max-w-6xl mx-auto px-6">
       <div className="border-t border-line/[0.08]" />
     </div>
+  );
+}
+
+/* The logo row Partners and Sponsor share.
+ *
+ * One centred row with the same gap between every pair of
+ * neighbours, so the spacing is symmetric whatever each logo's
+ * width and the row sits on the page's centre. Equal columns
+ * centred each logo in its own cell instead, which put the two wide
+ * logos close together and left the narrow one apart.
+ *
+ * One unit per breakpoint, set as the list's font-size: 28px at
+ * sm, 36px at md, 48px at lg, 56px from xl, and 44px in the single
+ * stacked column below sm. Logo heights (Company.height) and the
+ * gap are both in that unit, so the spacing keeps its proportion to
+ * the logos at every width instead of jumping at a breakpoint. */
+function LogoRow({ companies }: { companies: Company[] }) {
+  return (
+    <ul className="mt-14 flex flex-col items-center gap-y-[1.25em] text-[44px] sm:flex-row sm:justify-center sm:gap-x-[1.75em] sm:text-[28px] md:mt-16 md:text-[36px] lg:text-[48px] xl:text-[56px]">
+      {companies.map((c) => (
+        <motion.li
+          key={c.name}
+          variants={rise}
+          initial="hidden"
+          whileInView="show"
+          viewport={VIEWPORT}
+          className="flex items-center"
+          style={{ height: `${c.height ?? 1}em` }}
+        >
+          {c.logo ? (
+            /* The artwork is dark, so dark mode turns it white. Each
+               SVG's viewBox is trimmed to its artwork, so the gap is
+               measured from the ink, not from built-in margin. */
+            <img
+              src={c.logo}
+              alt={`${c.name} logo`}
+              loading="lazy"
+              decoding="async"
+              className="h-full w-auto dark:brightness-0 dark:invert"
+            />
+          ) : (
+            /* Pretendard, not the display face: Space Grotesk's quirky
+               forms made a plain company name look like a logo it is
+               not. */
+            <span className="font-sans text-[0.9em] font-bold leading-none tracking-tight text-ink">
+              {c.name}
+            </span>
+          )}
+        </motion.li>
+      ))}
+    </ul>
   );
 }
 
@@ -116,95 +167,19 @@ export function TeamPage() {
         <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
           Partners
         </h2>
-        {/* One centred row with the same gap between every pair of
-            neighbours, so the spacing is symmetric whatever each logo's
-            width and the row sits on the page's centre. Equal columns
-            centred each logo in its own cell instead, which put the two wide
-            logos close together and left the narrow one apart.
-            One unit per breakpoint, set as the list's font-size: 28px at
-            sm, 36px at md, 48px at lg, 56px from xl, and 44px in the single
-            stacked column below sm. Logo heights (Company.height) and the
-            gap are both in that unit, so the spacing keeps its proportion to
-            the logos at every width instead of jumping at a breakpoint. */}
-        <ul className="mt-14 flex flex-col items-center gap-y-[1.25em] text-[44px] sm:flex-row sm:justify-center sm:gap-x-[1.75em] sm:text-[28px] md:mt-16 md:text-[36px] lg:text-[48px] xl:text-[56px]">
-          {PARTNERS_AND_CLIENTS.map((c) => (
-            <motion.li
-              key={c.name}
-              variants={rise}
-              initial="hidden"
-              whileInView="show"
-              viewport={VIEWPORT}
-              className="flex items-center"
-              style={{ height: `${c.height ?? 1}em` }}
-            >
-              {c.logo ? (
-                /* The artwork is dark, so dark mode turns it white. Each
-                   SVG's viewBox is trimmed to its artwork, so the gap is
-                   measured from the ink, not from built-in margin. */
-                <img
-                  src={c.logo}
-                  alt={`${c.name} logo`}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-full w-auto dark:brightness-0 dark:invert"
-                />
-              ) : (
-                /* Pretendard, not the display face: Space Grotesk's quirky
-                   forms made a plain company name look like a logo it is
-                   not. */
-                <span className="font-sans text-[0.9em] font-bold leading-none tracking-tight text-ink">
-                  {c.name}
-                </span>
-              )}
-            </motion.li>
-          ))}
-        </ul>
+        <LogoRow companies={PARTNERS_AND_CLIENTS} />
       </section>
 
       <Divider />
 
       {/* ── Sponsor ──
-           Under Partners, in the same section shape: title, then one centred
-           row in the same type-scaled unit. Unlike the partner logos, AWS's
-           keeps its colours in both themes (the orange smile is the mark), so
-           each theme gets its own file rather than the wall's invert. The
-           caption names the programme in the page's micro-label type. */}
+           Under Partners, in the same shape: title, then the same logo row.
+           AWS, as its startup programme; see SPONSORS in data.ts. */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
         <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
           Sponsor
         </h2>
-        <ul className="mt-14 flex flex-col items-center gap-y-[1.25em] text-[44px] sm:flex-row sm:justify-center sm:gap-x-[1.75em] sm:text-[28px] md:mt-16 md:text-[36px] lg:text-[48px] xl:text-[56px]">
-          {SPONSORS.map((s) => (
-            <motion.li
-              key={s.name}
-              variants={rise}
-              initial="hidden"
-              whileInView="show"
-              viewport={VIEWPORT}
-              className="flex flex-col items-center"
-            >
-              <span className="flex items-center" style={{ height: `${s.height}em` }}>
-                <img
-                  src={s.logo}
-                  alt={`${s.name} logo`}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-full w-auto dark:hidden"
-                />
-                <img
-                  src={s.logoDark}
-                  alt={`${s.name} logo`}
-                  loading="lazy"
-                  decoding="async"
-                  className="hidden h-full w-auto dark:block"
-                />
-              </span>
-              <span className="mt-6 font-mono text-xs uppercase tracking-[0.22em] text-ink-3">
-                {s.caption}
-              </span>
-            </motion.li>
-          ))}
-        </ul>
+        <LogoRow companies={SPONSORS} />
       </section>
 
       <Divider />
