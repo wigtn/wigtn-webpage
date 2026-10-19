@@ -973,19 +973,23 @@ export function ResearchLedHome() {
 
         <Divider />
 
-        {/* ───── 3. CTA: text layout; only the contact link is boxed in purple ───── */}
+        {/* ───── 3. CTA: text layout; only the contact link is boxed in purple ─────
+             The copy picks up where the founder's letter on /team ends ("If
+             you have a problem AI hasn't solved for you yet, we'd like to
+             hear about it") and keeps its habit: measure first, say where
+             the fix stops. It asked for "a site to build" until 2026-10-20,
+             which was the Web Agency's pitch. */}
         <section className="max-w-6xl mx-auto px-6 py-28 md:py-40">
           <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-accent">
             Work with us
           </span>
           <h3 className="mt-5 font-display max-w-3xl text-pretty text-[clamp(1.75rem,4vw,3rem)] font-semibold tracking-tight leading-[1.15]">
-            If you have work for a team like this, we would rather hear from you
-            than not.
+            Have a problem AI hasn’t solved for you yet?
           </h3>
           <p className="mt-6 max-w-2xl text-pretty text-ink-3 leading-relaxed">
-            Bring us a site to build or a workflow that wants AI in it. Or read a
-            report and tell us where it is wrong, use one of the models, open an
-            issue. All of it is more useful to us than silence.
+            Tell us where it fails today. We measure it before we build anything, bring the fix
+            into the systems you already run, and say where the fix stops. A report you think is
+            wrong, or an issue on one of our tools, is just as welcome.
           </p>
           <a
             href={CONTACT_HREF}
