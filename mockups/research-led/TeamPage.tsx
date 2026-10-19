@@ -68,15 +68,22 @@ export function TeamPage() {
            carries no dash or rule in front of it. The measure is max-w-4xl:
            at 3xl the paragraphs ran long and narrow, and the second one left
            "at NeurIPS." alone on its last line. It opens the page; the top
-           padding is PageHero's, which clears the sticky header. */}
+           padding is PageHero's, which clears the sticky header.
+           Since 2026-10-20 the first sentence is set apart as a lede in the
+           display face, with one phrase in accent the way the homepage hero
+           carries one, and the body is ink rather than ink-2, so the letter
+           is the first thing the eye lands on. The words are unchanged. */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-24 md:pt-36 md:pb-28">
-        <div className="mx-auto max-w-4xl space-y-6 text-center text-pretty text-lg leading-relaxed text-ink-2 md:text-xl md:leading-relaxed">
+        <p className="mx-auto max-w-4xl text-center text-balance font-display text-[clamp(1.75rem,3.6vw,2.75rem)] font-bold leading-[1.15] tracking-[-0.02em] text-ink">
+          WIGTN started in January 2026 as <span className="text-accent">five engineers</span> who
+          kept running into the same problem in industry.
+        </p>
+        <div className="mx-auto mt-10 max-w-4xl space-y-6 text-center text-pretty text-lg leading-relaxed text-ink md:mt-12 md:text-xl md:leading-relaxed">
           <p>
-            WIGTN started in January 2026 as five engineers who kept running into the same
-            problem in industry. AI could do much of what companies asked of it, and then it
-            would fail in ways nobody had measured. A document parser whose output looked fine
-            would quietly hurt retrieval. A voice system would invent words out of silence. An
-            LLM judge would report an improvement that was only noise.
+            AI could do much of what companies asked of it, and then it would fail in ways
+            nobody had measured. A document parser whose output looked fine would quietly hurt
+            retrieval. A voice system would invent words out of silence. An LLM judge would
+            report an improvement that was only noise.
           </p>
           <p>
             So we worked on those problems, without a lab behind us. This year that work became
