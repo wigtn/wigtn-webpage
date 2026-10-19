@@ -13,14 +13,15 @@ promoted from a mockup and kept its folder name.
 ```
 app/                       routes; thin wrappers around mockups/research-led/*
 mockups/research-led/
-  data.ts                  articles, team, milestones, nav, selectors
+  data.ts                  articles, milestones, partners, nav, selectors
   links.ts                 URL constants a post may import (leaf module, see below)
   ArticleDetail.tsx        renders an Article's Block[]
   updates/<slug>/          one folder per post, notice or story: index.ts + images
   updates/_template/       four post templates + the shared rules
-public/images/             team portraits, logos, one milestone photo, the four
-                           module scenes the homepage plays, and the Seoul mask
-                           under Our Service. Nothing else.
+public/images/             logos (partners/ holds the Partners & Clients wall),
+                           one milestone photo, the four module scenes the
+                           homepage plays, and the Seoul mask under Our
+                           Service. Nothing else.
 ```
 
 `updates/` keeps its folder name through every rename above it, the same way
@@ -31,8 +32,9 @@ The site has four nav destinations: **About** (/team), **Notice** (/notices),
 **Story** (/story), and **Tech**, which is an external link to WIGTN Tech's
 report index. The landing page is three sections: Hero, Our Service (the
 business model: Web Agency and AX Agency as two halves that open when
-pointed at), Contact. About is "Who we are.": the members and the partners
-and clients, nothing else. A **Blog** section exists in the source
+pointed at), Contact. About is "Who we are.": the company's History (papers
+accepted and business relationships, from `MILESTONES`) and the partners and
+clients, nothing else. It does not introduce members individually. A **Blog** section exists in the source
 (BlogPage.tsx, the "blog" channel) but is closed and unrouted: it is reserved
 for business-track news (a signed subcontract, a program selection, a
 partnership), and it opens with its first qualifying post, not before.

@@ -1,21 +1,21 @@
 "use client";
 
-/** /team, labelled "About" in the nav: the crew roster and the Partners &
- * Clients wall, under one title and nothing else.
+/** /team, labelled "About" in the nav: the company's History and the
+ * Partners & Clients wall, under one title and nothing else.
  *
- * The page is "Who we are." and then the people. It briefly opened with the
- * record's capability list after the 2026-08-09 restructure; that duplicated
- * what the landing's What-we-do section already says, so the list went and
- * the title came back. No lead under the hero and no "Members" heading over
- * the roster: with a one-subject page, both were captions on the obvious.
+ * The page is "Who we are." answered as a company: what WIGTN has done, in
+ * order, and who it works with. It carried a member roster (portrait, role,
+ * one-line bio per person) until 2026-10-19. That came off when the site
+ * started presenting WIGTN as a company: the roster described individuals
+ * and their careers outside WIGTN, which is not what a client reading this
+ * page needs. Papers still name their authors where they are published.
  *
- * HistoryTimeline at the bottom of this file is retained but currently
- * unrendered; the deployed page excludes it on purpose. */
+ * No lead under the hero: History starts straight under it. */
 
 import { Fragment } from "react";
 import { motion } from "framer-motion";
 import { PageShell, PageHero, rise, VIEWPORT } from "./chrome";
-import { TEAM, MILESTONES, PARTNERS_AND_CLIENTS } from "./data";
+import { MILESTONES, PARTNERS_AND_CLIENTS } from "./data";
 
 /* Prefer wrapping at commas. Each clause is an inline-block, so the browser
  * takes the break between clauses before it breaks inside one; a clause too
@@ -54,70 +54,18 @@ export function TeamPage() {
     <PageShell>
       <PageHero title="Who we are." titleClassName="text-accent" />
 
-      {/* ── Crew: one row per person, portrait + name left, role + bio right.
-           Straight under the hero: the title is the section heading, so a
-           "Members" h2 here would say it twice. ── */}
-      <section className="max-w-5xl mx-auto px-6 pt-2 pb-28 md:pt-4 md:pb-36">
-        <ul className="divide-y divide-line/[0.08]">
-          {TEAM.map((m, i) => (
-            <motion.li
-              key={m.name}
-              variants={rise}
-              custom={i}
-              initial="hidden"
-              whileInView="show"
-              viewport={VIEWPORT}
-              className="grid gap-6 py-10 sm:grid-cols-[11rem_1fr] sm:items-center sm:gap-10 md:py-12"
-            >
-              {/* left: portrait, name underneath */}
-              <div className="flex flex-col items-center text-center">
-                <div className="h-32 w-32 overflow-hidden rounded-full bg-paper-tint ring-1 ring-inset ring-line/[0.08] md:h-36 md:w-36">
-                  {/* Decorative: the adjacent h3 already announces the name. */}
-                  <img
-                    src={m.image}
-                    alt=""
-                    style={m.imagePosition ? { objectPosition: m.imagePosition } : undefined}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <h3 className="mt-4 text-base font-semibold tracking-tight text-ink md:text-lg">
-                  {m.name}
-                </h3>
-              </div>
-
-              {/* right: WIGTN title (team lead only), discipline, one-line bio */}
-              <div className="text-center sm:text-left">
-                {m.position && (
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
-                    {m.position}
-                  </div>
-                )}
-                <div
-                  className={`font-display text-xl font-bold tracking-tight text-ink md:text-2xl ${
-                    m.position ? "mt-2" : ""
-                  }`}
-                >
-                  {m.role}
-                </div>
-                <p className="mt-3 max-w-2xl text-pretty leading-relaxed text-ink-3">
-                  {m.bio}
-                </p>
-              </div>
-            </motion.li>
-          ))}
-        </ul>
-      </section>
+      <HistoryTimeline />
 
       <Divider />
 
       {/* ── Partners & Clients: logo wall ──
            The title names both relationships at once, so no logo has to say
            which one it is. The list holds direct relationships only (see
-           PARTNERS_AND_CLIENTS in data.ts).
+           PARTNERS_AND_CLIENTS in data.ts); History says what each one was.
            Moved here from the homepage. This page answers who we are, and who
            we work with is part of that answer; the homepage is a teaser whose
            sections all hand off to a page, and this one had nowhere to hand off
-           to. It closes the page now that History is unrendered. */}
+           to. It closes the page. */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
         <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
           Partners &amp; Clients
@@ -154,49 +102,49 @@ export function TeamPage() {
   );
 }
 
-/* ── History (연혁): retained but currently unrendered ──
+/* ── History (연혁) ──
  *
- * The alternating timeline this page carried until 2026-08-09. It came out of
- * the render by decision, not by neglect: the About page is What we do,
- * Members, Partners & Clients now, and the month-by-month record was retired from the
- * deployed site while MILESTONES itself stays in data.ts (the homepage's
- * retained MilestoneTimeline reads it too). Mount it again by rendering
- * <HistoryTimeline /> after Partners & Clients, with a Divider between them. */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ * The vertical timeline, newest at the top and founding (2026.01) at the
+ * bottom. Retired from the render on 2026-08-09 and mounted again on
+ * 2026-10-19 in place of the roster, with MILESTONES narrowed to papers and
+ * business relationships (see the comment there).
+ *
+ * From md up the entries alternate around a centre line. Below md there is
+ * one column, so the line and its nodes move to the left edge and the text
+ * sits to their right; a centred line would run through the text. */
 function HistoryTimeline() {
-  // Newest at the top, founding (2026.01) at the bottom; drop placeholder entries.
   const history = MILESTONES.filter((m) => !m.placeholder).slice().reverse();
 
   return (
-    <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
+    <section className="max-w-6xl mx-auto px-6 pt-2 pb-28 md:pt-4 md:pb-36">
       <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">History</h2>
 
       {/* max-w-5xl, not 3xl: each side of the centre line is half of this,
           so a narrower rail chops titles and one-liners into three-word
           fragments. This keeps ~430px of measure per side. */}
       <div className="relative mx-auto mt-14 max-w-5xl md:mt-20">
-        {/* center pipeline */}
+        {/* the line: left edge on mobile, centre from md */}
         <span
           aria-hidden
-          className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-brand/30"
+          className="absolute inset-y-0 left-[7px] w-px bg-brand/30 md:left-1/2 md:-translate-x-1/2"
         />
         <ul className="space-y-12 md:space-y-16">
           {history.map((m, i) => {
             const left = i % 2 === 0;
             return (
               <motion.li
-                key={m.date}
+                key={`${m.date} ${m.title}`}
                 variants={rise}
                 custom={i}
                 initial="hidden"
                 whileInView="show"
                 viewport={VIEWPORT}
-                className="relative grid md:grid-cols-2 md:gap-16"
+                className="relative grid pl-9 md:grid-cols-2 md:gap-16 md:pl-0"
               >
-                {/* node on the center line */}
+                {/* node on the line */}
                 <span
                   aria-hidden
-                  className="absolute left-1/2 top-1.5 h-3.5 w-3.5 -translate-x-1/2 rounded-full bg-brand ring-4 ring-paper"
+                  className="absolute left-0 top-1.5 h-3.5 w-3.5 rounded-full bg-brand ring-4 ring-paper md:left-1/2 md:-translate-x-1/2"
                 />
                 <div className={left ? "md:pr-12 md:text-right" : "md:col-start-2 md:pl-12"}>
                   <div className="font-mono text-sm text-accent">{m.date}</div>
