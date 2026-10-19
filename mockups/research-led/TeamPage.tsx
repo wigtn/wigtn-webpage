@@ -67,18 +67,22 @@ export function TeamPage() {
            to. It opens the page; the top padding is PageHero's, which clears
            the sticky header. */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
+        {/* The ampersand is Pretendard's. Space Grotesk draws a stylised one
+            that reads as a stray symbol at heading size. */}
         <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
-          Partners &amp; Clients
+          Partners <span className="font-sans">&amp;</span> Clients
         </h2>
-        {/* Equal columns, each logo centred in its own: the row is centred on
-            the page, and the middle logo sits on the History centre line
-            below. One logo height per breakpoint, set as the li's font-size
-            so the logos (h-[1em]) and the type stand-in (0.94em) scale
-            together.
-            Each step is the largest that fits its narrowest column: 28px at
-            sm, 36px at md, 48px at lg, 56px from xl (a 322px-wide logo in a
-            346px column). One stacked column below sm takes 44px. */}
-        <ul className="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 text-[44px] sm:grid-cols-3 sm:text-[28px] md:mt-16 md:text-[36px] lg:text-[48px] xl:text-[56px]">
+        {/* One centred row with the same gap between every pair of
+            neighbours, so the spacing is symmetric whatever each logo's
+            width. Equal columns centred each logo in its own cell instead,
+            which put the two wide logos close together and left the narrow
+            one apart.
+            One logo height per breakpoint, set as the list's font-size so
+            the logos (h-[1em]) and the type stand-in scale together. Each
+            step keeps the row inside the container: 28px at sm, 36px at md,
+            48px at lg, 56px from xl. Below sm the logos stack in one
+            centred column at 44px. */}
+        <ul className="mt-14 flex flex-col items-center gap-y-14 text-[44px] sm:flex-row sm:justify-center sm:gap-x-12 sm:text-[28px] md:mt-16 md:text-[36px] lg:gap-x-24 lg:text-[48px] xl:text-[56px]">
           {PARTNERS_AND_CLIENTS.map((c) => (
             <motion.li
               key={c.name}
@@ -86,19 +90,22 @@ export function TeamPage() {
               initial="hidden"
               whileInView="show"
               viewport={VIEWPORT}
-              className="flex h-[1em] items-center justify-center"
+              className="flex h-[1em] items-center"
             >
               {c.logo ? (
                 /* The artwork is near-black, so dark mode turns it white.
-                   Each SVG's viewBox is trimmed to its artwork, so centring
-                   the box centres the logo. */
+                   Each SVG's viewBox is trimmed to its artwork, so the gap
+                   is measured from the ink, not from built-in margin. */
                 <img
                   src={c.logo}
                   alt={c.name}
-                  className="h-full w-auto max-w-full object-contain dark:brightness-0 dark:invert"
+                  className="h-full w-auto dark:brightness-0 dark:invert"
                 />
               ) : (
-                <span className="font-display text-[0.94em] font-bold leading-none tracking-tight text-ink">
+                /* Pretendard, not the display face: Space Grotesk's quirky
+                   forms made a plain company name look like a logo it is
+                   not. */
+                <span className="font-sans text-[0.9em] font-bold leading-none tracking-tight text-ink">
                   {c.name}
                 </span>
               )}
