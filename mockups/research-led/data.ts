@@ -111,7 +111,7 @@ export const NAV: NavItem[] = [
 
 /* ── The module kit ─────────────────────────────────────────────────────────
  *
- * The homepage's answer to what Web Agency actually is. A portfolio says we
+ * The homepage's answer to what Solutions actually is. A portfolio says we
  * finished some jobs; a kit says the next one starts from something already
  * built and already under test, which is nearer to what a client is buying.
  *
@@ -318,9 +318,12 @@ export type Practice = {
   /* Identity for the open state, and the React key. */
   slug: string;
   /* The name of the line of business, set as a micro-label. It says which of
-   * the two this is; the heading has a harder job. */
+   * the two this is; the heading has a harder job. The web half is
+   * "Solutions", the name of the team that runs it since WIGTN organised
+   * into Solutions, Product and Research (2026-10-19); it was "Web Agency"
+   * before. */
   kicker: string;
-  /* The heading, and it is a sentence with a verb in it. "Web Agency" and "AX
+  /* The heading, and it is a sentence with a verb in it. "Solutions" and "AX
    * Agency" are categories a reader has to already know; "We build it" and "We
    * measure it" are what we do, and the pair reads as one claim across the
    * divider. */
@@ -336,7 +339,7 @@ export type Practice = {
 export const PRACTICES: Practice[] = [
   {
     slug: "web",
-    kicker: "Web Agency",
+    kicker: "Solutions",
     title: "We build it",
     lead: "Websites and web products, built from modules we own and keep under test.",
     cue: "4 modules",
