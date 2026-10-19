@@ -11,7 +11,11 @@ export const THEME_STORAGE_KEY = "wigtn-theme";
 /**
  * Runs before first paint (inlined into <head>) so the page never flashes the
  * wrong theme. Dependency-free on purpose, since an external module would load too
- * late. Resolution order: explicit choice in localStorage → OS preference.
+ * late. Resolution order: explicit choice in localStorage → light.
+ *
+ * Light is the site's theme; dark is opt-in through the header toggle. The OS
+ * preference used to decide the first visit, which put every dark-mode laptop
+ * on the dark site. A visitor who already picked a side keeps it.
  */
 export const themeInitScript = `
 (function () {
@@ -19,12 +23,6 @@ export const themeInitScript = `
   try {
     stored = localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)});
   } catch (e) {}
-  var theme =
-    stored === "light" || stored === "dark"
-      ? stored
-      : window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
-  document.documentElement.classList.toggle("dark", theme === "dark");
+  document.documentElement.classList.toggle("dark", stored === "dark");
 })();
 `.trim();

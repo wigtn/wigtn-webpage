@@ -7,18 +7,13 @@
  * app/globals.css under `:root` (light) and `.dark`. Flipping the theme is
  * therefore a single class toggle on <html>; nothing re-renders.
  *
- * Resolution order: explicit choice in localStorage → OS preference. Until
- * someone picks a side, the site keeps tracking the OS so a dark-mode laptop
- * lands on dark.
+ * Resolution order: explicit choice in localStorage → light. The OS
+ * preference is not consulted (see themeInitScript in lib/theme.ts).
  */
 
 import { useCallback, useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
-
-function systemTheme(): Theme {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-}
 
 function storedTheme(): Theme | null {
   try {
@@ -49,21 +44,10 @@ export function useTheme() {
     // Re-resolve here as a CSP/storage-safe fallback. The pre-paint script is
     // still the fast path, but the hydrated control must not blindly trust a
     // missing class if that script or localStorage access was blocked.
-    const initial = storedTheme() ?? systemTheme();
+    const initial = storedTheme() ?? "light";
     document.documentElement.classList.toggle("dark", initial === "dark");
     setTheme(initial);
     setMounted(true);
-
-    // Keep following the OS until the visitor makes an explicit choice.
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = () => {
-      if (storedTheme()) return;
-      const next = systemTheme();
-      applyTheme(next);
-      setTheme(next);
-    };
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
   }, []);
 
   const toggle = useCallback(() => {
