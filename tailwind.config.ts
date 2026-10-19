@@ -65,6 +65,20 @@ const config: Config = {
          * OS default (Menlo vs Consolas). This is the research-lab texture. */
         mono: ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
       },
+      /* History's timeline: a bright segment sweeps up the line, then the
+       * line rests for as long again. Transform only, so it never lays out.
+       * The segment starts below the track and ends above it, where the
+       * track's overflow hides it, so the loop's jump back is never seen.
+       * See HistoryTimeline in mockups/research-led/TeamPage.tsx. */
+      keyframes: {
+        "timeline-rise": {
+          "0%": { transform: "translateY(100%)" },
+          "50%, 100%": { transform: "translateY(-8rem)" },
+        },
+      },
+      animation: {
+        "timeline-rise": "timeline-rise 5s cubic-bezier(0.65, 0, 0.35, 1) infinite",
+      },
     },
   },
   plugins: [],

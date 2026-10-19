@@ -1,7 +1,7 @@
 "use client";
 
 /** /team, labelled "About" in the nav: a short introduction signed by the
- * founder, the Partners & Clients wall, then the company's History, and
+ * founder, the Partners wall, then the company's History, and
  * nothing else.
  *
  * The page answers who WIGTN is as a company: what it is, who it works with,
@@ -96,19 +96,18 @@ export function TeamPage() {
 
       <Divider />
 
-      {/* ── Partners & Clients: logo wall ──
-           The title names both relationships at once, so no logo has to say
-           which one it is. The list holds direct relationships only (see
-           PARTNERS_AND_CLIENTS in data.ts); History says what each one was.
+      {/* ── Partners: logo wall ──
+           The list holds direct relationships only (see PARTNERS_AND_CLIENTS
+           in data.ts, named for the wall's old title); History says what
+           each one was.
            Moved here from the homepage. This page answers who we are, and who
            we work with is part of that answer; the homepage is a teaser whose
            sections all hand off to a page, and this one had nowhere to hand off
            to. */}
       <section className="max-w-6xl mx-auto px-6 pt-28 pb-28 md:pt-36 md:pb-36">
-        {/* The ampersand is Pretendard's. Space Grotesk draws a stylised one
-            that reads as a stray symbol at heading size. */}
+        {/* "Partners" since 2026-10-20; it read "Partners & Clients". */}
         <h2 className="font-display text-[clamp(2rem,5vw,3rem)] font-bold tracking-tight text-accent">
-          Partners <span className="font-sans">&amp;</span> Clients
+          Partners
         </h2>
         {/* One centred row with the same gap between every pair of
             neighbours, so the spacing is symmetric whatever each logo's
@@ -166,7 +165,7 @@ export function TeamPage() {
  * bottom. Retired from the render on 2026-08-09 and mounted again on
  * 2026-10-19 in place of the roster, with MILESTONES narrowed to papers and
  * business relationships (see the comment there). It closes the page, under
- * Partners & Clients.
+ * Partners.
  *
  * From md up the entries alternate around a centre line. Below md there is
  * one column, so the line and its nodes move to the left edge and the text
@@ -195,6 +194,22 @@ function HistoryTimeline() {
             aria-hidden
             className="absolute inset-y-0 left-[7px] w-px bg-brand/30 md:left-1/2 md:-translate-x-1/2"
           />
+          {/* The sweep: every five seconds a bright segment runs up the line
+              from the founding to the newest entry, the direction the record
+              grows, and the line rests for the other half. The track is a
+              clipped 8px strip on the line, so the segment appears out of
+              the bottom and leaves through the top; the nodes are drawn over
+              it. A blurred wide copy under a 2px core makes the glow. Off
+              under reduced motion. */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 left-[7.5px] w-2 -translate-x-1/2 overflow-hidden motion-reduce:hidden md:left-1/2"
+          >
+            <span className="absolute inset-0 animate-timeline-rise">
+              <span className="absolute left-1/2 top-0 h-32 w-2 -translate-x-1/2 bg-gradient-to-t from-transparent via-brand/50 to-transparent blur-[3px]" />
+              <span className="absolute left-1/2 top-0 h-32 w-[2px] -translate-x-1/2 bg-gradient-to-t from-transparent via-brand to-transparent" />
+            </span>
+          </span>
           <ul className="space-y-12 md:space-y-16">
             {history.map((m, i) => {
               const left = i % 2 === 0;
