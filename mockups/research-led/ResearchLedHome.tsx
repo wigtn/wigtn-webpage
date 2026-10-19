@@ -11,8 +11,8 @@
  *     leaning on `accent` for legibility on light)
  *   - Everything that is not a link out of the page is separated by a
  *     hairline, not boxed.
- * Sections: 1 Hero · 2 Our Service (the two lines of business, side by
- * side) · 3 CTA, a Divider between each pair. The evidence for section 2 is
+ * Sections: 1 Hero · 2 Our Service (the three teams, side by side) ·
+ * 3 CTA, a Divider between each pair. The evidence for section 2 is
  * inside it now, in the half that claims it. The landing held the record's capability list, a Notices rail and
  * a WIGTN Tech rail until 2026-08-09; the release ledger is /notices, and the
  * stories live under /story. MilestoneTimeline is retained but currently
@@ -172,10 +172,12 @@ function Divider() {
 
 /* ───── Our Service ─────────────────────────────────────────────────────────
  *
- * The two lines of business as two halves of one section. At rest they are
- * 50/50 and each shows its names; point at one and it takes 78 percent of the
- * width while the other folds to 22, where its name and label still read
- * horizontally without any rotated-spine trick.
+ * The three teams (Solutions, Product, Research) as three panels of one
+ * section. At rest they share the width equally and each shows its names;
+ * point at one and it takes 70 percent while the other two fold to 15 each,
+ * where the label and the heading still read horizontally without any
+ * rotated-spine trick. It was two halves (Web Agency, AX Agency) at 50/50
+ * opening to 78/22 until 2026-10-19.
  *
  * WHY ONE SECTION. They were two stacked bands, one practice each, and that was
  * honest but cost about 1,800px of page to say seven things. Side by side, the
@@ -208,12 +210,18 @@ function Divider() {
  * answering "which one is this" or "which one is live".
  */
 
-/* How wide the pointed-at half becomes, and the fixed parts of a half its items
- * have to make room for. The items are laid out at a width computed from these
- * rather than at whatever width the half has mid-animation: a four-column grid
- * that re-solves every frame reflows its text the whole way open, which reads
- * as the words settling rather than as the panel opening. */
-const OPEN_SHARE = 0.78;
+/* How wide the pointed-at panel becomes, and the fixed parts of a panel its
+ * items have to make room for. The items are laid out at a width computed from
+ * these rather than at whatever width the panel has mid-animation: a
+ * four-column grid that re-solves every frame reflows its text the whole way
+ * open, which reads as the words settling rather than as the panel opening.
+ *
+ * 0.7 with three panels leaves each folded one 15 percent: 216px at 1440,
+ * 192px at 1280. That holds the label and the heading over two lines, not the
+ * lead or the names, so a folded panel drops those. Opening wider would push
+ * the heading to three lines; narrower would squeeze the four web modules
+ * below about 110px each. */
+const OPEN_SHARE = 0.7;
 const NAME_COL = 240;
 const INNER_PAD = 28;
 const ITEMS_GAP = 40;
@@ -225,11 +233,16 @@ const PAGE_PAD = 24;
 function Practices() {
   const frame = useRef<HTMLDivElement | null>(null);
   const [open, setOpen] = useState<string | null>(null);
-  const [box, setBox] = useState<{ gutter: number; items: number } | null>(null);
+  const [box, setBox] = useState<{
+    gutter: number;
+    edge: number;
+    middle: number;
+    fold: number;
+  } | null>(null);
   const [split, setSplit] = useState(false);
   const still = useReducedMotion();
 
-  /* Whether the two halves are side by side at all. `inert` is an attribute,
+  /* Whether the panels are side by side at all. `inert` is an attribute,
    * not a style, so it cannot be applied at a breakpoint the way the layout is:
    * below xl everything is stacked and open, and marking it inert there would
    * hide the whole section from a phone. */
@@ -247,10 +260,13 @@ function Practices() {
   const { scrollYProgress } = useScroll({ target: frame, offset: ["start end", "end start"] });
   const drift = useTransform(scrollYProgress, [0, 1], [34, -34]);
 
-  /* Two numbers come off the band's own width, and both exist for the same
-   * reason: the ground is full bleed and the words are not. The outer padding
-   * is whatever puts a half's text on the page's left or right margin, and the
-   * items get what is left of the open share after it.
+  /* The numbers come off the band's own width, for the same reason: the
+   * ground is full bleed and the words are not. The outer padding is whatever
+   * puts an end panel's text on the page's left or right margin, and the items
+   * get what is left of the open share after it. The middle panel has inner
+   * padding on both sides, so its items get a width of their own. A folded
+   * panel's name column is set to the folded width up front, so the heading
+   * wraps once rather than on every frame of the fold.
    *
    * Both are read with a fallback where they are used, because neither exists
    * in the exported HTML and an observer cannot run before the first paint:
@@ -262,9 +278,13 @@ function Practices() {
     const ro = new ResizeObserver(([entry]) => {
       const w = entry.contentRect.width;
       const gutter = Math.max(PAGE_PAD, Math.round((w - PAGE_W) / 2) + PAGE_PAD);
+      const open = Math.round(w * OPEN_SHARE);
+      const fixed = INNER_PAD + NAME_COL + ITEMS_GAP;
       setBox({
         gutter,
-        items: Math.max(0, Math.round(w * OPEN_SHARE) - gutter - INNER_PAD - NAME_COL - ITEMS_GAP),
+        edge: Math.max(0, open - gutter - fixed),
+        middle: Math.max(0, open - INNER_PAD - fixed),
+        fold: Math.max(0, Math.round((w * (1 - OPEN_SHARE)) / (PRACTICES.length - 1)) - 2 * INNER_PAD),
       });
     });
     ro.observe(el);
@@ -283,9 +303,9 @@ function Practices() {
 
       {/* Full bleed, because the reference's band runs to the edge and because a
           tinted half with the page showing down both sides is a card. Closing
-          the pointer out of the whole band, not out of a half, is what returns
-          it to 50/50: leaving one half by crossing into the other must not
-          flicker through the resting state on the way. */}
+          the pointer out of the whole band, not out of a panel, is what returns
+          it to equal thirds: leaving one panel by crossing into another must
+          not flicker through the resting state on the way. */}
       <div
         ref={frame}
         /* Not while the keyboard is in there. Closing a half under a focused
@@ -296,7 +316,12 @@ function Practices() {
         }}
         style={
           box
-            ? ({ "--gutter": `${box.gutter}px`, "--items-w": `${box.items}px` } as CSSProperties)
+            ? ({
+                "--gutter": `${box.gutter}px`,
+                "--items-edge": `${box.edge}px`,
+                "--items-mid": `${box.middle}px`,
+                "--fold-w": `${box.fold}px`,
+              } as CSSProperties)
             : undefined
         }
         className="relative mt-12 overflow-hidden border-y border-line/[0.14] md:mt-16 xl:flex xl:h-[27rem]"
@@ -320,20 +345,26 @@ function Practices() {
         </motion.div>
 
         {PRACTICES.map((practice, i) => {
+          const last = PRACTICES.length - 1;
           const isOpen = open === practice.slug;
           const folded = open !== null && !isOpen;
-          const basis = open === null ? 50 : isOpen ? OPEN_SHARE * 100 : (1 - OPEN_SHARE) * 100;
-          /* The outer padding is the page margin, until the half folds. At
-           * 1440 that margin is 168px and a folded half is 317px wide, so
-           * keeping it would leave 121px for a 240px name column and cut the
-           * heading off mid-word. Folded, the padding drops to the inner one
-           * and the block slides out to the wall it is being pushed against,
-           * which is also what it looks like: pushed aside, not sheared. */
+          const basis =
+            open === null ? 100 / PRACTICES.length : isOpen ? OPEN_SHARE * 100 : ((1 - OPEN_SHARE) / last) * 100;
+          /* An end panel's outer padding is the page margin, until it folds.
+           * At 1440 that margin is 168px and a folded panel is 216px wide, so
+           * keeping it would leave no room for the heading. Folded, the
+           * padding drops to the inner one and the block slides out to the
+           * wall it is being pushed against, which is also what it looks like:
+           * pushed aside, not sheared. The middle panel has the inner padding
+           * on both sides throughout. */
           const pad = folded
             ? "xl:pl-7 xl:pr-7"
-            : i === 1
-              ? "xl:pl-7 xl:[padding-right:var(--gutter,1.5rem)]"
-              : "xl:pr-7 xl:[padding-left:var(--gutter,1.5rem)]";
+            : i === 0
+              ? "xl:pr-7 xl:[padding-left:var(--gutter,1.5rem)]"
+              : i === last
+                ? "xl:pl-7 xl:[padding-right:var(--gutter,1.5rem)]"
+                : "xl:px-7";
+          const empty = practice.rows.length === 0;
           return (
             <div
               key={practice.slug}
@@ -349,39 +380,52 @@ function Practices() {
               onClick={() => split && setOpen(practice.slug)}
               style={{ flexBasis: `${basis}%` }}
               className={`relative overflow-hidden px-6 py-9 transition-[flex-basis,background-color,padding] duration-[620ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none xl:flex xl:py-7 ${pad} ${
-                i === 1 ? "border-t border-line/[0.14] xl:border-t-0" : ""
+                i > 0 ? "border-t border-line/[0.14] xl:border-t-0" : ""
               } ${isOpen ? "bg-brand/[0.038]" : ""}`}
             >
               {/* The divider is brand in the middle and the page's own hairline
-                  at both ends, so the colour is at the point the two halves meet
+                  at both ends, so the colour is at the point two panels meet
                   rather than along the whole edge. */}
-              {i === 1 && (
+              {i > 0 && (
                 <span
                   aria-hidden
                   className="absolute inset-y-0 left-0 z-[2] hidden w-px bg-gradient-to-b from-rule via-brand/50 to-rule xl:block"
                 />
               )}
 
-              <div className="relative z-[1] flex flex-col xl:w-60 xl:shrink-0">
+              <div
+                className={`relative z-[1] flex flex-col xl:shrink-0 ${
+                  folded ? "xl:[width:var(--fold-w,10rem)]" : "xl:w-60"
+                }`}
+              >
                 <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
                   {practice.kicker}
                 </span>
                 <h3 className="mt-3.5 font-display text-[2rem] font-normal leading-[1.02] tracking-[-0.04em] text-ink">
                   {practice.title}
                 </h3>
-                <p className="mt-4 max-w-[26ch] text-pretty text-sm leading-relaxed text-ink-3">
-                  {practice.lead}
-                </p>
+                {/* Folded, the column is too narrow for the lead and the names,
+                    so both leave; the label and the heading are what a folded
+                    panel has to say. */}
+                {practice.lead && (
+                  <p
+                    className={`mt-4 max-w-[26ch] text-pretty text-sm leading-relaxed text-ink-3 ${
+                      folded ? "xl:hidden" : ""
+                    }`}
+                  >
+                    {practice.lead}
+                  </p>
+                )}
 
-                {/* The names, and only until this half has something better to
+                {/* The names, and only until this panel has something better to
                     show. Hidden on a phone, where the items themselves are
                     always on screen and a list of the same names above them
                     would just be the same list twice. */}
                 <div
                   aria-hidden={split && isOpen}
-                  className={`mt-7 hidden flex-col gap-2 transition-[opacity,transform] duration-300 xl:flex ${
-                    isOpen ? "pointer-events-none -translate-y-1.5 opacity-0" : "opacity-100"
-                  }`}
+                  className={`mt-7 hidden flex-col gap-2 transition-[opacity,transform] duration-300 ${
+                    folded || empty ? "" : "xl:flex"
+                  } ${isOpen ? "pointer-events-none -translate-y-1.5 opacity-0" : "opacity-100"}`}
                 >
                   {practice.rows.map((row) => (
                     <span
@@ -406,7 +450,7 @@ function Practices() {
                     setOpen(isOpen ? null : practice.slug);
                   }}
                   aria-expanded={isOpen}
-                  aria-label={`${practice.kicker}: ${practice.cue}`}
+                  aria-label={`${practice.kicker}: ${practice.cue ?? practice.title}`}
                   className={`mt-auto hidden items-center gap-2.5 pt-8 font-mono text-[11px] uppercase tracking-[0.2em] underline-offset-[6px] transition-colors focus-visible:text-accent focus-visible:underline focus-visible:outline-none xl:flex ${
                     isOpen ? "text-accent" : "text-ink-4 hover:text-ink-2"
                   }`}
@@ -428,11 +472,18 @@ function Practices() {
                   stay readable, and the cue button opens this. */}
               <div
                 inert={split && !isOpen}
-                className={`relative z-[1] mt-9 w-full xl:mt-0 xl:ml-10 xl:shrink-0 xl:[width:var(--items-w,0px)] xl:transition-[opacity,transform] xl:duration-500 xl:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:xl:transition-none ${
+                className={`relative z-[1] mt-9 w-full xl:mt-0 xl:ml-10 xl:shrink-0 xl:transition-[opacity,transform] xl:duration-500 xl:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:xl:transition-none ${
+                  i === 0 || i === last ? "xl:[width:var(--items-edge,0px)]" : "xl:[width:var(--items-mid,0px)]"
+                } ${empty ? "hidden xl:block" : ""} ${
                   isOpen ? "xl:translate-x-0 xl:opacity-100" : "xl:translate-x-4 xl:opacity-0"
                 }`}
               >
-                {practice.slug === "web" ? (
+                {empty ? (
+                  /* Nothing to show yet, and nothing invented to fill the
+                     space: an empty frame says it is reserved. Desktop only;
+                     stacked, the heading already says "Coming soon". */
+                  <div aria-hidden className="h-full border border-dashed border-line/20" />
+                ) : practice.slug === "web" ? (
                   <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 xl:h-full xl:grid-cols-4 xl:gap-5">
                     {practice.rows.map((row) => (
                       <ModuleCard key={row.slug} row={row} live={isOpen && !still} />

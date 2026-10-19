@@ -307,14 +307,21 @@ const AX_ROWS: PracticeRow[] = [
   },
 ];
 
-/* ── The two lines of business ──────────────────────────────────────────────
+/* ── The three teams ─────────────────────────────────────────────────────────
  *
- * What we do used to state these as two cards with keyword tags, which is the
- * shape every agency site uses and says nothing either of them could not say.
- * Then they were two stacked bands, one practice each, which was honest but
- * ran to about 1,800px of page for seven items. They are now two halves of one
- * section that open when pointed at, so the whole business fits in 432px and
- * the reader chooses which half spends it.
+ * What we do used to state the lines of business as two cards with keyword
+ * tags, which is the shape every agency site uses and says nothing either of
+ * them could not say. Then they were two stacked bands, one practice each,
+ * which was honest but ran to about 1,800px of page for seven items. Then two
+ * halves of one section that open when pointed at, so the whole business fit
+ * in 432px and the reader chose which half spent it.
+ *
+ * Since 2026-10-19 the panels are WIGTN's three teams, in the order the
+ * company names them: Solutions, Product, Research. Solutions keeps the web
+ * modules and Research keeps the AX stages (the kickers were "Web Agency" and
+ * "AX Agency"; the slugs stay "web" and "ax" as identities). Product has
+ * nothing to show yet, so it carries a title and no rows, and opens onto an
+ * empty frame rather than onto invented content.
  *
  * The leads are the old SERVICES copy, cut to what fits a 240px column. The
  * sentence about our own measurements being on WIGTN Tech moved up to the section
@@ -322,22 +329,21 @@ const AX_ROWS: PracticeRow[] = [
 export type Practice = {
   /* Identity for the open state, and the React key. */
   slug: string;
-  /* The name of the line of business, set as a micro-label. It says which of
-   * the two this is; the heading has a harder job. The web half is
-   * "Solutions", the name of the team that runs it since WIGTN organised
-   * into Solutions, Product and Research (2026-10-19); it was "Web Agency"
-   * before. */
+  /* The team's name, set as a micro-label. It says which of the three this
+   * is; the heading has a harder job. */
   kicker: string;
-  /* The heading, and it is a sentence with a verb in it. "Solutions" and "AX
-   * Agency" are categories a reader has to already know; "We build it" and "We
-   * measure it" are what we do, and the pair reads as one claim across the
-   * divider. */
+  /* The heading, and it is a sentence with a verb in it. Team names are
+   * categories a reader has to already know; "We build it" and "We
+   * measure it" are what we do. Product's is "Coming soon" until it has
+   * something to show. */
   title: string;
-  lead: string;
-  /* How much is behind this half, said before it opens. It is the closest thing
-   * the section has to an affordance: "4 modules" tells a reader there is
-   * something under the pointer without drawing a button that is not there. */
-  cue: string;
+  lead?: string; // absent while a team has nothing to describe
+  /* How much is behind this panel, said before it opens. It is the closest
+   * thing the section has to an affordance: "4 modules" tells a reader there
+   * is something under the pointer without drawing a button that is not
+   * there. Absent when nothing is behind it; the disclosure button stays for
+   * the keyboard and shows only its rule. */
+  cue?: string;
   rows: PracticeRow[];
 };
 
@@ -351,8 +357,14 @@ export const PRACTICES: Practice[] = [
     rows: WEB_ROWS,
   },
   {
+    slug: "product",
+    kicker: "Product",
+    title: "Coming soon",
+    rows: [],
+  },
+  {
     slug: "ax",
-    kicker: "AX Agency",
+    kicker: "Research",
     title: "We measure it",
     lead: "We find where AI has leverage, build it in, and measure whether it moved anything.",
     cue: "3 stages",
