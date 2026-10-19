@@ -259,7 +259,6 @@ function Practices() {
   const [box, setBox] = useState<{
     gutter: number;
     edge: number;
-    middle: number;
     fold: number;
   } | null>(null);
   const [split, setSplit] = useState(false);
@@ -286,8 +285,11 @@ function Practices() {
   /* The numbers come off the band's own width, for the same reason: the
    * ground is full bleed and the words are not. The outer padding is whatever
    * puts an end panel's text on the page's left or right margin, and the items
-   * get what is left of the open share after it. The middle panel has inner
-   * padding on both sides, so its items get a width of their own. A folded
+   * get what is left of the open share after it. Every panel's items take
+   * that same width, the middle one included: it has inner padding on both
+   * sides and so more room, but a wider grid there made Product's cards a
+   * size larger than Solutions' and R&D's, and the spare room now sits to the
+   * right of its cards instead. A folded
    * panel's name column is set to the folded width up front, so the heading
    * wraps once rather than on every frame of the fold.
    *
@@ -306,7 +308,6 @@ function Practices() {
       setBox({
         gutter,
         edge: Math.max(0, open - gutter - fixed),
-        middle: Math.max(0, open - INNER_PAD - fixed),
         fold: Math.max(0, Math.round((w * (1 - OPEN_SHARE)) / (PRACTICES.length - 1)) - 2 * INNER_PAD),
       });
     });
@@ -342,7 +343,6 @@ function Practices() {
             ? ({
                 "--gutter": `${box.gutter}px`,
                 "--items-edge": `${box.edge}px`,
-                "--items-mid": `${box.middle}px`,
                 "--fold-w": `${box.fold}px`,
               } as CSSProperties)
             : undefined
@@ -531,7 +531,7 @@ function Practices() {
                 <div
                   inert={split && !isOpen}
                   className={`relative z-[1] mt-9 w-full xl:mt-0 xl:ml-10 xl:shrink-0 xl:transition-[opacity,transform] xl:duration-500 xl:ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:xl:transition-none ${
-                    i === 0 || i === last ? "xl:[width:var(--items-edge,0px)]" : "xl:[width:var(--items-mid,0px)]"
+                    "xl:[width:var(--items-edge,0px)]"
                   } ${isOpen ? "xl:translate-x-0 xl:opacity-100" : "xl:translate-x-4 xl:opacity-0"}`}
                 >
                   <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 xl:gap-5">
@@ -662,7 +662,8 @@ function ModuleCard({ row, live }: { row: PracticeRow; live: boolean }) {
  * project or a paper has no public page, so its card is not a link rather
  * than one that goes nowhere.
  *
- * A release's picture is its cover art, cropped to 16:9 to fill. A project's
+ * A release's picture is its cover art, cropped to fill the same tile a logo
+ * gets. A project's
  * or a paper's is a logo on a white tile, white in both themes so every logo
  * keeps its own colours (SK hynix's red and orange, the venues' marks); a
  * dark-mode inversion would turn them into different logos. Wide wordmarks
@@ -672,7 +673,11 @@ function TeamCard({ row }: { row: PracticeRow }) {
   const body = (
     <>
       {row.image ? (
-        <span className="relative block aspect-[16/9] overflow-hidden bg-paper-tint ring-1 ring-inset ring-line/10 group-focus-visible:ring-accent">
+        /* The same box as a logo tile from sm up, so the three panels' cards
+           match; cover art is cropped to it, centred. Stacked on a phone it
+           keeps 16:9, because a full-width 80px strip would cut the art down
+           to a sliver. */
+        <span className="relative block aspect-[16/9] overflow-hidden bg-paper-tint ring-1 ring-inset ring-line/10 group-focus-visible:ring-accent sm:aspect-auto sm:h-24 xl:h-20">
           <img
             src={row.image}
             alt=""
