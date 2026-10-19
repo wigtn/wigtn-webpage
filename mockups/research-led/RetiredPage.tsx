@@ -31,10 +31,9 @@ export function RetiredPage({
   title: string;
   note: string;
 }) {
-  /* The tech-report heading only for one report. TimeLens forwards off-site
-   * too, to its repository, and is not in the tech reports; /research and
-   * /tech-reports forward to the index, where "WIGTN Tech is now in the tech
-   * reports" would be the sentence. Both get the plain heading. */
+  /* The tech-report heading only for one report. Any other destination,
+   * off-site or not, gets the plain heading: "<title> is now in the tech
+   * reports" is only true of a report. */
   const toReport = to.startsWith(TECH_REPORT_SITE) && to !== TECH_REPORT_INDEX;
 
   return (
@@ -70,7 +69,8 @@ export function RetiredPage({
  *
  * og:url points at the destination as well. Without it a redirect page
  * inherited the layout's, and a shared link to /news previewed as the
- * homepage. Shared by app/[slug] and the app/<prefix>/[slug] routes. */
+ * homepage. Kept out of app/[slug]/page.tsx so the redirect page and its
+ * metadata are defined in one file. */
 export function retiredMetadata(retired: Retired): Metadata {
   return pageMetadata({
     title: `Moved: ${retired.title}`,

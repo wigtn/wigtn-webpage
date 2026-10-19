@@ -36,7 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const newestRelease = RELEASE_ROWS[0].date;
   const newestStory = STORY_FEED[0].date;
 
-  /* Retired routes (/work, /news, /projects and the rest of RETIRED) still
+  /* Retired routes (/work, /news and the rest of RETIRED) still
    * resolve as redirect pages and none is listed here, because a redirect is
    * not a page worth indexing.
    *
