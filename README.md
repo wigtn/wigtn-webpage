@@ -31,7 +31,7 @@
 - **AX Consulting**: We map where AI can create real leverage for your business and hand you a clear, prioritized roadmap.
 - **AI System Integration**: We build AI capabilities directly into the products and workflows you already run.
 - **AI R&D**: We push the frontier through applied research, and bring what we learn back into what we build for you.
-- **Web Agency**: We design and ship polished marketing sites and web products, end to end.
+- **Solutions**: We design and ship polished marketing sites and web products, end to end.
 
 ## Proof
 
