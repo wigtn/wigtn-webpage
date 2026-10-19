@@ -658,7 +658,7 @@ export const MILESTONES: Milestone[] = [
   {
     month: "Feb",
     date: "2026.02",
-    label: "Web Agency",
+    label: "Arustay",
     title: "Arustay: Website Development",
   },
   {
