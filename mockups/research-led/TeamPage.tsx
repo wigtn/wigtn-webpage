@@ -136,7 +136,9 @@ export function TeamPage() {
                    measured from the ink, not from built-in margin. */
                 <img
                   src={c.logo}
-                  alt={c.name}
+                  alt={`${c.name} logo`}
+                  loading="lazy"
+                  decoding="async"
                   className="h-full w-auto dark:brightness-0 dark:invert"
                 />
               ) : (

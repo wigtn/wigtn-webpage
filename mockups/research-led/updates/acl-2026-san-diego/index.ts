@@ -68,8 +68,11 @@ import workshopTalk from "./workshop-talk.jpg";
 
 const p = (text: string): Block => ({ t: "p", text });
 
-/* Exported so the hero/cover can reuse the same file the body does. */
-export const ACL_2026_COVER = teamCover.src;
+/* Exported because STORIES in ../../data.ts shows this cover on the /story
+ * row and the story page's social card uses it. The whole image import, not
+ * its `src`, so the card can state the width and height. Those are the only
+ * consumers; do not add the export to a post without one. */
+export const ACL_2026_COVER = teamCover;
 
 export const acl2026SanDiego: Article = {
   slug: "acl-2026-san-diego",

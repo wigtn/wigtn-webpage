@@ -1,4 +1,8 @@
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { PageShell } from "./chrome";
+import type { Retired } from "./data";
+import { TECH_REPORT_INDEX, TECH_REPORT_SITE } from "./links";
 
 /**
  * A page that used to live at this URL and now lives somewhere else.
@@ -27,7 +31,11 @@ export function RetiredPage({
   title: string;
   note: string;
 }) {
-  const offSite = to.startsWith("http");
+  /* The tech-report heading only for one report. TimeLens forwards off-site
+   * too, to its repository, and is not in the tech reports; /research and
+   * /tech-reports forward to the index, where "WIGTN Tech is now in the tech
+   * reports" would be the sentence. Both get the plain heading. */
+  const toReport = to.startsWith(TECH_REPORT_SITE) && to !== TECH_REPORT_INDEX;
 
   return (
     <PageShell>
@@ -37,7 +45,7 @@ export function RetiredPage({
           Moved
         </span>
         <h1 className="font-display mt-4 text-3xl font-bold leading-tight tracking-tight text-ink md:text-4xl">
-          {offSite ? `${title} is now in the tech reports` : `This page moved`}
+          {toReport ? `${title} is now in the tech reports` : `This page moved`}
         </h1>
         <p className="mt-5 leading-relaxed text-ink-3">
           {note}
@@ -52,4 +60,21 @@ export function RetiredPage({
       </div>
     </PageShell>
   );
+}
+
+/* Canonical points at the destination, and nothing else does. An earlier
+ * version also set robots noindex, which contradicts it: canonical asks a
+ * crawler to fold this URL's signal into the destination, noindex asks it to
+ * drop the URL, and noindex wins. Dropping it loses the consolidation this
+ * page exists to get.
+ *
+ * og:url points at the destination as well. Without it a redirect page
+ * inherited the layout's, and a shared link to /news previewed as the
+ * homepage. Shared by app/[slug] and the app/<prefix>/[slug] routes. */
+export function retiredMetadata(retired: Retired): Metadata {
+  return pageMetadata({
+    title: `Moved: ${retired.title}`,
+    description: `This page has moved to ${retired.to}`,
+    path: retired.to,
+  });
 }

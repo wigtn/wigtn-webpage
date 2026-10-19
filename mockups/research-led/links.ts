@@ -60,3 +60,7 @@ export const storyHref = (slug: string) => `${STORY_INDEX}/${slug}`;
  * stay in the source, unrouted, waiting for the first real post. */
 export const BLOG_INDEX = "/blog";
 export const blogHref = (slug: string) => `${BLOG_INDEX}/${slug}`;
+
+/* TimeLens, the Gemini Live Agent Challenge entry. Its post left this site
+ * and its repository is public, so retired TimeLens URLs forward here. */
+export const TIMELENS_REPO = "https://github.com/wigtn/wigtn-timelens";

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { SITE_URL } from "@/lib/brand";
+import { pageMetadata } from "@/lib/metadata";
+import { postSchema } from "@/lib/schema";
+import { JsonLd } from "@/components/JsonLd";
 import { ArticleDetail } from "@/mockups/research-led/ArticleDetail";
-import { STORY_FEED, getArticle } from "@/mockups/research-led/data";
+import { STORY_FEED, getArticle, getStory } from "@/mockups/research-led/data";
 
 /**
  * Static params for `output: "export"`: one page per long-form story, served
@@ -27,21 +29,20 @@ export async function generateMetadata({
     return {};
   }
 
-  return {
-    title: `${article.title} | WIGTN`,
+  /* The card is the story's cover, the picture its /story row shows. */
+  const cover = getStory(article.slug)?.cover;
+  return pageMetadata({
+    title: article.title,
     description: article.summary,
-    /* No trailing slash: the Pages build exports flat files, so `/story/slug`
-     * is the URL that resolves and `/story/slug/` 404s. */
-    alternates: {
-      canonical: `/story/${article.slug}`,
+    path: `/story/${article.slug}`,
+    type: "article",
+    image: cover && {
+      url: cover.src,
+      width: cover.width,
+      height: cover.height,
+      alt: article.title,
     },
-    openGraph: {
-      title: article.title,
-      description: article.summary,
-      url: `${SITE_URL}/story/${article.slug}`,
-      type: "article",
-    },
-  };
+  });
 }
 
 export default async function StoryPostPage({
@@ -50,5 +51,11 @@ export default async function StoryPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  return <ArticleDetail slug={slug} />;
+  const article = getArticle(slug);
+  return (
+    <>
+      {article && <JsonLd data={postSchema(article)} />}
+      <ArticleDetail slug={slug} />
+    </>
+  );
 }

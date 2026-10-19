@@ -317,6 +317,7 @@ export function ArticleDetail({ slug }: { slug: string }) {
                 <img
                   src={article.image}
                   alt={article.title}
+                  fetchPriority="high"
                   className="absolute inset-0 h-full w-full object-cover opacity-90"
                 />
               )}
@@ -365,10 +366,13 @@ export function ArticleDetail({ slug }: { slug: string }) {
         {/* Related */}
         {related.length > 0 && (
           <section className="max-w-6xl mx-auto px-6 py-16 md:py-20">
+            {/* The label is an h2 so the cards' h3 titles sit under it
+                rather than under the body's last section heading. Its
+                classes set the whole look. */}
             <div className="flex items-center gap-4 mb-8">
-              <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-ink-4">
+              <h2 className="text-[11px] font-semibold tracking-[0.22em] uppercase text-ink-4">
                 More from {KIND_LABEL[article.kind]}
-              </span>
+              </h2>
               <span className="h-px flex-1 bg-line/[0.08]" />
             </div>
             {/* Equal-height cards: the grid row already stretches its items,
