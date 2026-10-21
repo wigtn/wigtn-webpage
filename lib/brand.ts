@@ -23,8 +23,13 @@ export const ORG_NAME = "WIGTN";
  * "Research team" until 2026-08-09, when the homepage took the business
  * model above the fold. The blend is deliberate: the client work is what the
  * team sells, the published record is why anyone should buy it, and a
- * tagline that names only one of the two misdescribes the site under it. */
-export const TAGLINE = "An independent AI team that builds for clients and publishes in the open.";
+ * tagline that names only one of the two misdescribes the site under it.
+ *
+ * "An independent AI team that builds for clients and publishes in the open"
+ * until 2026-10-22. WIGTN now runs enterprise projects as a company, so the
+ * sentence names the company and its three teams' work in the order Our
+ * Service lists them. The GitHub org profile carries the same sentence. */
+export const TAGLINE = "An AI company in Korea: we build AI into enterprise systems, ship open-source tools, and publish research.";
 
 /** The tagline plus what follows from it. Every page-level description. */
 export const DESCRIPTION = `${TAGLINE} Web products and AI systems built end to end, with peer-reviewed work, open models, and reports that state their own limits.`;
