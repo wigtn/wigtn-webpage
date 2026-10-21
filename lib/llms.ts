@@ -66,7 +66,7 @@ export function llmsIndex(): string {
 
   return `# ${ORG_NAME}
 
-> ${TAGLINE} Founded in Korea in January 2026, with three teams: ${solutions.kicker}, ${product.kicker} and ${research.kicker}.
+> ${TAGLINE} Founded in January 2026, with three teams: ${solutions.kicker}, ${product.kicker} and ${research.kicker}.
 
 Every item below is on ${SITE_URL} or at the source it links. Papers are listed
 once accepted. Versions and release dates are on the Products page.
