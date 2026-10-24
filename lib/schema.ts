@@ -100,11 +100,11 @@ export const siteSchema = {
  * profile's Papers list (github.com/wigtn/.github, profile/README.md); the
  * panel prints a short line. Authors, in published order and spelling:
  *   WIGVO  ACL Anthology, 2026.acl-demo.33 (BibTeX, checked 2026-10-20)
- *   RCPS   citation in github.com/wigtn/WigtnOCR-RADP README ("camera-ready
- *          pending"), so no URL yet
+ *   RCPS   ACL Anthology, 2026.emnlp-industry.90 (BibTeX, checked 2026-10-24;
+ *          the page lists no DOI, so no sameAs)
  *   MDI    citation in github.com/wigtn/mdi-artifact README (non-archival),
  *          so no URL yet
- * When RCPS or MDI gets a public page (Anthology, OpenReview), add `url`. */
+ * When MDI gets a public page (OpenReview), add `url`. */
 type Paper = {
   title: string;
   authors: string[];
@@ -132,9 +132,11 @@ export const PAPERS: Record<string, Paper> = {
     title:
       "Retrieval-Conditional Parsing Score (RCPS): Choosing Document Parsers by Retrieval, Not by Appearance",
     authors: ["Sang-Woo Son", "Hyeong-seob Kim", "Hyeonsang Kim", "Hyun-woo Cho", "Jinmo Kim"],
-    venue: "Proceedings of EMNLP 2026 (Industry Track)",
-    date: "2026",
-    status: "Accepted",
+    venue:
+      "Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing: Industry Track",
+    date: "2026-10",
+    url: "https://aclanthology.org/2026.emnlp-industry.90/",
+    pagination: "1531-1544",
   },
   "neurips-2026": {
     title: "MDI: The Minimum Detectable Improvement of an LLM Judge",
