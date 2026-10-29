@@ -495,7 +495,9 @@ export type Company = {
    * Wordmarks about six times wider than tall sit at 0.85; the stacked
    * Arustay mark would be a sliver at that height, so it sits at 2 to read
    * at a similar weight. The wordmarks were at 1 until 2026-10-20, which
-   * made Arustay look small beside them. */
+   * made Arustay look small beside them. Mind AI sits 15% above the other
+   * wordmarks (0.98) since 2026-10-29, at Mind AI's request that its logo
+   * read larger. */
   height?: number;
 };
 
@@ -505,7 +507,7 @@ export type Company = {
  * across, in the ink's own colour (#644e41). */
 export const PARTNERS_AND_CLIENTS: Company[] = [
   { name: "Braincrew", logo: "/images/partners/braincrew.svg", height: 0.85 },
-  { name: "Mind AI", logo: "/images/partners/mind-ai.svg", height: 0.85 },
+  { name: "Mind AI", logo: "/images/partners/mind-ai.svg", height: 0.98 },
   { name: "Arustay", logo: "/images/partners/arustay.svg", height: 2 },
 ];
 
