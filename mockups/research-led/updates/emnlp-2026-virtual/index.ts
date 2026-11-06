@@ -121,6 +121,8 @@
  *     slot. It is not used as an image because it shows another team's paper
  *     and the participants' names; only the fact that the session timed its
  *     talks in the chat is taken from it.
+ *   - Zoom as the call software: the presenter, 2026-11-06, and the
+ *     screenshot's own UI (the meeting-chat panel and tile layout).
  *   - live-session.png: the presenter's screenshot at 21:31 KST on 25
  *     October (original in _source/, ignored by git). The four other
  *     participants' tiles are blurred, names and initials both; only the
@@ -219,13 +221,13 @@ export const emnlp2026Virtual: Article = {
 
     { t: "h", text: "Sunday night in Seoul" },
     p(
-      "The session ran as a video call: one presenter after another, each sharing their own screen. The session host timed every talk and posted a notice in the chat when about two minutes were left. Our turn came at around half past nine Seoul time. Ten minutes, walking the workflow slide from the evaluation frame on the left to the deployment decision on the right.",
+      "The session ran on Zoom: one presenter after another, each sharing their own screen. The session host timed every talk and posted a notice in the chat when about two minutes were left. Our turn came at around half past nine Seoul time. Ten minutes, walking the workflow slide from the evaluation frame on the left to the deployment decision on the right.",
     ),
     {
       t: "image",
       src: liveSession.src,
       alt: "A screenshot of the live session: the RCPS workflow slide shared full screen, with the participant panel on the right. The presenter's tile reads Presenter, Sang-Woo Son; the other participants' tiles are blurred.",
-      caption: "21:31 in Seoul, 13:31 in Budapest. Other participants are blurred.",
+      caption: "The virtual presentation, held over Zoom. Other participants are blurred.",
     },
     p(
       "Questions were held until every speaker had finished, for one Q&A at the end of the session. Perhaps because of that format, nobody was quick to unmute and ask, and the Q&A passed without a question for our talk.",
