@@ -95,9 +95,15 @@
  *     minutes: the presenter, 2026-11-06. Sang-Woo Son is named as presenter
  *     because the talk's title slide and the session's own label publish him
  *     in that role.
+ *   - "Thanks to": the chairs' written approval of the corresponding-author
+ *     footnote is in WigtnOCR-RADP docs/CAMERA_READY_PLAN.md; the virtual
+ *     presentation exchange is EMAIL_REPLY_final.txt. The camera-ready
+ *     revision plan in that repo was built "from the final rebuttal
+ *     commitments", which is the basis for the reviewers' line. Corresponding
+ *     author as the poster and the camera-ready publish it. The session host
+ *     is thanked by role only: no name is published for the session chair.
  *   - Industry Track chairs by name and role: 2026.emnlp.org/organization,
- *     fetched 2026-11-06. The session chair is not published, so no one else
- *     is thanked by name.
+ *     fetched 2026-11-06, along with the Virtual Infrastructure Chairs.
  *
  * IMAGES, all screenshots or rendered slides, none of them camera output, so
  * none went through the photo command:
@@ -246,7 +252,16 @@ export const emnlp2026Virtual: Article = {
 
     { t: "h", text: "Thanks to" },
     p(
-      "The EMNLP 2026 Industry Track Chairs, Pepa Atanasova, Gholamreza Haffari and Minghan Wang. The paper is by Sang-Woo Son, Hyeong-seob Kim, Hyeonsang Kim, Hyun-woo Cho and Jinmo Kim.",
+      "To the EMNLP 2026 Industry Track Chairs, Pepa Atanasova, Gholamreza Haffari and Minghan Wang, who answered every question we sent them between acceptance and the talk, from the author footnote on the camera-ready to the move to a virtual presentation.",
+    ),
+    p(
+      "To the Virtual Infrastructure Chairs, Fernando Batista and Ali Hürriyetoğlu, whose virtual track is the reason a team in Seoul could present at a conference in Budapest at all, and to the session host who kept every talk on time.",
+    ),
+    p(
+      "To the reviewers. Their questions in July became much of the camera-ready revision, and the paper is better for every one of them.",
+    ),
+    p(
+      "And to the five people who wrote it: Sang-Woo Son, Hyeong-seob Kim (corresponding author), Hyeonsang Kim, Hyun-woo Cho and Jinmo Kim.",
     ),
   ],
 };
