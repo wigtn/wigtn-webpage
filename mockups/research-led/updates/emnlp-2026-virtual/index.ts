@@ -258,7 +258,7 @@ export const emnlp2026Virtual: Article = {
       "To the Virtual Infrastructure Chairs, Fernando Batista and Ali Hürriyetoğlu, whose virtual track is the reason a team in Seoul could present at a conference in Budapest at all, and to the session host who kept every talk on time.",
     ),
     p(
-      "To the reviewers. Their questions in July became much of the camera-ready revision, and the paper is better for every one of them.",
+      "To the anonymous reviewers. Their questions in July became much of the camera-ready revision, and the paper is better for every one of them.",
     ),
     p(
       "And to the five people who wrote it: Sang-Woo Son, Hyeong-seob Kim (corresponding author), Hyeonsang Kim, Hyun-woo Cho and Jinmo Kim.",
