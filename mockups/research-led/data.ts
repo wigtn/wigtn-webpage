@@ -33,6 +33,7 @@
  * ship from the post folders again, which is why ./milestones is gone. */
 import type { StaticImageData } from "next/image";
 import { ACL_2026_COVER, acl2026SanDiego } from "./updates/acl-2026-san-diego";
+import { EMNLP_2026_COVER, emnlp2026Virtual } from "./updates/emnlp-2026-virtual";
 /* The IWSLT talk photo, which the homepage milestone rail shows for IWSLT 2026.
  * The post exports only its cover, so the file is imported directly. Importing
  * a post folder's file is safe here: data.ts may read a post folder, a post may
@@ -40,6 +41,7 @@ import { ACL_2026_COVER, acl2026SanDiego } from "./updates/acl-2026-san-diego";
 import iwsltTalk from "./updates/acl-2026-san-diego/iwslt-talk.jpg";
 import { OBA_WEEKENDTHON_COVER, obaWeekendthonTop6 } from "./updates/oba-weekendthon-top6";
 import { obaWeekendthon2026Top6 } from "./updates/oba-weekendthon-2026-top6";
+import { rcpsEmnlp2026 } from "./updates/rcps-emnlp-2026";
 import { SNOWFLAKE_2026_COVER, snowflakeKorea2026 } from "./updates/snowflake-korea-2026";
 import { TRAE_SEOUL_COVER, traeSeoulGrandPrize } from "./updates/trae-seoul-grand-prize";
 import { snowflakeKorea2026TechTrack } from "./updates/snowflake-korea-2026-tech-track";
@@ -679,6 +681,7 @@ export const ARTICLES: Article[] = [
    * carries its words on /story and links both its page and the story. A
    * notice with no story to pair with has nowhere to land; see the comment
    * above NEWSROOM_FEED's replacement below. */
+  rcpsEmnlp2026, // 2026.10.25, announcement
   wigvoAcl2026, // 2026.07, announcement
   /* One post per contest, on the date that contest was. They were a single
    * roundup for an afternoon; see the header on trae-seoul-2026-grand-prize
@@ -700,6 +703,7 @@ export const ARTICLES: Article[] = [
    * channel: "story": rendered at /story/<slug>, kept out of NEWSROOM_FEED
    * by the channel filter. Each pairs with a /story row through STORIES
    * below. */
+  emnlp2026Virtual, // 2026.10.25, virtual talk
   acl2026SanDiego, // 2026.07.16, trip report
   obaWeekendthonTop6, // 2026.05.31, hackathon
   snowflakeKorea2026, // 2026.04.29, hackathon
@@ -745,6 +749,7 @@ export const BLOG_FEED = ARTICLES.filter(
  * the trip report: the acceptance is the notice, the trip is the story. */
 export type Story = { article: Article; cover: StaticImageData; storySlug: string };
 export const STORIES: Story[] = [
+  { article: rcpsEmnlp2026, cover: EMNLP_2026_COVER, storySlug: "emnlp-2026-virtual" },
   { article: wigvoAcl2026, cover: ACL_2026_COVER, storySlug: "acl-2026-san-diego" },
   { article: obaWeekendthon2026Top6, cover: OBA_WEEKENDTHON_COVER, storySlug: "oba-weekendthon-top6" },
   { article: snowflakeKorea2026TechTrack, cover: SNOWFLAKE_2026_COVER, storySlug: "snowflake-korea-2026" },
