@@ -204,7 +204,6 @@ export const emnlp2026Virtual: Article = {
         {
           src: rcpsPoster.src,
           alt: "The RCPS poster: a header with the title, authors and EMNLP 2026 Budapest logo; an introduction in three beats; an architecture panel for selection and coverage diagnosis; an evaluation panel with the parser ranking, the deployment audit and the coverage chart; and a footer reading Select, Diagnose, Act.",
-          caption: "The A0 poster, submitted to Underline with the recording and the slides.",
           aspect: "3/4",
         },
       ],
